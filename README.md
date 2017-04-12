@@ -38,7 +38,8 @@ An **open-source** Android Burraco scorekeeper with social functions, different 
 
 # History
 
-I have started writing this app at the age of 16, in 2014. My test device was an old and modded Android 4.0.3 phone. I started making this app for personal use. After one year, I released it on the Google Play Store.
+I have started writing this app at the age of 16, in 2014. My test device was an old and modded Android 4.0.3 phone.
+I started making this app for personal use. After one year, I released it on the Google Play Store.
 Now, in 2017, after a big rework of the app, I am publishing my code on GitHub.
 
 # Specs / Open-source libraries:
