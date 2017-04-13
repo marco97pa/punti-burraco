@@ -31,7 +31,7 @@ In order to help translations, please take a look at [Localize.im](https://www.l
 
 Please note that _Localize.im_ will be discontinued in October 2018, so I am planning to move the translation to another service in mid-2018
 
-#Versioning
+# Versioning
 
 Just some information about how I manage the app version.
 
