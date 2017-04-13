@@ -25,7 +25,7 @@
 ### 6.5.0
 
 * New Guide & Feedback center: it is possible to read the guide, news and send a bug
-* The app now asks permissions at runtime on Android 6.0+ [*buggy - fixed in 8.0.0*]
+* The app now asks permissions at runtime on Android 6.0+ [*buggy - fixed in [8.0.0](CHANGELOG.md#800)*]
 * Support for Android 7.1+
 * Circular icon on Android 7.1+
 * Gboard keyboard support
@@ -33,17 +33,17 @@
 
 ## 6.0.0
 
-* Added the user guide [*improved in 6.5.0*]
+* Added the user guide [*improved in [6.5.0](CHANGELOG.md#650)*]
 * Increased the fluidity of checkbox animations
 
 ### 5.9.0
 
-* Enabled PRO version purchase [*changed to Donation in 8.0.0*]
+* Enabled PRO version purchase [*changed to Donation in [8.0.0](CHANGELOG.md#800)*]
 
 ### 5.8.0
 
-* New "Hands detail" function [*improved in 7.0.0*]
-* Introducing the new PRO version [*buggy - fixed in 5.9.0*]
+* New "Hands detail" function [*improved in [7.0.0](CHANGELOG.md#700)*]
+* Introducing the new PRO version [*buggy - fixed in [5.9.0](CHANGELOG.md#590)*]
 
 ### 5.6.8
 
@@ -75,12 +75,12 @@
 
 ### 5.2.0
 
-* You can now add images of the teams in 4 players mode [*improved in 8.0.0*]
+* You can now add images of the teams in 4 players mode [*improved in [8.0.0](CHANGELOG.md#800)*]
 
 ### 5.1.0
 
-* Added in-app PRO version purchase [*not working - fixed in 5.8.0*]
-* You can now add profile images of each player in 2 players mode [*improved in 8.0.0*]
+* Added in-app PRO version purchase [*not working - fixed in [5.8.0](CHANGELOG.md#580)*]
+* You can now add profile images of each player in 2 players mode [*improved in [8.0.0](CHANGELOG.md#800)*]
 
 ## 5.0.0
 
@@ -106,7 +106,7 @@
 
 ### 4.1.0
 
-* Added "Match history" function [*removed in 4.9.0 - complex and useless*]
+* Added "Match history" function [*removed in [4.9.0](CHANGELOG.md#490) - complex and useless*]
 * Solved a bug
 
 ## 4.0.0
@@ -114,8 +114,8 @@
 * New hamburger side menu
 * Interface improved
 * 4 players mode is now distinct from 2 players mode
-* New way to change players name [*removed in 4.9.0 - complex and useless*]
-* Added player statics [*removed in 4.9.0 - buggy and useless*]
+* New way to change players name [*removed in [4.9.0](CHANGELOG.md#490) - complex and useless*]
+* Added player statics [*removed in [4.9.0](CHANGELOG.md#490) - buggy and useless*]
 * Added settings
 * Stability and speed improvements
 * Removed transparent status bar on Android 4.4+, it was causing problems on some devices
@@ -127,7 +127,7 @@
 ## 3.0
 
 * Refreshed app theme
-* A new "Changelog" windows will appear at each update [*removed in 4.0.0 - it was not working*]
+* A new "Changelog" windows will appear at each update [*removed in [4.0.0](CHANGELOG.md#400) - it was not working*]
 
 ### 2.8
 
@@ -138,7 +138,7 @@
 
 ### 2.5
 
-* Transparent status bar on Android 4.4+ [*removed in 4.0.0*]
+* Transparent status bar on Android 4.4+ [*removed in [4.9.0](CHANGELOG.md#490)*]
 
 ### 2.1
 
