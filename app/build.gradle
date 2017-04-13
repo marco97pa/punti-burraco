@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+
+    defaultConfig {
+        applicationId "com.marco97pa.puntiburraco"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 4100
+        versionName "8.0.0"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://lorenzo.villani.me/android-cropimage/'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:gridlayout-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.google.firebase:firebase-ads:10.2.0'
+    compile 'com.android.support:customtabs:25.3.1'
+    compile 'com.android.support:support-vector-drawable:25.3.1'
+    compile 'me.villani.lorenzo.android:android-cropimage:1.1.+'
+    compile 'com.android.support:cardview-v7:25.3.1'
+    testCompile 'junit:junit:4.12'
+}
+
+
+
+
+apply plugin: 'com.google.gms.google-services'

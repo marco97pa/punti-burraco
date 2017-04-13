@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/nav_title_mod">
+    <menu>
+        <item
+            android:id="@+id/nav_2_player"
+            android:icon="@mipmap/ic_group_2"
+            android:title="@string/nav_2gioc" />
+        <item
+            android:id="@+id/nav_3_player"
+            android:icon="@mipmap/ic_group_3"
+            android:title="@string/nav_3gioc" />
+        <item
+            android:id="@+id/nav_4_player"
+            android:icon="@mipmap/ic_group_4"
+            android:title="@string/nav_4gioc" />
+
+    </menu>
+    </item>
+
+    <item android:title="@string/nav_title_alt">
+        <menu>
+            <item
+                android:id="@+id/nav_info"
+                android:icon="@drawable/ic_favorite_black_24dp"
+                android:title="@string/nav_info" />
+            <item
+                android:id="@+id/nav_upgrade"
+                android:icon="@drawable/ic_mall"
+                android:title="@string/nav_upgrade" />
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_build_black_24dp"
+                android:title="@string/nav_settings" />
+            <item
+                android:id="@+id/nav_guide"
+                android:icon="@drawable/ic_help_black_24dp"
+                android:title="@string/nav_guide" />
+        </menu>
+    </item>
+
+</menu>

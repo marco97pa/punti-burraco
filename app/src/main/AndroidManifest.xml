@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.marco97pa.puntiburraco">
+    <!-- Chrome Custom Tabs -->
+    <uses-sdk tools:overrideLibrary="android.support.customtabs" />
+
+    <!-- Save screenshot and set profile images-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Support ChromeBook -->
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <!-- In-App Billing-->
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <!-- AdMob -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <!-- Support 18:9 displays-->
+        <meta-data android:name="android.max_aspect" android:value="2.1" />
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marco97pa.puntiburraco.MainActivity" />
+        </activity>
+
+        <activity android:name=".Contributions"
+            android:label="@string/intro_pro"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.marco97pa.puntiburraco.MainActivity" />
+        </activity>
+
+        <!-- Declare the bundled CropImage Activity -->
+        <activity android:name="com.android.camera.CropImage" />
+    </application>
+
+</manifest>

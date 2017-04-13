@@ -1,0 +1,270 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:gravity="center">
+
+        <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:grid="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:screenOrientation="portrait"
+            grid:columnCount="2"
+            grid:rowCount="24"
+            tools:context="com.marco97pa.puntiburraco.MainActivity">
+
+            <ImageView
+                android:id="@+id/image1"
+                android:layout_width="138dp"
+                android:layout_height="109dp"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                app:srcCompat="@drawable/ic_menu_gallery"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="0" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+
+                android:id="@+id/pozzetto1"
+                android:text="@string/pozzetto"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="9" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+
+                android:id="@+id/chiusura1"
+                android:text="@string/chiusura"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="8" />
+
+            <EditText
+                android:id="@+id/editPM1"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggPM"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="7" />
+
+            <EditText
+                android:id="@+id/editP1"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggP"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="6" />
+
+            <EditText
+                android:id="@+id/editBS1"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggBS"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="5" />
+
+            <EditText
+                android:id="@+id/editBI1"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggBI"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="4" />
+
+            <TextView
+                android:id="@+id/Punti1"
+                android:width="@dimen/tabella"
+                android:gravity="center"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/textBig"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="2" />
+
+            <TextView
+                android:id="@+id/editNome1"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:gravity="center"
+                android:text="@string/n1"
+                android:textSize="20dp"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="1" />
+
+            <EditText
+                android:id="@+id/editBP1"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggBP"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="3" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/pozzetto2"
+                android:text="@string/pozzetto"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="9" />
+
+            <!--CheckBox-->
+            <!--android:button="@drawable/btn_check"-->
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/chiusura2"
+                android:text="@string/chiusura"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="8" />
+
+            <EditText
+                android:id="@+id/editPM2"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggPM"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="7" />
+
+            <EditText
+                android:id="@+id/editP2"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggP"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="6" />
+
+            <EditText
+                android:id="@+id/editBS2"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggBS"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="5" />
+
+            <EditText
+                android:id="@+id/editBI2"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggBI"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="4" />
+
+            <EditText
+                android:id="@+id/editBP2"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:hint="@string/SuggBP"
+                android:inputType="number"
+                android:maxLength="4"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="3" />
+
+            <TextView
+                android:id="@+id/Punti2"
+                android:width="@dimen/tabella"
+                android:gravity="center"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/textBig"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="2" />
+
+            <TextView
+                android:id="@+id/editNome2"
+                android:width="@dimen/tabella"
+                android:ems="10"
+                android:gravity="center"
+                android:text="@string/n2"
+                android:textSize="20dp"
+                grid:layout_column="1"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
+                grid:layout_row="1" />
+
+            <ImageView
+                android:id="@+id/image2"
+                android:layout_width="138dp"
+                android:layout_height="109dp"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                app:srcCompat="@drawable/ic_menu_gallery"
+                grid:layout_column="1"
+                grid:layout_row="0"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"/>
+
+        </android.support.v7.widget.GridLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
+    </LinearLayout>
+</ScrollView>

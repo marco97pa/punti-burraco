@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Punti Burraco</string>
+
+    <!-- Side Menu -->
+    <string name="action_settings">Informazioni</string>
+    <string name="action_set">Modifica nomi</string>
+    <string name="action_start">Aggiungi punti</string>
+    <string name="action_share">Condividi risultati</string>
+    <string name="action_reset">Nuova partita</string>
+    <string name="action_nomi">Ripristino giocatori predefiniti</string>
+    <string name="reset">Nuova partita, punteggi azzerati!</string>
+
+    <!-- Interface -->
+    <string name="SuggBP">Burrachi puri</string>
+    <string name="SuggBI">Burrachi sporchi</string>
+    <string name="SuggBS">Burrachi semi sporchi</string>
+    <string name="SuggMiniBP">B. puri</string>
+    <string name="SuggMiniBI">B.sporchi</string>
+    <string name="SuggMiniBS">B. semi</string>
+    <string name="SuggP">Punti tavolo</string>
+    <string name="SuggPM">Punti in mano</string>
+    <string name="SuggNome">Nome squadra</string>
+    <string name="n1">Squadra 1</string>
+    <string name="n2">Squadra 2</string>
+    <string name="s1">Giocatore 1</string>
+    <string name="s2">Giocatore 2</string>
+    <string name="g1">Gioc 1</string>
+    <string name="g2">Gioc 2</string>
+    <string name="g3">Gioc 3</string>
+    <string name="cancel">Annulla</string>
+    <string name="win">vince</string>
+    <string name="chiusura">Chiusura</string>
+    <string name="pozzetto">No pozzetto</string>
+    <string name="chius">Chiude</string>
+    <string name="pozz">No Pozz</string>
+    <string name="solo">Solo</string>
+    <string name="error01">Impossibile selezionare più caselle</string>
+    <string name="error02">Impossibile chiudere con punti in mano</string>
+    <string name="error03">Impossibile non arrivare al pozzetto senza punti in mano</string>
+    <string name="action_dpp">Dettaglio punteggi parziali</string>
+
+    <!-- Settings -->
+    <string name="setting_valuta">Valuta l\'app</string>
+    <string name="setting_valuta_d">Verrai indirizzato al Play Store per lasciare una recensione. Grazie per il tuo supporto</string>
+    <string name="setting_share">Invia questa app</string>
+    <string name="setting_share_d">Condividi Punti Burraco con uno o più amici</string>
+    <string name="setting_advanced">Opzioni avanzate</string>
+    <string name="setting_advanced_d">Regola impostazioni avanzate dell\'app</string>
+    <string name="setting_notte">Modalità notturna</string>
+    <string name="setting_notte_d">Attiva il tema scuro per ambienti poco illuminati</string>
+    <string name="setting_img">Mostra immagini</string>
+    <string name="setting_img_d">Attiva le immagini di profilo nelle modalità 2 e 4 giocatori</string>
+    <string name="setting_pub">Supporta lo sviluppo</string>
+    <string name="setting_pub_d">Grazie per il tuo contributo: verranno mostrati dei piccoli banner pubblicitari</string>
+    <string name="setting_schermo">Mantieni lo schermo acceso</string>
+    <string name="setting_schermo_d">Leggi e aggiorna i punteggi comodamente e senza interruzioni</string>
+    <string name="setting_limite">Imposta punteggio di arrivo</string>
+    <string name="setting_version">Versione app</string>
+    <string name="setting_version_d">Versione sconosciuta</string>
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="title_activity_setting">Impostazioni</string>
+    <string name="setting_title_pro">Interfaccia</string>
+    <string name="setting_title_app">Opzioni app</string>
+    <string name="share_message">Installa anche tu #PuntiBurraco</string>
+    <string name="share_hint">Invia app via</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Apri navigation drawer</string>
+    <string name="navigation_drawer_close">Chiudi navigation drawer</string>
+    <string name="permission_true">Premi nuovamente CONDIVIDI per avviare la condivisione</string>
+    <string name="permission_false">Impossibile avviare la condivisione: hai rifiutato il permesso</string>
+    <string name="nav_guide">Guida e feedback</string>
+    <string name="nav_info">Contribuisci</string>
+    <string name="nav_upgrade">Donazione</string>
+    <string name="nav_settings">Impostazioni</string>
+    <string name="nav_2gioc">2 Giocatori</string>
+    <string name="nav_3gioc">3 Giocatori</string>
+    <string name="nav_4gioc">4 Giocatori</string>
+    <string name="nav_title_mod">Modalità</string>
+    <string name="nav_title_alt">Altro</string>
+    <string name="errore_connection">Per accedere alla guida devi essere connesso ad una rete. Riprova</string>
+    <string name="buy_success">Grazie mille</string>
+    <string name="buy_cancel">Acquisto versione PRO annullato</string>
+    <string name="buy_network">Connessione assente. Riprova</string>
+    <string name="buy_already">Errore: donazione già effettuata</string>
+    <string name="buy_api">Errore API</string>
+    <string name="buy_dev">Errore sviluppatore</string>
+    <string name="buy_notavaible">Acquisto in-app non disponibile</string>
+    <string name="buy_playservices">Versione di Google Play Services antiquata, aggiorna per continuare</string>
+
+    <!-- Alerts -->
+    <string name="ok">OK</string>
+    <string name="ko">Annulla</string>
+    <string name="close">Chiudi</string>
+    <string name="add_point">Punti aggiunti</string>
+    <string name="marshmallow_alert">Hai rifiutato il permesso di visualizzare le tue foto</string>
+    <string name="marshmallow_alert_2">Hai rifiutato il permesso di condividere il tuo risultato</string>
+    <string name="guida">Guida</string>
+    <string name="change_name">Per modificare i nomi basta toccare il nome del giocatore dalla schermata principale</string>
+    <string name="errore_dpp">Non hai ancora completato una smazzata</string>
+    <string name="pro_function">Funzionalità PRO</string>
+    <string name="pro_details">Per mostrare il dettaglio dei punteggi parziali, devi avere la versione PRO. Puoi acquistarla dal menu principale</string>
+    <string name="back_to_exit">Premi di nuovo indietro per uscire</string>
+
+    <!-- Contribution Activity -->
+    <string name="intro_pro">Contribuisci allo sviluppo</string>
+    <string name="contrib_donate_t">Donazioni</string>
+    <string name="contrib_donate_d">Puoi contribuire lo sviluppo effettuando una piccola donazione direttamente dal menu dell\'app</string>
+    <string name="contrib_ads_t">Pubblicità</string>
+    <string name="contrib_ads_d">Abilitando l\'opzione \"Contribuisci allo sviluppo\" dalle Impostazioni, è possibile dare una mano con dei piccoli banner pubblicitari non intrusivi</string>
+    <string name="contrib_trans_t">Traduzioni</string>
+    <string name="contrib_trans_d">È possibile contribuire nella traduzione dell\'app in altre lingue, al fine di raggiungere un numero più ampio di persone. Tocca qui per iniziare </string>
+    <string name="contrib_github_t">OpenSource</string>
+    <string name="contrib_github_d">Punti Burraco è open source ed è disponibile su GitHub, così che chiunque possa contribuire al suo miglioramento. Tocca per maggiori info</string>
+    <string name="contrib_org_t">Condividi</string>
+    <string name="contrib_org_d">Condividi Punti Burraco ai tuoi amici, colleghi o compagni di partite. Anche questo è un modo di contribuire allo sviluppo</string>
+    <string name="intro_pro_desc">Lo sviluppo di un\'app comporta costi e fatica. Che tu sia uno sviluppatore, un traduttore, un\'azienda o un semplice giocatore di Burraco, ci sono tanti modi per esprimere il tuo supporto</string>
+
+
+    <!-- Ads String -->
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9375533114553467/1596678635</string>
+
+</resources>
+

@@ -1,0 +1,70 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/setting_title_pro">
+            <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+            <EditTextPreference
+                android:defaultValue="2005"
+                android:inputType="number"
+                android:key="limite"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="@string/setting_limite" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="img"
+            android:summary="@string/setting_img_d"
+            android:title="@string/setting_img" />
+
+            <SwitchPreference
+                android:defaultValue="false"
+                android:key="wake"
+                android:summary="@string/setting_schermo_d"
+                android:title="@string/setting_schermo" />
+
+            <SwitchPreference
+                android:defaultValue="false"
+                android:key="night"
+                android:summary="@string/setting_notte_d"
+                android:title="@string/setting_notte" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/setting_title_app">
+        <Preference
+            android:title="@string/setting_advanced"
+            android:summary="@string/setting_advanced_d"
+            android:key="advanced">
+        </Preference>
+
+        <Preference
+            android:title="@string/setting_share"
+            android:summary="@string/setting_share_d"
+            android:key="share">
+        </Preference>
+
+        <Preference
+            android:title="@string/setting_valuta"
+            android:summary="@string/setting_valuta_d">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco" />
+        </Preference>
+
+        <CheckBoxPreference
+            android:title="@string/setting_pub"
+            android:summary="@string/setting_pub_d"
+            android:key="pub"
+            android:defaultValue="true">
+        </CheckBoxPreference>
+
+        <Preference
+            android:title="@string/setting_version"
+            android:summary="@string/setting_version_d"
+            android:key="version">
+        </Preference>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
