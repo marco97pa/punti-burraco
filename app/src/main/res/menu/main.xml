@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- BOTTONE SCREEN -->
+    <item android:id="@+id/action_share"
+        android:title="@string/action_share"
+        android:icon="@mipmap/ic_share_white"
+        app:showAsAction="ifRoom" />
+
+    <!-- BOTTONE SET -->
+    <item android:id="@+id/action_dpp"
+        android:title="@string/action_dpp"
+        android:icon="@drawable/ic_receipt_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <!-- BOTTONE RESET -->
+    <item android:id="@+id/action_reset"
+        android:title="@string/action_reset"
+        app:showAsAction="never" />
+
+    <!-- BOTTONE SET -->
+    <item android:id="@+id/action_set"
+        android:title="@string/action_set"
+        app:showAsAction="never" />
+    <!-- BOTTONE RIPRISTINO -->
+    <item android:id="@+id/action_nomi"
+        android:title="@string/action_nomi"
+        app:showAsAction="never" />
+
+
+</menu>

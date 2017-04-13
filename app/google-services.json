@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "450159642823",
+    "firebase_url": "https://punti-burraco.firebaseio.com",
+    "project_id": "punti-burraco",
+    "storage_bucket": "punti-burraco.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450159642823:android:44c8bbc4ce7d8048",
+        "android_client_info": {
+          "package_name": "com.marco97pa.puntiburraco"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450159642823-7asrgms0jql4cvq6f3pdk2ndskpl087t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4PRo7C9V9m31W8qzWaNjzwMaA93fnbxQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

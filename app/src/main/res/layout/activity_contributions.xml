@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.marco97pa.puntiburraco.Contributions">
+
+
+    <TextView
+        android:id="@+id/textViewDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/intro_pro_desc"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="italic" />
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_1"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="12dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_1"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@android:color/holo_green_light"
+                android:scaleType="fitCenter"
+                card_view:srcCompat="@drawable/ic_monetization_on_black_24dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_title_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_donate_t"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <TextView
+                    android:id="@+id/text_desc_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_donate_d"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_2"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="12dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_2"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@android:color/holo_red_light"
+                android:scaleType="fitCenter"
+                card_view:srcCompat="@drawable/ic_loyalty_black_24dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_title_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_ads_t"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <TextView
+                    android:id="@+id/text_desc_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_ads_d"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_3"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_3"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@android:color/holo_blue_light"
+                android:clickable="false"
+                android:scaleType="fitCenter"
+                card_view:srcCompat="@drawable/ic_translate_black_24dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:clickable="false"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_title_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_trans_t"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <TextView
+                    android:id="@+id/text_desc_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_trans_d"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_4"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:onClick="openGitHub"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_4"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@android:color/darker_gray"
+                android:clickable="false"
+                android:scaleType="fitCenter"
+                card_view:srcCompat="@drawable/ic_developer_mode_black_24dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:clickable="false"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_title_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_github_t"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <TextView
+                    android:id="@+id/text_desc_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_github_d"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_5"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_5"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@android:color/holo_purple"
+                android:scaleType="fitCenter"
+                card_view:srcCompat="@drawable/ic_share_black_24dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_title_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_org_t"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <TextView
+                    android:id="@+id/text_desc_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrib_org_d"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
+
+</ScrollView>
