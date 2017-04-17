@@ -1,5 +1,9 @@
 # Points Buraco CHANGELOG
 
+### 8.0.3
+* Solved problems with interface on small screens
+* Changed colors in Contributions section
+
 ## 8.0.0
 * Points Buraco is now open-source: it is available on GitHub
 * All features are available to all, for **free**
