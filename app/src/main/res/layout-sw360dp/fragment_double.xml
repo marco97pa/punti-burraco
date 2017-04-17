@@ -36,7 +36,8 @@
                 android:cropToPadding="false"
                 app:srcCompat="@drawable/ic_menu_gallery"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="0" />
 
             <android.support.v7.widget.AppCompatCheckBox
@@ -44,7 +45,8 @@
                 android:id="@+id/pozzetto1"
                 android:text="@string/pozzetto"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="9" />
 
             <android.support.v7.widget.AppCompatCheckBox
@@ -52,7 +54,8 @@
                 android:id="@+id/chiusura1"
                 android:text="@string/chiusura"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="8" />
 
             <EditText
@@ -63,7 +66,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="7" />
 
             <EditText
@@ -74,7 +78,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="6" />
 
             <EditText
@@ -85,7 +90,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="5" />
 
             <EditText
@@ -96,7 +102,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="4" />
 
             <TextView
@@ -107,7 +114,8 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/textBig"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="2" />
 
             <TextView
@@ -118,7 +126,8 @@
                 android:text="@string/n1"
                 android:textSize="20dp"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="1" />
 
             <EditText
@@ -129,14 +138,16 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="0"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="3" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/pozzetto2"
                 android:text="@string/pozzetto"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="9" />
 
             <!--CheckBox-->
@@ -145,7 +156,8 @@
                 android:id="@+id/chiusura2"
                 android:text="@string/chiusura"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="8" />
 
             <EditText
@@ -156,7 +168,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="7" />
 
             <EditText
@@ -167,7 +180,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="6" />
 
             <EditText
@@ -178,7 +192,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="5" />
 
             <EditText
@@ -189,7 +204,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="4" />
 
             <EditText
@@ -200,7 +216,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="3" />
 
             <TextView
@@ -211,7 +228,8 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/textBig"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="2" />
 
             <TextView
@@ -222,7 +240,8 @@
                 android:text="@string/n2"
                 android:textSize="20dp"
                 grid:layout_column="1"
-                
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"
                 grid:layout_row="1" />
 
             <ImageView
@@ -234,7 +253,8 @@
                 app:srcCompat="@drawable/ic_menu_gallery"
                 grid:layout_column="1"
                 grid:layout_row="0"
-                />
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="fill_horizontal"/>
 
         </android.support.v7.widget.GridLayout>
 

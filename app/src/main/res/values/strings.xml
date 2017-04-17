@@ -100,6 +100,7 @@
     <string name="guida">Guida</string>
     <string name="change_name">Per modificare i nomi basta toccare il nome del giocatore dalla schermata principale</string>
     <string name="errore_dpp">Non hai ancora completato una smazzata</string>
+    <string name="intro_pro_dpp_t">Dettaglio punteggi</string>
     <string name="pro_function">Funzionalità PRO</string>
     <string name="pro_details">Per mostrare il dettaglio dei punteggi parziali, devi avere la versione PRO. Puoi acquistarla dal menu principale</string>
     <string name="back_to_exit">Premi di nuovo indietro per uscire</string>
