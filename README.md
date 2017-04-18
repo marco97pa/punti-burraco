@@ -2,7 +2,6 @@
 
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](http://choosealicense.com/licenses/gpl-3.0/)
 [![Downloads](https://img.shields.io/badge/google%20play%20downloads-4.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
-[![Version](https://img.shields.io/badge/latest-8.0.0-blue.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
 
 # Points Buraco  
 
