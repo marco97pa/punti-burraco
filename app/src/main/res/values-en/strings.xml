@@ -90,11 +90,11 @@
     <string name="setting_advanced">Advanced options</string>
     <string name="setting_advanced_d">Set up advanced app options</string>
     <string name="marshmallow_alert_2">Permission denied to publish your score</string>
-    <string name="contrib_github_d">Points Buraco is open source and it is available on GitHub, so everyone can help to get it better. Touch for more info</string>
+    <string name="contrib_github_d">Points Buraco is open source and it is available on GitHub, so everyone can help to get it better.</string>
     <string name="contrib_github_t">Open Source</string>
     <string name="contrib_org_d">Share Points Buraco with friends and colleagues. It is another way to help the developer</string>
     <string name="contrib_org_t">Share</string>
-    <string name="contrib_trans_d">You can help translating the app in other languages. Touch here to start</string>
+    <string name="contrib_trans_d">You can help translating the app in other languages, so more people will try the app</string>
     <string name="contrib_trans_t">Translation</string>
     <string name="intro_pro_desc">Here you can help improving Points Buraco</string>
     <string name="setting_img">Show images</string>
@@ -105,4 +105,11 @@
     <string name="contrib_donate_d">You can help development by making a little donation</string>
     <string name="contrib_ads_t">Ads</string>
     <string name="contrib_ads_d">By enabling the option in the Settings, you can help by showing little ads in the app</string>
+    <string name="button_go">Go to Github</string>
+    <string name="button_share">Share</string>
+    <string name="button_star">Start</string>
+    <string name="button_start">Let\'s go</string>
+    <string name="contrib_star_d">If you like the app, write a review with 5 stars. Your feedback is really appreciated</string>
+    <string name="contrib_star_t">Write a review</string>
+    <string name="message_out_to_play_store">Thanks :D \n You can write a review by scrolling in the bottom of the page</string>
 </resources>

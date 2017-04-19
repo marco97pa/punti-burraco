@@ -112,13 +112,19 @@
     <string name="contrib_ads_t">Pubblicità</string>
     <string name="contrib_ads_d">Abilitando l\'opzione \"Contribuisci allo sviluppo\" dalle Impostazioni, è possibile dare una mano con dei piccoli banner pubblicitari non intrusivi</string>
     <string name="contrib_trans_t">Traduzioni</string>
-    <string name="contrib_trans_d">È possibile contribuire nella traduzione dell\'app in altre lingue, al fine di raggiungere un numero più ampio di persone. Tocca qui per iniziare </string>
+    <string name="contrib_trans_d">È possibile contribuire nella traduzione dell\'app in altre lingue, al fine di raggiungere un numero più ampio di persone.</string>
     <string name="contrib_github_t">OpenSource</string>
-    <string name="contrib_github_d">Punti Burraco è open source ed è disponibile su GitHub, così che chiunque possa contribuire al suo miglioramento. Tocca per maggiori info</string>
+    <string name="contrib_github_d">Punti Burraco è open source ed è disponibile su GitHub, così che chiunque possa contribuire al suo miglioramento.</string>
     <string name="contrib_org_t">Condividi</string>
     <string name="contrib_org_d">Condividi Punti Burraco ai tuoi amici, colleghi o compagni di partite. Anche questo è un modo di contribuire allo sviluppo</string>
     <string name="intro_pro_desc">Lo sviluppo di un\'app comporta costi e fatica. Che tu sia uno sviluppatore, un traduttore, un\'azienda o un semplice giocatore di Burraco, ci sono tanti modi per esprimere il tuo supporto</string>
-
+    <string name="contrib_star_t">Lascia un commento</string>
+    <string name="contrib_star_d">Se l\'app è di tuo gradimento, lascia una valutazione con 5 stelle. Bastano pochi secondi e darai un contributo importante allo sviluppo</string>
+    <string name="button_start">Inizia subito</string>
+    <string name="button_go">Vai su GitHub</string>
+    <string name="button_star">Recensisci</string>
+    <string name="button_share">Condividi</string>
+    <string name="message_out_to_play_store">Grazie per aver scelto di lasciarci una valutazione\n Basta scorrere in basso per lasciare una recensione</string>
 
     <!-- Ads String -->
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9375533114553467/1596678635</string>

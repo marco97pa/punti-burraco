@@ -96,13 +96,20 @@
     <string name="setting_img_d">Ativa as imagens em modo de 2 e 4 jogadores</string>
     <string name="intro_pro_desc">Aqui você pode ajudar a melhorar Points Buraco</string>
     <string name="contrib_trans_t">Tradução</string>
-    <string name="contrib_trans_d">Você pode ajudar a traduzir o aplicativo em outros idiomas. Toque aqui para iniciar</string>
+    <string name="contrib_trans_d">Você pode ajudar a traduzir o aplicativo em outros idiomas.</string>
     <string name="contrib_org_t">Compartilhar</string>
     <string name="contrib_org_d">Compartilhe Pontos Buraco com amigos e colegas. É outra maneira de ajudar o desenvolvedor</string>
     <string name="contrib_github_t">Open Source</string>
-    <string name="contrib_github_d">Pontos Buraco é de código aberto e está disponível no GitHub, para que todos possam ajudar a obtê-lo melhor. Toque para obter mais informações</string>
+    <string name="contrib_github_d">Pontos Buraco é de código aberto e está disponível no GitHub, para que todos possam ajudar a obtê-lo melhor.</string>
     <string name="contrib_donate_t">Doações</string>
     <string name="contrib_donate_d">Você pode ajudar o desenvolvimento fazendo uma pequena doação</string>
     <string name="contrib_ads_t">Publicidades</string>
     <string name="contrib_ads_d">Ao ativar a opção nas Configurações, você pode ajudar mostrando pequenos anúncios na aplicação</string>
+    <string name="button_share">Compartilhar</string>
+    <string name="button_go">Descobrir</string>
+    <string name="button_start">Começar</string>
+    <string name="button_star">Rever</string>
+    <string name="contrib_star_d">Se você gosta do aplicativo, escreva um comentário com 5 estrelas. Seu feedback é muito apreciado</string>
+    <string name="contrib_star_t">Escreva uma crítica</string>
+    <string name="message_out_to_play_store">Obrigado :D \n Você pode escrever um comentário rolando na parte inferior da página</string>
 </resources>
