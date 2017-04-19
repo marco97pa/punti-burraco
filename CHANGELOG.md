@@ -1,5 +1,8 @@
 # Points Buraco CHANGELOG
 
+### 8.0.5
+* Improved Contributions section
+
 ### 8.0.3
 * Solved problems with interface on small screens
 * Changed colors in Contributions section
