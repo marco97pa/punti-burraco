@@ -65,6 +65,7 @@
     <string name="setting_title_app">Opzioni app</string>
     <string name="share_message">Installa anche tu #PuntiBurraco</string>
     <string name="share_hint">Invia app via</string>
+    <string name="easter_egg">Wow! Arcobaleni ovunque...</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Apri navigation drawer</string>
