@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.marco97pa.puntiburraco"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 4150
-        versionName "8.0.5"
+        versionCode 4180
+        versionName "8.0.8"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

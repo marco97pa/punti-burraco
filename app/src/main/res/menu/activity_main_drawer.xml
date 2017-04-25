@@ -9,11 +9,11 @@
             android:title="@string/nav_2gioc" />
         <item
             android:id="@+id/nav_3_player"
-            android:icon="@mipmap/ic_group_3"
+            android:icon="@drawable/ics_people_3_24dp"
             android:title="@string/nav_3gioc" />
         <item
             android:id="@+id/nav_4_player"
-            android:icon="@mipmap/ic_group_4"
+            android:icon="@drawable/ics_people_4_24dp"
             android:title="@string/nav_4gioc" />
 
     </menu>

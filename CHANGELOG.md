@@ -1,5 +1,9 @@
 # Points Buraco CHANGELOG
 
+### 8.0.8
+* Improved icons in the navigation bar
+* Added an easter egg :D
+
 ### 8.0.5
 * Improved Contributions section
 

@@ -2,12 +2,21 @@ package com.marco97pa.puntiburraco;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.widget.Toast;
+
+import java.util.Random;
 
 /**
  * SETTINGS FRAGMENT
@@ -18,6 +27,7 @@ import android.preference.PreferenceManager;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    int taps = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +39,21 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         //Sets version name programatically
         Preference version = findPreference("version");
         version.setSummary(BuildConfig.VERSION_NAME);
+
+        //Sets version name easter egg
+        version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+
+                if(taps > 7) {
+                    Toast.makeText(getActivity(), getString(R.string.easter_egg), Toast.LENGTH_SHORT).show();
+                    ((SettingActivity) getActivity()).setRandomColor();
+                }
+
+                taps++;
+                return true;
+            }
+        });
 
         //Sets intent to share app with friends
         Preference share_p = findPreference("share");
