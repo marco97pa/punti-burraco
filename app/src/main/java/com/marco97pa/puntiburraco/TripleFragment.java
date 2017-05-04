@@ -421,13 +421,14 @@ public class TripleFragment extends Fragment {
         PZ2.setVisibility(View.VISIBLE);
         PZ3.setVisibility(View.VISIBLE);
         win=false;
+        //salva tutto
+        onSave();
         //reset dpp
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp3", "");
+        editor.putInt("interrupted", 0);
         editor.commit();
-        //salva tutto
-        onSave();
         Snackbar.make(getView(), R.string.reset, Snackbar.LENGTH_SHORT).show();
     }
 
@@ -726,6 +727,7 @@ public class TripleFragment extends Fragment {
             editor.putString("sqd1",textNome1.getText().toString());
             editor.putString("sqd2",textNome2.getText().toString());
             editor.putString("sqd3",textNome3.getText().toString());
+            editor.putInt("interrupted", 3);
             editor.commit();
         }
         else{
@@ -735,6 +737,7 @@ public class TripleFragment extends Fragment {
             editor.putString("sqd1", sq1Default);
             editor.putString("sqd2",sq2Default);
             editor.putString("sqd3",sq3Default);
+            editor.putInt("interrupted", 0);
             //archiviaPartita
                 showDettPuntParz();
             editor.putString("dpp3", "");
@@ -872,7 +875,7 @@ public class TripleFragment extends Fragment {
             }
             else {
                 WebView webview = new WebView(getActivity());
-                String header = "<html><body bgcolor=\"#EEEEEE\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th><th>" + textNome3.getText().toString() + "</th></tr>";
+                String header = "<html><body bgcolor=\"#FFFFFF\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th><th>" + textNome3.getText().toString() + "</th></tr>";
                 String data = header + html + "</table></body></html>";
                 webview.loadData(data, "text/html; charset=UTF-8", null);
                 AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());

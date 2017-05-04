@@ -3,6 +3,7 @@ package com.marco97pa.puntiburraco;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,6 +27,7 @@ import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -184,6 +186,28 @@ public class MainActivity extends AppCompatActivity
         serviceIntent.setPackage("com.android.vending");
         bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
 
+        //Delete notification (if there is any)
+        NotificationManager notifManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notifManager.cancelAll();
+
+        //If the user opens the app by clicking on a notification, set the Fragment according to the last used mode
+        Intent intent = getIntent();
+        int mode = intent.getIntExtra("mode", 0);
+        if(mode == 2){
+            fragment = new DoubleFragment();
+            fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"2").commit();
+        }
+        else if(mode == 3){
+            fragment = new TripleFragment();
+            fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"3").commit();
+        }
+        else if(mode == 4){
+            fragment = new QuadFragment();
+            fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"4").commit();
+        }
 
         //Keep the screen always on if the user has set it true
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -206,6 +230,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (exit) {
+                notifyIfGameSuspended();
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
@@ -232,6 +257,78 @@ public class MainActivity extends AppCompatActivity
         if (mService != null) {
             unbindService(mServiceConn);
         }
+    }
+
+    /*NOTIFY USER ABOUT SUSPENDED MATCH
+    * If the user closes the app before one of the players wins,
+    * a notification will be shown on his Notification Drawer */
+    public void notifyIfGameSuspended(){
+        int PDefault = 0;
+        int tot1, tot2, tot3, status;
+        final String gioc1Default=getString(R.string.s1);
+        final String gioc2Default=getString(R.string.s2);
+        final String sq1Default=getString(R.string.n1);
+        final String sq2Default=getString(R.string.n2);
+        final String p1Default=getString(R.string.g1);
+        final String p2Default=getString(R.string.g2);
+        final String p3Default=getString(R.string.g3);
+        String gioc1, gioc2,gioc3, sq1, sq2;
+        //Initialize description
+        String description = "";
+        //Check if the game was interrupted (if no one has already won)
+        /*interrupted can be:
+        * - 0: one of the players has won, so user doesn't need to be notified
+        * - 2: game interrupted in 2 players mode
+        * - 3: game interrupted in 3 players mode
+        * - 4: game interrupted in 4 players mode*/
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        status = sharedPref.getInt("interrupted", 0);
+        Log.i("STATO:",Integer.toString(status));
+        //if game was interrupted
+        if(status != 0){
+            //Generating notification text according to the mode selected
+            switch (status){
+                case 2:
+                    tot1 = sharedPref.getInt("p1",PDefault);
+                    tot2 = sharedPref.getInt("p2",PDefault);
+                    gioc1 = sharedPref.getString("sq1",gioc1Default);
+                    gioc2 = sharedPref.getString("sq2",gioc2Default);
+                    description = gioc1+" - "+gioc2+"    "+Integer.toString(tot1)+" - "+Integer.toString(tot2);
+                    break;
+                case 4:
+                    tot1 = sharedPref.getInt("punti1",PDefault);
+                    tot2 = sharedPref.getInt("punti2",PDefault);
+                    sq1 = sharedPref.getString("squadra1",sq1Default);
+                    sq2 = sharedPref.getString("squadra2",sq2Default);
+                    description = sq1+" - "+sq2+"    "+Integer.toString(tot1)+" - "+Integer.toString(tot2);
+                    break;
+                case 3:
+                    tot1 = sharedPref.getInt("t1",PDefault);
+                    tot2 = sharedPref.getInt("t2",PDefault);
+                    tot3 = sharedPref.getInt("t3",PDefault);
+                    gioc1 = sharedPref.getString("sqd1",p1Default);
+                    gioc2 = sharedPref.getString("sqd2",p2Default);
+                    gioc3 = sharedPref.getString("sqd3",p3Default);
+                    description = gioc1+" - "+gioc2+" - "+gioc3+"  "+Integer.toString(tot1)+" - "+Integer.toString(tot2)+" - "+Integer.toString(tot3);
+                    break;
+
+            }
+
+            //and then, make the Notification
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle(getString(R.string.notification))
+                    .setContentText(description)
+                    .setAutoCancel(true)
+                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            //Intent to open MainActivity (passing the actual player mode (fragment))
+            Intent launch_app = new Intent(this, MainActivity.class);
+            launch_app.putExtra("mode", status);
+            mBuilder.setContentIntent(PendingIntent.getActivity(this,0,launch_app , PendingIntent.FLAG_UPDATE_CURRENT));
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(0, mBuilder.build());
+        }
+
     }
 
     //On return from another activity
