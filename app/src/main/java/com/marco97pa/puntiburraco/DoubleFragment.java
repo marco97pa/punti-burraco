@@ -402,13 +402,14 @@ public class DoubleFragment extends Fragment {
         punti1.setText(Integer.toString(tot1));
         punti2.setText(Integer.toString(tot2));
         win=false;
+        //save all
+        onSave();
         //reset dpp (hands detail string)
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp", "");
+        editor.putInt("interrupted", 0);
         editor.commit();
-        //save all
-        onSave();
         //reset images
         File file1 = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
         file1.delete();
@@ -618,7 +619,6 @@ public class DoubleFragment extends Fragment {
             }
             //save the new score
             onSave();
-
         }
     }
 
@@ -649,6 +649,7 @@ public class DoubleFragment extends Fragment {
             editor.putInt("p2", tot2);
             editor.putString("sq1",textNome1.getText().toString());
             editor.putString("sq2",textNome2.getText().toString());
+            editor.putInt("interrupted", 2);
             editor.commit();
         }
         else{
@@ -656,7 +657,8 @@ public class DoubleFragment extends Fragment {
             editor.putInt("p2", PDefault);
             editor.putString("sq1", sq1Default);
             editor.putString("sq2",sq2Default);
-            //Show "Hands Details, then delete the string"
+            editor.putInt("interrupted", 0);
+            //Show "Hands Details", then delete the string
                 showDettPuntParz();
             editor.putString("dpp", "");
             editor.commit();
@@ -844,7 +846,7 @@ public class DoubleFragment extends Fragment {
             }
             else {
                 WebView webview = new WebView(getActivity());
-                String header = "<html><body bgcolor=\"#EEEEEE\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
+                String header = "<html><body bgcolor=\"#FFFFFF\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
                 String data = header + html + "</table></body></html>";
                 webview.loadData(data, "text/html; charset=UTF-8", null);
                 AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());

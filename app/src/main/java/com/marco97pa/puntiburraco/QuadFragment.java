@@ -348,13 +348,14 @@ public class QuadFragment extends Fragment {
         punti1.setText(Integer.toString(tot1));
         punti2.setText(Integer.toString(tot2));
         win=false;
+        //salva tutto
+        onSave();
         //reset dpp
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp4", "");
+        editor.putInt("interrupted", 0);
         editor.commit();
-        //salva tutto
-        onSave();
         //reset Immagini
         File file1 = new File(getActivity().getFilesDir(), "img_m4_1.jpg");
         file1.delete();
@@ -503,6 +504,7 @@ public class QuadFragment extends Fragment {
             editor.putInt("punti2", tot2);
             editor.putString("squadra1",textNome1.getText().toString());
             editor.putString("squadra2",textNome2.getText().toString());
+            editor.putInt("interrupted", 4);
             editor.commit();
         }
         else{
@@ -510,6 +512,7 @@ public class QuadFragment extends Fragment {
             editor.putInt("punti2", PDefault);
             editor.putString("squadra1", sq1Default);
             editor.putString("squadra2",sq2Default);
+            editor.putInt("interrupted", 0);
             //archiviaPartita
                 showDettPuntParz();
             editor.putString("dpp", "");
@@ -679,7 +682,7 @@ public class QuadFragment extends Fragment {
             }
             else {
                 WebView webview = new WebView(getActivity());
-                String header = "<html><body bgcolor=\"#EEEEEE\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
+                String header = "<html><body bgcolor=\"#FFFFFF\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
                 String data = header + html + "</table></body></html>";
                 webview.loadData(data, "text/html; charset=UTF-8", null);
                 AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());

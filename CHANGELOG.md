@@ -1,5 +1,8 @@
 # Points Buraco CHANGELOG
 
+### 8.1.0
+* A notification is displayed if the game is suspended, so you can continue easily
+
 ### 8.0.8
 * Improved icons in the navigation bar
 * Added an easter egg :D
