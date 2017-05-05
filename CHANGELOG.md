@@ -1,5 +1,8 @@
 # Points Buraco CHANGELOG
 
+### 8.1.5
+* Moved the translation service to OneSky, including options to translate App, User Guide and Google Play description
+
 ### 8.1.0
 * A notification is displayed if the game is suspended, so you can continue easily
 

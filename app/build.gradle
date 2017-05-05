@@ -8,8 +8,8 @@ android {
         applicationId "com.marco97pa.puntiburraco"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 4200
-        versionName "8.1.0"
+        versionCode 4250
+        versionName "8.1.5"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
