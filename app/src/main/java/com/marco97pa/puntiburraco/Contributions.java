@@ -36,7 +36,7 @@ public class Contributions extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.localize.im/projects/x4"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://punti-burraco.oneskyapp.com/"));
                 startActivity(browserIntent);
             }
         });
