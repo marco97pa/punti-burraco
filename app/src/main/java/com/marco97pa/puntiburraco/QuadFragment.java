@@ -37,10 +37,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.camera.CropImageIntentBuilder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -324,8 +325,8 @@ public class QuadFragment extends Fragment {
         file1.delete();
         File file2 = new File(getActivity().getFilesDir(), "img_m4_2.jpg");
         file2.delete();
-        IMG1.setImageResource(R.drawable.ic_menu_gallery);
-        IMG2.setImageResource(R.drawable.ic_menu_gallery);
+        IMG1.setImageResource(R.drawable.ic_add_a_photo_white_48dp);
+        IMG2.setImageResource(R.drawable.ic_add_a_photo_white_48dp);
     }
     //AVVIA RESET
     public void openReset(){
@@ -356,13 +357,6 @@ public class QuadFragment extends Fragment {
         editor.putString("dpp4", "");
         editor.putInt("interrupted", 0);
         editor.commit();
-        //reset Immagini
-        File file1 = new File(getActivity().getFilesDir(), "img_m4_1.jpg");
-        file1.delete();
-        File file2 = new File(getActivity().getFilesDir(), "img_m4_2.jpg");
-        file2.delete();
-        IMG1.setImageResource(R.drawable.ic_menu_gallery);
-        IMG2.setImageResource(R.drawable.ic_menu_gallery);
         Snackbar.make(getView(), R.string.reset, Snackbar.LENGTH_SHORT).show();
     }
     //AVVIA CALCOLO PUNTI
@@ -699,27 +693,32 @@ public class QuadFragment extends Fragment {
 
     }
 
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        File croppedImageFile = new File(getActivity().getFilesDir(), "test.jpg");
+        File croppedImageFile;
 
         if ((requestCode == REQUEST_PICTURE_1) && (resultCode == RESULT_OK)) {
             // When the user is done picking a picture, let's start the CropImage Activity,
-            // setting the output image file and size to 200x200 pixels square.
-            Uri croppedImage = Uri.fromFile(croppedImageFile);
 
-            CropImageIntentBuilder cropImage = new CropImageIntentBuilder(200, 200, croppedImage);
-            cropImage.setOutlineColor(0xFF03A9F4);
-            cropImage.setSourceImage(data.getData());
+            Uri photo = data.getData();
 
-            startActivityForResult(cropImage.getIntent(getActivity()), REQUEST_CROP_PICTURE_1);
-        } else if ((requestCode == REQUEST_CROP_PICTURE_1) && (resultCode == RESULT_OK)) {
+            Intent intent = CropImage.activity(photo)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setFixAspectRatio(true)
+                    .setActivityTitle(getString(R.string.resize))
+                    .getIntent(getActivity());
+            startActivityForResult(intent, REQUEST_CROP_PICTURE_1);
+
+        } else if ((requestCode == REQUEST_CROP_PICTURE_1) && (resultCode == RESULT_OK)){
             // When we are done cropping, display it in the ImageView.
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            Uri resultUri = result.getUri();
             ImageView IMG1 = (ImageView) getView().findViewById(R.id.image1);
-            IMG1.setImageBitmap(BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath()));
+            IMG1.setImageURI(resultUri);
 
+            //and save it
+            croppedImageFile = new File(resultUri.getPath());
             File file = new File(getActivity().getFilesDir(), "img_m4_1.jpg");
             saveImage(file, croppedImageFile);
         }
@@ -727,19 +726,25 @@ public class QuadFragment extends Fragment {
 
         if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
             // When the user is done picking a picture, let's start the CropImage Activity,
-            // setting the output image file and size to 200x200 pixels square.
-            Uri croppedImage = Uri.fromFile(croppedImageFile);
 
-            CropImageIntentBuilder cropImage = new CropImageIntentBuilder(200, 200, croppedImage);
-            cropImage.setOutlineColor(0xFF03A9F4);
-            cropImage.setSourceImage(data.getData());
+            Uri photo = data.getData();
 
-            startActivityForResult(cropImage.getIntent(getActivity()), REQUEST_CROP_PICTURE_2);
-        } else if ((requestCode == REQUEST_CROP_PICTURE_2) && (resultCode == RESULT_OK)) {
+            Intent intent = CropImage.activity(photo)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setFixAspectRatio(true)
+                    .setActivityTitle(getString(R.string.resize))
+                    .getIntent(getActivity());
+            startActivityForResult(intent, REQUEST_CROP_PICTURE_2);
+
+        } else if ((requestCode == REQUEST_CROP_PICTURE_2) && (resultCode == RESULT_OK)){
             // When we are done cropping, display it in the ImageView.
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            Uri resultUri = result.getUri();
             ImageView IMG2 = (ImageView) getView().findViewById(R.id.image2);
-            IMG2.setImageBitmap(BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath()));
+            IMG2.setImageURI(resultUri);
 
+            //and save it
+            croppedImageFile = new File(resultUri.getPath());
             File file = new File(getActivity().getFilesDir(), "img_m4_2.jpg");
             saveImage(file, croppedImageFile);
         }

@@ -106,6 +106,7 @@
     <string name="pro_details">Per mostrare il dettaglio dei punteggi parziali, devi avere la versione PRO. Puoi acquistarla dal menu principale</string>
     <string name="back_to_exit">Premi di nuovo indietro per uscire</string>
     <string name="notification">Partita sospesa</string>
+    <string name="resize">Ritaglia</string>
 
     <!-- Contribution Activity -->
     <string name="intro_pro">Contribuisci allo sviluppo</string>

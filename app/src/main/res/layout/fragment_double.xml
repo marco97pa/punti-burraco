@@ -28,13 +28,13 @@
             grid:rowCount="24"
             tools:context="com.marco97pa.puntiburraco.MainActivity">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image1"
                 android:layout_width="138dp"
                 android:layout_height="109dp"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
-                app:srcCompat="@drawable/ic_menu_gallery"
+                android:src="@drawable/ic_add_a_photo_white_48dp"
                 grid:layout_column="0"
                 
                 grid:layout_row="0" />
@@ -225,13 +225,13 @@
                 
                 grid:layout_row="1" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image2"
                 android:layout_width="138dp"
                 android:layout_height="109dp"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
-                app:srcCompat="@drawable/ic_menu_gallery"
+                android:src="@drawable/ic_add_a_photo_white_48dp"
                 grid:layout_column="1"
                 grid:layout_row="0"
                 />

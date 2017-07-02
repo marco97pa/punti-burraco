@@ -114,4 +114,5 @@
     <string name="message_out_to_play_store">Obrigado :D \n Você pode escrever um comentário rolando na parte inferior da página</string>
     <string name="easter_egg">Yeah!</string>
     <string name="notification">Jogo suspenso</string>
+    <string name="resize">Redimensionar</string>
 </resources>
