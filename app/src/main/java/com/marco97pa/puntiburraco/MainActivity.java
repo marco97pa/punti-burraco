@@ -259,6 +259,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        notifyIfGameSuspended();
+    }
+
+
     /*NOTIFY USER ABOUT SUSPENDED MATCH
     * If the user closes the app before one of the players wins,
     * a notification will be shown on his Notification Drawer */
@@ -284,8 +291,15 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         status = sharedPref.getInt("interrupted", 0);
         Log.i("STATO:",Integer.toString(status));
+        //check if the score is 0 - 0: in that case do not notify
+        boolean scoreNotZero = true;
+        if(sharedPref.getInt("p1",PDefault) == 0 && sharedPref.getInt("p2",PDefault) == 0
+                && sharedPref.getInt("punti1",PDefault) == 0 && sharedPref.getInt("punti2",PDefault) == 0
+                && sharedPref.getInt("t1",PDefault) == 0 && sharedPref.getInt("t2",PDefault) == 0 && sharedPref.getInt("t3",PDefault) == 0){
+            scoreNotZero = false;
+        }
         //if game was interrupted
-        if(status != 0){
+        if(status != 0 && scoreNotZero){
             //Generating notification text according to the mode selected
             switch (status){
                 case 2:
@@ -345,6 +359,10 @@ public class MainActivity extends AppCompatActivity
             editor.commit();
             recreate();
         }
+
+        //Delete notification (if there is any)
+        NotificationManager notifManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notifManager.cancelAll();
 
     }
 

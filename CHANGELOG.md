@@ -1,5 +1,11 @@
 # Points Buraco CHANGELOG
 
+### 8.4.0
+* Improved notifications
+* Improved the profile image editor
+* Round profile images
+* Support for Android O 8.0 
+
 ### 8.1.5
 * Moved the translation service to OneSky, including options to translate App, User Guide and Google Play description
 
