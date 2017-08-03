@@ -36,6 +36,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * TRIPLE FRAGMENT
@@ -639,6 +641,10 @@ public class TripleFragment extends Fragment {
                 winner=textNome1.getText().toString();
                 loser1=textNome2.getText().toString();
                 loser2=textNome3.getText().toString();
+                //save score to DB
+                saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
+                //make alert
+
                 AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
 
                 String out=textNome1.getText().toString();
@@ -658,6 +664,10 @@ public class TripleFragment extends Fragment {
                 winner=textNome2.getText().toString();
                 loser1=textNome1.getText().toString();
                 loser2=textNome3.getText().toString();
+                //save score to DB
+                saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
+                //make alert
+
                 win=true;
                 AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
                 String out=textNome2.getText().toString();
@@ -677,6 +687,11 @@ public class TripleFragment extends Fragment {
                 winner=textNome3.getText().toString();
                 loser1=textNome2.getText().toString();
                 loser2=textNome1.getText().toString();
+
+                //save score to DB
+                saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
+                //make alert
+
                 win=true;
                 AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
                 String out=textNome3.getText().toString();
@@ -781,7 +796,8 @@ public class TripleFragment extends Fragment {
         String nomeFoto="SCREEN"+ System.currentTimeMillis() + ".png";
         File imageFileToShare;
         try {
-            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStorageDirectory().toString(), nomeFoto));
+            // Save as png
+            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), nomeFoto));
             bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
@@ -858,6 +874,22 @@ public class TripleFragment extends Fragment {
         }
         return res;
     }
+
+    /**
+     * SAVE MATCH TO DATABASE
+     * If one of the players wins, the score of the match will be saved in History ScoreDB
+     */
+    public void saveScoreToDB(String player1,String player2,String player3, int point1,int point2, int point3) {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
+        String date = dateformat.format(c.getTime());
+
+        ScoreDB db = new ScoreDB(getActivity());
+        db.open();
+        long id = db.insertScore(player1, player2, player3, point1, point2, point3, date);
+        db.close();
+    }
+
     //AVVIA SET NOMI
     public void showNoticeDialog() {
         new AlertDialog.Builder(getActivity())

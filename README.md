@@ -1,7 +1,7 @@
 <img src="http://marcofantauzzo.it/images/punti.png" align="right" width="200" height="200"/>
 
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](http://choosealicense.com/licenses/gpl-3.0/)
-[![Downloads](https://img.shields.io/badge/google%20play%20downloads-4.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
+[![Downloads](https://img.shields.io/badge/google%20play%20downloads-5.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
 
 # Points Buraco  
 
@@ -25,6 +25,7 @@ An **open-source** Android Burraco scorekeeper with social functions, different 
   - Set the arrive score, when the game ends (default: 2005)
   - Ability to pause a game and continue later
   - Automatically counts the score, based on the number of run
+  - History of your matches
 - **App**
   - Full Material Design
   - Share your results on Facebook, Whatsapp and others

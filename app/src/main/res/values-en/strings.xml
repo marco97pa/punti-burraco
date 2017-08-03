@@ -61,8 +61,6 @@
     <string name="pro_details">To show the details of each hand, you must buy the PRO version</string>
     <string name="pro_function">PRO functionality</string>
     <string name="reset">New game, points reset</string>
-    <string name="s1">Player 1</string>
-    <string name="s2">Player 2</string>
     <string name="setting_limite">Set win point</string>
     <string name="setting_notte">Night Mode</string>
     <string name="setting_notte_d">Suggested for low light ambients</string>
@@ -115,4 +113,8 @@
     <string name="easter_egg">Yay! Rainbows everywhere!</string>
     <string name="notification">Match suspended</string>
     <string name="resize">Resize</string>
+    <string name="button_donate">Donate</string>
+    <string name="gioc_1">Player 1</string>
+    <string name="gioc_2">Player 2</string>
+    <string name="nav_history">History</string>
 </resources>

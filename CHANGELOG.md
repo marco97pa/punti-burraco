@@ -1,5 +1,12 @@
 # Points Buraco CHANGELOG
 
+### 9.0.0
+* Speed improvements
+* New history function to display your latest matches
+* Full 5.0 emoji support for Android 4.4+ devices
+* Moved donations to Contribution section
+* Bug fixing
+
 ### 8.4.0
 * Improved notifications
 * Improved the profile image editor
