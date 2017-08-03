@@ -48,6 +48,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -351,8 +353,8 @@ public class DoubleFragment extends Fragment {
      * String sq1Default and String sq2Default : Default players name according to string.xml
      */
     public void Restore(){
-        final String sq1Default=getString(R.string.s1);
-        final String sq2Default=getString(R.string.s2);
+        final String sq1Default=getString(R.string.gioc_1);
+        final String sq2Default=getString(R.string.gioc_2);
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         tot1 = sharedPref.getInt("p1",PDefault);
         tot2 = sharedPref.getInt("p2",PDefault);
@@ -367,8 +369,8 @@ public class DoubleFragment extends Fragment {
      * This method sets default names and images for each player
      */
     public void openNomi(){
-        textNome1.setText(getString(R.string.s1));
-        textNome2.setText(getString(R.string.s2));
+        textNome1.setText(getString(R.string.gioc_1));
+        textNome2.setText(getString(R.string.gioc_2));
         onSave();
         //reset Immagini
         File file1 = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
@@ -578,6 +580,9 @@ public class DoubleFragment extends Fragment {
                     win = true;
                     winner = textNome1.getText().toString();
                     loser = textNome2.getText().toString();
+                    //save score to DB
+                    saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                    //make alert
                     AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
                     String out = textNome1.getText().toString();
                     out = out +" ";
@@ -597,6 +602,9 @@ public class DoubleFragment extends Fragment {
                     win = true;
                     winner = textNome2.getText().toString();
                     loser = textNome1.getText().toString();
+                    //save score to DB
+                    saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                    //make alert
                     AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
                     String out=textNome2.getText().toString();
                     out = out +" ";
@@ -634,8 +642,8 @@ public class DoubleFragment extends Fragment {
      * If user has won, default values will be saved, to start a new game.
      */
     public void onSave(){
-        final String sq1Default=getString(R.string.s1);
-        final String sq2Default=getString(R.string.s2);
+        final String sq1Default=getString(R.string.gioc_1);
+        final String sq2Default=getString(R.string.gioc_2);
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         if(win == false){
@@ -733,7 +741,7 @@ public class DoubleFragment extends Fragment {
         File imageFileToShare;
         try {
             // Save as png
-            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStorageDirectory().toString(), nomeFoto));
+            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), nomeFoto));
             bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
@@ -816,6 +824,20 @@ public class DoubleFragment extends Fragment {
         return res;
     }
 
+    /**
+     * SAVE MATCH TO DATABASE
+     * If one of the players wins, the score of the match will be saved in History ScoreDB
+     */
+    public void saveScoreToDB(String player1,String player2,int point1,int point2) {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
+        String date = dateformat.format(c.getTime());
+
+        ScoreDB db = new ScoreDB(getActivity());
+        db.open();
+        long id = db.insertScore(player1, player2, point1, point2, date);
+        db.close();
+    }
     /**
      * ALERT HOW-TO CHANGE NAMES
      * A little alert to help user change players names

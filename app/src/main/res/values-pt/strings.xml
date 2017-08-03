@@ -56,8 +56,6 @@
     <string name="pro_details">Para mostrar os detalhes das pontuações parciais, você tem que ter a versão PRO. Você pode comprá-lo a partir do menu principal</string>
     <string name="pro_function">Funcionalidade PRO</string>
     <string name="reset">Novo jogo</string>
-    <string name="s1">Jogador 1</string>
-    <string name="s2">Jogador 2</string>
     <string name="setting_limite">Pontos de chegada</string>
     <string name="setting_notte">Modo noturno</string>
     <string name="setting_schermo">Modo Always-On</string>
@@ -115,4 +113,8 @@
     <string name="easter_egg">Yeah!</string>
     <string name="notification">Jogo suspenso</string>
     <string name="resize">Redimensionar</string>
+    <string name="button_donate">Começar</string>
+    <string name="gioc_1">Jogador 1</string>
+    <string name="gioc_2">Jogador 2</string>
+    <string name="nav_history">História</string>
 </resources>

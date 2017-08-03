@@ -24,8 +24,8 @@
     <string name="SuggNome">Nome squadra</string>
     <string name="n1">Squadra 1</string>
     <string name="n2">Squadra 2</string>
-    <string name="s1">Giocatore 1</string>
-    <string name="s2">Giocatore 2</string>
+    <string name="gioc_1">Giocatore 1</string>
+    <string name="gioc_2">Giocatore 2</string>
     <string name="g1">Gioc 1</string>
     <string name="g2">Gioc 2</string>
     <string name="g3">Gioc 3</string>
@@ -74,6 +74,7 @@
     <string name="permission_false">Impossibile avviare la condivisione: hai rifiutato il permesso</string>
     <string name="nav_guide">Guida e feedback</string>
     <string name="nav_info">Contribuisci</string>
+    <string name="nav_history">Cronologia partite</string>
     <string name="nav_upgrade">Donazione</string>
     <string name="nav_settings">Impostazioni</string>
     <string name="nav_2gioc">2 Giocatori</string>
@@ -111,7 +112,7 @@
     <!-- Contribution Activity -->
     <string name="intro_pro">Contribuisci allo sviluppo</string>
     <string name="contrib_donate_t">Donazioni</string>
-    <string name="contrib_donate_d">Puoi contribuire lo sviluppo effettuando una piccola donazione direttamente dal menu dell\'app</string>
+    <string name="contrib_donate_d">Puoi contribuire lo sviluppo effettuando una piccola donazione di qualsiasi importo tramite Paypal</string>
     <string name="contrib_ads_t">Pubblicità</string>
     <string name="contrib_ads_d">Abilitando l\'opzione \"Contribuisci allo sviluppo\" dalle Impostazioni, è possibile dare una mano con dei piccoli banner pubblicitari non intrusivi</string>
     <string name="contrib_trans_t">Traduzioni</string>
@@ -127,6 +128,7 @@
     <string name="button_go">Vai su GitHub</string>
     <string name="button_star">Recensisci</string>
     <string name="button_share">Condividi</string>
+    <string name="button_donate">Dona</string>
     <string name="message_out_to_play_store">Grazie per aver scelto di lasciarci una valutazione\n Basta scorrere in basso per lasciare una recensione</string>
 
     <!-- Ads String -->

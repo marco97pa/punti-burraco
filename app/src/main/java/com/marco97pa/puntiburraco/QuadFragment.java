@@ -49,6 +49,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -437,6 +439,9 @@ public class QuadFragment extends Fragment {
                     win=true;
                     winner=textNome1.getText().toString();
                     loser=textNome2.getText().toString();
+                    //save score to DB
+                    saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                    //make alert
                     AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
                     String out=textNome1.getText().toString();
                     out = out +" ";
@@ -455,6 +460,9 @@ public class QuadFragment extends Fragment {
                     win=true;
                     winner=textNome2.getText().toString();
                     loser=textNome1.getText().toString();
+                    //save score to DB
+                    saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                    //make alert
                     AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
                     String out=textNome2.getText().toString();
                     out = out +" ";
@@ -584,7 +592,8 @@ public class QuadFragment extends Fragment {
         String nomeFoto="SCREEN"+ System.currentTimeMillis() + ".png";
         File imageFileToShare;
         try {
-            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStorageDirectory().toString(), nomeFoto));
+            // Save as png
+            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), nomeFoto));
             bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
@@ -612,6 +621,21 @@ public class QuadFragment extends Fragment {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * SAVE MATCH TO DATABASE
+     * If one of the players wins, the score of the match will be saved in History ScoreDB
+     */
+    public void saveScoreToDB(String player1,String player2,int point1,int point2) {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
+        String date = dateformat.format(c.getTime());
+
+        ScoreDB db = new ScoreDB(getActivity());
+        db.open();
+        long id = db.insertScore(player1, player2, point1, point2, date);
+        db.close();
     }
 
     //CONTROLLI ERRORI

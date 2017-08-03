@@ -27,6 +27,8 @@ import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.text.emoji.EmojiCompat;
+import android.support.text.emoji.bundled.BundledEmojiCompatConfig;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -49,12 +51,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.vending.billing.IInAppBillingService;
-import com.marco97pa.puntiburraco.util.IabHelper;
-import com.marco97pa.puntiburraco.util.IabResult;
-import com.marco97pa.puntiburraco.util.Inventory;
-import com.marco97pa.puntiburraco.util.Purchase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,16 +79,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static Context contextOfApplication;
-    final String TEST_ID="android.test.purchased";
-    //Test ID for In-App Billing
-    final String PRO_ID="com.marco97pa.puntiburraco.pro";
-    //Real ID for In-App Billing
-    IInAppBillingService mService;
-    final String base64EncodedPublicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1sDQLIixxrs2UY51TxvoMpxmd3GTLd3cOEx0BOC73S2AyzRERmI2mDdfdzVUEtRVDC+iH0xAkdyFNIaeVU1Yy5eKpT8haFAdWAHRhTgSXCHr6hrTkcPiOkcszIdm4zkzZEqw3R6H16dUOuNxRWwgO2qel4Z6tzxDdKpQdi1QsGYOzG916nvmz3VhwdvYD74D9+UK2bblNHMl6PB7xPWZa2Uf8cPKSvLVhLSXg6i6bsXHKyabczQfj0a+0H7MacAmrBOQcK6CDYPs/6qqPsOiaPCAQelWldArVyTn5MocjCQBXyqvbocOqB6r4eitNK2TqlxUcFYJ4HblA6foi6/LyQIDAQAB";
-    /* Public Key for In-App Billing
-     * I know that Google says to not make this value easy to read and sharing with others
-     * But this app works with donations, so this key will "unlock" no new features, so it is useless to attackers
-     */
 
     //CREATING ACTIVITY AND FAB BUTTON
     @Override
@@ -180,12 +166,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Loading In-App Service
-        Intent serviceIntent =
-                new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-
         //Delete notification (if there is any)
         NotificationManager notifManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.cancelAll();
@@ -216,6 +196,9 @@ public class MainActivity extends AppCompatActivity
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
+        EmojiCompat.Config config = new BundledEmojiCompatConfig(this)
+                .setReplaceAll(true);
+        EmojiCompat.init(config);
     }
 
 
@@ -254,9 +237,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mService != null) {
-            unbindService(mServiceConn);
-        }
     }
 
     @Override
@@ -414,6 +394,11 @@ public class MainActivity extends AppCompatActivity
             Intent myIntent = new Intent(this, SettingActivity.class);
             this.startActivity(myIntent);
 
+        } else if (id == R.id.nav_history) {
+            //Launches History Activity
+            Intent myIntent = new Intent(this, HistoryActivity.class);
+            this.startActivity(myIntent);
+
         } else if (id == R.id.nav_guide) {
             //Check if the device is connected
             ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -438,11 +423,11 @@ public class MainActivity extends AppCompatActivity
                 Log.i("LINGUA", localeId);
                 //If lang is italian it will be redirected to guide-it.html., else to guide-en.html
                 if(localeId.equals("it_IT")) {
-                    customTabsIntent.launchUrl(this, Uri.parse("http://marco97pa.altervista.org/android/puntiburraco/guide-it.html"));
+                    customTabsIntent.launchUrl(this, Uri.parse("https://punti-burraco.firebaseapp.com/guide-it.html"));
                     Log.i("PASSA", "true");
                 }
                 else{
-                    customTabsIntent.launchUrl(this, Uri.parse("http://marco97pa.altervista.org/android/puntiburraco/guide-en.html"));
+                    customTabsIntent.launchUrl(this, Uri.parse("https://punti-burraco.firebaseapp.com/guide-en.html"));
                     Log.i("PASSA", "false");
                 }
             }
@@ -466,21 +451,6 @@ public class MainActivity extends AppCompatActivity
             Intent myIntent = new Intent(this, Contributions.class);
             this.startActivity(myIntent);
 
-        } else if (id == R.id.nav_upgrade) {
-            //It starts in-app process
-            try {
-                Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
-                        PRO_ID, "inapp", "y");
-                PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
-                startIntentSenderForResult(pendingIntent.getIntentSender(),
-                        1001, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
-                        Integer.valueOf(0));
-
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (IntentSender.SendIntentException e) {
-                e.printStackTrace();
-            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -488,67 +458,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //Simple Method to returno the Context of App
+    //Simple Method to return the Context of App
     public static Context getContextOfApplication(){
         return contextOfApplication;
     }
 
-    //Handles the Results of In-App Billing process
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1001) {
-            int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
-            String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
-            String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
 
-            if (resultCode == RESULT_OK) {
-                        Toast.makeText(this, getString(R.string.buy_success), Toast.LENGTH_LONG).show();
-                        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putBoolean("pro", true);
-                        editor.commit();
-            }
-            if(resultCode == 1){
-                Toast.makeText(this, getString(R.string.buy_cancel), Toast.LENGTH_LONG).show();
-            }
-            if(resultCode == 2){
-                Toast.makeText(this, getString(R.string.buy_network), Toast.LENGTH_LONG).show();
-            }
-            if(resultCode == 3){
-                Toast.makeText(this, getString(R.string.buy_playservices), Toast.LENGTH_LONG).show();
-            }
-            if(resultCode == 4){
-                Toast.makeText(this, getString(R.string.buy_notavaible), Toast.LENGTH_LONG).show();
-            }
-            if(resultCode == 5){
-                Toast.makeText(this, getString(R.string.buy_dev), Toast.LENGTH_LONG).show();
-            }
-            if(resultCode == 6){
-                Toast.makeText(this, getString(R.string.buy_api), Toast.LENGTH_LONG).show();
-            }
-            if(resultCode == 7){
-                Toast.makeText(this, getString(R.string.buy_already), Toast.LENGTH_LONG).show();
-                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean("pro", true);
-                editor.commit();
-            }
-
-        }
-    }
-
-    ServiceConnection mServiceConn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name,
-                                       IBinder service) {
-            mService = IInAppBillingService.Stub.asInterface(service);
-        }
-    };
 
 
 

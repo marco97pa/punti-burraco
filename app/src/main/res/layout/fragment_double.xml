@@ -110,15 +110,16 @@
                 
                 grid:layout_row="2" />
 
-            <TextView
+            <android.support.text.emoji.widget.EmojiTextView
                 android:id="@+id/editNome1"
                 android:width="@dimen/tabella"
                 android:ems="10"
                 android:gravity="center"
                 android:text="@string/n1"
+                android:textAppearance="@android:style/TextAppearance.Material.Large"
+
                 android:textSize="20dp"
                 grid:layout_column="0"
-                
                 grid:layout_row="1" />
 
             <EditText
@@ -214,15 +215,16 @@
                 
                 grid:layout_row="2" />
 
-            <TextView
+            <android.support.text.emoji.widget.EmojiTextView
                 android:id="@+id/editNome2"
                 android:width="@dimen/tabella"
                 android:ems="10"
                 android:gravity="center"
                 android:text="@string/n2"
+                android:textAppearance="@android:style/TextAppearance.Material.Large"
+
                 android:textSize="20dp"
                 grid:layout_column="1"
-                
                 grid:layout_row="1" />
 
             <de.hdodenhof.circleimageview.CircleImageView

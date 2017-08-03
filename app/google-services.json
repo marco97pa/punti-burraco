@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "450159642823-f4ee2p5hs5pd2ujoo6tbhpekfn67gvb0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marco97pa.puntiburraco",
+            "certificate_hash": "d52cf0cc3422524458dc0fc431677495b4157b9d"
+          }
+        },
+        {
+          "client_id": "450159642823-uafpnarvpt6gmsljtio03i4j4jtlhgjv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marco97pa.puntiburraco",
+            "certificate_hash": "4c2590c065b48ca83d4c9b8220d9cb962880ca35"
+          }
+        },
+        {
           "client_id": "450159642823-7asrgms0jql4cvq6f3pdk2ndskpl087t.apps.googleusercontent.com",
           "client_type": 3
         }

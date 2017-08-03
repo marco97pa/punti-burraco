@@ -14,47 +14,50 @@
     android:screenOrientation="portrait"
     >
 
-    <TextView
+    <android.support.text.emoji.widget.EmojiTextView
         android:id="@+id/editNome1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        grid:layout_column="0"
-        grid:layout_row="0"
-        grid:layout_columnWeight="1"
-        grid:layout_gravity="fill_horizontal"
-        android:gravity="center"
         android:width="@dimen/tab"
         android:ems="10"
+        android:gravity="center"
         android:text="@string/g1"
-        android:textSize="20dp" />
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textSize="20dp"
+        grid:layout_column="0"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_row="0" />
 
-    <TextView
+    <android.support.text.emoji.widget.EmojiTextView
         android:id="@+id/editNome2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        grid:layout_column="1"
-        grid:layout_columnWeight="1"
-        grid:layout_gravity="fill_horizontal"
-        grid:layout_row="0"
         android:width="@dimen/tab"
         android:ems="10"
         android:gravity="center"
         android:text="@string/g2"
-        android:textSize="20dp" />
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textSize="20dp"
+        grid:layout_column="1"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_row="0" />
 
-    <TextView
+    <android.support.text.emoji.widget.EmojiTextView
         android:id="@+id/editNome3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        grid:layout_column="2"
-        grid:layout_columnWeight="1"
-        grid:layout_gravity="fill_horizontal"
-        grid:layout_row="0"
         android:width="@dimen/tab"
         android:ems="10"
         android:gravity="center"
         android:text="@string/g3"
-        android:textSize="20dp" />
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textSize="20dp"
+        grid:layout_column="2"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_row="0" />
 
     <TextView
         android:id="@+id/Punti1"
