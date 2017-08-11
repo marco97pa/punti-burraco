@@ -60,8 +60,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         share_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference preference) {
-                final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
-                String testo = getString(R.string.share_message)+ " https://play.google.com/store/apps/details?id=" + appPackageName;
+                String testo = getString(R.string.share_message)+ " https://hh29c.app.goo.gl/eaFH"; //this is a Dynamic Link
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 // Add data to the intent, the receiving app will decide

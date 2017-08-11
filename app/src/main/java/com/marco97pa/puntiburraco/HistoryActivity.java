@@ -1,5 +1,6 @@
 package com.marco97pa.puntiburraco;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,34 @@ public class HistoryActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
         mDividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(mDividerItemDecoration);
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new MainActivity.ClickListener() {
+
+            public void onClick(View view, int position) {
+                Score selezionato = scoreList.get(position);
+                String points3, player3;
+                if(selezionato.getPoint3() == -1) {
+                    points3 = "";
+                    player3 = "";
+                }
+                else{
+                    points3 = " - "+Integer.toString(selezionato.getPoint3());
+                    player3 = " vs "+selezionato.getPlayer3();
+                }
+                String scoreToText = selezionato.getPlayer1()+ " vs "+ selezionato.getPlayer2() + player3 + ": " + selezionato.getPoint1() + " - " + selezionato.getPoint2() + points3;
+
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                // Add data to the intent, the receiving app will decide
+                // what to do with it.
+                share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                share.putExtra(Intent.EXTRA_TEXT, scoreToText);
+                startActivity(Intent.createChooser(share, getString(R.string.share_hint)));
+            }
+
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         prepareData();
     }

@@ -67,8 +67,7 @@ public class Contributions extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
-                String testo = getString(R.string.share_message)+ " https://play.google.com/store/apps/details?id=" + appPackageName;
+                String testo = getString(R.string.share_message)+ " https://hh29c.app.goo.gl/eaFH ";
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 // Add data to the intent, the receiving app will decide

@@ -1,6 +1,13 @@
 # Points Buraco CHANGELOG
 
-### 9.0.0
+### 9.5.0
+* Guide improved
+* Removed in app permission
+* Splash screen
+* Ability to share history results
+* Dinamic links
+
+## 9.0.0
 * Speed improvements
 * New history function to display your latest matches
 * Full 5.0 emoji support for Android 4.4+ devices

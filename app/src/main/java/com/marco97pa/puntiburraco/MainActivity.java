@@ -14,6 +14,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -80,6 +81,13 @@ public class MainActivity extends AppCompatActivity
 
     public static Context contextOfApplication;
 
+
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
+    }
+
     //CREATING ACTIVITY AND FAB BUTTON
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +102,9 @@ public class MainActivity extends AppCompatActivity
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.barBlack));
             }
+        }
+        else{
+            setTheme(R.style.AppTheme_NoActionBar);
         }
 
         /* CREATING ACTIVITY
@@ -409,6 +420,8 @@ public class MainActivity extends AppCompatActivity
                 //I am using CustomTabs
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                final Bitmap backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back_black_24dp);
+                builder.setCloseButtonIcon(backButton);
                 builder.setShowTitle(true);
                 CustomTabsIntent customTabsIntent = builder.build();
                 //Takes the user to the localized page of the user guide
