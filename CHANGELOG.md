@@ -1,5 +1,11 @@
 # Points Buraco CHANGELOG
 
+### 9.7.0
+* Android 8.0 Support improved
+* Adaptive icon
+* Improved notification
+* Improved hands details and alert theme
+
 ### 9.5.0
 * Guide improved
 * Removed in app permission
