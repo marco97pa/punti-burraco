@@ -3,7 +3,7 @@
 
 ### Before you import the project to Android Studio:
 
-- Make sure you have Android Studio 2.3 & above.
+- Make sure you have latest Android Studio version.
 - Set the following Android Studio Settings (to ensure same code formatting):
 
 > New line: CRLF - Encoding: UTF-8 - Indenting: 4 spaces
@@ -25,11 +25,6 @@
 
 > I really appreciate your efforts on contributing to this project.
 
-# Contribute Translations
-
-In order to help translations, please take a look at [Localize.im](https://www.localize.im/projects/x4)
-
-Please note that _Localize.im_ will be discontinued in October 2018, so I am planning to move the translation to another service in mid-2018
 
 # Versioning
 
