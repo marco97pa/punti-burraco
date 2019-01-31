@@ -59,7 +59,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * DOUBLE FRAGMENT
  * Fragment of the 2 players mode
- * Some parts of this code has been written by me at the age of 16, so it can be written better
+ * Some parts of this code was written by me at the age of 16, so it can be written better
  * It is really similar to TripleFragment and QuadFragment, except for some calculation and error checks difference
  * Specific comments will be provided near relative instruction
  *
