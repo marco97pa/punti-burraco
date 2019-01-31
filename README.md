@@ -49,7 +49,7 @@ For more information, visit the full [**Changelog**](CHANGELOG.md)
 # Specs / Open-source libraries:
 
 - Minimum **SDK 15**
-- [**Android-CropImage**](https://github.com/lvillani/android-cropimage) for cropping profile images
+- [**uCrop**](https://github.com/Yalantis/uCrop) for cropping profile images
 - **Firebase** analytics, crash reporting, ads
 - **Android X**, the almighty ;)
 - **Android Custom Tabs**, to show the user Guide
