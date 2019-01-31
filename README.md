@@ -1,7 +1,7 @@
-<img src="http://marcofantauzzo.it/images/punti.png" align="right" width="200" height="200"/>
+<img src="https://punti-burraco.firebaseapp.com/images/icon.png" align="right" width="200" height="200"/>
 
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](http://choosealicense.com/licenses/gpl-3.0/)
-[![Downloads](https://img.shields.io/badge/google%20play%20downloads-5.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
+[![Downloads](https://img.shields.io/badge/google%20play%20downloads-10.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
 
 # Points Buraco  
 
@@ -36,7 +36,7 @@ An **open-source** Android Burraco scorekeeper with social functions, different 
 - _**Much more...**_
   - _Points Buraco is actively developed. More features will come!_
 
-> **Points Buraco** contain Ads, which are enabled by default. You could disable them, but if you'd like to support the development you should consider to keep them enabled.
+> **Points Buraco** is a FREE app without ads, in-app purchases or other freemium models of revenue
 
 # History
 
@@ -51,8 +51,7 @@ For more information, visit the full [**Changelog**](CHANGELOG.md)
 - Minimum **SDK 15**
 - [**Android-CropImage**](https://github.com/lvillani/android-cropimage) for cropping profile images
 - **Firebase** analytics, crash reporting, ads
-- **Android Support Libraries**, the almighty ;)
-- **AppCompat**, the power ;)
+- **Android X**, the almighty ;)
 - **Android Custom Tabs**, to show the user Guide
 
 # Contribution
@@ -63,7 +62,7 @@ Read the [**contribution guide**](CONTRIBUTE.md) for more detailed information.
 
 # License
 
-> Copyright (C) 2017 [Marco Fantauzzo](http://marcofantauzzo.it). 
+> Copyright (C) 2019 [Marco Fantauzzo](http://marcofantauzzo.it). 
 > Licensed under the [GPL-3.0](https://www.gnu.org/licenses/gpl.html) license.
 > (See the [LICENSE](https://github.com/marco97pa/punti-burraco/master/LICENSE) file for the whole license text.)
 
