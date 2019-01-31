@@ -57,7 +57,7 @@ For more information, visit the full [**Changelog**](https://punti-burraco.fireb
 
 You love Points Buraco? You want new features or bug fixes?  
 Please **contribute** to the  project either by [_creating a Pull Request_](https://github.com/marco97pa/punti-burraco/compare) or [_submitting an issue_](https://github.com/marco97pa/punti-burraco/issues/new) on GitHub.  
-Read the [**contribution guide**](CONTRIBUTE.md) for more detailed information.
+Read the [**contribution guide**](https://github.com/marco97pa/punti-burraco/wiki/Contributions) for more detailed information.
 
 # License
 
