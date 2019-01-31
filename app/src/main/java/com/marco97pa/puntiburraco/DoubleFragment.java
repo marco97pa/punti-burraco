@@ -1,5 +1,7 @@
 package com.marco97pa.puntiburraco;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.Manifest;
@@ -8,26 +10,30 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.widget.PopupMenu;
+
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.CheckBox;
@@ -36,11 +42,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -98,6 +101,10 @@ public class DoubleFragment extends Fragment {
     //Old totals are variable used to revert point changes
     public int old_tot1;
     public int old_tot2;
+    //colors for alerts
+    String bgColor, txtColor;
+    boolean bypass = false;
+    MediaPlayer sound;
 
     public DoubleFragment() {
         // Empty constructor required for fragment subclasses
@@ -135,8 +142,14 @@ public class DoubleFragment extends Fragment {
         IMG1= (ImageView) rootView.findViewById(R.id.image1);
         IMG2= (ImageView) rootView.findViewById(R.id.image2);
 
+        sound = MediaPlayer.create(getActivity(), R.raw.fischio);
+
         //Invoking method to recover the state of an interrupted game
         Restore();
+
+        //get Actual Theme Colors
+        bgColor = ((MainActivity)getActivity()).getAlertBackgroundColor();
+        txtColor = ((MainActivity) getActivity()).getAlertTextColor();
 
         //Setting OnclickListeners for each Player TextView
         textNome1.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +176,21 @@ public class DoubleFragment extends Fragment {
 
             @Override
             public void onClick(View arg0) {
+                //Animation
+                IMG1.bringToFront();
+                IMG1.invalidate();
+                IMG1.animate()
+                        .scaleX(10)
+                        .scaleY(10)
+                        .setDuration(500)
+                        .setInterpolator(new LinearInterpolator())
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator){
+                                IMG1.setScaleX(1);
+                                IMG1.setScaleY(1);
+                            }
+                        });
                 //Pick image from user Gallery
                 // First, request permission (Android 6.0+ only)
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -177,10 +205,57 @@ public class DoubleFragment extends Fragment {
             }
         });
 
+        IMG1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                makeVibration();
+                PopupMenu popup = new PopupMenu(getActivity(), view);
+
+                // This activity implements OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.removeText:
+                                textNome1.setText(getString(R.string.gioc_1));
+                                onSave();
+                                return true;
+                            case R.id.removeImage:
+                                File file1 = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
+                                file1.delete();
+                                IMG1.setImageResource(R.drawable.circle_placeholder);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.actions);
+                popup.show();
+                return false;
+            }
+
+        });
+
         IMG2.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
+                //Animation
+                IMG2.bringToFront();
+                IMG2.invalidate();
+                IMG2.animate()
+                        .scaleX(10)
+                        .scaleY(10)
+                        .setDuration(500)
+                        .setInterpolator(new LinearInterpolator())
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator){
+                                IMG2.setScaleX(1);
+                                IMG2.setScaleY(1);
+                            }
+                        });
                 //Pick image from user Gallery
                 // First, request permission
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -195,6 +270,38 @@ public class DoubleFragment extends Fragment {
             }
         });
 
+        IMG2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                makeVibration();
+                PopupMenu popup = new PopupMenu(getActivity(), view);
+
+                // This activity implements OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.removeText:
+                                textNome2.setText(getString(R.string.gioc_2));
+                                onSave();
+                                return true;
+                            case R.id.removeImage:
+                                File file2 = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
+                                file2.delete();
+                                IMG2.setImageResource(R.drawable.circle_placeholder);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.actions);
+                popup.show();
+                return false;
+            }
+
+        });
+
         /**
          * RECOVER IMAGES OF LAST GAME
          * Images are showed only if user has choose it in settings
@@ -202,11 +309,28 @@ public class DoubleFragment extends Fragment {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Boolean isImgActivated = sharedPref.getBoolean("img", false) ;
         if(isImgActivated) {
-            Bitmap bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m2_1.jpg");
+            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
+            Bitmap bitmap1 = null, bitmap2 = null;
+            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                try {
+                    File bmp1 = new File(getActivity().getFilesDir() + "/img_m2_1.jpg");
+                    ImageDecoder.Source source1 = ImageDecoder.createSource(bmp1);
+                    bitmap1 = ImageDecoder.decodeBitmap(source1);
+                } catch (IOException e) { e.printStackTrace(); }
+                try {
+                    File bmp2 = new File(getActivity().getFilesDir() + "/img_m2_2.jpg");
+                    ImageDecoder.Source source2 = ImageDecoder.createSource(bmp2);
+                    bitmap2 = ImageDecoder.decodeBitmap(source2);
+                } catch (IOException e) { e.printStackTrace(); }
+            }
+            else{
+                bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/img_m2_1.jpg");
+                bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m2_2.jpg");
+            }
+            //Set Bitmap to Image if not null
             if(bitmap1 != null) {
                 IMG1.setImageBitmap(bitmap1);
             }
-            Bitmap bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m2_2.jpg");
             if(bitmap2 != null) {
                 IMG2.setImageBitmap(bitmap2);
             }
@@ -215,20 +339,39 @@ public class DoubleFragment extends Fragment {
             IMG1.setVisibility(View.GONE);
             IMG2.setVisibility(View.GONE);
         }
-
-        /**
-         * ADMOB
-         * Ads are showed only if user has choose it in settings
-         */
-            Boolean isAdActivated = sharedPref.getBoolean("pub", true) ;
-            AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
-            if(isAdActivated) {
-                MobileAds.initialize(getActivity().getApplicationContext(), "ca-app-pub-9375533114553467~6724882232");
-                AdRequest adRequest = new AdRequest.Builder().build();
-                mAdView.loadAd(adRequest);
+        //improves usability in Android N with MultiWindow and avoids bugs
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (getActivity().isInMultiWindowMode()) {
+                IMG1.setVisibility(View.GONE);
+                IMG2.setVisibility(View.GONE);
             }
-            else {
-                mAdView.setVisibility(View.GONE);
+        }
+
+
+          /**
+           * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
+           *
+           * */
+            Boolean isManoModeActivated = sharedPref.getBoolean("input_puntimano", true) ;
+            if(!isManoModeActivated){
+                PM1.setVisibility(View.GONE);
+                PM2.setVisibility(View.GONE);
+                bypass = true; //PERMETTI DI CHIUDERE SENZA POZZETTO E SENZA PUNTI IN MANO
+            }
+            Boolean isDirectModeActivated = sharedPref.getBoolean("input_direct", false) ;
+            if(isDirectModeActivated){
+                PM1.setVisibility(View.GONE);
+                BP1.setVisibility(View.GONE);
+                BI1.setVisibility(View.GONE);
+                BS1.setVisibility(View.GONE);
+                PM2.setVisibility(View.GONE);
+                BP2.setVisibility(View.GONE);
+                BI2.setVisibility(View.GONE);
+                BS2.setVisibility(View.GONE);
+                CH1.setVisibility(View.GONE);
+                CH2.setVisibility(View.GONE);
+                PZ1.setVisibility(View.GONE);
+                PZ2.setVisibility(View.GONE);
             }
 
         return rootView;
@@ -307,7 +450,7 @@ public class DoubleFragment extends Fragment {
                 //First, close the (eventually) opened keyboard
                 InputMethodManager inputMethodManager = (InputMethodManager)
                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                inputMethodManager.hideSoftInputFromWindow(textNome1.getWindowToken(), 0);
 
                 //Than make the screenshot, asking the permission in Android 6.0+ (because it will be saved to memory)
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -377,8 +520,8 @@ public class DoubleFragment extends Fragment {
         file1.delete();
         File file2 = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
         file2.delete();
-        IMG1.setImageResource(R.drawable.ic_add_a_photo_white_48dp);
-        IMG2.setImageResource(R.drawable.ic_add_a_photo_white_48dp);
+        IMG1.setImageResource(R.drawable.circle_placeholder);
+        IMG2.setImageResource(R.drawable.circle_placeholder);
     }
 
     /**
@@ -413,6 +556,8 @@ public class DoubleFragment extends Fragment {
         editor.putString("dpp", "");
         editor.putInt("interrupted", 0);
         editor.commit();
+        //make action bar standard again
+        ((MainActivity)getActivity()).setMenuAlternative(false);
         //make a Snackbar to alert the user
         Snackbar.make(getView(), R.string.reset, Snackbar.LENGTH_SHORT).show();
     }
@@ -562,6 +707,7 @@ public class DoubleFragment extends Fragment {
                     .setAction(getString(R.string.ko), new annullaPunti())  // action text on the right side to revert changes
                     .setDuration(10000).show();
 
+
             /**
              * CHECK IF A PLAYER HAS WIN
              * If one of the two players overtakes 2005 points, it will be the winner
@@ -591,14 +737,25 @@ public class DoubleFragment extends Fragment {
                     points=punti1.getText().toString();
                     points=points.concat(" - ");
                     points=points.concat(punti2.getText().toString());
+                    //Play sound
+                    Boolean soundActive = sharedPreferences.getBoolean("sound", true) ;
+                    if(soundActive) {
+                        sound.start();
+                    }
                     //If player1 wins, a dialog will be displayed
-                    builder.setMessage(points);
+                    WebView webview = generateWebView();
+                    builder.setView(webview);
+                    builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
                     AlertDialog dialog=builder.create();
                     dialog.show();
                 }
             }
             else{
-                if(tot2>=limite){
+                if(tot2 >= limite){
                     win = true;
                     winner = textNome2.getText().toString();
                     loser = textNome1.getText().toString();
@@ -613,8 +770,19 @@ public class DoubleFragment extends Fragment {
                     points=punti1.getText().toString();
                     points=points.concat(" - ");
                     points=points.concat(punti2.getText().toString());
-                    //If player2 wins, a dialog will be displayed
-                    builder.setMessage(points);
+                    //Play sound
+                    Boolean soundActive = sharedPreferences.getBoolean("sound", true) ;
+                    if(soundActive) {
+                        sound.start();
+                    }
+                    //If player1 wins, a dialog will be displayed
+                    WebView webview = generateWebView();
+                    builder.setView(webview);
+                    builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
                     AlertDialog dialog=builder.create();
                     dialog.show();
                 }
@@ -660,9 +828,9 @@ public class DoubleFragment extends Fragment {
             editor.putString("sq1", sq1Default);
             editor.putString("sq2",sq2Default);
             editor.putInt("interrupted", 0);
-            //Show "Hands Details", then delete the string
-                showDettPuntParz();
             editor.putString("dpp", "");
+            //set alternative bar
+            ((MainActivity)getActivity()).setMenuAlternative(true);
             editor.commit();
         }
     }
@@ -727,44 +895,14 @@ public class DoubleFragment extends Fragment {
         }
     }
 
-    /**
-     * TAKE SCREENSHOT, then SHARE
-     * This method shares the scores.
-     * A screenshot of the app will be taken, saved in memory, then invoked the Android Share Intent
-     */
+    //OPEN THE SHARE SCREEN
     public void openScreen(){
-        View v = getActivity().getWindow().getDecorView().getRootView();
-        v.setDrawingCacheEnabled(true);
-        Bitmap bmp = Bitmap.createBitmap(v.getDrawingCache());
-        v.setDrawingCacheEnabled(false);
-        String nomeFoto = "SCREEN"+ System.currentTimeMillis() + ".png";
-        File imageFileToShare;
-        try {
-            // Save as png
-            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), nomeFoto));
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            fos.close();
-
-            //Share
-            Intent share = new Intent(Intent.ACTION_SEND);
-
-            share.setType("image/png");
-
-            //I have put png image named myImage.png in my app directory
-            //String imagePath = Environment.getExternalStorageDirectory()+nomeFoto;
-            //File imageFileToShare = new File(imagePath);
-
-            Uri uri = Uri.fromFile(imageFileToShare);
-            share.putExtra(Intent.EXTRA_STREAM, uri);
-
-            startActivity(Intent.createChooser(share, getString(R.string.action_share)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        Intent myIntent = new Intent(getActivity(), ShareResultActivity.class);
+        myIntent.putExtra("name1", textNome1.getText().toString());
+        myIntent.putExtra("name2", textNome2.getText().toString());
+        myIntent.putExtra("score1", tot1);
+        myIntent.putExtra("score2", tot2);
+        this.startActivity(myIntent);
     }
 
 
@@ -796,7 +934,7 @@ public class DoubleFragment extends Fragment {
                 Snackbar.make(getView(), R.string.error01, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
-            if(check==0){
+            if(check==0&&bypass==false){
                 Snackbar.make(getView(), R.string.error03, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
@@ -816,7 +954,7 @@ public class DoubleFragment extends Fragment {
                 Snackbar.make(getView(), R.string.error01, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
-            if(check==0){
+            if(check==0&&bypass==false){
                 Snackbar.make(getView(), R.string.error03, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
@@ -838,6 +976,23 @@ public class DoubleFragment extends Fragment {
         long id = db.insertScore(player1, player2, point1, point2, date);
         db.close();
     }
+
+    /**
+     * MAKE VIBRATION
+     */
+    public void makeVibration(){
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator.hasVibrator()) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                VibrationEffect effect = VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE);
+                vibrator.vibrate(effect);
+            }
+            else{
+                vibrator.vibrate(50);
+            }
+        }
+    }
+
     /**
      * ALERT HOW-TO CHANGE NAMES
      * A little alert to help user change players names
@@ -861,10 +1016,7 @@ public class DoubleFragment extends Fragment {
                 Snackbar.make(getView(), getString(R.string.errore_dpp), Snackbar.LENGTH_SHORT).show();
             }
             else {
-                WebView webview = new WebView(getActivity());
-                String header = "<html><body bgcolor=\"#FFFFFF\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
-                String data = header + html + "</table></body></html>";
-                webview.loadData(data, "text/html; charset=UTF-8", null);
+                WebView webview = generateWebView();
                 AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
                 ad.setTitle(R.string.intro_pro_dpp_t);
                 ad.setView(webview);
@@ -879,6 +1031,16 @@ public class DoubleFragment extends Fragment {
 
     }
 
+    public WebView generateWebView(){
+        SharedPreferences sharedPref =  getActivity().getPreferences(Context.MODE_PRIVATE);
+        String html_inner =sharedPref.getString("dpp", "");
+        WebView webview = new WebView(getActivity());
+        String header = "<html><body bgcolor=\""+ bgColor +"\" style=\"color: " + txtColor + "\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
+        String data = header + html_inner + "</table></body></html>";
+        webview.loadData(data, "text/html; charset=UTF-8", null);
+        return webview;
+    }
+
 
     /**
      * ON ACTIVITY RESULT
@@ -888,43 +1050,63 @@ public class DoubleFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        File croppedImageFile;
-
         if ((requestCode == REQUEST_PICTURE_1) && (resultCode == RESULT_OK)) {
             // When the user is done picking a picture, let's start the CropImage Activity,
-
             Uri photo = data.getData();
 
-            Intent intent = CropImage.activity(photo)
-                    .setCropShape(CropImageView.CropShape.OVAL)
-                    .setFixAspectRatio(true)
-                    .setActivityTitle(getString(R.string.resize))
-                    .getIntent(getActivity());
-            startActivityForResult(intent, REQUEST_CROP_PICTURE_1);
+            File file = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
+            Uri result = Uri.fromFile(file);
+            startActivityForResult(
+                    UCrop.of(photo, result)
+                    .withAspectRatio(1, 1)
+                    .withMaxResultSize(1080, 1080)
+                    .getIntent(getActivity()
+                    ), REQUEST_CROP_PICTURE_1);
+        }
 
-        } else if ((requestCode == REQUEST_CROP_PICTURE_1) && (resultCode == RESULT_OK)){
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_1) {
             // When we are done cropping, display it in the ImageView.
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            Uri resultUri = result.getUri();
+            final Uri resultUri = UCrop.getOutput(data);
             ImageView IMG1 = (ImageView) getView().findViewById(R.id.image1);
             IMG1.setImageURI(resultUri);
 
-            //and save it
-            croppedImageFile = new File(resultUri.getPath());
-            File file = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
-            saveImage(file, croppedImageFile);
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
         }
 
 
         if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
             // When the user is done picking a picture, let's start the CropImage Activity,
+            Uri photo = data.getData();
+
+            File file = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
+            Uri result = Uri.fromFile(file);
+            startActivityForResult(
+                    UCrop.of(photo, result)
+                            .withAspectRatio(1, 1)
+                            .withMaxResultSize(1080, 1080)
+                            .getIntent(getActivity()
+                            ), REQUEST_CROP_PICTURE_2);
+        }
+
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_2) {
+            // When we are done cropping, display it in the ImageView.
+            final Uri resultUri = UCrop.getOutput(data);
+            ImageView IMG2 = (ImageView) getView().findViewById(R.id.image2);
+            IMG2.setImageURI(resultUri);
+
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+        }
+       /* if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
+            // When the user is done picking a picture, let's start the CropImage Activity,
 
             Uri photo = data.getData();
 
             Intent intent = CropImage.activity(photo)
                     .setCropShape(CropImageView.CropShape.OVAL)
                     .setFixAspectRatio(true)
-                    .setActivityTitle(getString(R.string.resize))
+                    .setCropMenuCropButtonIcon(R.drawable.ic_check_white_24dp)
                     .getIntent(getActivity());
             startActivityForResult(intent, REQUEST_CROP_PICTURE_2);
 
@@ -939,7 +1121,9 @@ public class DoubleFragment extends Fragment {
             croppedImageFile = new File(resultUri.getPath());
             File file = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
             saveImage(file, croppedImageFile);
+
         }
+        */
     }
 
     /**

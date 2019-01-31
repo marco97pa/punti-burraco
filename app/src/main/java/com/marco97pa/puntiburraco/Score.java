@@ -7,11 +7,12 @@ package com.marco97pa.puntiburraco;
 public class Score {
     private String player1, player2, player3, date;
     private int point1, point2, point3;
+    private long id;
 
     public Score() {
     }
 
-    public Score(String player1, String player2, String player3, int point1, int point2, int point3, String date) {
+    public Score(Long id, String player1, String player2, String player3, int point1, int point2, int point3, String date) {
         this.player1 = player1;
         this.player2 = player2;
         this.player3 = player3;
@@ -19,6 +20,7 @@ public class Score {
         this.point2 = point2;
         this.point3 = point3;
         this.date = date;
+        this.id = id;
     }
 
     public String getPlayer1() {
@@ -67,6 +69,13 @@ public class Score {
     }
     public void setPoint3(int point3) {
         this.point3 = point3;
+    }
+
+    public  long getId(){
+        return id;
+    }
+    public void setId(long id){
+        this.id = id;
     }
 
 }

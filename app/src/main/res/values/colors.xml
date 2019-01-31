@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF00B8D4</color>
     <color name="barBlack">#000</color>
     <color name="barWhite">#fff</color>
+    <color name="ic_background">#FD9600</color>
+    <color name="txtBlack">#000</color>
+    <color name="txtWhite">#fff</color>
+    <color name="bgBlack">#ff424242</color>
+    <color name="bgWhite">#fff</color>
 </resources>

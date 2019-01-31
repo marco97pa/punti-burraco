@@ -1,35 +1,21 @@
 package com.marco97pa.puntiburraco;
 
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.ActionBar;
 
-import java.util.List;
+import android.preference.PreferenceManager;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
 import java.util.Random;
 
 /**
@@ -45,6 +31,11 @@ import java.util.Random;
  */
 
 public class SettingActivity extends AppCompatActivity {
+
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
     public String[] mColors = {
             "#F44336", //red
@@ -85,6 +76,18 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set Theme
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Boolean isNight = sharedPreferences.getBoolean("night", false) ;
+        if(isNight){
+            setTheme(R.style.DarkTheme);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.barBlack));
+            }
+        }
+        else{
+            setTheme(R.style.AppTheme);
+        }
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()

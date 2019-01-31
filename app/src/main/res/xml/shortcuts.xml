@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="2playersmode"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_looks_2_24px"
+        android:shortcutShortLabel="@string/nav_2gioc"
+        android:shortcutLongLabel="@string/nav_2gioc">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.marco97pa.puntiburraco"
+            android:targetClass="com.marco97pa.puntiburraco.MainActivity">
+            <extra android:name="mode" android:value="2"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="3playersmode"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_looks_3_24px"
+        android:shortcutShortLabel="@string/nav_3gioc"
+        android:shortcutLongLabel="@string/nav_3gioc">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.marco97pa.puntiburraco"
+            android:targetClass="com.marco97pa.puntiburraco.MainActivity">
+            <extra android:name="mode" android:value="3"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="4playersmode"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_looks_4_24px"
+        android:shortcutShortLabel="@string/nav_4gioc"
+        android:shortcutLongLabel="@string/nav_4gioc">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.marco97pa.puntiburraco"
+            android:targetClass="com.marco97pa.puntiburraco.MainActivity">
+            <extra android:name="mode" android:value="4"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <!-- Specify more shortcuts here. -->
+</shortcuts>

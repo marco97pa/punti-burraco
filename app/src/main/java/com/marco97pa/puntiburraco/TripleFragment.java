@@ -1,6 +1,5 @@
 package com.marco97pa.puntiburraco;
 
-import android.*;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -10,18 +9,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +73,12 @@ public class TripleFragment extends Fragment {
     public int old_tot2;
     public int old_tot3;
 
+    String bgColor, txtColor;
+    boolean bypass = false;
+    Boolean isManoModeActivated;
+    Boolean isDirectModeActivated;
+    MediaPlayer sound;
+
     public TripleFragment() {
         // Empty constructor required for fragment subclasses
     }
@@ -112,6 +118,48 @@ public class TripleFragment extends Fragment {
         PZ1 = (CheckBox) rootView.findViewById(R.id.pozzetto1);
         PZ2 = (CheckBox) rootView.findViewById(R.id.pozzetto2);
         PZ3 = (CheckBox) rootView.findViewById(R.id.pozzetto3);
+
+        sound = MediaPlayer.create(getActivity(), R.raw.fischio);
+
+        //get Actual Theme Colors
+        bgColor = ((MainActivity)getActivity()).getAlertBackgroundColor();
+        txtColor = ((MainActivity) getActivity()).getAlertTextColor();
+
+        /**
+         * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
+         *
+         * */
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        isManoModeActivated = sharedPref.getBoolean("input_puntimano", true) ;
+        if(!isManoModeActivated){
+            PM1.setVisibility(View.GONE);
+            PM2.setVisibility(View.GONE);
+            PM3.setVisibility(View.GONE);
+            bypass = true; //PERMETTI DI CHIUDERE SENZA POZZETTO E SENZA PUNTI IN MANO
+        }
+        isDirectModeActivated = sharedPref.getBoolean("input_direct", false) ;
+        if(isDirectModeActivated){
+            PM1.setVisibility(View.GONE);
+            BP1.setVisibility(View.GONE);
+            BI1.setVisibility(View.GONE);
+            BS1.setVisibility(View.GONE);
+            PM2.setVisibility(View.GONE);
+            BP2.setVisibility(View.GONE);
+            BI2.setVisibility(View.GONE);
+            BS2.setVisibility(View.GONE);
+            CH1.setVisibility(View.GONE);
+            CH2.setVisibility(View.GONE);
+            PZ1.setVisibility(View.GONE);
+            PZ2.setVisibility(View.GONE);
+            PZ3.setVisibility(View.GONE);
+            CH3.setVisibility(View.GONE);
+            PM3.setVisibility(View.GONE);
+            BP3.setVisibility(View.GONE);
+            BI3.setVisibility(View.GONE);
+            BS3.setVisibility(View.GONE);
+        }
+
+
         //SET POZZETTO - Imposta squadre
         RB1 = (CheckBox) rootView.findViewById(R.id.rB1);
         RB1.setOnClickListener(new View.OnClickListener()
@@ -123,19 +171,23 @@ public class TripleFragment extends Fragment {
                     RB1.setChecked(false);
                 }
                 else{
-                    if(BP3.getVisibility()==View.VISIBLE){
+                    if(PN3.getVisibility()==View.VISIBLE){
                         SET=View.INVISIBLE;
                     }
                     else{
                         SET=View.VISIBLE;
                     }
-                    BP3.setVisibility(SET);
-                    BI3.setVisibility(SET);
                     PN3.setVisibility(SET);
-                    PM3.setVisibility(SET);
-                    CH3.setVisibility(SET);
-                    PZ3.setVisibility(SET);
-                    BS3.setVisibility(SET);
+                    if(!isDirectModeActivated) {
+                        BP3.setVisibility(SET);
+                        BI3.setVisibility(SET);
+                        if(isManoModeActivated) {
+                            PM3.setVisibility(SET);
+                        }
+                        CH3.setVisibility(SET);
+                        PZ3.setVisibility(SET);
+                        BS3.setVisibility(SET);
+                    }
                 }
             }
 
@@ -149,19 +201,23 @@ public class TripleFragment extends Fragment {
                     RB2.setChecked(false);
                 }
                 else{
-                    if(BP1.getVisibility()==View.VISIBLE){
+                    if(PN1.getVisibility()==View.VISIBLE){
                         SET=View.INVISIBLE;
                     }
                     else{
                         SET=View.VISIBLE;
                     }
-                    BP1.setVisibility(SET);
-                    BI1.setVisibility(SET);
                     PN1.setVisibility(SET);
-                    PM1.setVisibility(SET);
-                    CH1.setVisibility(SET);
-                    PZ1.setVisibility(SET);
-                    BS1.setVisibility(SET);
+                    if(!isDirectModeActivated) {
+                        BP1.setVisibility(SET);
+                        BI1.setVisibility(SET);
+                        if(isManoModeActivated) {
+                            PM1.setVisibility(SET);
+                        }
+                        CH1.setVisibility(SET);
+                        PZ1.setVisibility(SET);
+                        BS1.setVisibility(SET);
+                    }
                 }
             }
         });
@@ -175,19 +231,23 @@ public class TripleFragment extends Fragment {
                     RB3.setChecked(false);
                 }
                 else{
-                    if(BP2.getVisibility()==View.VISIBLE){
+                    if(PN2.getVisibility()==View.VISIBLE){
                         SET=View.INVISIBLE;
                     }
                     else{
                         SET=View.VISIBLE;
                     }
-                    BP2.setVisibility(SET);
-                    BI2.setVisibility(SET);
                     PN2.setVisibility(SET);
-                    PM2.setVisibility(SET);
-                    CH2.setVisibility(SET);
-                    PZ2.setVisibility(SET);
-                    BS2.setVisibility(SET);
+                    if(!isDirectModeActivated) {
+                        BP2.setVisibility(SET);
+                        BI2.setVisibility(SET);
+                        if(isManoModeActivated) {
+                            PM2.setVisibility(SET);
+                        }
+                        CH2.setVisibility(SET);
+                        PZ2.setVisibility(SET);
+                        BS2.setVisibility(SET);
+                    }
                 }
             }
         });
@@ -216,6 +276,7 @@ public class TripleFragment extends Fragment {
                 onSave();
             }
         });
+
         return rootView;
     }
 
@@ -401,27 +462,31 @@ public class TripleFragment extends Fragment {
         punti1.setText(Integer.toString(tot1));
         punti2.setText(Integer.toString(tot2));
         punti3.setText(Integer.toString(tot3));
-        BP3.setVisibility(View.VISIBLE);
-        BI3.setVisibility(View.VISIBLE);
-        BS3.setVisibility(View.VISIBLE);
         PN3.setVisibility(View.VISIBLE);
-        PM3.setVisibility(View.VISIBLE);
-        CH3.setVisibility(View.VISIBLE);
-        BP1.setVisibility(View.VISIBLE);
-        BI1.setVisibility(View.VISIBLE);
-        BS1.setVisibility(View.VISIBLE);
         PN1.setVisibility(View.VISIBLE);
-        PM1.setVisibility(View.VISIBLE);
-        CH1.setVisibility(View.VISIBLE);
-        BP2.setVisibility(View.VISIBLE);
-        BI2.setVisibility(View.VISIBLE);
-        BS2.setVisibility(View.VISIBLE);
         PN2.setVisibility(View.VISIBLE);
-        PM2.setVisibility(View.VISIBLE);
-        CH2.setVisibility(View.VISIBLE);
-        PZ1.setVisibility(View.VISIBLE);
-        PZ2.setVisibility(View.VISIBLE);
-        PZ3.setVisibility(View.VISIBLE);
+        if(!isDirectModeActivated) {
+            BP3.setVisibility(View.VISIBLE);
+            BI3.setVisibility(View.VISIBLE);
+            BS3.setVisibility(View.VISIBLE);
+            CH3.setVisibility(View.VISIBLE);
+            BP1.setVisibility(View.VISIBLE);
+            BI1.setVisibility(View.VISIBLE);
+            BS1.setVisibility(View.VISIBLE);
+            CH1.setVisibility(View.VISIBLE);
+            BP2.setVisibility(View.VISIBLE);
+            BI2.setVisibility(View.VISIBLE);
+            BS2.setVisibility(View.VISIBLE);
+            CH2.setVisibility(View.VISIBLE);
+            PZ1.setVisibility(View.VISIBLE);
+            PZ2.setVisibility(View.VISIBLE);
+            PZ3.setVisibility(View.VISIBLE);
+            if(isManoModeActivated) {
+                PM3.setVisibility(View.VISIBLE);
+                PM1.setVisibility(View.VISIBLE);
+                PM2.setVisibility(View.VISIBLE);
+            }
+        }
         win=false;
         //salva tutto
         onSave();
@@ -431,6 +496,8 @@ public class TripleFragment extends Fragment {
         editor.putString("dpp3", "");
         editor.putInt("interrupted", 0);
         editor.commit();
+        //make action bar standard again
+        ((MainActivity)getActivity()).setMenuAlternative(false);
         Snackbar.make(getView(), R.string.reset, Snackbar.LENGTH_SHORT).show();
     }
 
@@ -606,27 +673,32 @@ public class TripleFragment extends Fragment {
             RB1.setChecked(false);
             RB2.setChecked(false);
             RB3.setChecked(false);
-            BP3.setVisibility(View.VISIBLE);
-            BI3.setVisibility(View.VISIBLE);
+
             PN3.setVisibility(View.VISIBLE);
-            PM3.setVisibility(View.VISIBLE);
-            BS3.setVisibility(View.VISIBLE);
-            CH3.setVisibility(View.VISIBLE);
-            BP1.setVisibility(View.VISIBLE);
-            BI1.setVisibility(View.VISIBLE);
             PN1.setVisibility(View.VISIBLE);
-            PM1.setVisibility(View.VISIBLE);
-            CH1.setVisibility(View.VISIBLE);
-            BS1.setVisibility(View.VISIBLE);
-            BP2.setVisibility(View.VISIBLE);
-            BI2.setVisibility(View.VISIBLE);
             PN2.setVisibility(View.VISIBLE);
-            PM2.setVisibility(View.VISIBLE);
-            CH2.setVisibility(View.VISIBLE);
-            BS2.setVisibility(View.VISIBLE);
-            PZ1.setVisibility(View.VISIBLE);
-            PZ2.setVisibility(View.VISIBLE);
-            PZ3.setVisibility(View.VISIBLE);
+            if(!isDirectModeActivated) {
+                BP3.setVisibility(View.VISIBLE);
+                BI3.setVisibility(View.VISIBLE);
+                BS3.setVisibility(View.VISIBLE);
+                CH3.setVisibility(View.VISIBLE);
+                BP1.setVisibility(View.VISIBLE);
+                BI1.setVisibility(View.VISIBLE);
+                BS1.setVisibility(View.VISIBLE);
+                CH1.setVisibility(View.VISIBLE);
+                BP2.setVisibility(View.VISIBLE);
+                BI2.setVisibility(View.VISIBLE);
+                BS2.setVisibility(View.VISIBLE);
+                CH2.setVisibility(View.VISIBLE);
+                PZ1.setVisibility(View.VISIBLE);
+                PZ2.setVisibility(View.VISIBLE);
+                PZ3.setVisibility(View.VISIBLE);
+                if(isManoModeActivated) {
+                    PM3.setVisibility(View.VISIBLE);
+                    PM1.setVisibility(View.VISIBLE);
+                    PM2.setVisibility(View.VISIBLE);
+                }
+            }
             //SnackBar con annulla
             Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.ko), new annullaPunti())  // action text on the right side
@@ -636,7 +708,7 @@ public class TripleFragment extends Fragment {
             int limite = Integer.parseInt(sharedPreferences.getString("limite", "2005"));;
             String winText = getString(R.string.win);
             String points="";
-            if(tot1>=limite){
+            if(tot1>=limite && tot1>tot2 && tot1>tot3){
                 win=true;
                 winner=textNome1.getText().toString();
                 loser1=textNome2.getText().toString();
@@ -656,11 +728,22 @@ public class TripleFragment extends Fragment {
                 points=points.concat(punti2.getText().toString());
                 points=points.concat(" - ");
                 points=points.concat(punti3.getText().toString());
-                builder.setMessage(points);
+                //Play sound
+                Boolean soundActive = sharedPreferences.getBoolean("sound", true) ;
+                if(soundActive) {
+                    sound.start();
+                }
+                WebView webview = generateWebView();
+                builder.setView(webview);
+                builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
                 AlertDialog dialog=builder.create();
                 dialog.show();
             }
-            if(tot2>=limite){
+            if(tot2>=limite && tot2>tot3 && tot2>tot1){
                 winner=textNome2.getText().toString();
                 loser1=textNome1.getText().toString();
                 loser2=textNome3.getText().toString();
@@ -679,11 +762,22 @@ public class TripleFragment extends Fragment {
                 points=points.concat(punti2.getText().toString());
                 points=points.concat(" - ");
                 points=points.concat(punti3.getText().toString());
-                builder.setMessage(points);
+                //Play sound
+                Boolean soundActive = sharedPreferences.getBoolean("sound", true) ;
+                if(soundActive) {
+                    sound.start();
+                }
+                WebView webview = generateWebView();
+                builder.setView(webview);
+                builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
                 AlertDialog dialog=builder.create();
                 dialog.show();
             }
-            if(tot3>=limite){
+            if(tot3>=limite && tot3>tot2 && tot3>tot1){
                 winner=textNome3.getText().toString();
                 loser1=textNome2.getText().toString();
                 loser2=textNome1.getText().toString();
@@ -703,7 +797,18 @@ public class TripleFragment extends Fragment {
                 points=points.concat(punti2.getText().toString());
                 points=points.concat(" - ");
                 points=points.concat(punti3.getText().toString());
-                builder.setMessage(points);
+                //Play sound
+                Boolean soundActive = sharedPreferences.getBoolean("sound", true) ;
+                if(soundActive) {
+                    sound.start();
+                }
+                WebView webview = generateWebView();
+                builder.setView(webview);
+                builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
                 AlertDialog dialog=builder.create();
                 dialog.show();
             }
@@ -753,9 +858,9 @@ public class TripleFragment extends Fragment {
             editor.putString("sqd2",sq2Default);
             editor.putString("sqd3",sq3Default);
             editor.putInt("interrupted", 0);
-            //archiviaPartita
-                showDettPuntParz();
             editor.putString("dpp3", "");
+            //set alternative bar
+            ((MainActivity)getActivity()).setMenuAlternative(true);
             editor.commit();
         }
     }
@@ -787,45 +892,18 @@ public class TripleFragment extends Fragment {
         }
     }
 
-    //AVVIA SCREENSHOT + SHARE
+    //OPEN THE SHARE SCREEN
     public void openScreen(){
-        View v = getActivity().getWindow().getDecorView().getRootView();
-        v.setDrawingCacheEnabled(true);
-        Bitmap bmp = Bitmap.createBitmap(v.getDrawingCache());
-        v.setDrawingCacheEnabled(false);
-        String nomeFoto="SCREEN"+ System.currentTimeMillis() + ".png";
-        File imageFileToShare;
-        try {
-            // Save as png
-            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), nomeFoto));
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            fos.close();
-
-
-            Intent share = new Intent(Intent.ACTION_SEND);
-
-            // If you want to share a png image only, you can do:
-            // setType("image/png"); OR for jpeg: setType("image/jpeg");
-            share.setType("image/png");
-
-            // Make sure you put example png image named myImage.png in your
-            // directory
-            //String imagePath = Environment.getExternalStorageDirectory()+nomeFoto;
-
-            //File imageFileToShare = new File(imagePath);
-
-            Uri uri = Uri.fromFile(imageFileToShare);
-            share.putExtra(Intent.EXTRA_STREAM, uri);
-
-            startActivity(Intent.createChooser(share, getString(R.string.action_share)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        Intent myIntent = new Intent(getActivity(), ShareResultActivity.class);
+        myIntent.putExtra("name1", textNome1.getText().toString());
+        myIntent.putExtra("name2", textNome2.getText().toString());
+        myIntent.putExtra("name3", textNome3.getText().toString());
+        myIntent.putExtra("score1", tot1);
+        myIntent.putExtra("score2", tot2);
+        myIntent.putExtra("score3", tot3);
+        this.startActivity(myIntent);
     }
+
 
     //CONTROLLI ERRORI
     public boolean checkErrors(){
@@ -839,7 +917,7 @@ public class TripleFragment extends Fragment {
                 Snackbar.make(getView(), R.string.error01, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
-            if(check==0){
+            if(check==0&&bypass==false){
                 Snackbar.make(getView(), R.string.error03, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
@@ -853,7 +931,7 @@ public class TripleFragment extends Fragment {
                 Snackbar.make(getView(), R.string.error01, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
-            if(check==0){
+            if(check==0&&bypass==false){
                 Snackbar.make(getView(), R.string.error03, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
@@ -867,7 +945,7 @@ public class TripleFragment extends Fragment {
                 Snackbar.make(getView(), R.string.error01, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
-            if(check==0){
+            if(check==0&&bypass==false){
                 Snackbar.make(getView(), R.string.error03, Snackbar.LENGTH_SHORT).show();
                 res=true;
             }
@@ -906,10 +984,7 @@ public class TripleFragment extends Fragment {
                 Snackbar.make(getView(), getString(R.string.errore_dpp), Snackbar.LENGTH_SHORT).show();
             }
             else {
-                WebView webview = new WebView(getActivity());
-                String header = "<html><body bgcolor=\"#FFFFFF\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th><th>" + textNome3.getText().toString() + "</th></tr>";
-                String data = header + html + "</table></body></html>";
-                webview.loadData(data, "text/html; charset=UTF-8", null);
+                WebView webview = generateWebView();
                 AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
                 ad.setTitle(R.string.intro_pro_dpp_t);
                 ad.setView(webview);
@@ -922,6 +997,16 @@ public class TripleFragment extends Fragment {
                 dialog.show();
             }
 
+    }
+
+    public WebView generateWebView(){
+        SharedPreferences sharedPref =  getActivity().getPreferences(Context.MODE_PRIVATE);
+        String html_inner =sharedPref.getString("dpp3", "");
+        WebView webview = new WebView(getActivity());
+        String header = "<html><body bgcolor=\""+ bgColor +"\" style=\"color: " + txtColor + "\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th><th>" + textNome3.getText().toString() + "</th></tr>";
+        String data = header + html_inner + "</table></body></html>";
+        webview.loadData(data, "text/html; charset=UTF-8", null);
+        return webview;
     }
 
 }
