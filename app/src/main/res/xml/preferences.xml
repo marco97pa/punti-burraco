@@ -1,22 +1,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/setting_title_pro">
-            <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-            <EditTextPreference
-                android:defaultValue="2005"
-                android:inputType="number"
-                android:key="limite"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"
-                android:title="@string/setting_limite" />
+        android:title="@string/setting_title_pro" android:key="interface_settings">
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="img"
-            android:summary="@string/setting_img_d"
-            android:title="@string/setting_img" />
+            <SwitchPreference
+                android:defaultValue="false"
+                android:key="img"
+                android:summary="@string/setting_img_d"
+                android:title="@string/setting_img" />
 
             <SwitchPreference
                 android:defaultValue="false"
@@ -30,9 +21,61 @@
                 android:summary="@string/setting_notte_d"
                 android:title="@string/setting_notte" />
 
+            <SwitchPreference
+                android:defaultValue="true"
+                android:key="sound"
+                android:summary="@string/setting_sound_d"
+                android:title="@string/setting_sound" />
+                
+            <!-- Doppia tipologia di preferenza, per accedere a impostazioni di notifiche di sistema se Android 8.0+ -->
+            <Preference
+                android:title="@string/setting_notification"
+                android:summary="@string/setting_notification_d"
+                android:key="notification">
+            </Preference>
+            <SwitchPreference
+                android:defaultValue="true"
+                android:title="@string/setting_notification"
+                android:summary="@string/setting_notification_d"
+                android:key="notification_old">
+            </SwitchPreference>
+
+            <ListPreference
+                android:key="background_stories"
+                android:title="@string/setting_background"
+                android:entries="@array/listentries"
+                android:entryValues="@array/listvalues" />
+
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/setting_title_game">
+            <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+            <EditTextPreference
+                android:defaultValue="2005"
+                android:inputType="number"
+                android:key="limite"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="@string/setting_limite" />
+
+            <SwitchPreference
+                android:defaultValue="false"
+                android:key="input_direct"
+                android:summary="@string/setting_inputdirect_d"
+                android:title="@string/setting_inputdirect"
+                android:disableDependentsState="true"/>
+
+            <SwitchPreference
+                android:defaultValue="true"
+                android:key="input_puntimano"
+                android:summary="@string/setting_pm_d"
+                android:title="@string/setting_pm"
+                android:dependency="input_direct"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_title_app">
+        
         <Preference
             android:title="@string/setting_advanced"
             android:summary="@string/setting_advanced_d"
@@ -52,17 +95,15 @@
                 android:data="https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco" />
         </Preference>
 
-        <CheckBoxPreference
-            android:title="@string/setting_pub"
-            android:summary="@string/setting_pub_d"
-            android:key="pub"
-            android:defaultValue="true">
-        </CheckBoxPreference>
-
         <Preference
             android:title="@string/setting_version"
             android:summary="@string/setting_version_d"
             android:key="version">
+        </Preference>
+        <Preference
+            android:title="@string/setting_integrity"
+            android:summary="@string/setting_integrity_d"
+            android:key="integrity">
         </Preference>
     </PreferenceCategory>
 

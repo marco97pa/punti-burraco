@@ -17,6 +17,7 @@
     <!-- BOTTONE RESET -->
     <item android:id="@+id/action_reset"
         android:title="@string/action_reset"
+        android:icon="@drawable/ic_replay_black_24dp"
         app:showAsAction="never" />
 
     <!-- BOTTONE SET -->

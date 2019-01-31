@@ -40,6 +40,9 @@
     <string name="error02">Impossibile chiudere con punti in mano</string>
     <string name="error03">Impossibile non arrivare al pozzetto senza punti in mano</string>
     <string name="action_dpp">Dettaglio punteggi parziali</string>
+    <string name="crop_image_activity_title">Ritaglia</string>
+    <string name="crop_image_menu_rotate_right">Ruota</string>
+    <string name="crop_image_menu_crop">Fatto</string>
 
     <!-- Settings -->
     <string name="setting_valuta">Valuta l\'app</string>
@@ -59,13 +62,30 @@
     <string name="setting_limite">Imposta punteggio di arrivo</string>
     <string name="setting_version">Versione app</string>
     <string name="setting_version_d">Versione sconosciuta</string>
+    <string name="setting_sound">Suoni</string>
+    <string name="setting_sound_d">Se abilitato, quando un giocatore vince sentirai dei suoni</string>
     <string name="title_activity_settings">Impostazioni</string>
     <string name="title_activity_setting">Impostazioni</string>
     <string name="setting_title_pro">Interfaccia</string>
+    <string name="setting_title_game">Meccaniche di gioco</string>
     <string name="setting_title_app">Opzioni app</string>
     <string name="share_message">Installa anche tu #PuntiBurraco</string>
     <string name="share_hint">Invia app via</string>
     <string name="easter_egg">Wow! Arcobaleni ovunque...</string>
+    <string name="channel_name">Notifica partite sospese</string>
+    <string name="channel_description">Riceverai una notifica nel caso in cui chiudi l\'app lasciando una partita in sospeso. Potrai riprenderla successivamente, toccando la notifica</string>
+    <string name="setting_notification_d">Attiva le notifiche in caso di sospensione della partita</string>
+    <string name="setting_notification">Notifiche</string>
+    <string name="setting_pm_d">Permette di segnare gli eventuali punti in mano del singolo giocatore, che verranno sottratti ai punti tavolo</string>
+    <string name="setting_pm">Abilita punti in mano</string>
+    <string name="setting_inputdirect">Inserimento diretto</string>
+    <string name="setting_inputdirect_d">Inserisci direttamente il punteggio della giocata. L\'interfaccia sarà più minimale, ma è consigliata a giocatori esperti, senza bisogno di aiuti</string>
+    <string name="debug_mode">Modalità sviluppatore (debug) \n BENTORNATO MARCO FANTAUZZO</string>
+    <string name="integrity_0">App non sicura, installata da fonti inaffidabili. E\' consigliato disinstallarla e reinstallarla dal Play Store</string>
+    <string name="integrity_1">App sicura, installata dal Play Store</string>
+    <string name="setting_integrity">Controllo integrità app</string>
+    <string name="setting_integrity_d">Controllo in corso...</string>
+    <string name="setting_background">Tema delle Storie da condividere</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Apri navigation drawer</string>
@@ -107,32 +127,16 @@
     <string name="pro_details">Per mostrare il dettaglio dei punteggi parziali, devi avere la versione PRO. Puoi acquistarla dal menu principale</string>
     <string name="back_to_exit">Premi di nuovo indietro per uscire</string>
     <string name="notification">Partita sospesa</string>
-    <string name="resize">Ritaglia</string>
-
-    <!-- Contribution Activity -->
-    <string name="intro_pro">Contribuisci allo sviluppo</string>
-    <string name="contrib_donate_t">Donazioni</string>
-    <string name="contrib_donate_d">Puoi contribuire lo sviluppo effettuando una piccola donazione di qualsiasi importo tramite Paypal</string>
-    <string name="contrib_ads_t">Pubblicità</string>
-    <string name="contrib_ads_d">Abilitando l\'opzione \"Contribuisci allo sviluppo\" dalle Impostazioni, è possibile dare una mano con dei piccoli banner pubblicitari non intrusivi</string>
-    <string name="contrib_trans_t">Traduzioni</string>
-    <string name="contrib_trans_d">È possibile contribuire nella traduzione dell\'app in altre lingue, al fine di raggiungere un numero più ampio di persone.</string>
-    <string name="contrib_github_t">OpenSource</string>
-    <string name="contrib_github_d">Punti Burraco è open source ed è disponibile su GitHub, così che chiunque possa contribuire al suo miglioramento.</string>
-    <string name="contrib_org_t">Condividi</string>
-    <string name="contrib_org_d">Condividi Punti Burraco ai tuoi amici, colleghi o compagni di partite. Anche questo è un modo di contribuire allo sviluppo</string>
-    <string name="intro_pro_desc">Lo sviluppo di un\'app comporta costi e fatica. Che tu sia uno sviluppatore, un traduttore, un\'azienda o un semplice giocatore di Burraco, ci sono tanti modi per esprimere il tuo supporto</string>
-    <string name="contrib_star_t">Lascia un commento</string>
-    <string name="contrib_star_d">Se l\'app è di tuo gradimento, lascia una valutazione con 5 stelle. Bastano pochi secondi e darai un contributo importante allo sviluppo</string>
-    <string name="button_start">Inizia subito</string>
-    <string name="button_go">Vai su GitHub</string>
-    <string name="button_star">Recensisci</string>
-    <string name="button_share">Condividi</string>
-    <string name="button_donate">Dona</string>
     <string name="message_out_to_play_store">Grazie per aver scelto di lasciarci una valutazione\n Basta scorrere in basso per lasciare una recensione</string>
+    <string name="removeImage">Rimuovi immagine</string>
+    <string name="removeText">Ripristina nome</string>
 
-    <!-- Ads String -->
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9375533114553467/1596678635</string>
+    <!-- Various String -->
+    <string name="dialog_share">Condividi</string>
+    <string name="dialog_delete">Elimina</string>
+    <string name="no_data_available">Non hai ancora giocato nessuna partita...</string>
+    <string name="audio_up">Volume multimediale alzato al massimo</string>
+
 
 </resources>
 

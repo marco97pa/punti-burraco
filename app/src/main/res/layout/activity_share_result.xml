@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_1"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context=".ShareResultActivity">
+
+    <LinearLayout
+        android:id="@+id/ContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_marginMOD"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textColor="#fafafa"
+                android:textSize="42sp"
+                app:fontFamily="@font/advent_pro_semibold" />
+
+            <TextView
+                android:id="@+id/score1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/activity_vertical_marginMOD"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="TextView"
+                android:textColor="#fafafa"
+                android:textSize="42sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/advent_pro_semibold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_marginMOD"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textColor="#fafafa"
+                android:textSize="42sp"
+                app:fontFamily="@font/advent_pro_semibold" />
+
+            <TextView
+                android:id="@+id/score2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/activity_vertical_marginMOD"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="TextView"
+                android:textColor="#fafafa"
+                android:textSize="42sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/advent_pro_semibold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_marginMOD"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textColor="#fafafa"
+                android:textSize="42sp"
+                app:fontFamily="@font/advent_pro_semibold" />
+
+            <TextView
+                android:id="@+id/score3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/activity_vertical_marginMOD"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="TextView"
+                android:textColor="#fafafa"
+                android:textSize="42sp"
+                app:fontFamily="@font/advent_pro_semibold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/appFooter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/appIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/activity_vertical_marginMOD"
+            android:src="@mipmap/ic_launcher_alt" />
+
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_name"
+            android:textSize="30sp" />
+    </LinearLayout>
+</LinearLayout>

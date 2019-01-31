@@ -13,7 +13,7 @@
         android:text="Modifica nome della squadra"
         android:id="@+id/textView" />
 
-    <android.support.text.emoji.widget.EmojiEditText
+    <androidx.emoji.widget.EmojiEditText
         android:id="@+id/edittext"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

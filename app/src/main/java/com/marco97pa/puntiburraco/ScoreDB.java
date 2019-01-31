@@ -126,7 +126,7 @@ public class ScoreDB {
     }
 
     /*
-    Cancellazione di un nuovo cliente nella tabella
+    Cancellazione di un risultato nella tabella
     */
     public boolean deleteScore(long scoreId)
     {

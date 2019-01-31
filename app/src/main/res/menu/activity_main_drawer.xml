@@ -5,17 +5,16 @@
     <menu>
         <item
             android:id="@+id/nav_2_player"
-            android:icon="@mipmap/ic_group_2"
+            android:icon="@drawable/ic_outline_looks_2_24px"
             android:title="@string/nav_2gioc" />
         <item
             android:id="@+id/nav_3_player"
-            android:icon="@drawable/ics_people_3_24dp"
+            android:icon="@drawable/ic_outline_looks_3_24px"
             android:title="@string/nav_3gioc" />
         <item
             android:id="@+id/nav_4_player"
-            android:icon="@drawable/ics_people_4_24dp"
+            android:icon="@drawable/ic_outline_looks_4_24px"
             android:title="@string/nav_4gioc" />
-
     </menu>
     </item>
 
@@ -23,19 +22,15 @@
         <menu>
             <item
                 android:id="@+id/nav_history"
-                android:icon="@drawable/ic_history_black_24dp"
+                android:icon="@drawable/ic_outline_history_24px"
                 android:title="@string/nav_history" />
             <item
-                android:id="@+id/nav_info"
-                android:icon="@drawable/ic_favorite_black_24dp"
-                android:title="@string/nav_info" />
-            <item
                 android:id="@+id/nav_setting"
-                android:icon="@drawable/ic_build_black_24dp"
+                android:icon="@drawable/ic_outline_settings_24px"
                 android:title="@string/nav_settings" />
             <item
                 android:id="@+id/nav_guide"
-                android:icon="@drawable/ic_help_black_24dp"
+                android:icon="@drawable/ic_help_outline_black_24dp"
                 android:title="@string/nav_guide" />
         </menu>
     </item>

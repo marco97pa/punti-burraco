@@ -13,12 +13,12 @@
 
     <TextView
         android:id="@+id/players"
-        android:textColor="#222222"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/score"

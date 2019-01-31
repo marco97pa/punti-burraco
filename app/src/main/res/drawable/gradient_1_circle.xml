@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:angle="225"
+                android:startColor="#FB8837"
+                android:endColor="#A106B9"
+                android:type="linear" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/ic_blur_on_black_24dp"
+        android:bottom="24dp"
+        android:left="24dp"
+        android:right="24dp"
+        android:top="24dp"/>
+</layer-list>

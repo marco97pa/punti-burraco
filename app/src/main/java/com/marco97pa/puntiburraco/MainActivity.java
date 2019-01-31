@@ -1,69 +1,59 @@
 package com.marco97pa.puntiburraco;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.text.emoji.EmojiCompat;
-import android.support.text.emoji.bundled.BundledEmojiCompatConfig;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.browser.customtabs.CustomTabsIntent;
+
+import com.google.android.gms.common.wrappers.InstantApps;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.core.provider.FontRequest;
+import androidx.emoji.text.EmojiCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.emoji.text.FontRequestEmojiCompatConfig;
+
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
-
-import static android.R.attr.id;
-import static android.widget.Toast.LENGTH_SHORT;
 
 
 /**
@@ -76,11 +66,18 @@ import static android.widget.Toast.LENGTH_SHORT;
  */
 
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     public static Context contextOfApplication;
-
+    String CHANNEL_ID = "channel_suspended";
+    //action bar settings
+    Boolean ddp_visibility = true;
+    Boolean newgame_show = false;
 
     public interface ClickListener {
         void onClick(View view, int position);
@@ -107,6 +104,8 @@ public class MainActivity extends AppCompatActivity
             setTheme(R.style.AppTheme_NoActionBar);
         }
 
+        isGooglePlayServicesAvailable(this);
+
         /* CREATING ACTIVITY
          * Creating activity and setting its contents, the toolbar, the fab and the first Fragment
          */
@@ -114,6 +113,14 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //fix for Nav Header not really nightly
+        if(isNight){
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View header = navigationView.getHeaderView(0);
+            View linearLayout = (View) header.findViewById(R.id.linearLayout);
+            linearLayout.setBackgroundResource(R.drawable.side_nav_bar_alt);
+        }
 
         //Setting first Fragment to display as DoubleFragment (aka 2 players mode)
         Fragment fragment = new DoubleFragment();
@@ -157,17 +164,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                InputMethodManager inputMethodManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
             }
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                InputMethodManager inputMethodManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
             }
         };
         drawer.setDrawerListener(toggle);
@@ -176,6 +181,27 @@ public class MainActivity extends AppCompatActivity
         //Sets navigation drawer listener
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Set Notification Channel (as of Android 8.0 Oreo)
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // The id of the channel.
+            String id = CHANNEL_ID;
+            // The user-visible name of the channel.
+            CharSequence name = getString(R.string.channel_name);
+            // The user-visible description of the channel.
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(id, name, importance);
+            // Configure the notification channel.
+            mChannel.setDescription(description);
+            mChannel.enableLights(true);
+            mChannel.enableVibration(false);
+            // Sets the notification light color for notifications posted to this
+            // channel, if the device supports this feature.
+            mChannel.setLightColor(Color.YELLOW);
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
 
         //Delete notification (if there is any)
         NotificationManager notifManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -207,9 +233,15 @@ public class MainActivity extends AppCompatActivity
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
-        EmojiCompat.Config config = new BundledEmojiCompatConfig(this)
-                .setReplaceAll(true);
+        //EMOJI: Imposta carattere e avvia il download in background
+        FontRequest fontRequest = new FontRequest(
+                "com.google.android.gms.fonts",
+                "com.google.android.gms",
+                "Noto Color Emoji Compat",
+                R.array.com_google_android_gms_fonts_certs);
+        EmojiCompat.Config config = new FontRequestEmojiCompatConfig(this, fontRequest);
         EmojiCompat.init(config);
+
     }
 
 
@@ -253,7 +285,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-        notifyIfGameSuspended();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
     }
 
 
@@ -261,77 +297,82 @@ public class MainActivity extends AppCompatActivity
     * If the user closes the app before one of the players wins,
     * a notification will be shown on his Notification Drawer */
     public void notifyIfGameSuspended(){
-        int PDefault = 0;
-        int tot1, tot2, tot3, status;
-        final String gioc1Default=getString(R.string.s1);
-        final String gioc2Default=getString(R.string.s2);
-        final String sq1Default=getString(R.string.n1);
-        final String sq2Default=getString(R.string.n2);
-        final String p1Default=getString(R.string.g1);
-        final String p2Default=getString(R.string.g2);
-        final String p3Default=getString(R.string.g3);
-        String gioc1, gioc2,gioc3, sq1, sq2;
-        //Initialize description
-        String description = "";
-        //Check if the game was interrupted (if no one has already won)
-        /*interrupted can be:
-        * - 0: one of the players has won, so user doesn't need to be notified
-        * - 2: game interrupted in 2 players mode
-        * - 3: game interrupted in 3 players mode
-        * - 4: game interrupted in 4 players mode*/
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        status = sharedPref.getInt("interrupted", 0);
-        Log.i("STATO:",Integer.toString(status));
-        //check if the score is 0 - 0: in that case do not notify
-        boolean scoreNotZero = true;
-        if(sharedPref.getInt("p1",PDefault) == 0 && sharedPref.getInt("p2",PDefault) == 0
-                && sharedPref.getInt("punti1",PDefault) == 0 && sharedPref.getInt("punti2",PDefault) == 0
-                && sharedPref.getInt("t1",PDefault) == 0 && sharedPref.getInt("t2",PDefault) == 0 && sharedPref.getInt("t3",PDefault) == 0){
-            scoreNotZero = false;
-        }
-        //if game was interrupted
-        if(status != 0 && scoreNotZero){
-            //Generating notification text according to the mode selected
-            switch (status){
-                case 2:
-                    tot1 = sharedPref.getInt("p1",PDefault);
-                    tot2 = sharedPref.getInt("p2",PDefault);
-                    gioc1 = sharedPref.getString("sq1",gioc1Default);
-                    gioc2 = sharedPref.getString("sq2",gioc2Default);
-                    description = gioc1+" - "+gioc2+"    "+Integer.toString(tot1)+" - "+Integer.toString(tot2);
-                    break;
-                case 4:
-                    tot1 = sharedPref.getInt("punti1",PDefault);
-                    tot2 = sharedPref.getInt("punti2",PDefault);
-                    sq1 = sharedPref.getString("squadra1",sq1Default);
-                    sq2 = sharedPref.getString("squadra2",sq2Default);
-                    description = sq1+" - "+sq2+"    "+Integer.toString(tot1)+" - "+Integer.toString(tot2);
-                    break;
-                case 3:
-                    tot1 = sharedPref.getInt("t1",PDefault);
-                    tot2 = sharedPref.getInt("t2",PDefault);
-                    tot3 = sharedPref.getInt("t3",PDefault);
-                    gioc1 = sharedPref.getString("sqd1",p1Default);
-                    gioc2 = sharedPref.getString("sqd2",p2Default);
-                    gioc3 = sharedPref.getString("sqd3",p3Default);
-                    description = gioc1+" - "+gioc2+" - "+gioc3+"  "+Integer.toString(tot1)+" - "+Integer.toString(tot2)+" - "+Integer.toString(tot3);
-                    break;
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Boolean shouldNotify = sharedPreferences.getBoolean("notification_old", true) ;
+        if(shouldNotify) {
+            int PDefault = 0;
+            int tot1, tot2, tot3, status;
+            final String gioc1Default = getString(R.string.gioc_1);
+            final String gioc2Default = getString(R.string.gioc_2);
+            final String sq1Default = getString(R.string.n1);
+            final String sq2Default = getString(R.string.n2);
+            final String p1Default = getString(R.string.g1);
+            final String p2Default = getString(R.string.g2);
+            final String p3Default = getString(R.string.g3);
+            String gioc1, gioc2, gioc3, sq1, sq2;
+            //Initialize description
+            String description = "";
+            //Check if the game was interrupted (if no one has already won)
+            /*interrupted can be:
+             * - 0: one of the players has won, so user doesn't need to be notified
+             * - 2: game interrupted in 2 players mode
+             * - 3: game interrupted in 3 players mode
+             * - 4: game interrupted in 4 players mode*/
+            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+            status = sharedPref.getInt("interrupted", 0);
+            Log.i("STATO:", Integer.toString(status));
+            //check if the score is 0 - 0: in that case do not notify
+            boolean scoreNotZero = true;
+            if (sharedPref.getInt("p1", PDefault) == 0 && sharedPref.getInt("p2", PDefault) == 0
+                    && sharedPref.getInt("punti1", PDefault) == 0 && sharedPref.getInt("punti2", PDefault) == 0
+                    && sharedPref.getInt("t1", PDefault) == 0 && sharedPref.getInt("t2", PDefault) == 0 && sharedPref.getInt("t3", PDefault) == 0) {
+                scoreNotZero = false;
             }
+            //if game was interrupted
+            if (status != 0 && scoreNotZero) {
+                //Generating notification text according to the mode selected
+                switch (status) {
+                    case 2:
+                        tot1 = sharedPref.getInt("p1", PDefault);
+                        tot2 = sharedPref.getInt("p2", PDefault);
+                        gioc1 = sharedPref.getString("sq1", gioc1Default);
+                        gioc2 = sharedPref.getString("sq2", gioc2Default);
+                        description = gioc1 + " - " + gioc2 + "    " + Integer.toString(tot1) + " - " + Integer.toString(tot2);
+                        break;
+                    case 4:
+                        tot1 = sharedPref.getInt("punti1", PDefault);
+                        tot2 = sharedPref.getInt("punti2", PDefault);
+                        sq1 = sharedPref.getString("squadra1", sq1Default);
+                        sq2 = sharedPref.getString("squadra2", sq2Default);
+                        description = sq1 + " - " + sq2 + "    " + Integer.toString(tot1) + " - " + Integer.toString(tot2);
+                        break;
+                    case 3:
+                        tot1 = sharedPref.getInt("t1", PDefault);
+                        tot2 = sharedPref.getInt("t2", PDefault);
+                        tot3 = sharedPref.getInt("t3", PDefault);
+                        gioc1 = sharedPref.getString("sqd1", p1Default);
+                        gioc2 = sharedPref.getString("sqd2", p2Default);
+                        gioc3 = sharedPref.getString("sqd3", p3Default);
+                        description = gioc1 + " - " + gioc2 + " - " + gioc3 + "  " + Integer.toString(tot1) + " - " + Integer.toString(tot2) + " - " + Integer.toString(tot3);
+                        break;
 
-            //and then, make the Notification
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setContentTitle(getString(R.string.notification))
-                    .setContentText(description)
-                    .setAutoCancel(true)
-                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            //Intent to open MainActivity (passing the actual player mode (fragment))
-            Intent launch_app = new Intent(this, MainActivity.class);
-            launch_app.putExtra("mode", status);
-            mBuilder.setContentIntent(PendingIntent.getActivity(this,0,launch_app , PendingIntent.FLAG_UPDATE_CURRENT));
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(0, mBuilder.build());
+                }
+
+                //and then, make the Notification
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setContentTitle(getString(R.string.notification))
+                        .setContentText(description)
+                        .setAutoCancel(true)
+                        .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                        .setChannelId(CHANNEL_ID);
+                //Intent to open MainActivity (passing the actual player mode (fragment))
+                Intent launch_app = new Intent(this, MainActivity.class);
+                launch_app.putExtra("mode", status);
+                mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, launch_app, PendingIntent.FLAG_UPDATE_CURRENT));
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(0, mBuilder.build());
+            }
         }
 
     }
@@ -376,6 +417,18 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_dpp).setVisible(ddp_visibility);
+        if(newgame_show) {
+            menu.findItem(R.id.action_reset).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
+        else{
+            menu.findItem(R.id.action_reset).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        }
+        return true;
+    }
     /* HANDLE NAVIGATION DRAWER SELECTION
      * It changes the fragment when changing mode
      */
@@ -385,6 +438,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         Fragment fragment = null;
         int id = item.getItemId();
+        //reset menu
+        setMenuAlternative(false);
 
         if (id == R.id.nav_2_player) {
             fragment = new DoubleFragment();
@@ -399,6 +454,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new QuadFragment();
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "4").commit();
+
 
         } else if (id == R.id.nav_setting) {
             //Launches Settings Activity
@@ -420,7 +476,16 @@ public class MainActivity extends AppCompatActivity
                 //I am using CustomTabs
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                final Bitmap backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back_black_24dp);
+                //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
+                Bitmap backButton = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                    ImageDecoder.Source source = ImageDecoder.createSource(getResources(), R.drawable.ic_arrow_back_black_24dp);
+                    try {
+                          backButton = ImageDecoder.decodeBitmap(source);
+                    } catch (IOException e) { e.printStackTrace(); }
+                } else{
+                      backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back_black_24dp);
+                }
                 builder.setCloseButtonIcon(backButton);
                 builder.setShowTitle(true);
                 CustomTabsIntent customTabsIntent = builder.build();
@@ -459,16 +524,47 @@ public class MainActivity extends AppCompatActivity
                 alert.show();
             }
 
-        } else if (id == R.id.nav_info) {
-            //It opens Contributions Activity
-            Intent myIntent = new Intent(this, Contributions.class);
-            this.startActivity(myIntent);
-
-        }
+        } 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    //HANDLE SCREEN ORENTATION CHANGES
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.content_frame);
+        String tag = currentFragment.getTag();
+        // Save custom values into the bundle
+        savedInstanceState.putString("actual_mode", tag);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore state members from saved instance
+        String tag = savedInstanceState.getString("actual_mode");
+        Fragment fragment;
+        FragmentManager fragmentManager;
+        if(tag == "2"){
+            fragment = new DoubleFragment();
+            fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"2").commit();
+        }
+        else if(tag == "3"){
+            fragment = new TripleFragment();
+            fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"3").commit();
+        }
+        else if(tag == "4"){
+            fragment = new QuadFragment();
+            fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"4").commit();
+        }
     }
 
     //Simple Method to return the Context of App
@@ -476,8 +572,61 @@ public class MainActivity extends AppCompatActivity
         return contextOfApplication;
     }
 
+    public void setMenuAlternative(boolean flag){
+        if(flag){
+            ddp_visibility = false;
+            newgame_show = true;
+        }
+        else{
+            ddp_visibility = true;
+            newgame_show = false;
+        }
+        invalidateOptionsMenu();
+        //the method above invokes onPrepareOptionsMenu();
+    }
 
+    //Method to check Play Services Status
+    public boolean isGooglePlayServicesAvailable(Activity activity) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
+        if(status != ConnectionResult.SUCCESS) {
+            if(googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(activity, status, 2404).show();
+            }
+            return false;
+        }
+        return true;
+    }
 
+    public String getAlertBackgroundColor(){
+        int intbgColor;
+        String bgColor;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Boolean isNight = sharedPref.getBoolean("night", false) ;
+        if(isNight){
+            intbgColor = ContextCompat.getColor(getApplicationContext(), R.color.bgBlack);
+            bgColor = String.format("#%06X", (0xFFFFFF & intbgColor));
+        }
+        else{
+            intbgColor = ContextCompat.getColor(getApplicationContext(), R.color.bgWhite);
+            bgColor = String.format("#%06X", (0xFFFFFF & intbgColor));
+        }
+        return bgColor;
+    }
 
-
+    public  String getAlertTextColor(){
+        int inttxtColor;
+        String txtColor;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Boolean isNight = sharedPref.getBoolean("night", false) ;
+        if(isNight){
+            inttxtColor = ContextCompat.getColor(getApplicationContext(), R.color.txtWhite);
+            txtColor = String.format("#%06X", (0xFFFFFF & inttxtColor));
+        }
+        else{
+            inttxtColor = ContextCompat.getColor(getApplicationContext(), R.color.txtBlack);
+            txtColor = String.format("#%06X", (0xFFFFFF & inttxtColor));
+        }
+        return  txtColor;
+    }
 }
