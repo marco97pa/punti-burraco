@@ -58,7 +58,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * QUAD FRAGMENT
  * Fragment of the 4 players mode
- * Some parts of this code has been written by me at the age of 16, so it can be written better
+ * Some parts of this code was written by me at the age of 16, so it can be written better
  * It is really similar to DoubleFragment and TripleFragment, except for some calculation and error checks difference
  * So I will not provide comments of this Fragment
  *
