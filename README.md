@@ -28,10 +28,9 @@ An **open-source** Android Burraco scorekeeper with social functions, different 
   - History of your matches
 - **App**
   - Full Material Design
-  - Share your results on Facebook, Whatsapp and others
+  - Share your results on Facebook, Whatsapp, Instagram Stories and others
   - Use the Night Theme
   - Keep the screen on
-  - Read the guide
   - Other personalization options
 - _**Much more...**_
   - _Points Buraco is actively developed. More features will come!_
@@ -44,7 +43,7 @@ I have started writing this app at the age of 16, in 2014. My test device was an
 I started making this app for personal use. After one year, I released it on the Google Play Store.
 Now, in 2017, after a big rework of the app, I am publishing my code on GitHub.
 
-For more information, visit the full [**Changelog**](CHANGELOG.md)
+For more information, visit the full [**Changelog**](https://punti-burraco.firebaseapp.com/changelog.html)
 
 # Specs / Open-source libraries:
 
