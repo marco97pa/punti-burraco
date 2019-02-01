@@ -1,4 +1,4 @@
-<img src="https://punti-burraco.firebaseapp.com/images/icon.png" align="right" width="200" height="200"/>
+<img src="https://punti-burraco.firebaseapp.com/images/icon-small.png" align="right" width="200" height="200"/>
 
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](http://choosealicense.com/licenses/gpl-3.0/)
 [![Downloads](https://img.shields.io/badge/google%20play%20downloads-10.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
