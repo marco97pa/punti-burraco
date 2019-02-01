@@ -43,7 +43,7 @@ I have started writing this app at the age of 16, in 2014. My test device was an
 I started making this app for personal use. After one year, I released it on the Google Play Store.
 Now, in 2017, after a big rework of the app, I am publishing my code on GitHub.
 
-For more information, visit the full [**Changelog**](https://punti-burraco.firebaseapp.com/CHANGELOG.md)
+For more information, visit the full [**Changelog**](https://punti-burraco.firebaseapp.com/changelog.html)
 
 # Specs / Open-source libraries:
 
