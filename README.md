@@ -63,5 +63,5 @@ Read the [**contribution guide**](https://github.com/marco97pa/punti-burraco/wik
 
 > Copyright (C) [Marco Fantauzzo](http://marcofantauzzo.it). 
 > Licensed under the [GPL-3.0](https://www.gnu.org/licenses/gpl.html) license.
-> (See the [LICENSE](https://github.com/marco97pa/punti-burraco/master/LICENSE) file for the whole license text.)
+> (See the [LICENSE](https://github.com/marco97pa/punti-burraco/blob/master/LICENSE) file for the whole license text.)
 
