@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="0.2">
+
+<LinearLayout
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -130,3 +136,48 @@
             android:textSize="30sp" />
     </LinearLayout>
 </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ControllerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@drawable/gradient_shadow"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rootLayout"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/button_facebook"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/facebook"
+            android:text="@string/facebook" />
+
+        <Button
+            android:id="@+id/button_instagram"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/instagram"
+            android:text="@string/instagram" />
+
+        <Button
+            android:id="@+id/button_share"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:text="@string/dialog_share" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

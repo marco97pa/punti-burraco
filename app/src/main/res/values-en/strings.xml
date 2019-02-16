@@ -19,14 +19,6 @@
     <string name="action_start">Add points</string>
     <string name="add_point">Points added</string>
     <string name="back_to_exit">Press back again to exit</string>
-    <string name="buy_already">You have already donated</string>
-    <string name="buy_api">API error</string>
-    <string name="buy_cancel">Purchase canceled</string>
-    <string name="buy_dev">Developer error</string>
-    <string name="buy_network">Connection lost. Try again.</string>
-    <string name="buy_notavaible">In-app purchase not available</string>
-    <string name="buy_playservices">Old Google Play Services version. Update it.</string>
-    <string name="buy_success">Thanks for your donation</string>
     <string name="cancel">Cancel</string>
     <string name="change_name">To change names, just touch the player\'s name in the main screen</string>
     <string name="chius">Closes</string>
@@ -41,15 +33,12 @@
     <string name="g2">Player 2</string>
     <string name="g3">Player 3</string>
     <string name="guida">Guide</string>
-    <string name="intro_pro_dpp_t">Hand details</string>
     <string name="ko">Cancel</string>
     <string name="marshmallow_alert">Permission denied to read your External storage</string>
     <string name="n1">Team 1</string>
     <string name="n2">Team 2</string>
     <string name="nav_guide">Guide and feedback</string>
-    <string name="nav_info">Support</string>
     <string name="nav_settings">Settings</string>
-    <string name="nav_upgrade">Upgrade to PRO</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="ok">OK</string>
@@ -57,8 +46,6 @@
     <string name="permission_true">Press SHARE again to continue</string>
     <string name="pozz">No Pots</string>
     <string name="pozzetto">No Pots</string>
-    <string name="pro_details">To show the details of each hand, you must buy the PRO version</string>
-    <string name="pro_function">PRO functionality</string>
     <string name="reset">New game, points reset</string>
     <string name="setting_limite">Set win point</string>
     <string name="setting_notte">Night Mode</string>
@@ -91,7 +78,7 @@
     <string name="setting_img_d">Enables the images in 2 and 4 players mode</string>
     <string name="setting_pub">Help development</string>
     <string name="setting_pub_d">Thanks for your help: little non-intrusive ads will be displayed</string>
-    <string name="message_out_to_play_store">Thanks :D \n You can write a review by scrolling in the bottom of the page</string>
+    <string name="message_out_to_play_store">Thanks :D   You can write a review by scrolling in the bottom of the page</string>
     <string name="easter_egg">Yay! Rainbows everywhere!</string>
     <string name="notification">Match suspended</string>
     <string name="crop_image_activity_title">Resize</string>
@@ -101,7 +88,6 @@
     <string name="gioc_2">Player 2</string>
     <string name="nav_history">History</string>
     <string name="channel_name">Suspended game notifications</string>
-    <string name="channel_description">If you leave the app without ending the game, you will receive a notification to continue the game</string>
     <string name="removeImage">Remove photo</string>
     <string name="removeText">Reset name</string>
     <string name="setting_notification_d">Set notification settings</string>
@@ -119,9 +105,10 @@
     <string name="integrity_1">App is secure</string>
     <string name="setting_integrity">Integrity Check</string>
     <string name="setting_integrity_d">Loading...</string>
-    <string name="sorry">Images are unsupported in Android 9.0 Pie. Soon they will be avaible, sorry for inconvenience</string>
     <string name="audio_up">Turned up the volume</string>
     <string name="setting_sound">Sound</string>
     <string name="setting_sound_d">Play sound when someone wins</string>
-    <string name="setting_background">Stories color</string>
+    <string name="setting_background">Stories background color</string>
+    <string name="change_background_hint">Touch to change background</string>
+    <string name="channel_description">If you leave the app without ending the game, you will receive a notification to continue the game</string>
 </resources>

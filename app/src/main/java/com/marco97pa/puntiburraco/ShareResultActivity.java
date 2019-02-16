@@ -3,6 +3,7 @@ package com.marco97pa.puntiburraco;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -12,11 +13,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,6 +30,8 @@ import java.io.IOException;
 public class ShareResultActivity extends AppCompatActivity {
 private TextView name1, name2, name3, score1, score2, score3;
 boolean diRitornoDaCondivisione;
+int selection;
+LinearLayout root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,89 +72,165 @@ boolean diRitornoDaCondivisione;
             score3.setVisibility(View.GONE);
         }
 
-        //Imposta lo sfondo
-        LinearLayout root = (LinearLayout) findViewById(R.id.rootLayout);
+        //Set background based on user selection
+        root = (LinearLayout) findViewById(R.id.rootLayout);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String background_selection = sharedPreferences.getString("background_stories", "1");
-        switch (background_selection){
-            case "1": root.setBackgroundResource(R.drawable.gradient_1); break;
-            case "2": root.setBackgroundResource(R.drawable.gradient_2); break;
-            case "3": root.setBackgroundResource(R.drawable.gradient_3); break;
-            case "4": root.setBackgroundResource(R.drawable.gradient_4); break;
-        }
+        selection = Integer.parseInt(background_selection);
+        changeBackground();
 
-        //CLICCA OVUNQUE PER USCIRE
-        root.setOnClickListener(new View.OnClickListener() {
+        //BUTTONS
+        Button instagram = (Button) findViewById(R.id.button_instagram);
+        instagram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                shareOnInstagram();
             }
         });
 
-        //Activity avviata
+        Button facebook = (Button) findViewById(R.id.button_facebook);
+        facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareOnFacebook();
+            }
+        });
+
+        Button btn = (Button) findViewById(R.id.button_share);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareOnOtherApps();
+            }
+        });
+
+        //Change background by tapping on view
+        root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selection++;
+                changeBackground();
+            }
+        });
+
+        //Activity started
         diRitornoDaCondivisione = false;
+
+        //Display hint
+        Toast toast = Toast.makeText(this,getString(R.string.change_background_hint), Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
 
     }
 
     public void onResume() {
         super.onResume();
-        //Nonappena ha finito di creare l'Activity, aspetta 200ms
-        //e poi FAI LO SCREENSHOT E CONDIVIDI
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                if(diRitornoDaCondivisione == false) {
-                    diRitornoDaCondivisione = true;
-                    screenshotAndShare();
-                }
-                else{
-                    finish();
-                }
+        //Close after sharing
+        if(diRitornoDaCondivisione) {
+            finish();
         }
-        }, 200);
 
     }
+
+    public void changeBackground(){
+        switch (selection){
+            case 1: root.setBackgroundResource(R.drawable.gradient_1); break;
+            case 2: root.setBackgroundResource(R.drawable.gradient_2); break;
+            case 3: root.setBackgroundResource(R.drawable.gradient_3); break;
+            case 4: root.setBackgroundResource(R.drawable.gradient_4); break;
+            default:
+                selection = 1;
+                root.setBackgroundResource(R.drawable.gradient_1); break;
+        }
+    }
+
+    public void shareOnOtherApps(){
+        Uri image = takeScreenshot();
+        //Share
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+        share.putExtra(Intent.EXTRA_STREAM, image);
+        startActivity(Intent.createChooser(share, getString(R.string.action_share)));
+    }
+
+    public void shareOnFacebook(){
+        // Define image asset URI and attribution link URL
+        Uri backgroundAssetUri = takeScreenshot();
+        String attributionLinkUrl = "https://punti-burraco.firebaseapp.com/";
+
+        // Instantiate implicit intent with ADD_TO_STORY action,
+        // background asset, and attribution link
+        Intent intent = new Intent("com.facebook.stories.ADD_TO_STORY");
+        intent.setDataAndType(backgroundAssetUri, "image/jpeg");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra("https://punti-burraco.firebaseapp.com/", attributionLinkUrl);
+
+        // Instantiate activity and verify it will resolve implicit intent
+        Activity activity = this;
+        if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+            activity.startActivityForResult(intent, 0);
+        }
+    }
+
+    public void shareOnInstagram(){
+        // Define image asset URI and attribution link URL
+        Uri backgroundAssetUri = takeScreenshot();
+        String attributionLinkUrl = "https://punti-burraco.firebaseapp.com/";
+
+        // Instantiate implicit intent with ADD_TO_STORY action,
+        // background asset, and attribution link
+        Intent intent = new Intent("com.instagram.share.ADD_TO_STORY");
+        intent.setDataAndType(backgroundAssetUri, "image/jpeg");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra("https://punti-burraco.firebaseapp.com/", attributionLinkUrl);
+
+        // Instantiate activity and verify it will resolve implicit intent
+        Activity activity = this;
+        if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+            activity.startActivityForResult(intent, 0);
+        }
+    }
+
     /**
-     * TAKE SCREENSHOT, then SHARE
-     * This method shares the scores.
-     * A screenshot of the app will be taken, saved in memory, then invoked the Android Share Intent
+     * TAKE SCREENSHOT
+     * This method hides the ControllerView then
+     * A screenshot of the app will be taken, saved in memory
      */
-    public void screenshotAndShare(){
+    public Uri takeScreenshot(){
+        //First hide the ControllerView
+        LinearLayout controller = (LinearLayout) findViewById(R.id.ControllerLayout) ;
+        controller.setVisibility(View.GONE);
+        diRitornoDaCondivisione = true;
+
+        //Then Take screenshot and save as JPG
         View v = getWindow().getDecorView().getRootView();
         v.setDrawingCacheEnabled(true);
         v.buildDrawingCache(true);
         Bitmap bmp = Bitmap.createBitmap(v.getDrawingCache());
         v.setDrawingCacheEnabled(false);
-        String nomeFoto = "SCREEN"+ System.currentTimeMillis() + ".png";
+        String nomeFoto = "SCREEN"+ System.currentTimeMillis() + ".jpg";
         File imageFileToShare;
         try {
             // Save as png
             FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), nomeFoto));
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
 
-            //Share
-            Intent share = new Intent(Intent.ACTION_SEND);
-
-            share.setType("image/png");
-
-            //I have put png image named myImage.png in my app directory
-            //String imagePath = Environment.getExternalStorageDirectory()+nomeFoto;
-            //File imageFileToShare = new File(imagePath);
-
+            //Get URI
             Uri uri = FileProvider.getUriForFile(getApplicationContext(),
                     "com.marco97pa.puntiburraco.provider",
                     imageFileToShare);
-            share.putExtra(Intent.EXTRA_STREAM, uri);
 
-            startActivity(Intent.createChooser(share, getString(R.string.action_share)));
+            return uri;
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return null;
     }
 
 }
