@@ -845,7 +845,7 @@ public class QuadFragment extends Fragment {
             else {
                 WebView webview = generateWebView();
                 AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
-                ad.setTitle(R.string.intro_pro_dpp_t);
+                ad.setTitle(R.string.action_dpp);
                 ad.setView(webview);
                 ad.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

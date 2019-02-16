@@ -2,12 +2,14 @@
 <resources>
     <color name="colorPrimary">#FFFF9800</color>
     <color name="colorPrimaryDark">#FFF57C00</color>
-    <color name="colorAccent">#FF00B8D4</color>
+    <color name="colorAccent">#00b8d4</color>
     <color name="barBlack">#000</color>
     <color name="barWhite">#fff</color>
     <color name="ic_background">#FD9600</color>
     <color name="txtBlack">#000</color>
-    <color name="txtWhite">#fff</color>
+    <color name="txtWhite">#ffffff</color>
     <color name="bgBlack">#ff424242</color>
     <color name="bgWhite">#fff</color>
+    <color name="instagram">#e91e63</color>
+    <color name="facebook">#3949ab</color>
 </resources>

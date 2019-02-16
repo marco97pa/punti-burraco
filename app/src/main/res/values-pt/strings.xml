@@ -18,14 +18,6 @@
     <string name="action_start">Adicionar pontos</string>
     <string name="add_point">Pontos adicionado</string>
     <string name="back_to_exit">Imprensa de novo para sair</string>
-    <string name="buy_already">Erro</string>
-    <string name="buy_api">API erro</string>
-    <string name="buy_cancel">Cancelado</string>
-    <string name="buy_dev">Erro</string>
-    <string name="buy_network">Erro</string>
-    <string name="buy_notavaible">Erro</string>
-    <string name="buy_playservices">Erro</string>
-    <string name="buy_success">Você comprou</string>
     <string name="cancel">Cancela</string>
     <string name="change_name">Para alterar nomes, tocar nome</string>
     <string name="close">Perto</string>
@@ -39,21 +31,16 @@
     <string name="g1">Jogador 1</string>
     <string name="g2">Jogador 2</string>
     <string name="g3">Jogador 3</string>
-    <string name="intro_pro_dpp_t">Detalhe pontos</string>
     <string name="ko">cancela</string>
     <string name="marshmallow_alert">Permission denied to read your External storage</string>
     <string name="n1">Equipe 1</string>
     <string name="n2">Equipe 2</string>
-    <string name="nav_info">Informação em PRO</string>
     <string name="nav_settings">Configurações</string>
-    <string name="nav_upgrade">Mudar para PRO</string>
     <string name="navigation_drawer_close">perto</string>
     <string name="ok">OK</string>
     <string name="navigation_drawer_open">abridor</string>
     <string name="pozzetto">Perder o morto</string>
     <string name="pozz">Não morto</string>
-    <string name="pro_details">Para mostrar os detalhes das pontuações parciais, você tem que ter a versão PRO. Você pode comprá-lo a partir do menu principal</string>
-    <string name="pro_function">Funcionalidade PRO</string>
     <string name="reset">Novo jogo</string>
     <string name="setting_limite">Pontos de chegada</string>
     <string name="setting_notte">Modo noturno</string>
@@ -119,9 +106,9 @@
     <string name="integrity_1">OK</string>
     <string name="setting_integrity">Verificação de integridade</string>
     <string name="setting_integrity_d">...</string>
-    <string name="sorry">Disabled</string>
     <string name="audio_up">Volume 100%</string>
     <string name="setting_sound_d">Reproduzir som quando alguém ganha</string>
     <string name="setting_sound">Som</string>
     <string name="setting_background">Tema da partilha</string>
+    <string name="change_background_hint">Toque para mudar o fundo</string>
 </resources>
