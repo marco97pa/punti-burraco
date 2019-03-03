@@ -41,7 +41,8 @@ LinearLayout root;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow(); // in Activity's onCreate() for instance
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         }
 
         name1 = (TextView) findViewById(R.id.name1);
@@ -138,6 +139,8 @@ LinearLayout root;
             case 2: root.setBackgroundResource(R.drawable.gradient_2); break;
             case 3: root.setBackgroundResource(R.drawable.gradient_3); break;
             case 4: root.setBackgroundResource(R.drawable.gradient_4); break;
+            case 5: root.setBackgroundResource(R.drawable.gradient_5); break;
+            case 6: root.setBackgroundResource(R.drawable.gradient_6); break;
             default:
                 selection = 1;
                 root.setBackgroundResource(R.drawable.gradient_1); break;
@@ -170,6 +173,11 @@ LinearLayout root;
         if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
             activity.startActivityForResult(intent, 0);
         }
+        else{
+            //Show alert if app is not installed
+            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), "Facebook"), Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     public void shareOnInstagram(){
@@ -188,6 +196,11 @@ LinearLayout root;
         Activity activity = this;
         if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
             activity.startActivityForResult(intent, 0);
+        }
+        else {
+            //Show alert if app is not installed
+            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), "Instagram"), Toast.LENGTH_LONG);
+            toast.show();
         }
     }
 

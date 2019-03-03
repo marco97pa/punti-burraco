@@ -126,6 +126,7 @@
     <string name="instagram" translatable="false">Instagram Stories</string>
     <string name="change_background_hint">Touch to change background</string>
     <string name="action_start">Add points</string>
+    <string name="app_not_installed">%1$s not installed: can\'t share result</string>
 
 
 </resources>

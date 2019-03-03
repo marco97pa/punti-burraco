@@ -124,6 +124,7 @@
     <string name="no_data_available">Non hai ancora giocato nessuna partita...</string>
     <string name="audio_up">Volume multimediale alzato al massimo</string>
     <string name="change_background_hint">Tocca per cambiare lo sfondo</string>
+    <string name="app_not_installed">%1$s non installato. Installalo e potrai condividere i tuoi risultati</string>
 
 
 </resources>
