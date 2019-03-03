@@ -5,11 +5,15 @@
         <item>Nature green</item>
         <item>Buraco orange</item>
         <item>Ocean blue</item>
+        <item>Cherry red</item>
+        <item>Unicorn blood</item>
     </string-array>
     <string-array name="listvalues">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 </resources>

@@ -111,4 +111,5 @@
     <string name="setting_sound">Som</string>
     <string name="setting_background">Tema da partilha</string>
     <string name="change_background_hint">Toque para mudar o fundo</string>
+    <string name="app_not_installed">%1$s Erro</string>
 </resources>
