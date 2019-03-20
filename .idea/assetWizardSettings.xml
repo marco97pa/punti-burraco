@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_blur_on_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,13 +33,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="fafafa" />
-                            <entry key="height" value="48" />
-                            <entry key="opacityPercent" value="50" />
-                            <entry key="outputName" value="ic_blur_on_black_24dp" />
-                            <entry key="overrideSize" value="true" />
+                            <entry key="outputName" value="ic_check_black_24dp" />
                             <entry key="sourceFile" value="C:\Users\Marco F\Desktop\outline-help_outline-24px.svg" />
-                            <entry key="width" value="48" />
                           </map>
                         </option>
                       </PersistentState>

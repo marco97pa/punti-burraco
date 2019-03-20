@@ -2,7 +2,7 @@ package com.marco97pa.puntiburraco;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -984,29 +984,31 @@ public class TripleFragment extends Fragment {
                 Snackbar.make(getView(), getString(R.string.errore_dpp), Snackbar.LENGTH_SHORT).show();
             }
             else {
-                WebView webview = generateWebView();
-                AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
-                ad.setTitle(R.string.action_dpp);
-                ad.setView(webview);
-                ad.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog dialog = ad.create();
-                dialog.show();
+                //SHOW BOTTOM SHEET FRAGMENT
+                BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+                // Supply data from Hand Details as an argument.
+                Bundle args = new Bundle();
+                args.putString("data", generateHandsDetail());
+                bottomSheetFragment.setArguments(args);
+                bottomSheetFragment.show(getChildFragmentManager() ,bottomSheetFragment.getTag());
             }
 
     }
 
     public WebView generateWebView(){
-        SharedPreferences sharedPref =  getActivity().getPreferences(Context.MODE_PRIVATE);
-        String html_inner =sharedPref.getString("dpp3", "");
         WebView webview = new WebView(getActivity());
-        String header = "<html><body bgcolor=\""+ bgColor +"\" style=\"color: " + txtColor + "\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th><th>" + textNome3.getText().toString() + "</th></tr>";
-        String data = header + html_inner + "</table></body></html>";
+        String data = generateHandsDetail();
         webview.loadData(data, "text/html; charset=UTF-8", null);
         return webview;
     }
+
+    public String generateHandsDetail(){
+        SharedPreferences sharedPref =  getActivity().getPreferences(Context.MODE_PRIVATE);
+        String html_inner =sharedPref.getString("dpp3", "");
+        String header = "<html><body bgcolor=\""+ bgColor +"\" style=\"color: " + txtColor + "\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th><th>" + textNome3.getText().toString() + "</th></tr>";
+        String data = header + html_inner + "</table></body></html>";
+        return data;
+    }
+
 
 }

@@ -2,8 +2,8 @@ package com.marco97pa.puntiburraco;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
 
         //Setting first Fragment to display as DoubleFragment (aka 2 players mode)
         Fragment fragment = new DoubleFragment();
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "2").commit();
 
         //Setting the FAB button - It launches the openStart method of the active Fragment inside activity
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment currentFragment = getFragmentManager().findFragmentById(R.id.content_frame);
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
                 String tag = currentFragment.getTag();
                 switch (tag) {
                     case "2":
@@ -212,17 +212,17 @@ public class MainActivity extends AppCompatActivity
         int mode = intent.getIntExtra("mode", 0);
         if(mode == 2){
             fragment = new DoubleFragment();
-            fragmentManager = getFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"2").commit();
         }
         else if(mode == 3){
             fragment = new TripleFragment();
-            fragmentManager = getFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"3").commit();
         }
         else if(mode == 4){
             fragment = new QuadFragment();
-            fragmentManager = getFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"4").commit();
         }
 
@@ -443,16 +443,16 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_2_player) {
             fragment = new DoubleFragment();
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"2").commit();
         } else if (id == R.id.nav_3_player) {
             fragment = new TripleFragment();
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"3").commit();
 
         } else if (id == R.id.nav_4_player) {
             fragment = new QuadFragment();
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "4").commit();
 
 
@@ -535,7 +535,7 @@ public class MainActivity extends AppCompatActivity
     //HANDLE SCREEN ORENTATION CHANGES
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.content_frame);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         String tag = currentFragment.getTag();
         // Save custom values into the bundle
         savedInstanceState.putString("actual_mode", tag);
@@ -552,17 +552,17 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager;
         if(tag == "2"){
             fragment = new DoubleFragment();
-            fragmentManager = getFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"2").commit();
         }
         else if(tag == "3"){
             fragment = new TripleFragment();
-            fragmentManager = getFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"3").commit();
         }
         else if(tag == "4"){
             fragment = new QuadFragment();
-            fragmentManager = getFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"4").commit();
         }
     }

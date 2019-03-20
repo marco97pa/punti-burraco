@@ -3,7 +3,7 @@ package com.marco97pa.puntiburraco;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,17 +17,16 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 
-import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
+
 import androidx.appcompat.widget.PopupMenu;
+
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -505,6 +504,15 @@ public class DoubleFragment extends Fragment {
         punti2.setText(Integer.toString(tot2));
         textNome1.setText(sharedPref.getString("sq1",sq1Default));
         textNome2.setText(sharedPref.getString("sq2",sq2Default));
+    }
+
+    public void openInsert(){
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_bottom_sheet_dialog, null);
+
+        BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
+        dialog.setContentView(view);
+        dialog.show();
+
     }
 
     /**
@@ -1016,29 +1024,30 @@ public class DoubleFragment extends Fragment {
                 Snackbar.make(getView(), getString(R.string.errore_dpp), Snackbar.LENGTH_SHORT).show();
             }
             else {
-                WebView webview = generateWebView();
-                AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
-                ad.setTitle(R.string.action_dpp);
-                ad.setView(webview);
-                ad.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog dialog = ad.create();
-                dialog.show();
+                //SHOW BOTTOM SHEET FRAGMENT
+                BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+                // Supply data from Hand Details as an argument.
+                Bundle args = new Bundle();
+                args.putString("data", generateHandsDetail());
+                bottomSheetFragment.setArguments(args);
+                bottomSheetFragment.show(getChildFragmentManager() ,bottomSheetFragment.getTag());
             }
 
     }
 
     public WebView generateWebView(){
-        SharedPreferences sharedPref =  getActivity().getPreferences(Context.MODE_PRIVATE);
-        String html_inner =sharedPref.getString("dpp", "");
         WebView webview = new WebView(getActivity());
-        String header = "<html><body bgcolor=\""+ bgColor +"\" style=\"color: " + txtColor + "\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
-        String data = header + html_inner + "</table></body></html>";
+        String data = generateHandsDetail();
         webview.loadData(data, "text/html; charset=UTF-8", null);
         return webview;
+    }
+
+    public String generateHandsDetail(){
+        SharedPreferences sharedPref =  getActivity().getPreferences(Context.MODE_PRIVATE);
+        String html_inner =sharedPref.getString("dpp", "");
+        String header = "<html><body bgcolor=\""+ bgColor +"\" style=\"color: " + txtColor + "\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
+        String data = header + html_inner + "</table></body></html>";
+        return data;
     }
 
 
