@@ -1,5 +1,5 @@
 (function () {
-  var file = file || "../CHANGELOG.md";
+  var file = file || "CHANGELOG.md";
   var reader = new stmd.DocParser();
   var writer = new stmd.HtmlRenderer();
   var xhr = new XMLHttpRequest();
