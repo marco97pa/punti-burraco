@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Punti Burraco</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/4.1.3/firebase-app.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <script>
+      function getAndroidVersion(ua) {
+             ua = (ua || navigator.userAgent).toLowerCase();
+             var match = ua.match(/android\s([0-9\.]*)/);
+             return match ? match[1] : false;
+         };
+      
+      function download(){
+         if(getAndroidVersion()==false){
+            var userLang = navigator.language || navigator.userLanguage; 
+            if(userLang == "it-IT"){
+              var risposta = confirm("L'app e' disponibile solo per smartphone Android e il tuo dispositivo non sembra esserlo.\n Vuoi comunque visitare il Play Store?");
+            }
+            else{
+              var risposta = confirm("The app is only avaible on Android. \n Do you want to visit the Play Store anyway?");
+            }
+            if(risposta){
+              window.location = "https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco";
+            }
+         }
+        else{
+          window.location = "https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco";
+        }
+      }
+    </script>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 600px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 26px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #button { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; cursor: pointer;}
+      #message, #button { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="message">
+      <center>
+        <h1 id="app_name">Punti Burraco</h1>
+        <img src="images/icon.png" width="128px"/>
+        <p id="app_desc">Molto di più di un comodo segnapunti per le tue partite di Burraco con i tuoi amici</p>
+        <h2 id="app_price">Gratis</h2>
+      </center>
+      <br>
+      <div id="button" onclick="download();">installa</div>
+    </div>
+  </body>
+  <script>
+    var userLang = navigator.language || navigator.userLanguage; 
+      if(userLang != "it-IT"){
+        document.getElementById("app_name").innerHTML = "Points Buraco";
+        document.getElementById("app_desc").innerHTML = "More than a simple scorekeeper for your Buraco match with friends";
+        document.getElementById("app_price").innerHTML = "Free";
+        document.getElementById("button").innerHTML = "install";
+        document.title = "Points Buraco";
+      }
+  </script>
+</html>

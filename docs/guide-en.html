@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>Guide</title>
+	<link href="bottom-nav.css" rel="stylesheet"></head>
+
+  <body style="margin-top: -100px;">
+    <nav class="bottom-nav">
+      <a class="bottom-nav__action bottom-nav__action--active" id="home_button" onclick="show('home');">
+        <i class="bottom-nav__icon material-icons">help_outline</i>
+        <span class="bottom-nav__label">Guide</span>
+      </a>
+	  
+	  <a class="bottom-nav__action" id="recents_button" onclick="show('recents');">
+        <i class="bottom-nav__icon material-icons">history</i>
+        <span class="bottom-nav__label">News</span>
+      </a>
+
+      <a class="bottom-nav__action" id="bug_button" onclick="show('bug');">
+        <i class="bottom-nav__icon material-icons">bug_report</i>
+        <span class="bottom-nav__label">Bug</span>
+      </a>
+	  
+	  <a class="bottom-nav__action" id="info_button" onclick="show('info');">
+		<i class="bottom-nav__icon material-icons">info_outline</i>
+        <span class="bottom-nav__label">Info</span>
+      </a>
+    </nav>
+
+    <main class="active" id="home">
+               <h1>Guide for users</h1>
+               This guide will help you to use the Points Buraco app, but won't teach you how to play Buraco card game (you can still find some information on <a href="https://en.wikipedia.org/wiki/Buraco">Wikipedia</a>)
+               <ul class="toc">
+                 <h2>Table of contents</h2>
+					 <li><a href="#a1"> Modes </a>
+         			 <li><a href="#a2"> Scorekeeper </a>
+         			 <li><a href="#a2a"> Share results  </a>
+         			 <li><a href="#a3">  Change names  </a>
+         			 <li><a href="#a4">  Change photos  </a>
+         			 <li><a href="#a5"> Show hands details </a>
+					 <li><a href="#a5b"> History </a>
+         			 <li><a href="#a6"> Settings </a>
+               </ul>
+<br>
+       <h2 id="a1"> Modes </h2>
+       From the side menu <i class="material-icons">&#xE5D2;</i> you can select different modes according to the number of players<br>
+       There are 2, 3 or 4 players mode.<br>
+      <h2 id="a2" > Scorekeeper </h2>
+      Points Buraco is a scorekeeper <br>
+      Choose the right mode and start playing Buraco <br>
+      After an hand, insert the score of each player. A white field is considered zero and you can write scores in the order you prefer<br>
+      When you finished entering the scores, touch <i class="material-icons">&#xE148;</i> and totals will be automatically updated. <br>
+      Continue to play, until one of the players wins. The app will alert you in case of victory<br>
+      Game finishes at 2005 Points, but you can customize it in <a href="#a6"> Settings </a> <br>
+      <h2 id="a2a" > Share results</h2>
+      You can share your scores on <i style="color: blue">Facebook</i>, <i style="color: green">Whatsapp</i>, <i style="color: #d233ae">Instagram</i>, <i style="color: #5DA5CE">Telegram</i> and other apps.<br>
+      Just press <i class="material-icons">&#xE80D;</i> to share your current match with friends <br>
+      TIP: add the hashtag <b>#PointsBuraco</b> to your post. <br>
+     <h2 id="a3"> Change names </h2>
+     It is really easy: touch a name to edit it.<br>
+     To revert to default names, touch <i class="material-icons">&#xE5D3;</i> and select "Restore default names"<br> 
+     <h2 id="a4"> Change photos </h2>
+      Press <i class="material-icons">&#xE39D;</i> to add a photo from your Gallery<br>
+      TIP: you can enable profile pics in Settings<br>
+      <h2 id="a5"> Show hands details </h2>
+      To show it, press <i class="material-icons">&#xE5D3;</i> and then "Hands details"<br>
+      <h2 id="a5b"> History </h2>
+      Here you will see your latest score and you can share them by simply touch on it <br>
+      <h2 id="a6"> Settings </h2>
+      You can set up the app:
+      <br><b>Set the end score</b>
+		  <br>
+      <br><b>Show images in the app</b>
+			<br>
+            <br><b>Keep the screen on</b>
+			<br>
+            <br><b>Night mode</b>
+			<br>
+            <br><b>Share app</b>
+			<br>
+            <br><b>Vote app</b>
+			<br>
+            <br><b>Version number</b>
+			<br>
+    </main>
+	
+	<main id="recents">
+	  <a name="recents"></a>
+      <h1>Changelog</h1>
+      <p class="subtitle">Last app updates</p>
+	  <div id="markdown"></div>
+    </main>
+	
+	<main id="bug">
+      <h1>Report a bug</h1>
+      <p class="subtitle">Using the above form</p>
+                <form action="http://marco97pa.altervista.org/android/puntiburraco/send.php" method="post">
+                <div class="group">      
+                  <input type="text" required id="modello" name="modello">
+                  <span class="highlight"></span>
+                  <span class="bar"></span>
+                  <label>Device</label>
+                </div>
+                <div class="group">      
+                  <input type="text" required id="android" name="android">
+                  <span class="highlight"></span>
+                  <span class="bar"></span>
+                  <label>Android Version</label>
+                </div>
+                 <div class="group">      
+                  <input type="text" required id="descrizione" name="descrizione">
+                  <span class="highlight"></span>
+                  <span class="bar"></span>
+                  <label>Description...</label>
+                </div>
+              </div>
+                <!-- Accent-colored raised button with ripple -->
+               <button class="btn" type="submit"><span>Send</span></button>
+               </form>
+    </main>
+	
+	
+	<main id="info">
+      <h1>Information</h1>
+      <p class="subtitle">Developer details</p>
+	  
+      <div style="display: table;">
+        <img src="images/download.png" alt="" class="circular"/>
+        <div style="display: table-cell; position: relative; top: 50%; transform: translateY(-25%); float: left; margin-left: 20px;">
+          <h2>Points Buraco</h2>
+          <p>Android <br><b>10.000+</b> downloads<br>
+          Code on <a href="https://github.com/marco97pa/punti-burraco"><img src="images/GitHub.png" alt="" style="width: 72px; margin-left: 5px"/></a>
+          </p>
+        </div>
+      <br style="clear: both;">
+      </div>
+
+	  <div style="display: table;">
+	  <img src="https://graph.facebook.com/1017451071648699/picture?type=large" alt="" class="circular"/>
+	  <div style="display: table-cell; position: relative; top: 50%; transform: translateY(-25%); float: left; margin-left: 20px;">
+		  <h2>Marco Fantauzzo</h2>
+		  <p>Palermo <br><b id="anni"></b> years</p>
+	  </div>
+	  <br style="clear: both;">
+	  </div>
+    <a href="privacy_policy.html">Privacy Policy</a>
+    <p>Copyright Marco Fantauzzo &copy; <span id="year"> </span></p>
+    </main>
+  <script type="text/javascript" src="bottom-nav.js"></script>
+  <script src="moment.js"></script>
+  <script src="js/stmd.js"></script>
+  <script src="js/render.js"></script>
+       <script>
+       var nascita = moment("19971124", "YYYYMMDD");
+       var anni = moment().diff(nascita, 'years', true);
+       anni = parseInt(anni);
+       document.getElementById("anni").innerHTML = anni;
+
+       var now = moment().format("YYYY");
+       document.getElementById("year").innerHTML = now;
+
+       function getAndroidVersion(ua) {
+           ua = (ua || navigator.userAgent).toLowerCase();
+           var match = ua.match(/android\s([0-9\.]*)/);
+           return match ? match[1] : false;
+       };
+       if(getAndroidVersion()!=false){
+          document.getElementById("android").value = "Android "+getAndroidVersion();
+       }
+       </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>Guida</title>
+	<link href="bottom-nav.css" rel="stylesheet"></head>
+
+  <body style="margin-top: -100px;">
+    <nav class="bottom-nav">
+      <a class="bottom-nav__action bottom-nav__action--active" id="home_button" onclick="show('home');">
+        <i class="bottom-nav__icon material-icons">help_outline</i>
+        <span class="bottom-nav__label">Guida</span>
+      </a>
+	  
+	  <a class="bottom-nav__action" id="recents_button" onclick="show('recents');">
+        <i class="bottom-nav__icon material-icons">history</i>
+        <span class="bottom-nav__label">Novità</span>
+      </a>
+
+      <a class="bottom-nav__action" id="bug_button" onclick="show('bug');">
+        <i class="bottom-nav__icon material-icons">bug_report</i>
+        <span class="bottom-nav__label">Bug</span>
+      </a>
+	  
+	  <a class="bottom-nav__action" id="info_button" onclick="show('info');">
+		<i class="bottom-nav__icon material-icons">info_outline</i>
+        <span class="bottom-nav__label">Informazioni</span>
+      </a>
+    </nav>
+
+    <main class="active" id="home">
+               <h1>Guida all'utilizzo</h1>
+               Questa guida permette di conoscere come utilizzare l'app Punti Burraco sul vostro smartphone Android.<br>
+               Non verrà spiegato come giocare a Burraco, per quello è più facile imparare di persona o <a href="https://it.wikipedia.org/wiki/Burraco">leggere qualcosa su internet</a>
+               <ul class="toc">
+                 <h2>Contenuti</h2>
+					 <li><a href="#a1"> Modalità d'uso </a>
+         			 <li><a href="#a2"> Segnare i punti </a>
+         			 <li><a href="#a2a"> Condividere risultati sui social  </a>
+         			 <li><a href="#a3"> Cambiare i nomi </a>
+         			 <li><a href="#a4"> Cambiare le foto </a>
+         			 <li><a href="#a5"> Visualizzare il riepilogo delle smazzate </a>
+					 <li><a href="#a5b"> Cronologia partite </a>
+         			 <li><a href="#a6"> Impostazioni </a>
+               </ul>
+<br>
+       <h2 id="a1"> Modalità d'uso </h2>
+	   Sono disponibili svariate modalità, selezionabili dal menu laterale <i class="material-icons">&#xE5D2;</i>, a seconda del numero di giocatori.<br>
+	   Ci sono modalità per 2, 3 o 4 giocatori.<br>
+      <h2 id="a2" > Segnare i punti </h2>
+      Punti Burraco è innanzitutto un comodo segnapunti per le vostre partite. <br>
+      Dopo aver selezionato la modalità corretta, potete cominciare a segnare i punti. <br>
+      Potete inserire i punteggi totalizzati toccando un campo, non importa in qual ordine inseriate i dati, procedete come più vi aggrada. Se lasciate qualche campo vuoto, questo verrà considerato come nullo<br>
+      Una volta inseriti i dati richiesti, toccando il grande tasto rotondo <i class="material-icons">&#xE148;</i>, i punteggi totali verranno calcolati automaticamente. <br>
+      Procedete alla mano successiva, finchè uno dei giocatori vince. L'app vi avviserà in caso di vittoria. <br>
+      Normalmente il gioco termina a 2005 punti, ma è possibile personalizzare il punteggio di arrivo nelle <a href="#a6"> Impostazioni </a> <br>
+      <h2 id="a2a" > Condividere risultati sui social</h2>
+      È possibile condividere i propri risultati con i propri amici su <i style="color: blue">Facebook</i>, <i style="color: green">Whatsapp</i>, <i style="color: #d233ae">Instagram</i>, <i style="color: #5DA5CE">Telegram</i> e altro ancora.<br>
+      Basta toccare <i class="material-icons">&#xE80D;</i> per condividere la partita attuale sul tuo social preferito o con altre app. <br>
+      Potete anche aggiungere l'hashtag <b>#PuntiBurraco</b> ai vostri post. <br>
+     <h2 id="a3"> Cambiare i nomi </h2>
+      È possibile cambiare i nomi dei giocatori o delle squadre, toccando il nome attuale, per esempio "Giocatore 1". <br>
+      Si aprirà una finestra in cui potrete inserire il nuovo nome da assegnare. <br>
+      Per ripristinare i nomi predefiniti, basta aprire il menu <i class="material-icons">&#xE5D3;</i> e selezionare "Ripristina nomi predefiniti"<br>
+      <h2 id="a4"> Cambiare le foto </h2>
+      È possibile cambiare le foto dei giocatori o delle squadre, toccando l'icona <i class="material-icons">&#xE39D;</i> <br>
+      Si aprirà una finestra in cui potrete scegliere la foto da assegnare dalla vostra Galleria. <br>
+      NOTA: puoi abilitare le foto di profilo nelle Impostazioni<br>
+      <h2 id="a5"> Visualizzare il riepilogo delle smazzate </h2>
+      È possibile visualizzare il riepilogo delle singole smazzate in qualunque momento, basta aprire il menu <i class="material-icons">&#xE5D3;</i> e selezionare " Dettaglio smazzate"<br>
+      Verrà inoltre visualizzato il riepilogo a fine partita <br>
+      <h2 id="a5b"> Cronologia partite </h2>
+      Permette di mostrare i risultati delle ultime partite giocate e condividerle con gli amici con un semplice tocco <br>
+      <h2 id="a6"> Impostazioni </h2>
+      Per accedere alle Impostazioni bisogna aprire il menu laterale <i class="material-icons">&#xE5D2;</i> e selezionare l'apposita voce.
+      Sono disponibili varie opzioni:
+            <h4>Imposta il punteggio di arrivo</h4>
+			Normalmente è impostato a 2005, ma è possibile cambiarlo a piacere<br>
+			<h4>Mostra immagini</h4>
+			Abilita le immagini di profilo nelle modalità 2 e 4 giocatori<br>
+            <h4>Mantieni lo schermo acceso</h4>
+			Leggi e aggiorna i punteggi comodamente e senza interruzioni<br>
+			Potrebbe consumare maggiore batteria<br>
+            <h4>Modalità notturna</h4>
+      Attiva il tema scuro per ambienti poco illuminati<br>
+      <h4>Suoni</h4>
+			Se abilitato, sentirai dei suoni in caso di vittoria. Nel momento in cui attivi l'opzione, il tuo volume multimediale verrà alzato per permetterti di sentire il suono<br>
+      <h4>Notifiche</h4>
+			Attiva o disattiva le notifiche in caso di sospensione della partita
+      <h4>Invia app</h4>
+			Invia l'app Punti Burraco a uno o più amici<br>
+            <h4>Valuta app</h4>
+			Verrai indirizzato al Play Store per lasciare una recensione<br>
+            <h4>Versione app</h4>
+			Visualizza il numero di versione dell'app<br>
+    </main>
+	
+	<main id="recents">
+	  <a name="recents"></a>
+      <h1>Changelog</h1>
+      <p class="subtitle">Novità introdotte dagli ultimi aggiornamenti dell'app</p>
+	  <div id="markdown"></div>
+    </main>
+	
+	<main id="bug">
+      <h1>Segnala un bug</h1>
+      <p class="subtitle">Compila tutti i campi per inviare una segnalazione di bug</p>
+                <form action="http://marco97pa.altervista.org/android/puntiburraco/send.php" method="post">
+                <div class="group">      
+                  <input type="text" required id="modello" name="modello">
+                  <span class="highlight"></span>
+                  <span class="bar"></span>
+                  <label>Dispositivo</label>
+                </div>
+                <div class="group">      
+                  <input type="text" required id="android" name="android">
+                  <span class="highlight"></span>
+                  <span class="bar"></span>
+                  <label>Versione Android</label>
+                </div>
+                 <div class="group">      
+                  <input type="text" required id="descrizione" name="descrizione">
+                  <span class="highlight"></span>
+                  <span class="bar"></span>
+                  <label>Descrizione bug...</label>
+                </div>
+              </div>
+                <!-- Accent-colored raised button with ripple -->
+               <button class="btn" type="submit"><span>Invia</span></button>
+               </form>
+    </main>
+	
+	
+	<main id="info">
+      <h1>Informazioni</h1>
+      <p class="subtitle">Dettagli sullo sviluppatore</p>
+      <div style="display: table;">
+        <img src="images/download.png" alt="" class="circular"/>
+        <div style="display: table-cell; position: relative; top: 50%; transform: translateY(-25%); float: left; margin-left: 20px;">
+          <h2>Punti Burraco</h2>
+          <p>Android <br><b>10.000+</b> downloads<br>
+            Codice su <a href="https://github.com/marco97pa/punti-burraco"><img src="images/GitHub.png" alt="" style="width: 72px; margin-left: 5px"/></a>
+          </p>
+        </div>
+      <br style="clear: both;">
+      </div>
+
+	  <div style="display: table;">
+	  <img src="https://graph.facebook.com/1017451071648699/picture?type=large" alt="" class="circular"/>
+	  <div style="display: table-cell; position: relative; top: 50%; transform: translateY(-25%); float: left; margin-left: 20px;">
+		  <h2>Marco Fantauzzo</h2>
+		  <p>Palermo <br><b id="anni"></b> anni</p>
+	  </div>
+	  <br style="clear: both;">
+	  </div>
+    <a href="privacy_policy.html">Privacy Policy</a>
+    <p>Copyright Marco Fantauzzo &copy; <span id="year"> </span></p>
+    </main>
+  <script type="text/javascript" src="bottom-nav.js"></script>
+  <script src="moment.js"></script>
+  <script src="js/stmd.js"></script>
+  <script src="js/render.js"></script>
+       <script>
+       var nascita = moment("19971124", "YYYYMMDD");
+       var anni = moment().diff(nascita, 'years', true);
+       anni = parseInt(anni);
+       document.getElementById("anni").innerHTML = anni;
+
+       var now = moment().format("YYYY");
+       document.getElementById("year").innerHTML = now;
+
+       function getAndroidVersion(ua) {
+           ua = (ua || navigator.userAgent).toLowerCase();
+           var match = ua.match(/android\s([0-9\.]*)/);
+           return match ? match[1] : false;
+       };
+       if(getAndroidVersion()!=false){
+          document.getElementById("android").value = "Android "+getAndroidVersion();
+       }
+       </script>
+</body>
+</html>
