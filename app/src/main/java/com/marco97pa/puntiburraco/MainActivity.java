@@ -501,12 +501,12 @@ public class MainActivity extends AppCompatActivity
                 Log.i("LINGUA", localeId);
                 //If lang is italian it will be redirected to guide-it.html., else to guide-en.html
                 if(localeId.equals("it_IT")) {
-                    customTabsIntent.launchUrl(this, Uri.parse("https://punti-burraco.firebaseapp.com/guide-it.html"));
-                    Log.i("PASSA", "true");
+                    customTabsIntent.launchUrl(this, Uri.parse("https://marco97pa.github.io/punti-burraco/guide-it.html"));
+                    Log.i("language", "IT");
                 }
                 else{
-                    customTabsIntent.launchUrl(this, Uri.parse("https://punti-burraco.firebaseapp.com/guide-en.html"));
-                    Log.i("PASSA", "false");
+                    customTabsIntent.launchUrl(this, Uri.parse("https://marco97pa.github.io/punti-burraco/guide-en.html"));
+                    Log.i("language", "EN");
                 }
             }
             else{
