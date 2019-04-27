@@ -1,3 +1,7 @@
+### 10.8.0
+* New design to hand's detail view
+* Guide migrated to GitHub Pages
+
 ### 10.7.0
 * You can now share your result directly as an Instagram or Facebook story
 * Improved customization of share result feature
