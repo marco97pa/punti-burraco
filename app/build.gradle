@@ -9,7 +9,7 @@ android {
         applicationId "com.marco97pa.puntiburraco"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 5020
+        versionCode 5019
         versionName "10.8.0"
         vectorDrawables.useSupportLibrary = true
     }
