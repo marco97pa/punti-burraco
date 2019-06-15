@@ -42,3 +42,4 @@
 		</LinearLayout>
 
 	</androidx.drawerlayout.widget.DrawerLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
