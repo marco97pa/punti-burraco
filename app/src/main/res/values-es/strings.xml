@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Puntos de Burraco</string>
+
+    <!-- Side Menu -->
+    <string name="action_settings">Información</string>
+    <string name="action_set">Cambiar nombres</string>
+    <string name="action_start">Agregar puntos</string>
+    <string name="action_share">Compartir resultados</string>
+    <string name="action_reset">Nuevo juego</string>
+    <string name="action_nomi">Restaurar jugadores</string>
+    <string name="reset">Nuevo juego, puntos despejados!</string>
+
+    <!-- Interface -->
+    <string name="SuggBP">Canastas limpias</string>
+    <string name="SuggBI">Canastas sucias</string>
+    <string name="SuggBS">Canastas semi sucias</string>
+    <string name="SuggMiniBP">C. limpias</string>
+    <string name="SuggMiniBI">C.sucias</string>
+    <string name="SuggMiniBS">C. semi</string>
+    <string name="SuggP">Puntos de mesa</string>
+    <string name="SuggPM">Puntos en mano</string>
+    <string name="SuggNome">Nombre del equipo</string>
+    <string name="n1">Equipo 1</string>
+    <string name="n2">Equipo 2</string>
+    <string name="gioc_1">Jugador 1</string>
+    <string name="gioc_2">Jugador 2</string>
+    <string name="g1">Jug 1</string>
+    <string name="g2">Jug 2</string>
+    <string name="g3">Jug 3</string>
+    <string name="cancel">Cancelar</string>
+    <string name="win">victorias</string>
+    <string name="chiusura">Cierra</string>
+    <string name="pozzetto">No muerto</string>
+    <string name="chius">Cierra</string>
+    <string name="pozz">No muerto</string>
+    <string name="solo">Solamente</string>
+    <string name="error01">No se pueden seleccionar varios cuadros</string>
+    <string name="error02">Imposible cerrar con puntos en mano</string>
+    <string name="error03">Imposible toma el muerto sin se descarta</string>
+    <string name="action_dpp">Puntuaciones detalle</string>
+    <string name="crop_image_activity_title">Cortada</string>
+    <string name="crop_image_menu_rotate_right">Rotar</string>
+    <string name="crop_image_menu_crop">Hecho</string>
+
+    <!-- Settings -->
+    <string name="setting_valuta">Califica la aplicación</string>
+    <string name="setting_valuta_d">Serás dirigido a Play Store para dejar un comentario. Gracias por tu apoyo</string>
+    <string name="setting_share">Enviar esta aplicación</string>
+    <string name="setting_share_d">Compartir Puntos de Burraco con uno o más amigos</string>
+    <string name="setting_advanced">Opciones avanzadas</string>
+    <string name="setting_advanced_d">Ajustar la configuración avanzada de la aplicación</string>
+    <string name="setting_notte">Modo nocturno</string>
+    <string name="setting_notte_d">Activa el tema oscuro</string>
+    <string name="setting_img">Mostrar imagenes</string>
+    <string name="setting_img_d">Activar imágenes de perfil en modos de 2 y 4 jugadores</string>
+    <string name="setting_pub">Desarrollo de apoyo</string>
+    <string name="setting_pub_d">Gracias por su contribución: se mostrarán anuncios publicitario.</string>
+    <string name="setting_schermo">Mantener la pantalla en</string>
+    <string name="setting_schermo_d">Lea y actualice sus puntuaciones cómodamente y sin interrupción</string>
+    <string name="setting_limite">Establecer puntaje final</string>
+    <string name="setting_version">Versión de la aplicación</string>
+    <string name="setting_version_d">Desconocido</string>
+    <string name="setting_sound">Sonidos</string>
+    <string name="setting_sound_d">Si está habilitado, cuando un jugador gana, escuchará sonidos</string>
+    <string name="title_activity_settings">Ajustes</string>
+    <string name="title_activity_setting">Ajustes</string>
+    <string name="setting_title_pro">Interfaz</string>
+    <string name="setting_title_game">Jugar</string>
+    <string name="setting_title_app">Opciones de aplicación</string>
+    <string name="share_message">También instale #PuntosdeBurraco</string>
+    <string name="share_hint">Enviar aplicación a través de</string>
+    <string name="easter_egg">:D</string>
+    <string name="channel_name">Notificación de artículos suspendidos</string>
+    <string name="channel_description">Se le notificará si cierra la aplicación dejando un juego pendiente. Puede reanudarlo más tarde tocando la notificación</string>
+    <string name="setting_notification_d">Habilitar notificaciones en caso de suspensión del juego</string>
+    <string name="setting_notification">Notificaciones</string>
+    <string name="setting_pm_d">Le permite marcar cualquier punto en la mano del jugador, que se restará de los puntos de la mesa</string>
+    <string name="setting_pm">Habilitar puntos en mano</string>
+    <string name="setting_inputdirect">Entrada directa</string>
+    <string name="setting_inputdirect_d">Introduce la puntuación del juego directamente. La interfaz será más mínima, pero se recomienda para jugadores experimentados, sin la necesidad de ayuda</string>
+    <string name="debug_mode">Debug</string>
+    <string name="integrity_0">Aplicación insegura, instalada desde fuentes no confiables. Se recomienda desinstalarlo y reinstalarlo desde Play Store.</string>
+    <string name="integrity_1">Aplicación segura, instalada desde Play Store</string>
+    <string name="setting_integrity">Verificación de integridad de la aplicación</string>
+    <string name="setting_integrity_d">Comprobando ...</string>
+    <string name="setting_background">Tema de las Historias para compartir</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">abre navigation drawer</string>
+    <string name="navigation_drawer_close">cerca navigation drawer</string>
+    <string name="permission_true">Presiona SHARE nuevamente para comenzar a compartir</string>
+    <string name="permission_false">No se puede comenzar a compartir: has rechazado el permiso.</string>
+    <string name="nav_guide">Guía</string>
+    <string name="nav_history">Historial de partidos</string>
+    <string name="nav_settings">Ajustes</string>
+    <string name="nav_2gioc">2 jugadores</string>
+    <string name="nav_3gioc">3 jugadores</string>
+    <string name="nav_4gioc">4 jugadores</string>
+    <string name="nav_title_mod">Modo</string>
+    <string name="nav_title_alt">Más</string>
+    <string name="errore_connection">Para acceder a la guía debe estar conectado a una red. Por favor, inténtelo de nuevo</string>
+
+    <!-- Alerts -->
+    <string name="ok">Bueno</string>
+    <string name="ko">Cancelar</string>
+    <string name="close">Cerca</string>
+    <string name="add_point">Puntos añadidos</string>
+    <string name="marshmallow_alert">Te has negado a ver tus fotos</string>
+    <string name="marshmallow_alert_2">Has rechazado el permiso para compartir tu resultado.</string>
+    <string name="guida">Ayudar</string>
+    <string name="change_name">Para cambiar los nombres solo toca el nombre del jugador en la pantalla principal</string>
+    <string name="errore_dpp">Aún no has completado un juego</string>
+    <string name="back_to_exit">Presione de nuevo para salir</string>
+    <string name="notification">Partido suspendido</string>
+    <string name="message_out_to_play_store">Gracias</string>
+    <string name="removeImage">Quitar imagen</string>
+    <string name="removeText">Restaurar nombre</string>
+
+    <!-- Various String -->
+    <string name="dialog_share">Compartir</string>
+    <string name="dialog_delete">Borrar</string>
+    <string name="no_data_available">Aún no has jugado ningún juego ...</string>
+    <string name="audio_up">Volumen multimedia subido al máximo</string>
+    <string name="change_background_hint">Toque para cambiar el fondo</string>
+    <string name="app_not_installed">%1$s no instalado. Instálalo y podrás compartir tus resultados</string>
+
+
+</resources>
+
