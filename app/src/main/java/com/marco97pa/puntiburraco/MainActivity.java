@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity
     //action bar settings
     Boolean ddp_visibility = true;
     Boolean newgame_show = false;
+    private boolean isDrawerFixed;
 
     public interface ClickListener {
         void onClick(View view, int position);
@@ -103,7 +104,9 @@ public class MainActivity extends AppCompatActivity
         else{
             setTheme(R.style.AppTheme_NoActionBar);
         }
-
+        
+        isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
+        
         isGooglePlayServicesAvailable(this);
 
         /* CREATING ACTIVITY
@@ -152,31 +155,34 @@ public class MainActivity extends AppCompatActivity
          * Creating navigation drawer and setting its contents
          */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        
+        if (!isDrawerFixed) {
+                ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
 
-            //FIX The following methods close the (eventually) opened keyboard on opening the navigation bar
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
+                    //FIX The following methods close the (eventually) opened keyboard on opening the navigation bar
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        super.onDrawerClosed(drawerView);
+                    }
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
-            }
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        super.onDrawerOpened(drawerView);
+                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
+                    }
 
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
-            }
-        };
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+                        super.onDrawerSlide(drawerView, slideOffset);
+                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
+                    }
+                };
+                drawer.setDrawerListener(toggle);
+                toggle.syncState();
+        }
 
         //Sets navigation drawer listener
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -252,7 +258,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START) && !isDrawerFixed) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (exit) {
@@ -527,7 +533,9 @@ public class MainActivity extends AppCompatActivity
         } 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (!isDrawerFixed) {
+                drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 
