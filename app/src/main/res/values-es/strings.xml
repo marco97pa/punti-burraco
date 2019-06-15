@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Puntos de Burraco</string>
+    <string name="app_name">Puntos de Buraco</string>
 
     <!-- Side Menu -->
     <string name="action_settings">Información</string>
@@ -48,7 +48,7 @@
     <string name="setting_valuta">Califica la aplicación</string>
     <string name="setting_valuta_d">Serás dirigido a Play Store para dejar un comentario. Gracias por tu apoyo</string>
     <string name="setting_share">Enviar esta aplicación</string>
-    <string name="setting_share_d">Compartir Puntos de Burraco con uno o más amigos</string>
+    <string name="setting_share_d">Compartir Puntos de Buraco con uno o más amigos</string>
     <string name="setting_advanced">Opciones avanzadas</string>
     <string name="setting_advanced_d">Ajustar la configuración avanzada de la aplicación</string>
     <string name="setting_notte">Modo nocturno</string>
@@ -69,7 +69,7 @@
     <string name="setting_title_pro">Interfaz</string>
     <string name="setting_title_game">Jugar</string>
     <string name="setting_title_app">Opciones de aplicación</string>
-    <string name="share_message">También instale #PuntosdeBurraco</string>
+    <string name="share_message">También instale #PuntosdeBuraco</string>
     <string name="share_hint">Enviar aplicación a través de</string>
     <string name="easter_egg">:D</string>
     <string name="channel_name">Notificación de artículos suspendidos</string>
