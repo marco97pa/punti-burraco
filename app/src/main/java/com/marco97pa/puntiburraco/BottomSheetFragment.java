@@ -7,13 +7,18 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
@@ -57,6 +62,25 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         settings.setTextZoom(120);
         webview.loadData(data, "text/html; charset=UTF-8", null);
         return view;
+    }
+
+    /*
+        HUGE FIX: On tablets and high density screens in landscape mode, the Bottom Sheet Fragment was not fully expanded
+        This solution is provided by https://medium.com/@OguzhanAlpayli/bottom-sheet-dialog-fragment-expanded-full-height-65b725c8309
+     */
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+                FrameLayout bottomSheet = (FrameLayout) dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                behavior.setPeekHeight(0);
+            }
+        });
     }
 
 

@@ -1,3 +1,9 @@
+### 10.9.0
+* Added Spanish translation
+* Huge improvements on the UI for 7' and 10' tablets
+* Fixed a bug that made shared stories horizontal
+* Fixed a bug in the new hand's detail view
+
 ### 10.8.0
 * New design to hand's detail view
 * Guide migrated to GitHub Pages

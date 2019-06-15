@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         
         isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
         
-        isGooglePlayServicesAvailable(this);
+        //isGooglePlayServicesAvailable(this);
 
         /* CREATING ACTIVITY
          * Creating activity and setting its contents, the toolbar, the fab and the first Fragment
