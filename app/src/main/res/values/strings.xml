@@ -4,7 +4,6 @@
     <string name="app_name">Points Buraco</string>
 
     <!-- Side Menu -->
-    <string name="action_settings">Information</string>
     <string name="action_set">Change names</string>
     <string name="action_share">Share results</string>
     <string name="action_reset">New game</string>
@@ -20,7 +19,6 @@
     <string name="SuggMiniBS">Semi run</string>
     <string name="SuggP">Points table</string>
     <string name="SuggPM">Cards in hand</string>
-    <string name="SuggNome">Team name</string>
     <string name="n1">Team 1</string>
     <string name="n2">Team 2</string>
     <string name="gioc_1">Player 1</string>
@@ -28,7 +26,6 @@
     <string name="g1">Player 1</string>
     <string name="g2">Player 2</string>
     <string name="g3">Player 3</string>
-    <string name="cancel">Cancel</string>
     <string name="win">wins</string>
     <string name="chiusura">Closes</string>
     <string name="pozzetto">No Pots</string>
@@ -39,9 +36,6 @@
     <string name="error02">You can\'t close the game with cards in your hand</string>
     <string name="error03">You must have points in your hand to take the pots</string>
     <string name="action_dpp">Hands detail</string>
-    <string name="crop_image_activity_title">Resize</string>
-    <string name="crop_image_menu_rotate_right">Rotate</string>
-    <string name="crop_image_menu_crop">Done</string>
 
     <!-- Settings -->
     <string name="setting_valuta">Review the app</string>
@@ -54,8 +48,6 @@
     <string name="setting_notte_d">Suggested for low light ambients</string>
     <string name="setting_img">Show images</string>
     <string name="setting_img_d">Enables the images in 2 and 4 players mode</string>
-    <string name="setting_pub">Help development</string>
-    <string name="setting_pub_d">Thanks for your help: little non-intrusive ads will be displayed</string>
     <string name="setting_schermo">Keep screen on</string>
     <string name="setting_schermo_d">Read the score without any hassle</string>
     <string name="setting_limite">Set win point</string>
@@ -63,7 +55,6 @@
     <string name="setting_version_d">Unknown version</string>
     <string name="setting_sound">Sound</string>
     <string name="setting_sound_d">Play sound when someone wins</string>
-    <string name="title_activity_settings">Settings</string>
     <string name="title_activity_setting">Settings</string>
     <string name="setting_title_pro">Interface</string>
     <string name="setting_title_game">Game</string>
@@ -79,18 +70,11 @@
     <string name="setting_pm">Points in hand</string>
     <string name="setting_inputdirect">Easy mode</string>
     <string name="setting_inputdirect_d">Input points of a single match directly</string>
-    <string name="debug_mode">Debug Mode</string>
-    <string name="integrity_0">Integrity check not passed</string>
-    <string name="integrity_1">App is secure</string>
-    <string name="setting_integrity">Integrity Check</string>
-    <string name="setting_integrity_d">Loading...</string>
     <string name="setting_background">Stories background color</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="permission_true">Press SHARE again to continue</string>
-    <string name="permission_false">Can\'t share your score: you have revoked the permission</string>
     <string name="nav_guide">Guide and feedback</string>
     <string name="nav_history">History</string>
     <string name="nav_settings">Settings</string>
@@ -113,7 +97,6 @@
     <string name="errore_dpp">You haven\'t completed a hand</string>
     <string name="back_to_exit">Press back again to exit</string>
     <string name="notification">Match suspended</string>
-    <string name="message_out_to_play_store">Thanks :D   You can write a review by scrolling in the bottom of the page</string>
     <string name="removeImage">Remove photo</string>
     <string name="removeText">Reset name</string>
 
@@ -125,11 +108,9 @@
     <string name="facebook" translatable="false">Facebook Stories</string>
     <string name="instagram" translatable="false">Instagram Stories</string>
     <string name="change_background_hint">Touch to change background</string>
-    <string name="action_start">Add points</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

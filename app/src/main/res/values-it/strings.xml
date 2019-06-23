@@ -4,9 +4,7 @@
     <string name="app_name">Punti Burraco</string>
 
     <!-- Side Menu -->
-    <string name="action_settings">Informazioni</string>
     <string name="action_set">Modifica nomi</string>
-    <string name="action_start">Aggiungi punti</string>
     <string name="action_share">Condividi risultati</string>
     <string name="action_reset">Nuova partita</string>
     <string name="action_nomi">Ripristino giocatori predefiniti</string>
@@ -21,7 +19,6 @@
     <string name="SuggMiniBS">B. semi</string>
     <string name="SuggP">Punti tavolo</string>
     <string name="SuggPM">Punti in mano</string>
-    <string name="SuggNome">Nome squadra</string>
     <string name="n1">Squadra 1</string>
     <string name="n2">Squadra 2</string>
     <string name="gioc_1">Giocatore 1</string>
@@ -29,7 +26,6 @@
     <string name="g1">Gioc 1</string>
     <string name="g2">Gioc 2</string>
     <string name="g3">Gioc 3</string>
-    <string name="cancel">Annulla</string>
     <string name="win">vince</string>
     <string name="chiusura">Chiusura</string>
     <string name="pozzetto">No pozzetto</string>
@@ -40,9 +36,6 @@
     <string name="error02">Impossibile chiudere con punti in mano</string>
     <string name="error03">Impossibile non arrivare al pozzetto senza punti in mano</string>
     <string name="action_dpp">Dettaglio punteggi parziali</string>
-    <string name="crop_image_activity_title">Ritaglia</string>
-    <string name="crop_image_menu_rotate_right">Ruota</string>
-    <string name="crop_image_menu_crop">Fatto</string>
 
     <!-- Settings -->
     <string name="setting_valuta">Valuta l\'app</string>
@@ -55,8 +48,6 @@
     <string name="setting_notte_d">Attiva il tema scuro per ambienti poco illuminati</string>
     <string name="setting_img">Mostra immagini</string>
     <string name="setting_img_d">Attiva le immagini di profilo nelle modalità 2 e 4 giocatori</string>
-    <string name="setting_pub">Supporta lo sviluppo</string>
-    <string name="setting_pub_d">Grazie per il tuo contributo: verranno mostrati dei piccoli banner pubblicitari</string>
     <string name="setting_schermo">Mantieni lo schermo acceso</string>
     <string name="setting_schermo_d">Leggi e aggiorna i punteggi comodamente e senza interruzioni</string>
     <string name="setting_limite">Imposta punteggio di arrivo</string>
@@ -64,7 +55,6 @@
     <string name="setting_version_d">Versione sconosciuta</string>
     <string name="setting_sound">Suoni</string>
     <string name="setting_sound_d">Se abilitato, quando un giocatore vince sentirai dei suoni</string>
-    <string name="title_activity_settings">Impostazioni</string>
     <string name="title_activity_setting">Impostazioni</string>
     <string name="setting_title_pro">Interfaccia</string>
     <string name="setting_title_game">Meccaniche di gioco</string>
@@ -80,18 +70,11 @@
     <string name="setting_pm">Abilita punti in mano</string>
     <string name="setting_inputdirect">Inserimento diretto</string>
     <string name="setting_inputdirect_d">Inserisci direttamente il punteggio della giocata. L\'interfaccia sarà più minimale, ma è consigliata a giocatori esperti, senza bisogno di aiuti</string>
-    <string name="debug_mode">Modalità sviluppatore (debug) \n BENTORNATO MARCO FANTAUZZO</string>
-    <string name="integrity_0">App non sicura, installata da fonti inaffidabili. E\' consigliato disinstallarla e reinstallarla dal Play Store</string>
-    <string name="integrity_1">App sicura, installata dal Play Store</string>
-    <string name="setting_integrity">Controllo integrità app</string>
-    <string name="setting_integrity_d">Controllo in corso...</string>
     <string name="setting_background">Tema delle Storie da condividere</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Apri navigation drawer</string>
     <string name="navigation_drawer_close">Chiudi navigation drawer</string>
-    <string name="permission_true">Premi nuovamente CONDIVIDI per avviare la condivisione</string>
-    <string name="permission_false">Impossibile avviare la condivisione: hai rifiutato il permesso</string>
     <string name="nav_guide">Guida e feedback</string>
     <string name="nav_history">Cronologia partite</string>
     <string name="nav_settings">Impostazioni</string>
@@ -114,7 +97,6 @@
     <string name="errore_dpp">Non hai ancora completato una smazzata</string>
     <string name="back_to_exit">Premi di nuovo indietro per uscire</string>
     <string name="notification">Partita sospesa</string>
-    <string name="message_out_to_play_store">Grazie per aver scelto di lasciarci una valutazione\n Basta scorrere in basso per lasciare una recensione</string>
     <string name="removeImage">Rimuovi immagine</string>
     <string name="removeText">Ripristina nome</string>
 
