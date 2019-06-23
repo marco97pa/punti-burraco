@@ -1,6 +1,5 @@
 package com.marco97pa.puntiburraco;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -24,7 +23,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import androidx.browser.customtabs.CustomTabsIntent;
 
-import com.google.android.gms.common.wrappers.InstantApps;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.core.provider.FontRequest;
@@ -49,8 +47,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -106,8 +102,7 @@ public class MainActivity extends AppCompatActivity
         }
         
         isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
-        
-        //isGooglePlayServicesAvailable(this);
+
 
         /* CREATING ACTIVITY
          * Creating activity and setting its contents, the toolbar, the fab and the first Fragment
@@ -593,18 +588,6 @@ public class MainActivity extends AppCompatActivity
         //the method above invokes onPrepareOptionsMenu();
     }
 
-    //Method to check Play Services Status
-    public boolean isGooglePlayServicesAvailable(Activity activity) {
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
-        if(status != ConnectionResult.SUCCESS) {
-            if(googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(activity, status, 2404).show();
-            }
-            return false;
-        }
-        return true;
-    }
 
     public String getAlertBackgroundColor(){
         int intbgColor;

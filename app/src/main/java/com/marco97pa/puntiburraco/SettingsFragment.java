@@ -40,13 +40,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         Preference version = findPreference("version");
         version.setSummary(BuildConfig.VERSION_NAME);
 
-        //Sets integrity label
-        Preference integrity = findPreference("integrity");
-        switch (checkAppIntegrity()){
-            case 0: integrity.setSummary(getString(R.string.integrity_0)); break;
-            case 1: integrity.setSummary(getString(R.string.integrity_1)); break;
-            case 2: integrity.setSummary(getString(R.string.debug_mode)); break;
-        }
 
         //Sets sound and volume level
         final SwitchPreference sound = (SwitchPreference) findPreference("sound");
@@ -160,27 +153,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
         ListPref.setSummary(smy);
 
-    }
-
-    public int checkAppIntegrity(){
-            // A list with valid installers package name
-            String validInstaller = "com.android.vending";
-
-            // The package name of the app that has installed your app
-            final String installer = getActivity().getPackageManager().getInstallerPackageName(getActivity().getPackageName());
-
-            // true if your app is in debug mode
-            if (BuildConfig.DEBUG){
-                return 2;
-            }
-            else {
-                // true if your app has been downloaded from Play Store
-                if (installer.equals(validInstaller)) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
     }
 
     public void onResume() {
