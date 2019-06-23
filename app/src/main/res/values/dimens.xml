@@ -10,7 +10,5 @@
     <dimen name="tabella">140dp</dimen>
     <dimen name="textBig">50dp</dimen>
     <dimen name="textBigi">40dp</dimen>
-    <dimen name="textBigino">25dp</dimen>
     <dimen name="tab">100dp</dimen>
-    <dimen name="spacing_small">8dp</dimen>
 </resources>

@@ -4,9 +4,7 @@
     <string name="app_name">Puntos de Buraco</string>
 
     <!-- Side Menu -->
-    <string name="action_settings">Información</string>
     <string name="action_set">Cambiar nombres</string>
-    <string name="action_start">Agregar puntos</string>
     <string name="action_share">Compartir resultados</string>
     <string name="action_reset">Nuevo juego</string>
     <string name="action_nomi">Restaurar jugadores</string>
@@ -21,7 +19,6 @@
     <string name="SuggMiniBS">C. semi</string>
     <string name="SuggP">Puntos de mesa</string>
     <string name="SuggPM">Puntos en mano</string>
-    <string name="SuggNome">Nombre del equipo</string>
     <string name="n1">Equipo 1</string>
     <string name="n2">Equipo 2</string>
     <string name="gioc_1">Jugador 1</string>
@@ -29,7 +26,6 @@
     <string name="g1">Jug 1</string>
     <string name="g2">Jug 2</string>
     <string name="g3">Jug 3</string>
-    <string name="cancel">Cancelar</string>
     <string name="win">victorias</string>
     <string name="chiusura">Cierra</string>
     <string name="pozzetto">No muerto</string>
@@ -40,9 +36,6 @@
     <string name="error02">Imposible cerrar con puntos en mano</string>
     <string name="error03">Imposible toma el muerto sin se descarta</string>
     <string name="action_dpp">Puntuaciones detalle</string>
-    <string name="crop_image_activity_title">Cortada</string>
-    <string name="crop_image_menu_rotate_right">Rotar</string>
-    <string name="crop_image_menu_crop">Hecho</string>
 
     <!-- Settings -->
     <string name="setting_valuta">Califica la aplicación</string>
@@ -55,8 +48,6 @@
     <string name="setting_notte_d">Activa el tema oscuro</string>
     <string name="setting_img">Mostrar imagenes</string>
     <string name="setting_img_d">Activar imágenes de perfil en modos de 2 y 4 jugadores</string>
-    <string name="setting_pub">Desarrollo de apoyo</string>
-    <string name="setting_pub_d">Gracias por su contribución: se mostrarán anuncios publicitario.</string>
     <string name="setting_schermo">Mantener la pantalla en</string>
     <string name="setting_schermo_d">Lea y actualice sus puntuaciones cómodamente y sin interrupción</string>
     <string name="setting_limite">Establecer puntaje final</string>
@@ -64,7 +55,6 @@
     <string name="setting_version_d">Desconocido</string>
     <string name="setting_sound">Sonidos</string>
     <string name="setting_sound_d">Si está habilitado, cuando un jugador gana, escuchará sonidos</string>
-    <string name="title_activity_settings">Ajustes</string>
     <string name="title_activity_setting">Ajustes</string>
     <string name="setting_title_pro">Interfaz</string>
     <string name="setting_title_game">Jugar</string>
@@ -80,18 +70,11 @@
     <string name="setting_pm">Habilitar puntos en mano</string>
     <string name="setting_inputdirect">Entrada directa</string>
     <string name="setting_inputdirect_d">Introduce la puntuación del juego directamente. La interfaz será más mínima, pero se recomienda para jugadores experimentados, sin la necesidad de ayuda</string>
-    <string name="debug_mode">Debug</string>
-    <string name="integrity_0">Aplicación insegura, instalada desde fuentes no confiables. Se recomienda desinstalarlo y reinstalarlo desde Play Store.</string>
-    <string name="integrity_1">Aplicación segura, instalada desde Play Store</string>
-    <string name="setting_integrity">Verificación de integridad de la aplicación</string>
-    <string name="setting_integrity_d">Comprobando ...</string>
     <string name="setting_background">Tema de las Historias para compartir</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">abre navigation drawer</string>
     <string name="navigation_drawer_close">cerca navigation drawer</string>
-    <string name="permission_true">Presiona SHARE nuevamente para comenzar a compartir</string>
-    <string name="permission_false">No se puede comenzar a compartir: has rechazado el permiso.</string>
     <string name="nav_guide">Guía</string>
     <string name="nav_history">Historial de partidos</string>
     <string name="nav_settings">Ajustes</string>
@@ -114,7 +97,6 @@
     <string name="errore_dpp">Aún no has completado un juego</string>
     <string name="back_to_exit">Presione de nuevo para salir</string>
     <string name="notification">Partido suspendido</string>
-    <string name="message_out_to_play_store">Gracias</string>
     <string name="removeImage">Quitar imagen</string>
     <string name="removeText">Restaurar nombre</string>
 

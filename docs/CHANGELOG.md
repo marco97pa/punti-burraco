@@ -1,3 +1,8 @@
+### 10.9.1
+* Improved tablet view
+* Performance improvements
+* Bug fixes
+
 ### 10.9.0
 * Added Spanish translation
 * Huge improvements on the UI for 7' and 10' tablets
