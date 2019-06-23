@@ -1,11 +1,16 @@
 package com.marco97pa.puntiburraco;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.preference.PreferenceManager;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -71,6 +77,18 @@ public class HistoryActivity extends AppCompatActivity {
                 final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(HistoryActivity.this);
                 View sheetView = HistoryActivity.this.getLayoutInflater().inflate(R.layout.history_bottom_sheet, null);
                 mBottomSheetDialog.setContentView(sheetView);
+                //Fixes https://github.com/marco97pa/punti-burraco/issues/26
+                mBottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        BottomSheetDialog d = (BottomSheetDialog) dialog;
+                        FrameLayout bottomSheet = (FrameLayout) d.findViewById(R.id.design_bottom_sheet);
+                        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) bottomSheet.getParent();
+                        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                        bottomSheetBehavior.setPeekHeight(bottomSheet.getHeight());
+                        coordinatorLayout.getParent().requestLayout();
+                    }
+                });
                 mBottomSheetDialog.show();
                 
                 //OnClickListeners

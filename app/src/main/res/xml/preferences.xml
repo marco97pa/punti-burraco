@@ -100,11 +100,7 @@
             android:summary="@string/setting_version_d"
             android:key="version">
         </Preference>
-        <Preference
-            android:title="@string/setting_integrity"
-            android:summary="@string/setting_integrity_d"
-            android:key="integrity">
-        </Preference>
+
     </PreferenceCategory>
 
 
