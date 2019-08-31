@@ -44,7 +44,7 @@
     <string name="setting_share_d">Compartir Puntos de Buraco con uno o más amigos</string>
     <string name="setting_advanced">Opciones avanzadas</string>
     <string name="setting_advanced_d">Ajustar la configuración avanzada de la aplicación</string>
-    <string name="setting_notte">Modo nocturno</string>
+    <string name="setting_notte">Tema</string>
     <string name="setting_notte_d">Activa el tema oscuro</string>
     <string name="setting_img">Mostrar imagenes</string>
     <string name="setting_img_d">Activar imágenes de perfil en modos de 2 y 4 jugadores</string>
@@ -70,7 +70,7 @@
     <string name="setting_pm">Habilitar puntos en mano</string>
     <string name="setting_inputdirect">Entrada directa</string>
     <string name="setting_inputdirect_d">Introduce la puntuación del juego directamente. La interfaz será más mínima, pero se recomienda para jugadores experimentados, sin la necesidad de ayuda</string>
-    <string name="setting_background">Tema de las Historias para compartir</string>
+    <string name="setting_background">Fondo de las Historias para compartir</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">abre navigation drawer</string>
@@ -107,6 +107,7 @@
     <string name="audio_up">Volumen multimedia subido al máximo</string>
     <string name="change_background_hint">Toque para cambiar el fondo</string>
     <string name="app_not_installed">%1$s no instalado. Instálalo y podrás compartir tus resultados</string>
+    <string name="error_location">¡Revocaste el permiso de ubicación!\nTema de la aplicación configurado en Claro</string>
 
 
 </resources>

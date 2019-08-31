@@ -1,12 +1,16 @@
 package com.marco97pa.puntiburraco;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -18,6 +22,24 @@ import android.provider.Settings;
 
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import ca.rmen.sunrisesunset.SunriseSunset;
+
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 /**
  * SETTINGS FRAGMENT
  * Fragment of the settings
@@ -27,6 +49,8 @@ import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final int REQUEST_LOCATION = 100;
+    private FusedLocationProviderClient fusedLocationClient;
     int taps = 0;
 
     @Override
@@ -153,6 +177,33 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
         ListPref.setSummary(smy);
 
+        //Sets the theme setting
+        ListPreference ListPrefTheme = (ListPreference) findPreference("theme");
+        ArrayList<String> theme_values = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.theme_values)));
+        ArrayList<String> theme_entries = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.theme_entries)));
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            //remove follow-system-theme option on <= Android P
+            theme_values.remove(3);
+            theme_entries.remove(3);
+        }
+        if (!isPlayServicesAvailable()){
+            //remove auto option on device without Google Play APIs available
+            theme_values.remove(2);
+            theme_entries.remove(2);
+        }
+        ListPrefTheme.setEntries(theme_entries.toArray(new CharSequence[theme_entries.size()]));
+        ListPrefTheme.setEntryValues(theme_values.toArray(new CharSequence[theme_values.size()]));
+        String theme[] = getResources().getStringArray(R.array.theme_entries);
+        String summ;
+        switch (sp.getString("theme", "light")){
+            case "light": summ = theme[0]; break;
+            case "dark": summ = theme[1]; break;
+            case "auto": summ = theme[2]; break;
+            case "system": summ = theme[3]; break;
+            default: summ = theme[0]; break;
+        }
+        ListPrefTheme.setSummary(summ);
+
     }
 
     public void onResume() {
@@ -170,10 +221,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     //WHEN A PREFERENCE IS CHANGED...
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference pref = findPreference(key);
-        //check if is night to update theme
-        Preference night = findPreference("night");
-        if(night == pref){
-            getActivity().recreate();
+        //check if is changed to update theme
+        if(pref == findPreference("theme")){
+            ListPreference th = (ListPreference) pref;
+            pref.setSummary(th.getEntry());
+            setAppTheme(th.getValue());
         }
         //check if is EditText to update summary
         if (pref instanceof EditTextPreference) {
@@ -181,7 +233,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             pref.setSummary(etp.getText());
         }
         //check if is EditText to update summary
-        if (pref instanceof ListPreference) {
+        if (pref == findPreference("background_stories")) {
             ListPreference lp = (ListPreference) pref;
             switch (lp.getValue()){
                 case "1": lp.setIcon(R.drawable.gradient_1_circle); break;
@@ -199,6 +251,100 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("setChange", true);
         editor.commit();
+    }
+
+
+    public void setAppTheme(String selection) {
+        /* SETTING APP THEME
+         * Here I set the app theme according to the user choice
+         * This method MUST be called before the "setContentView(...)"
+         */
+        switch (selection) {
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case "system":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+            case "auto":
+                setAppThemeAuto();
+                break;
+            default:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+        }
+    }
+
+
+    public void setAppThemeAuto(){
+        /* SETTING APP THEME AUTOMATICALLY
+         * Here I set the app theme according to the current sun position
+         * Based on time and location, I can determine if the sun is up.
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions( new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+                }
+            else {
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                // Got last known location. In some rare situations this can be null.
+                                if (location != null) {
+                                    // Extract latitude and longitude
+                                    double longitude = location.getLongitude();
+                                    double latitude = location.getLatitude();
+                                    if (SunriseSunset.isDay(latitude, longitude)) {
+                                        //is DAY, so set the theme accordingly
+                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                                    } else {
+                                        //is NIGHT, so set the theme accordingly
+                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                                    }
+                                }
+                            }
+                        });
+            }
+        }
+    }
+
+    protected Boolean isPlayServicesAvailable() {
+        int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity());
+
+        if (resultCode == ConnectionResult.SUCCESS){
+            return true;
+        } else {
+            GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), resultCode, 1).show();
+            return false;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setAppThemeAuto();
+                } else {
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(),getString(R.string.error_location),Toast.LENGTH_LONG).show();
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("theme", "light");
+                    editor.commit();
+                    ListPreference ListPrefTheme = (ListPreference) findPreference("theme");
+                    String theme[] = getResources().getStringArray(R.array.theme_entries);
+                    ListPrefTheme.setSummary(theme[0]);
+                }
+            }
+        }
     }
 
 }

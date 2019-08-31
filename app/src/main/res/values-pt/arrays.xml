@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="listentries">
+        <item> Violeta do Instagram </item>
+        <item> Natureza verde </item>
+        <item> Laranja Buraco </item>
+        <item> Azul oceano </item>
+        <item> Vermelho cereja </item>
+        <item> Sangue unicórnio </item>
+    </string-array>
+    <string-array name="theme_entries">
+        <item> Luz </item>
+        <item> Escuro </item>
+        <item> Automático (com base na hora e no local) </item>
+        <item> Siga as configurações do sistema </item>
+    </string-array>
+</resources>

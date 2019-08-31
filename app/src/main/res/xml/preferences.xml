@@ -15,11 +15,10 @@
                 android:summary="@string/setting_schermo_d"
                 android:title="@string/setting_schermo" />
 
-            <SwitchPreference
-                android:defaultValue="false"
-                android:key="night"
-                android:summary="@string/setting_notte_d"
-                android:title="@string/setting_notte" />
+            <ListPreference
+                android:key="theme"
+                android:title="@string/setting_notte"
+                android:defaultValue="light"/>
 
             <SwitchPreference
                 android:defaultValue="true"

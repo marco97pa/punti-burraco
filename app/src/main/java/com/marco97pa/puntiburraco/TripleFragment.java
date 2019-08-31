@@ -122,8 +122,8 @@ public class TripleFragment extends Fragment {
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
 
         //get Actual Theme Colors
-        bgColor = ((MainActivity)getActivity()).getAlertBackgroundColor();
-        txtColor = ((MainActivity) getActivity()).getAlertTextColor();
+        bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
+        txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogText)));
 
         /**
          * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI

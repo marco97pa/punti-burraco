@@ -39,7 +39,7 @@
     <string name="pozz">Não morto</string>
     <string name="reset">Novo jogo</string>
     <string name="setting_limite">Pontos de chegada</string>
-    <string name="setting_notte">Modo noturno</string>
+    <string name="setting_notte">Tema</string>
     <string name="setting_schermo">Modo Always-On</string>
     <string name="setting_notte_d">Ativa o tema escuro para salas escuras</string>
     <string name="setting_schermo_d">Leia a pontuação sem qualquer aborrecimento</string>
@@ -91,7 +91,8 @@
     <string name="audio_up">Volume 100%</string>
     <string name="setting_sound_d">Reproduzir som quando alguém ganha</string>
     <string name="setting_sound">Som</string>
-    <string name="setting_background">Tema da partilha</string>
+    <string name="setting_background">Fundo da história</string>
     <string name="change_background_hint">Toque para mudar o fundo</string>
     <string name="app_not_installed">%1$s Erro</string>
+    <string name="error_location">Você revogou a permissão de localização!\nTema do aplicativo definido como Leve</string>
 </resources>

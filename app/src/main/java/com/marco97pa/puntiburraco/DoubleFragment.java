@@ -3,6 +3,8 @@ package com.marco97pa.puntiburraco;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
+
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.content.Context;
@@ -52,6 +54,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Set;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -147,8 +150,8 @@ public class DoubleFragment extends Fragment {
         Restore();
 
         //get Actual Theme Colors
-        bgColor = ((MainActivity)getActivity()).getAlertBackgroundColor();
-        txtColor = ((MainActivity) getActivity()).getAlertTextColor();
+        bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
+        txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogText)));
 
         //Setting OnclickListeners for each Player TextView
         textNome1.setOnClickListener(new View.OnClickListener() {
@@ -1107,32 +1110,7 @@ public class DoubleFragment extends Fragment {
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
         }
-       /* if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
 
-            Uri photo = data.getData();
-
-            Intent intent = CropImage.activity(photo)
-                    .setCropShape(CropImageView.CropShape.OVAL)
-                    .setFixAspectRatio(true)
-                    .setCropMenuCropButtonIcon(R.drawable.ic_check_white_24dp)
-                    .getIntent(getActivity());
-            startActivityForResult(intent, REQUEST_CROP_PICTURE_2);
-
-        } else if ((requestCode == REQUEST_CROP_PICTURE_2) && (resultCode == RESULT_OK)){
-            // When we are done cropping, display it in the ImageView.
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            Uri resultUri = result.getUri();
-            ImageView IMG2 = (ImageView) getView().findViewById(R.id.image2);
-            IMG2.setImageURI(resultUri);
-
-            //and save it
-            croppedImageFile = new File(resultUri.getPath());
-            File file = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
-            saveImage(file, croppedImageFile);
-
-        }
-        */
     }
 
     /**

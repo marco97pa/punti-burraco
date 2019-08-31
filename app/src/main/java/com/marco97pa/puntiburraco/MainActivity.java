@@ -1,8 +1,12 @@
 package com.marco97pa.puntiburraco;
 
+import android.Manifest;
 import android.app.AlertDialog;
+
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,10 +14,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -21,8 +27,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+
 import androidx.browser.customtabs.CustomTabsIntent;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.core.provider.FontRequest;
@@ -33,13 +43,16 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.util.Log;
 import android.view.View;
+
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.emoji.text.FontRequestEmojiCompatConfig;
+import ca.rmen.sunrisesunset.SunriseSunset;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +63,10 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Locale;
+
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+import static androidx.appcompat.app.AppCompatDelegate.getDefaultNightMode;
 
 
 /**
@@ -62,19 +79,25 @@ import java.util.Locale;
  */
 
 
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+    private final static int INTERVAL = 1000 * 1 * 5; //5 minutes
+    private static final int REQUEST_LOCATION = 100;
     public static Context contextOfApplication;
     String CHANNEL_ID = "channel_suspended";
     //action bar settings
     Boolean ddp_visibility = true;
     Boolean newgame_show = false;
+    double latitude, longitude;
+    private FusedLocationProviderClient fusedLocationClient;
     private boolean isDrawerFixed;
+    SharedPreferences sharedPreferences;
+    Handler mHandler;
+    Runnable runnableCode;
 
     public interface ClickListener {
         void onClick(View view, int position);
@@ -85,22 +108,19 @@ public class MainActivity extends AppCompatActivity
     //CREATING ACTIVITY AND FAB BUTTON
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /* SETTING APP THEME
-         * Here I set the app theme according to the user choice
-         * I do it here because it MUST stay before the "setContentViev(...)"
-         */
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean isNight = sharedPreferences.getBoolean("night", false) ;
-        if(isNight){
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        setAppTheme();
+        /* Boolean isNight = sharedPreferences.getBoolean("night", false);
+        if (isNight) {
             setTheme(R.style.DarkMode);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.barBlack));
             }
-        }
-        else{
+        } else {
             setTheme(R.style.AppTheme_NoActionBar);
-        }
-        
+        }*/
+
         isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
 
 
@@ -111,14 +131,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //fix for Nav Header not really nightly
-        if(isNight){
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            View header = navigationView.getHeaderView(0);
-            View linearLayout = (View) header.findViewById(R.id.linearLayout);
-            linearLayout.setBackgroundResource(R.drawable.side_nav_bar_alt);
-        }
 
         //Setting first Fragment to display as DoubleFragment (aka 2 players mode)
         Fragment fragment = new DoubleFragment();
@@ -150,33 +162,33 @@ public class MainActivity extends AppCompatActivity
          * Creating navigation drawer and setting its contents
          */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        
+
         if (!isDrawerFixed) {
-                ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
-                    //FIX The following methods close the (eventually) opened keyboard on opening the navigation bar
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                        super.onDrawerClosed(drawerView);
-                    }
+                //FIX The following methods close the (eventually) opened keyboard on opening the navigation bar
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                }
 
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
-                        super.onDrawerOpened(drawerView);
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
-                    }
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
+                }
 
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-                        super.onDrawerSlide(drawerView, slideOffset);
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
-                    }
-                };
-                drawer.setDrawerListener(toggle);
-                toggle.syncState();
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+                    super.onDrawerSlide(drawerView, slideOffset);
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
+                }
+            };
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
         }
 
         //Sets navigation drawer listener
@@ -205,32 +217,30 @@ public class MainActivity extends AppCompatActivity
         }
 
         //Delete notification (if there is any)
-        NotificationManager notifManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notifManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.cancelAll();
 
         //If the user opens the app by clicking on a notification, set the Fragment according to the last used mode
         Intent intent = getIntent();
         int mode = intent.getIntExtra("mode", 0);
-        if(mode == 2){
+        if (mode == 2) {
             fragment = new DoubleFragment();
             fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"2").commit();
-        }
-        else if(mode == 3){
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "2").commit();
+        } else if (mode == 3) {
             fragment = new TripleFragment();
             fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"3").commit();
-        }
-        else if(mode == 4){
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "3").commit();
+        } else if (mode == 4) {
             fragment = new QuadFragment();
             fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"4").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "4").commit();
         }
 
         //Keep the screen always on if the user has set it true
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean isWakeOn = sharedPreferences.getBoolean("wake", false) ;
-        if(isWakeOn){
+        Boolean isWakeOn = sharedPreferences.getBoolean("wake", false);
+        if (isWakeOn) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
@@ -242,6 +252,7 @@ public class MainActivity extends AppCompatActivity
                 R.array.com_google_android_gms_fonts_certs);
         EmojiCompat.Config config = new FontRequestEmojiCompatConfig(this, fontRequest);
         EmojiCompat.init(config);
+
 
     }
 
@@ -286,6 +297,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
+        //STOP Theme Handler if active
+        if(mHandler != null) {
+            mHandler.removeCallbacks(runnableCode);
+        }
+
     }
 
     @Override
@@ -382,6 +398,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume(){
         super.onResume();
+        //restart theme handler
+        if(mHandler!=null){
+            mHandler.postDelayed(runnableCode, INTERVAL);
+        }
         //Check if there was a setting change
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean settingsChanged = sharedPreferences.getBoolean("setChange", false) ;
@@ -480,12 +500,12 @@ public class MainActivity extends AppCompatActivity
                 //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
                 Bitmap backButton = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                    ImageDecoder.Source source = ImageDecoder.createSource(getResources(), R.drawable.ic_arrow_back_black_24dp);
+                    ImageDecoder.Source source = ImageDecoder.createSource(getResources(), R.drawable.ic_arrow_back);
                     try {
                           backButton = ImageDecoder.decodeBitmap(source);
                     } catch (IOException e) { e.printStackTrace(); }
                 } else{
-                      backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back_black_24dp);
+                      backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back);
                 }
                 builder.setCloseButtonIcon(backButton);
                 builder.setShowTitle(true);
@@ -501,14 +521,21 @@ public class MainActivity extends AppCompatActivity
                 String localeId = lang.toString();
                 Log.i("LINGUA", localeId);
                 //If lang is italian it will be redirected to guide-it.html., else to guide-en.html
+                String URLtoLaunch;
                 if(localeId.equals("it_IT")) {
-                    customTabsIntent.launchUrl(this, Uri.parse("https://marco97pa.github.io/punti-burraco/guide-it.html"));
+                    URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-it.html";
                     Log.i("language", "IT");
                 }
                 else{
-                    customTabsIntent.launchUrl(this, Uri.parse("https://marco97pa.github.io/punti-burraco/guide-en.html"));
+                    URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-en.html";
                     Log.i("language", "EN");
                 }
+                //Set theme (adds a parameter that a javascript script on the webpage can detect)
+                if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+                    URLtoLaunch = URLtoLaunch+"?dark";
+                }
+                //Launch custom tabs
+                customTabsIntent.launchUrl(this, Uri.parse(URLtoLaunch));
             }
             else{
                 //If user is not connected, shows an alert
@@ -588,36 +615,115 @@ public class MainActivity extends AppCompatActivity
         //the method above invokes onPrepareOptionsMenu();
     }
 
-
-    public String getAlertBackgroundColor(){
-        int intbgColor;
-        String bgColor;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean isNight = sharedPref.getBoolean("night", false) ;
-        if(isNight){
-            intbgColor = ContextCompat.getColor(getApplicationContext(), R.color.bgBlack);
-            bgColor = String.format("#%06X", (0xFFFFFF & intbgColor));
+    public void setAppTheme() {
+        /* SETTING APP THEME
+         * Here I set the app theme according to the user choice
+         * This method MUST be called before the "setContentView(...)"
+         */
+        switch (sharedPreferences.getString("theme", "light")) {
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case "system":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+            case "auto":
+                setAppThemeAuto();
+                break;
+            default:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
         }
-        else{
-            intbgColor = ContextCompat.getColor(getApplicationContext(), R.color.bgWhite);
-            bgColor = String.format("#%06X", (0xFFFFFF & intbgColor));
-        }
-        return bgColor;
     }
 
-    public  String getAlertTextColor(){
-        int inttxtColor;
-        String txtColor;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean isNight = sharedPref.getBoolean("night", false) ;
-        if(isNight){
-            inttxtColor = ContextCompat.getColor(getApplicationContext(), R.color.txtWhite);
-            txtColor = String.format("#%06X", (0xFFFFFF & inttxtColor));
+
+    public void setAppThemeAuto(){
+        /* SETTING APP THEME AUTOMATICALLY
+         * Here I set the app theme according to the current sun position
+         * Based on time and location, I can determine if the sun is up.
+         */
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+            } else {
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                // Got last known location. In some rare situations this can be null.
+                                if (location != null) {
+                                    // Extract latitude and longitude
+                                    longitude = location.getLongitude();
+                                    latitude = location.getLatitude();
+                                    if (SunriseSunset.isDay(latitude, longitude)) {
+                                        //is DAY, so set the theme accordingly
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putBoolean("lastCheckWasDay", true);
+                                        editor.commit();
+                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                                    } else {
+                                        //is NIGHT, so set the theme accordingly
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putBoolean("lastCheckWasDay", false);
+                                        editor.commit();
+                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                                    }
+                                }
+                            }
+                        });
+
+                mHandler = new Handler();
+
+                runnableCode = new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "RUNNING...", Toast.LENGTH_SHORT).show();
+                        if (SunriseSunset.isDay(latitude, longitude)) {
+                            if (!sharedPreferences.getBoolean("lastCheckWasDay", true)) {
+                                //is DAY, so set the theme accordingly
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("lastCheckWasDay", true);
+                                editor.commit();
+                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                            }
+                        } else {
+                            if (sharedPreferences.getBoolean("lastCheckWasDay", true)) {
+                                //is NIGHT, so set the theme accordingly
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("lastCheckWasDay", false);
+                                editor.commit();
+                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                            }
+                        }
+                        //Repeat this after an interval
+                        mHandler.postDelayed(this, INTERVAL);
+                    }
+                };
+
+            }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);;
+        switch (requestCode) {
+            case REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setAppThemeAuto();
+                } else {
+                    // permission denied, boo!
+                    Toast.makeText(this,getString(R.string.error_location),Toast.LENGTH_LONG).show();
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("theme", "light");
+                    editor.commit();
+                }
+            }
         }
-        else{
-            inttxtColor = ContextCompat.getColor(getApplicationContext(), R.color.txtBlack);
-            txtColor = String.format("#%06X", (0xFFFFFF & inttxtColor));
-        }
-        return  txtColor;
     }
 }
