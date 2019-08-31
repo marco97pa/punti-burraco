@@ -130,9 +130,9 @@ public class QuadFragment extends Fragment {
 
         Restore();
 
-        //get Actual Theme Colors
-        bgColor = ((MainActivity)getActivity()).getAlertBackgroundColor();
-        txtColor = ((MainActivity) getActivity()).getAlertTextColor();
+//get Actual Theme Colors
+        bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
+        txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogText)));
 
         textNome1.setOnClickListener(new View.OnClickListener() {
 

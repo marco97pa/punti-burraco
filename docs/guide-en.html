@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Guide</title>
-	<link href="bottom-nav.css" rel="stylesheet"></head>
+	<link id="stylesheet" href="bottom-nav.css" rel="stylesheet"></head>
 
   <body style="margin-top: -100px; ">
     <nav class="bottom-nav">
@@ -46,7 +46,6 @@
 					 <li><a href="#a5b"> History </a>
          			 <li><a href="#a6"> Settings </a>
                </ul>
-<br>
        <h2 id="a1"> Modes </h2>
        From the side menu <i class="material-icons">&#xE5D2;</i> you can select different modes according to the number of players<br>
        There are 2, 3 or 4 players mode.<br>
@@ -79,7 +78,9 @@
 			<br>
             <br><b>Keep the screen on</b>
 			<br>
-            <br><b>Night mode</b>
+            <br><b>Theme</b><br>
+            You can use a light or dark Theme<br>
+            You can also set to change it automatically (based on time and location) or follow system settings
 			<br>
             <br><b>Share app</b>
 			<br>
@@ -134,7 +135,7 @@
         <div style="display: table-cell; position: relative; top: 50%; transform: translateY(-25%); float: left; margin-left: 20px;">
           <h2>Points Buraco</h2>
           <p>Android <br><b>10.000+</b> downloads<br>
-          Code on <a href="https://github.com/marco97pa/punti-burraco"><img src="images/GitHub.png" alt="" style="width: 72px; margin-left: 5px"/></a>
+          Code on <a href="https://github.com/marco97pa/punti-burraco">GitHub</a>
           </p>
         </div>
       <br style="clear: both;">
@@ -155,7 +156,13 @@
   <script src="moment.js"></script>
   <script src="js/stmd.js"></script>
   <script src="js/render.js"></script>
-       <script>
+  <script>
+
+      //DARK THEME
+      if(getAllUrlParams().dark) {
+       document.getElementById('stylesheet').href='bottom-nav-dark.css';
+      }
+
        var nascita = moment("19971124", "YYYYMMDD");
        var anni = moment().diff(nascita, 'years', true);
        anni = parseInt(anni);
@@ -172,6 +179,72 @@
        if(getAndroidVersion()!=false){
           document.getElementById("android").value = "Android "+getAndroidVersion();
        }
+
+       ///URL EXTRACTOR
+       function getAllUrlParams(url) {
+
+        // get query string from url (optional) or window
+        var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+
+        // we'll store the parameters here
+        var obj = {};
+
+        // if query string exists
+        if (queryString) {
+
+          // stuff after # is not part of query string, so get rid of it
+          queryString = queryString.split('#')[0];
+
+          // split our query string into its component parts
+          var arr = queryString.split('&');
+
+          for (var i = 0; i < arr.length; i++) {
+            // separate the keys and the values
+            var a = arr[i].split('=');
+
+            // set parameter name and value (use 'true' if empty)
+            var paramName = a[0];
+            var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+
+            // (optional) keep case consistent
+            paramName = paramName.toLowerCase();
+            if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
+
+            // if the paramName ends with square brackets, e.g. colors[] or colors[2]
+            if (paramName.match(/\[(\d+)?\]$/)) {
+
+              // create key if it doesn't exist
+              var key = paramName.replace(/\[(\d+)?\]/, '');
+              if (!obj[key]) obj[key] = [];
+
+              // if it's an indexed array e.g. colors[2]
+              if (paramName.match(/\[\d+\]$/)) {
+                // get the index value and add the entry at the appropriate position
+                var index = /\[(\d+)\]/.exec(paramName)[1];
+                obj[key][index] = paramValue;
+              } else {
+                // otherwise add the value to the end of the array
+                obj[key].push(paramValue);
+              }
+            } else {
+              // we're dealing with a string
+              if (!obj[paramName]) {
+                // if it doesn't exist, create property
+                obj[paramName] = paramValue;
+              } else if (obj[paramName] && typeof obj[paramName] === 'string'){
+                // if property does exist and it's a string, convert it to an array
+                obj[paramName] = [obj[paramName]];
+                obj[paramName].push(paramValue);
+              } else {
+                // otherwise add the property
+                obj[paramName].push(paramValue);
+              }
+            }
+          }
+        }
+
+        return obj;
+        }
        </script>
 </body>
 </html>

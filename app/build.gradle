@@ -24,6 +24,7 @@ android {
 
 repositories {
     maven { url "https://maven.google.com" }
+    maven { url "https://dl.bintray.com/caarmen/maven/" }
     jcenter()
 }
 
@@ -31,18 +32,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-perf:16.2.3'
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
-    implementation 'com.github.yalantis:ucrop:2.2.2-native'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.emoji:emoji:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.github.yalantis:ucrop:2.2.2-native'
+    implementation 'ca.rmen:lib-sunrise-sunset:1.1.1'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
     testImplementation 'junit:junit:4.12'
 }
 

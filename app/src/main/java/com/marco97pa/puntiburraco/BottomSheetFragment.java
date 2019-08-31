@@ -46,16 +46,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         Bundle args = getArguments();
         String data = args.getString("data", "");
 
-        //Set Night according to theme
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Boolean isNight = sharedPreferences.getBoolean("night", false) ;
-        if(isNight){
-            title = (TextView) view.findViewById(R.id.title);
-            title.setTextColor(ContextCompat.getColor(getActivity(), R.color.barWhite));
-            dialog = (LinearLayout) view.findViewById(R.id.dialog);
-            dialog.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.bgBlack));
-        }
-
         //Set webview
         webview = (WebView) view.findViewById(R.id.web);
         WebSettings settings = webview.getSettings();

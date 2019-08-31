@@ -42,7 +42,7 @@
     <string name="pozzetto">No Pots</string>
     <string name="reset">New game, points reset</string>
     <string name="setting_limite">Set win point</string>
-    <string name="setting_notte">Night Mode</string>
+    <string name="setting_notte">Theme</string>
     <string name="setting_notte_d">Suggested for low light ambients</string>
     <string name="setting_schermo">Keep screen on</string>
     <string name="setting_schermo_d">Read the score without any hassle</string>
@@ -94,4 +94,5 @@
     <string name="change_background_hint">Touch to change background</string>
     <string name="channel_description">If you leave the app without ending the game, you will receive a notification to continue the game</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
+    <string name="error_location">You revoked Location permission!\nApp theme set to Light</string>
 </resources>

@@ -43,20 +43,12 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //set Theme
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean isNight = sharedPreferences.getBoolean("night", false) ;
-        if(isNight){
-            setTheme(R.style.DarkTheme);
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.barBlack));
-            }
-        }
-        else{
-            setTheme(R.style.AppTheme);
-        }
-
         setContentView(R.layout.activity_history);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         emptyView = (LinearLayout) findViewById(R.id.empty_view);
@@ -127,7 +119,6 @@ public class HistoryActivity extends AppCompatActivity {
                         ScoreDB db = new ScoreDB(HistoryActivity.this);
                         db.open();
                         db.deleteScore(selezionato.getId());
-                        Toast.makeText(HistoryActivity.this, "GOR", Toast.LENGTH_LONG);
                         db.close();
                         scoreList.remove(position);
                         recyclerView.removeViewAt(position);
