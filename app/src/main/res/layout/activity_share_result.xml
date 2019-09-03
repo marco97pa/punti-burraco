@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -135,49 +135,101 @@
             android:text="@string/app_name"
             android:textSize="30sp" />
     </LinearLayout>
+
 </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ControllerLayout"
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/action_share"
+        android:text="@string/dialog_share"
+        app:icon="@drawable/ic_send_24dp"
+        app:layout_anchor="@+id/rootLayout"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_margin="12dp"/>
+
+    <LinearLayout app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:id="@+id/bottom_sheet_share"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:background="@drawable/gradient_shadow"
-        android:gravity="bottom"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:weightSum="3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rootLayout"
-        app:layout_constraintVertical_bias="1.0">
+        android:layout_height="180dp"
+        android:orientation="vertical"
+        android:background="@color/dialogBackground"
+        app:behavior_hideable="true"
+        app:behavior_skipCollapsed="true">
+        <LinearLayout
+            android:id="@+id/bottom_sheet_share_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="16dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/facebook"
+                android:tint="@color/facebook"
+                />
 
-        <Button
-            android:id="@+id/button_facebook"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/facebook"
-            android:text="@string/facebook" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:text="@string/facebook"
+                android:textColor="@color/dialogText" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottom_sheet_share_instagram"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="16dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/instagram"
+                android:tint="@color/instagram"
+                />
 
-        <Button
-            android:id="@+id/button_instagram"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/instagram"
-            android:text="@string/instagram" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:text="@string/instagram"
+                android:textColor="@color/dialogText" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/button_share"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:text="@string/dialog_share" />
+        <LinearLayout
+            android:id="@+id/bottom_sheet_share_others"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="16dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_share_gray_24dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:text="@string/action_share"
+                android:textColor="@color/dialogText" />
+        </LinearLayout>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

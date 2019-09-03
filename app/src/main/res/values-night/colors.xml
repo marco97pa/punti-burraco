@@ -3,6 +3,9 @@
     <color name="colorPrimary">#212121</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#80d8ff</color>
+    <color name="colorSecondary">#81d4fa</color>
+    <color name="colorOnSecondary">#000</color>
     <color name="dialogBackground">#ff424242</color>
     <color name="dialogText">#fff</color>
+    <color name="dialogButton">#81d4fa</color>
 </resources>

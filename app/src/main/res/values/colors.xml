@@ -3,9 +3,12 @@
     <color name="colorPrimary">#FFFF9800</color>
     <color name="colorPrimaryDark">#FFF57C00</color>
     <color name="colorAccent">#00b8d4</color>
+    <color name="colorSecondary">#0277BD</color>
+    <color name="colorOnSecondary">#fff</color>
     <color name="appToolbarTitleText">#fff</color>
     <color name="dialogBackground">#fff</color>
     <color name="dialogText">#000</color>
+    <color name="dialogButton">#FFFF9800</color>
     <color name="instagram">#e91e63</color>
     <color name="facebook">#3949ab</color>
 </resources>

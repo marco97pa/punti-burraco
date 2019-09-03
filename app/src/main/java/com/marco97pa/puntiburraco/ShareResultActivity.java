@@ -3,6 +3,7 @@ package com.marco97pa.puntiburraco;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,12 +17,16 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,7 +37,9 @@ public class ShareResultActivity extends AppCompatActivity {
 private TextView name1, name2, name3, score1, score2, score3;
 boolean diRitornoDaCondivisione;
 int selection;
-LinearLayout root;
+private LinearLayout root;
+private BottomSheetBehavior bottomSheetBehavior;
+private ExtendedFloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,11 @@ LinearLayout root;
 
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         }
+
+        final LinearLayout bottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet_share);
+
+        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet_share));
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         name1 = (TextView) findViewById(R.id.name1);
         name2 = (TextView) findViewById(R.id.name2);
@@ -82,36 +94,63 @@ LinearLayout root;
         changeBackground();
 
         //BUTTONS
-        Button instagram = (Button) findViewById(R.id.button_instagram);
+        //fab
+        fab = (ExtendedFloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                fab.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        //instagram
+        LinearLayout instagram = (LinearLayout) findViewById(R.id.bottom_sheet_share_instagram);
         instagram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bottomSheet.setVisibility(View.GONE); //hide BottomSheet without animations (to boost performance)
                 shareOnInstagram();
             }
         });
 
-        Button facebook = (Button) findViewById(R.id.button_facebook);
+        //facebook
+        LinearLayout facebook = (LinearLayout) findViewById(R.id.bottom_sheet_share_facebook);
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bottomSheet.setVisibility(View.GONE); //hide BottomSheet without animations (to boost performance)
                 shareOnFacebook();
             }
         });
 
-        Button btn = (Button) findViewById(R.id.button_share);
+        //share
+        LinearLayout btn = (LinearLayout) findViewById(R.id.bottom_sheet_share_others);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bottomSheet.setVisibility(View.GONE); //hide BottomSheet without animations (to boost performance)
                 shareOnOtherApps();
             }
         });
 
-        //Change background by tapping on view
+        /* Handling clicks on rootView
+         * Change background of the story if BottomSheet is not open
+        */
         root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selection++;
-                changeBackground();
+                //Check if BottomSheet is open
+                if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
+                    //if is open, hide BottomSheet and show Fab button, but don't change background
+                    fab_show();
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+                else {
+                    //if is closed than change background
+                    selection++;
+                    changeBackground();
+                }
             }
         });
 
@@ -207,13 +246,13 @@ LinearLayout root;
 
     /**
      * TAKE SCREENSHOT
-     * This method hides the ControllerView then
+     * This method hides the BottomSheetDialog then
      * A screenshot of the app will be taken, saved in memory
      */
     public Uri takeScreenshot(){
         //First hide the ControllerView
-        LinearLayout controller = (LinearLayout) findViewById(R.id.ControllerLayout) ;
-        controller.setVisibility(View.GONE);
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet_share));;
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         diRitornoDaCondivisione = true;
 
         //Then Take screenshot and save as JPG
@@ -245,6 +284,30 @@ LinearLayout root;
         }
 
         return null;
+    }
+
+    public void fab_show(){
+        // previously invisible view
+        View fab = findViewById(R.id.fab);
+        // Check if the runtime version is at least Lollipop
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // get the center for the clipping circle
+            int cx = fab.getWidth() / 2;
+            int cy = fab.getHeight() / 2;
+
+            // get the final radius for the clipping circle
+            float finalRadius = (float) Math.hypot(cx, cy);
+
+            // create the animator for this view (the start radius is zero)
+            Animator anim = ViewAnimationUtils.createCircularReveal(fab, cx, cy, 0f, finalRadius);
+
+            // make the view visible and start the animation
+            fab.setVisibility(View.VISIBLE);
+            anim.start();
+        } else {
+            // set the view to invisible without a circular reveal animation below Lollipop
+            fab.setVisibility(View.INVISIBLE);
+        }
     }
 
 }

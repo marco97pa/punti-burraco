@@ -8,13 +8,19 @@
         <item name="android:navigationBarColor">?android:attr/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <!-- To change the popup menu and app text color  -->
+        <item name="android:textColor">@color/dialogText</item>
         <item name="android:navigationBarColor">?android:attr/colorPrimaryDark</item>
+        <item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>
     </style>
+
 
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash</item>

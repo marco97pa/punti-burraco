@@ -1,8 +1,8 @@
 package com.marco97pa.puntiburraco;
 
 import android.Manifest;
-import android.app.AlertDialog;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -33,6 +33,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.core.provider.FontRequest;
@@ -539,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             else{
                 //If user is not connected, shows an alert
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog);
                 builder .setTitle(getString(R.string.nav_guide))
                         .setMessage(getString(R.string.errore_connection))
                         .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {

@@ -2,7 +2,7 @@ package com.marco97pa.puntiburraco;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -384,7 +385,7 @@ public class DoubleFragment extends Fragment {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
@@ -412,7 +413,7 @@ public class DoubleFragment extends Fragment {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
@@ -740,7 +741,7 @@ public class DoubleFragment extends Fragment {
                     //save score to DB
                     saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                     //make alert
-                    AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+                    MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                     String out = textNome1.getText().toString();
                     out = out +" ";
                     out = out.concat(winText);
@@ -773,7 +774,7 @@ public class DoubleFragment extends Fragment {
                     //save score to DB
                     saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                     //make alert
-                    AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+                    MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                     String out=textNome2.getText().toString();
                     out = out +" ";
                     out=out.concat(winText);
@@ -1009,7 +1010,7 @@ public class DoubleFragment extends Fragment {
      * A little alert to help user change players names
      */
     public void showNoticeDialog() {
-        new AlertDialog.Builder(getActivity())
+        new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog)
                 .setTitle(getString(R.string.guida))
                 .setMessage(getString(R.string.change_name))
                 .show();
