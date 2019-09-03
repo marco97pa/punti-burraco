@@ -1,7 +1,7 @@
 package com.marco97pa.puntiburraco;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -285,7 +287,7 @@ public class TripleFragment extends Fragment {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
@@ -313,7 +315,7 @@ public class TripleFragment extends Fragment {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
@@ -341,7 +343,7 @@ public class TripleFragment extends Fragment {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
@@ -717,7 +719,7 @@ public class TripleFragment extends Fragment {
                 saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
                 //make alert
 
-                AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+                MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
 
                 String out=textNome1.getText().toString();
                 out = out +" ";
@@ -752,7 +754,7 @@ public class TripleFragment extends Fragment {
                 //make alert
 
                 win=true;
-                AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+                MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                 String out=textNome2.getText().toString();
                 out = out +" ";
                 out=out.concat(winText);
@@ -787,7 +789,7 @@ public class TripleFragment extends Fragment {
                 //make alert
 
                 win=true;
-                AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+                MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                 String out=textNome3.getText().toString();
                 out = out +" ";
                 out=out.concat(winText);
@@ -970,7 +972,7 @@ public class TripleFragment extends Fragment {
 
     //AVVIA SET NOMI
     public void showNoticeDialog() {
-        new AlertDialog.Builder(getActivity())
+        new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog)
                 .setTitle(getString(R.string.guida))
                 .setMessage(getString(R.string.change_name))
                 .show();

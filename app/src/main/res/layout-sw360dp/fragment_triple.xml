@@ -322,32 +322,33 @@
         android:text="@string/pozz" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
-        app:buttonTint="@color/colorPrimary"
         android:id="@+id/rB1"
+        android:onClick="setPozzetto1"
+        android:text="@string/solo"
+        app:buttonTint="@color/colorSecondary"
         grid:layout_column="0"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="2"
-        android:onClick="setPozzetto1"
-        android:text="@string/solo" />
+        grid:layout_row="2" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
-        app:buttonTint="@color/colorPrimary"
         android:id="@+id/rB2"
+        android:onClick="setPozzetto2"
+        android:text="@string/solo"
+        app:buttonTint="@color/colorSecondary"
         grid:layout_column="1"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="2"
-        android:onClick="setPozzetto2"
-        android:text="@string/solo" />
+        grid:layout_row="2" />
+
     <androidx.appcompat.widget.AppCompatCheckBox
-        app:buttonTint="@color/colorPrimary"
         android:id="@+id/rB3"
+        android:onClick="setPozzetto3"
+        android:text="@string/solo"
+        app:buttonTint="@color/colorSecondary"
         grid:layout_column="2"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="2"
-        android:onClick="setPozzetto3"
-        android:text="@string/solo" />
+        grid:layout_row="2" />
 
 </androidx.gridlayout.widget.GridLayout>
