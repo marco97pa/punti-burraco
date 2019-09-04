@@ -7,6 +7,16 @@
     android:background="@color/dialogBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <WebView
+        android:id="@+id/score_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </WebView>
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cfd8dc"/>
     <LinearLayout
         android:id="@+id/fragment_history_bottom_sheet_edit"
         android:layout_width="match_parent"

@@ -86,7 +86,7 @@
         android:textSize="@dimen/textBigi"
         android:width="@dimen/tab" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBP1"
         grid:layout_column="0"
         
@@ -98,7 +98,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBP2"
         grid:layout_column="1"
         
@@ -109,7 +109,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBP3"
         grid:layout_column="2"
         
@@ -120,7 +120,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBI1"
         grid:layout_column="0"
         
@@ -131,7 +131,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBI2"
         grid:layout_column="1"
         
@@ -142,7 +142,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBI3"
         grid:layout_column="2"
         
@@ -153,7 +153,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBS1"
         android:width="@dimen/tab"
         android:ems="10"
@@ -163,7 +163,7 @@
         grid:layout_column="0"
         grid:layout_row="5" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBS2"
         grid:layout_column="1"
         
@@ -173,7 +173,7 @@
         android:inputType="number"
         android:width="@dimen/tab"
         android:maxLength="4"/>
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBS3"
         grid:layout_column="2"
         
@@ -184,7 +184,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editP1"
         android:width="@dimen/tab"
 
@@ -195,7 +195,7 @@
         grid:layout_column="0"
         grid:layout_row="6" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editP2"
         android:width="@dimen/tab"
 
@@ -206,7 +206,7 @@
         grid:layout_column="1"
         grid:layout_row="6" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editP3"
         android:width="@dimen/tab"
 
@@ -217,7 +217,7 @@
         grid:layout_column="2"
         grid:layout_row="6" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editPM1"
         grid:layout_column="0"
         
@@ -228,7 +228,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editPM2"
         grid:layout_column="1"
         
@@ -239,7 +239,7 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editPM3"
         grid:layout_column="2"
         
@@ -250,70 +250,70 @@
         android:width="@dimen/tab"
         android:maxLength="4"/>
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/chiusura1"
         grid:layout_column="0"
-        
+        android:textColor="@color/dialogText"
         grid:layout_row="8"
         android:text="@string/chius" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/chiusura3"
         grid:layout_column="2"
-        
+        android:textColor="@color/dialogText"
         grid:layout_row="8"
         android:text="@string/chius" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/chiusura2"
         grid:layout_column="1"
-        
+        android:textColor="@color/dialogText"
         grid:layout_row="8"
         android:text="@string/chius" />
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/pozzetto1"
         grid:layout_column="0"
-        
+        android:textColor="@color/dialogText"
         grid:layout_row="9"
         android:text="@string/pozz" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/pozzetto2"
         grid:layout_column="1"
-        
+        android:textColor="@color/dialogText"
         grid:layout_row="9"
         android:text="@string/pozz" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/pozzetto3"
         grid:layout_column="2"
-        
+        android:textColor="@color/dialogText"
         grid:layout_row="9"
         android:text="@string/pozz" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/rB1"
         android:onClick="setPozzetto1"
         android:text="@string/solo"
-
+        android:textColor="@color/colorSecondary"
         app:buttonTint="@color/colorSecondary"
         grid:layout_column="0"
         grid:layout_row="2" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/rB2"
         android:onClick="setPozzetto2"
         android:text="@string/solo"
-
+        android:textColor="@color/colorSecondary"
         app:buttonTint="@color/colorSecondary"
         grid:layout_column="1"
         grid:layout_row="2" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/rB3"
         android:onClick="setPozzetto3"
         android:text="@string/solo"
-
+        android:textColor="@color/colorSecondary"
         app:buttonTint="@color/colorSecondary"
         grid:layout_column="2"
         grid:layout_row="2" />

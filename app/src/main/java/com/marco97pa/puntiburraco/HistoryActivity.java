@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -82,7 +84,24 @@ public class HistoryActivity extends AppCompatActivity {
                     }
                 });
                 mBottomSheetDialog.show();
-                
+
+                //Setting details
+                Score clicked = scoreList.get(position);
+                WebView webview = (WebView) sheetView.findViewById(R.id.score_details);
+                View separator = (View) sheetView.findViewById(R.id.separator);
+                setWebView(webview, separator, clicked.getDetails());
+
+                //Set BottomSheet to be EXPANDED
+                webview.setWebViewClient(new WebViewClient() {
+                    public void onPageFinished(WebView view, String url) {
+                        FrameLayout bottomSheet = (FrameLayout) mBottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+                        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) bottomSheet.getParent();
+                        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        coordinatorLayout.getParent().requestLayout();
+                    }
+                });
+
                 //OnClickListeners
                 LinearLayout share = (LinearLayout) sheetView.findViewById(R.id.fragment_history_bottom_sheet_edit);
                 LinearLayout delete = (LinearLayout) sheetView.findViewById(R.id.fragment_history_bottom_sheet_delete);
@@ -159,12 +178,32 @@ public class HistoryActivity extends AppCompatActivity {
         if (c.moveToFirst())
         {
             do {
-                score = new Score(c.getLong(0), c.getString(1),c.getString(2),c.getString(3),c.getInt(4), c.getInt(5), c.getInt(6), c.getString(7));
+                score = new Score(c.getLong(0), c.getString(1),c.getString(2),c.getString(3),c.getInt(4), c.getInt(5), c.getInt(6), c.getString(7), c.getString(8));
                 scoreList.add(score);
             } while (c.moveToNext());
         }
         db.close();
 
         mAdapter.notifyDataSetChanged();
+    }
+
+
+    public void setWebView(WebView webview, View separator, String details) {
+        if (details != null){
+            //if the saved score has details available then display them setting the webview
+            //get Actual Theme Colors
+            String bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(this, R.color.dialogBackground)));
+            String txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(this, R.color.dialogText)));
+            //Create header with colors
+            String colors = "<html><body bgcolor=\"" + bgColor + "\" style=\"color: " + txtColor + "\">";
+            String title = "<h3>" + getString(R.string.action_dpp) + "</h3>";
+            //Load webview
+            webview.loadData(colors + title + details, "text/html; charset=UTF-8", null);
+        }
+        else{
+            //if details are not available then hide the webview and its separator (from other actions in the menu)
+            webview.setVisibility(View.GONE);
+            separator.setVisibility(View.GONE);
+        }
     }
 }

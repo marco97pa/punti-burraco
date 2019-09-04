@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import androidx.appcompat.app.AlertDialog;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.Manifest;
@@ -12,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -79,6 +81,7 @@ public class DoubleFragment extends Fragment {
      *      int bp2 = Clean run player 2 = value of BP2 EditText
      */
 
+    private final Boolean google_has_fixed_nightmode_bug = false;
     int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
@@ -105,7 +108,7 @@ public class DoubleFragment extends Fragment {
     public int old_tot1;
     public int old_tot2;
     //colors for alerts
-    String bgColor, txtColor;
+    String bgColor, txtColor, colors;
     boolean bypass = false;
     MediaPlayer sound;
 
@@ -118,8 +121,7 @@ public class DoubleFragment extends Fragment {
      * Set Fragment view and linking code variables with Widgets of the view
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_double, container, false);
 
@@ -147,12 +149,14 @@ public class DoubleFragment extends Fragment {
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
 
+        //get Actual Theme Colors
+        bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(), R.color.dialogBackground)));
+        txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(), R.color.dialogText)));
+        colors = "<html><body bgcolor='"+ bgColor +"' style='color: " + txtColor + "'>";
+
         //Invoking method to recover the state of an interrupted game
         Restore();
 
-        //get Actual Theme Colors
-        bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
-        txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogText)));
 
         //Setting OnclickListeners for each Player TextView
         textNome1.setOnClickListener(new View.OnClickListener() {
@@ -985,7 +989,7 @@ public class DoubleFragment extends Fragment {
 
         ScoreDB db = new ScoreDB(getActivity());
         db.open();
-        long id = db.insertScore(player1, player2, point1, point2, date);
+        long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
         db.close();
     }
 
@@ -1032,7 +1036,7 @@ public class DoubleFragment extends Fragment {
                 BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
                 // Supply data from Hand Details as an argument.
                 Bundle args = new Bundle();
-                args.putString("data", generateHandsDetail());
+                args.putString("data", colors + generateHandsDetail());
                 bottomSheetFragment.setArguments(args);
                 bottomSheetFragment.show(getChildFragmentManager() ,bottomSheetFragment.getTag());
             }
@@ -1042,18 +1046,17 @@ public class DoubleFragment extends Fragment {
     public WebView generateWebView(){
         WebView webview = new WebView(getActivity());
         String data = generateHandsDetail();
-        webview.loadData(data, "text/html; charset=UTF-8", null);
+        webview.loadData(colors + data, "text/html; charset=UTF-8", null);
         return webview;
     }
 
     public String generateHandsDetail(){
         SharedPreferences sharedPref =  getActivity().getPreferences(Context.MODE_PRIVATE);
         String html_inner =sharedPref.getString("dpp", "");
-        String header = "<html><body bgcolor=\""+ bgColor +"\" style=\"color: " + txtColor + "\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
+        String header = "<table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th></tr>";
         String data = header + html_inner + "</table></body></html>";
         return data;
     }
-
 
     /**
      * ON ACTIVITY RESULT

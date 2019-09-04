@@ -40,8 +40,8 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="0" />
 
-            <androidx.appcompat.widget.AppCompatCheckBox
-
+            <CheckBox
+                android:textColor="@color/dialogText"
                 android:id="@+id/pozzetto1"
                 android:text="@string/pozzetto"
                 grid:layout_column="0"
@@ -49,8 +49,8 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="9" />
 
-            <androidx.appcompat.widget.AppCompatCheckBox
-
+            <CheckBox
+                android:textColor="@color/dialogText"
                 android:id="@+id/chiusura1"
                 android:text="@string/chiusura"
                 grid:layout_column="0"
@@ -58,7 +58,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="8" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPM1"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -70,7 +70,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="7" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editP1"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -82,7 +82,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="6" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBS1"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -94,7 +94,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="5" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBI1"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -131,7 +131,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="1" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBP1"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -143,25 +143,25 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="3" />
 
-            <androidx.appcompat.widget.AppCompatCheckBox
+            <CheckBox
                 android:id="@+id/pozzetto2"
                 android:text="@string/pozzetto"
+                android:textColor="@color/dialogText"
                 grid:layout_column="1"
                 grid:layout_columnWeight="1"
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="9" />
 
-            <!--CheckBox-->
-            <!--android:button="@drawable/btn_check"-->
-            <androidx.appcompat.widget.AppCompatCheckBox
+            <CheckBox
                 android:id="@+id/chiusura2"
                 android:text="@string/chiusura"
+                android:textColor="@color/dialogText"
                 grid:layout_column="1"
                 grid:layout_columnWeight="1"
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="8" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPM2"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -173,7 +173,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="7" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editP2"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -185,7 +185,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="6" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBS2"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -197,7 +197,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="5" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBI2"
                 android:width="@dimen/tabella"
                 android:ems="10"
@@ -209,7 +209,7 @@
                 grid:layout_gravity="fill_horizontal"
                 grid:layout_row="4" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBP2"
                 android:width="@dimen/tabella"
                 android:ems="10"

@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private final static int INTERVAL = 1000 * 1 * 5; //5 minutes
     private static final int REQUEST_LOCATION = 100;
+
     public static Context contextOfApplication;
     String CHANNEL_ID = "channel_suspended";
     //action bar settings
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         setAppTheme();
-        /* Boolean isNight = sharedPreferences.getBoolean("night", false);
+         /* Boolean isNight = sharedPreferences.getBoolean("night", false);
         if (isNight) {
             setTheme(R.style.DarkMode);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -253,7 +255,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.array.com_google_android_gms_fonts_certs);
         EmojiCompat.Config config = new FontRequestEmojiCompatConfig(this, fontRequest);
         EmojiCompat.init(config);
-
 
     }
 
@@ -615,6 +616,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         invalidateOptionsMenu();
         //the method above invokes onPrepareOptionsMenu();
     }
+
+
 
     public void setAppTheme() {
         /* SETTING APP THEME
