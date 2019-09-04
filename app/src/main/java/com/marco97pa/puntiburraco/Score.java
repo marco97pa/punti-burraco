@@ -8,11 +8,12 @@ public class Score {
     private String player1, player2, player3, date;
     private int point1, point2, point3;
     private long id;
+    private String details;
 
     public Score() {
     }
 
-    public Score(Long id, String player1, String player2, String player3, int point1, int point2, int point3, String date) {
+    public Score(Long id, String player1, String player2, String player3, int point1, int point2, int point3, String date, String details) {
         this.player1 = player1;
         this.player2 = player2;
         this.player3 = player3;
@@ -21,6 +22,7 @@ public class Score {
         this.point3 = point3;
         this.date = date;
         this.id = id;
+        this.details = details;
     }
 
     public String getPlayer1() {
@@ -46,7 +48,6 @@ public class Score {
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
     }
@@ -76,6 +77,13 @@ public class Score {
     }
     public void setId(long id){
         this.id = id;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+    public void setDetails(String details) {
+        this.details = details;
     }
 
 }

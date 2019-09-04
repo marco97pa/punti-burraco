@@ -35,7 +35,7 @@
     <string name="error01">Impossibile selezionare più caselle</string>
     <string name="error02">Impossibile chiudere con punti in mano</string>
     <string name="error03">Impossibile non arrivare al pozzetto senza punti in mano</string>
-    <string name="action_dpp">Dettaglio punteggi parziali</string>
+    <string name="action_dpp">Dettaglio punteggi</string>
 
     <!-- Settings -->
     <string name="setting_valuta">Valuta l\'app</string>

@@ -75,7 +75,7 @@ public class TripleFragment extends Fragment {
     public int old_tot2;
     public int old_tot3;
 
-    String bgColor, txtColor;
+    String bgColor, txtColor, colors;
     boolean bypass = false;
     Boolean isManoModeActivated;
     Boolean isDirectModeActivated;
@@ -126,6 +126,7 @@ public class TripleFragment extends Fragment {
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
         txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogText)));
+        colors = "<html><body bgcolor='"+ bgColor +"' style='color: " + txtColor + "'>";
 
         /**
          * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
@@ -966,7 +967,7 @@ public class TripleFragment extends Fragment {
 
         ScoreDB db = new ScoreDB(getActivity());
         db.open();
-        long id = db.insertScore(player1, player2, player3, point1, point2, point3, date);
+        long id = db.insertScore(player1, player2, player3, point1, point2, point3, date, generateHandsDetail());
         db.close();
     }
 
@@ -990,7 +991,7 @@ public class TripleFragment extends Fragment {
                 BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
                 // Supply data from Hand Details as an argument.
                 Bundle args = new Bundle();
-                args.putString("data", generateHandsDetail());
+                args.putString("data", colors + generateHandsDetail());
                 bottomSheetFragment.setArguments(args);
                 bottomSheetFragment.show(getChildFragmentManager() ,bottomSheetFragment.getTag());
             }
@@ -1000,14 +1001,14 @@ public class TripleFragment extends Fragment {
     public WebView generateWebView(){
         WebView webview = new WebView(getActivity());
         String data = generateHandsDetail();
-        webview.loadData(data, "text/html; charset=UTF-8", null);
+        webview.loadData(colors + data, "text/html; charset=UTF-8", null);
         return webview;
     }
 
     public String generateHandsDetail(){
         SharedPreferences sharedPref =  getActivity().getPreferences(Context.MODE_PRIVATE);
-        String html_inner =sharedPref.getString("dpp3", "");
-        String header = "<html><body bgcolor=\""+ bgColor +"\" style=\"color: " + txtColor + "\"><table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th><th>" + textNome3.getText().toString() + "</th></tr>";
+        String html_inner = sharedPref.getString("dpp3", "");
+        String header = "<table><tr><th>" + textNome1.getText().toString() + "</th><th>" + textNome2.getText().toString() + "</th><th>" + textNome3.getText().toString() + "</th></tr>";
         String data = header + html_inner + "</table></body></html>";
         return data;
     }

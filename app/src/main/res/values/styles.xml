@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorHint">@color/textColorHint</item>
         <!-- To change the popup menu and app text color  -->
         <item name="android:textColor">@color/dialogText</item>
         <item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>

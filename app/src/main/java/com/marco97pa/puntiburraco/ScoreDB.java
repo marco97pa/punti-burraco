@@ -20,15 +20,17 @@ public class ScoreDB {
     static final String KEY_POINT2 = "point2";
     static final String KEY_POINT3 = "point3";
     static final String KEY_DATE = "date";
+    static final String KEY_DETAILS = "details";
     static final String TAG = "ScoresDB";
     static final String DATABASE_NAME = "ScoreDB";
     static final String DATABASE_TABLE = "results";
-    static final int DATABASE_VERSION = 1;
+    static final int DATABASE_VERSION = 2;
 
     static final String DATABASE_CREATION = "create table results (_id integer primary key autoincrement, "
             + "player1 text not null, player2 text not null, player3 text,"
             + "point1 integer, point2 integer, point3 integer,"
-            + "date text not null);";
+            + "date text not null,"
+            + "details text);";
 
     final Context context;
     DatabaseHelper DBHelper;
@@ -59,8 +61,12 @@ public class ScoreDB {
         }
 
         @Override
-        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            //Patch to apply when upgrading
+            if(oldVersion < 2){
+                //Add Details coloumn when upgrading from DB v1 to v2
+                db.execSQL("alter table " + DATABASE_TABLE + " add column details text");
+            }
         }
     }
 
@@ -89,13 +95,13 @@ public class ScoreDB {
     public Cursor getAllScores()
     {
         // applico il metodo query senza applicare nessuna clausola WHERE
-        return db.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_PLAYER1, KEY_PLAYER2, KEY_PLAYER3, KEY_POINT1, KEY_POINT2, KEY_POINT3, KEY_DATE}, null, null, null, null, KEY_ID + " DESC");
+        return db.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_PLAYER1, KEY_PLAYER2, KEY_PLAYER3, KEY_POINT1, KEY_POINT2, KEY_POINT3, KEY_DATE, KEY_DETAILS}, null, null, null, null, KEY_ID + " DESC");
     }
 
     /*
     Inserimento di un nuovo cliente nella tabella
     */
-    public long insertScore(String player1, String player2, String player3, int point1, int point2, int point3, String date)
+    public long insertScore(String player1, String player2, String player3, int point1, int point2, int point3, String date, String details)
     {
         // creo una mappa di valori
         ContentValues initialValues = new ContentValues();
@@ -106,11 +112,12 @@ public class ScoreDB {
         initialValues.put(KEY_POINT2, point2);
         initialValues.put(KEY_POINT3, point3);
         initialValues.put(KEY_DATE, date);
+        initialValues.put(KEY_DETAILS, details);
         // applico il metodo insert
         return db.insert(DATABASE_TABLE, null, initialValues);
     }
 
-    public long insertScore(String player1, String player2, int point1, int point2, String date)
+    public long insertScore(String player1, String player2, int point1, int point2, String date, String details)
     {
         // creo una mappa di valori
         ContentValues initialValues = new ContentValues();
@@ -121,6 +128,7 @@ public class ScoreDB {
         initialValues.put(KEY_POINT2, point2);
         initialValues.put(KEY_POINT3, -1);
         initialValues.put(KEY_DATE, date);
+        initialValues.put(KEY_DETAILS, details);
         // applico il metodo insert
         return db.insert(DATABASE_TABLE, null, initialValues);
     }
