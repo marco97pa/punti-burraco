@@ -106,6 +106,7 @@
         android:hint="@string/SuggMiniBP"
         android:inputType="number"
         android:width="@dimen/tab"
+        app:backgroundTint="@color/textColorSecondary"
         android:maxLength="4"/>
 
     <com.google.android.material.textfield.TextInputEditText
@@ -118,6 +119,7 @@
         android:hint="@string/SuggMiniBP"
         android:inputType="number"
         android:width="@dimen/tab"
+        app:backgroundTint="@color/textColorSecondary"
         android:maxLength="4"/>
 
     <com.google.android.material.textfield.TextInputEditText
@@ -130,6 +132,7 @@
         android:hint="@string/SuggMiniBP"
         android:inputType="number"
         android:width="@dimen/tab"
+        app:backgroundTint="@color/textColorSecondary"
         android:maxLength="4"/>
 
     <com.google.android.material.textfield.TextInputEditText
@@ -142,6 +145,7 @@
         android:hint="@string/SuggMiniBI"
         android:inputType="number"
         android:width="@dimen/tab"
+        app:backgroundTint="@color/textColorSecondary"
         android:maxLength="4"/>
 
     <com.google.android.material.textfield.TextInputEditText
@@ -154,6 +158,7 @@
         android:hint="@string/SuggMiniBI"
         android:inputType="number"
         android:width="@dimen/tab"
+        app:backgroundTint="@color/textColorSecondary"
         android:maxLength="4"/>
 
     <com.google.android.material.textfield.TextInputEditText
@@ -166,6 +171,7 @@
         android:hint="@string/SuggMiniBI"
         android:inputType="number"
         android:width="@dimen/tab"
+        app:backgroundTint="@color/textColorSecondary"
         android:maxLength="4"/>
      <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editBS1"
@@ -177,6 +183,7 @@
         android:hint="@string/SuggMiniBS"
         android:inputType="number"
         android:width="@dimen/tab"
+        app:backgroundTint="@color/textColorSecondary"
          android:maxLength="4" />
 
     <com.google.android.material.textfield.TextInputEditText
@@ -200,6 +207,7 @@
         android:hint="@string/SuggMiniBS"
         android:inputType="number"
         android:width="@dimen/tab"
+        app:backgroundTint="@color/textColorSecondary"
         android:maxLength="4"/>
 
     <com.google.android.material.textfield.TextInputEditText
@@ -212,6 +220,7 @@
         grid:layout_column="0"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
+        app:backgroundTint="@color/textColorSecondary"
         grid:layout_row="6" />
 
     <com.google.android.material.textfield.TextInputEditText
@@ -221,6 +230,7 @@
         android:hint="@string/SuggP"
         android:inputType="number|numberSigned"
         android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
         grid:layout_column="1"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
@@ -233,6 +243,7 @@
         android:hint="@string/SuggP"
         android:inputType="number|numberSigned"
         android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
         grid:layout_column="2"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
@@ -244,6 +255,7 @@
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
         grid:layout_row="7"
+        app:backgroundTint="@color/textColorSecondary"
         android:ems="10"
         android:hint="@string/SuggPM"
         android:inputType="number"
@@ -257,6 +269,7 @@
         grid:layout_gravity="fill_horizontal"
         grid:layout_row="7"
         android:ems="10"
+        app:backgroundTint="@color/textColorSecondary"
         android:hint="@string/SuggPM"
         android:inputType="number"
         android:width="@dimen/tab"
@@ -269,6 +282,7 @@
         grid:layout_gravity="fill_horizontal"
         grid:layout_row="7"
         android:ems="10"
+        app:backgroundTint="@color/textColorSecondary"
         android:hint="@string/SuggPM"
         android:inputType="number"
         android:width="@dimen/tab"
