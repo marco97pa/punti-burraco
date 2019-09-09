@@ -1,3 +1,12 @@
+## 11.0.0
+* New Material Components UI
+* New dark theme
+* Automatic switch theme (day/night) based on time and location
+* Improved History: now saves and shows hands detail of each game
+* Improved Share as Story experience
+* Android 10 support
+* Bug fixes and performance improvements
+
 ### 10.9.1
 * Improved tablet view
 * Performance improvements

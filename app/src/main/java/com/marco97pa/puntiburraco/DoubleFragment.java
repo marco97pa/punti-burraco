@@ -28,6 +28,7 @@ import android.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -588,223 +589,220 @@ public class DoubleFragment extends Fragment {
      * No Pots = -100 points
      */
     public void openStart(){
-        //Checks if there are errors in user input
-        boolean ciSonoErrori = checkErrors();
-        //If there aren't errors, we can start
-        if(ciSonoErrori == false){
+        try {
+            //Checks if there are errors in user input
+            boolean ciSonoErrori = checkErrors();
+            //If there aren't errors, we can start
+            if (ciSonoErrori == false) {
 
-            //Getting values from user. If some fields are empty (aka ""), then they will be considered zero
-            if(BP1.getText().toString().matches("")){
-                bp1=0;
-            }
-            else{
-                bp1 = Integer.parseInt(BP1.getText().toString());
-            }
-            if(BI1.getText().toString().matches("")){
-                bi1=0;
-            }
-            else{
-                bi1 = Integer.parseInt(BI1.getText().toString());
-            }
-            if(BS1.getText().toString().matches("")){
-                bs1=0;
-            }
-            else{
-                bs1 = Integer.parseInt(BS1.getText().toString());
-            }
-            if(PN1.getText().toString().matches("")){
-                pn1=0;
-            }
-            else{
-                pn1 = Integer.parseInt(PN1.getText().toString());
-            }
-            if(PM1.getText().toString().matches("")){
-                pm1=0;
-            }
-            else{
-                pm1 = Integer.parseInt(PM1.getText().toString());
-            }
-
-            //Backing up old totals, so we can revert changes if user makes a mistake
-            old_tot1 = tot1;
-            old_tot2 = tot2;
-
-            //Calculating new total
-            tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1)-pm1);
-
-            //Adding Closing points
-            if (CH1.isChecked()) {
-                tot1=tot1+100;
-            }
-            //Subtract No Pots points
-            if (PZ1.isChecked()) {
-                tot1=tot1-100;
-            }
-
-            //Set the new score to the TextView
-            punti1.setText(Integer.toString(tot1));
-
-            /**
-             * SAME THING FOR SECOND PLAYER
-             * I don't provide comments again, just scroll :D
-             */
-
-            if(BP2.getText().toString().matches("")){
-                bp2=0;
-            }
-            else{
-                bp2 = Integer.parseInt(BP2.getText().toString());
-            }
-            if(BI2.getText().toString().matches("")){
-                bi2=0;
-            }
-            else{
-                bi2 = Integer.parseInt(BI2.getText().toString());
-            }
-            if(BS2.getText().toString().matches("")){
-                bs2=0;
-            }
-            else{
-                bs2 = Integer.parseInt(BS2.getText().toString());
-            }
-            if(PN2.getText().toString().matches("")){
-                pn2=0;
-            }
-            else{
-                pn2 = Integer.parseInt(PN2.getText().toString());
-            }
-            if(PM2.getText().toString().matches("")){
-                pm2=0;
-            }
-            else{
-                pm2 = Integer.parseInt(PM2.getText().toString());
-            }
-
-            //Calculating total
-            tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2)-pm2);
-
-            if (CH2.isChecked()) {
-                tot2=tot2+100;
-            }
-            if (PZ2.isChecked()) {
-                tot2=tot2-100;
-            }
-            //Set the new score to the TextView
-            punti2.setText(Integer.toString(tot2));
-
-
-            //Generates the ddp string (Hands detail string).
-            //It is a simple html table of the scores, written in a string
-            //This will be shown when the user opens the Hand details dialog
-            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-            String html=sharedPref.getString("dpp", "");
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("dpp",html+"<tr><td>"+tot1+"</td><td>"+tot2+"</td></tr>");
-            editor.commit();
-
-            //reset the interface widget (polish EditText and uncheck checkboxes)
-            BP1.setText("");
-            BI1.setText("");
-            BS1.setText("");
-            PN1.setText("");
-            PM1.setText("");
-            BP2.setText("");
-            BI2.setText("");
-            BS2.setText("");
-            PN2.setText("");
-            PM2.setText("");
-            CH1.setChecked(false);
-            CH2.setChecked(false);
-            PZ1.setChecked(false);
-            PZ2.setChecked(false);
-
-            //SnackBar to alert user about the new score
-            Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_LONG)
-                    .setAction(getString(R.string.ko), new annullaPunti())  // action text on the right side to revert changes
-                    .setDuration(10000).show();
-
-
-            /**
-             * CHECK IF A PLAYER HAS WIN
-             * If one of the two players overtakes 2005 points, it will be the winner
-             *
-             * int limite = closing points, when the game ends, set by the user (default: 2005)
-             * String winText = "wins"
-             * String out = String to display if someone wins. It will be "PlayerName wins"
-             * String points = Another string to display if someone wins. It will contain the final score
-             */
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            int limite = Integer.parseInt(sharedPreferences.getString("limite", "2005"));
-            String winText = getString(R.string.win);
-            String points="";
-            if(tot1 > tot2){
-                if(tot1 >= limite){
-                    win = true;
-                    winner = textNome1.getText().toString();
-                    loser = textNome2.getText().toString();
-                    //save score to DB
-                    saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
-                    //make alert
-                    MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
-                    String out = textNome1.getText().toString();
-                    out = out +" ";
-                    out = out.concat(winText);
-                    builder.setTitle(out);
-                    points=punti1.getText().toString();
-                    points=points.concat(" - ");
-                    points=points.concat(punti2.getText().toString());
-                    //Play sound
-                    Boolean soundActive = sharedPreferences.getBoolean("sound", true) ;
-                    if(soundActive) {
-                        sound.start();
-                    }
-                    //If player1 wins, a dialog will be displayed
-                    WebView webview = generateWebView();
-                    builder.setView(webview);
-                    builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog dialog=builder.create();
-                    dialog.show();
+                //Getting values from user. If some fields are empty (aka ""), then they will be considered zero
+                if (BP1.getText().toString().matches("")) {
+                    bp1 = 0;
+                } else {
+                    bp1 = Integer.parseInt(BP1.getText().toString());
                 }
-            }
-            else{
-                if(tot2 >= limite){
-                    win = true;
-                    winner = textNome2.getText().toString();
-                    loser = textNome1.getText().toString();
-                    //save score to DB
-                    saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
-                    //make alert
-                    MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
-                    String out=textNome2.getText().toString();
-                    out = out +" ";
-                    out=out.concat(winText);
-                    builder.setTitle(out);
-                    points=punti1.getText().toString();
-                    points=points.concat(" - ");
-                    points=points.concat(punti2.getText().toString());
-                    //Play sound
-                    Boolean soundActive = sharedPreferences.getBoolean("sound", true) ;
-                    if(soundActive) {
-                        sound.start();
-                    }
-                    //If player1 wins, a dialog will be displayed
-                    WebView webview = generateWebView();
-                    builder.setView(webview);
-                    builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog dialog=builder.create();
-                    dialog.show();
+                if (BI1.getText().toString().matches("")) {
+                    bi1 = 0;
+                } else {
+                    bi1 = Integer.parseInt(BI1.getText().toString());
                 }
+                if (BS1.getText().toString().matches("")) {
+                    bs1 = 0;
+                } else {
+                    bs1 = Integer.parseInt(BS1.getText().toString());
+                }
+                if (PN1.getText().toString().matches("")) {
+                    pn1 = 0;
+                } else {
+                    pn1 = Integer.parseInt(PN1.getText().toString());
+                }
+                if (PM1.getText().toString().matches("")) {
+                    pm1 = 0;
+                } else {
+                    pm1 = Integer.parseInt(PM1.getText().toString());
+                }
+
+                //Backing up old totals, so we can revert changes if user makes a mistake
+                old_tot1 = tot1;
+                old_tot2 = tot2;
+
+                //Calculating new total
+                tot1 = tot1 + (((bp1 * 200) + (bi1 * 100) + (bs1 * 150) + pn1) - pm1);
+
+                //Adding Closing points
+                if (CH1.isChecked()) {
+                    tot1 = tot1 + 100;
+                }
+                //Subtract No Pots points
+                if (PZ1.isChecked()) {
+                    tot1 = tot1 - 100;
+                }
+
+                //Set the new score to the TextView
+                punti1.setText(Integer.toString(tot1));
+
+                /**
+                 * SAME THING FOR SECOND PLAYER
+                 * I don't provide comments again, just scroll :D
+                 */
+
+                if (BP2.getText().toString().matches("")) {
+                    bp2 = 0;
+                } else {
+                    bp2 = Integer.parseInt(BP2.getText().toString());
+                }
+                if (BI2.getText().toString().matches("")) {
+                    bi2 = 0;
+                } else {
+                    bi2 = Integer.parseInt(BI2.getText().toString());
+                }
+                if (BS2.getText().toString().matches("")) {
+                    bs2 = 0;
+                } else {
+                    bs2 = Integer.parseInt(BS2.getText().toString());
+                }
+                if (PN2.getText().toString().matches("")) {
+                    pn2 = 0;
+                } else {
+                    pn2 = Integer.parseInt(PN2.getText().toString());
+                }
+                if (PM2.getText().toString().matches("")) {
+                    pm2 = 0;
+                } else {
+                    pm2 = Integer.parseInt(PM2.getText().toString());
+                }
+
+                //Calculating total
+                tot2 = tot2 + (((bp2 * 200) + (bi2 * 100) + (bs2 * 150) + pn2) - pm2);
+
+                if (CH2.isChecked()) {
+                    tot2 = tot2 + 100;
+                }
+                if (PZ2.isChecked()) {
+                    tot2 = tot2 - 100;
+                }
+                //Set the new score to the TextView
+                punti2.setText(Integer.toString(tot2));
+
+
+                //Generates the ddp string (Hands detail string).
+                //It is a simple html table of the scores, written in a string
+                //This will be shown when the user opens the Hand details dialog
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                String html = sharedPref.getString("dpp", "");
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("dpp", html + "<tr><td>" + tot1 + "</td><td>" + tot2 + "</td></tr>");
+                editor.commit();
+
+                //reset the interface widget (polish EditText and uncheck checkboxes)
+                BP1.setText("");
+                BI1.setText("");
+                BS1.setText("");
+                PN1.setText("");
+                PM1.setText("");
+                BP2.setText("");
+                BI2.setText("");
+                BS2.setText("");
+                PN2.setText("");
+                PM2.setText("");
+                CH1.setChecked(false);
+                CH2.setChecked(false);
+                PZ1.setChecked(false);
+                PZ2.setChecked(false);
+
+                //SnackBar to alert user about the new score
+                Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.ko), new annullaPunti())  // action text on the right side to revert changes
+                        .setDuration(10000).show();
+
+
+                /**
+                 * CHECK IF A PLAYER HAS WIN
+                 * If one of the two players overtakes 2005 points, it will be the winner
+                 *
+                 * int limite = closing points, when the game ends, set by the user (default: 2005)
+                 * String winText = "wins"
+                 * String out = String to display if someone wins. It will be "PlayerName wins"
+                 * String points = Another string to display if someone wins. It will contain the final score
+                 */
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                int limite = Integer.parseInt(sharedPreferences.getString("limite", "2005"));
+                String winText = getString(R.string.win);
+                String points = "";
+                if (tot1 > tot2) {
+                    if (tot1 >= limite) {
+                        win = true;
+                        winner = textNome1.getText().toString();
+                        loser = textNome2.getText().toString();
+                        //save score to DB
+                        saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                        //make alert
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+                        String out = textNome1.getText().toString();
+                        out = out + " ";
+                        out = out.concat(winText);
+                        builder.setTitle(out);
+                        points = punti1.getText().toString();
+                        points = points.concat(" - ");
+                        points = points.concat(punti2.getText().toString());
+                        //Play sound
+                        Boolean soundActive = sharedPreferences.getBoolean("sound", true);
+                        if (soundActive) {
+                            sound.start();
+                        }
+                        //If player1 wins, a dialog will be displayed
+                        WebView webview = generateWebView();
+                        builder.setView(webview);
+                        builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                } else {
+                    if (tot2 >= limite) {
+                        win = true;
+                        winner = textNome2.getText().toString();
+                        loser = textNome1.getText().toString();
+                        //save score to DB
+                        saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                        //make alert
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+                        String out = textNome2.getText().toString();
+                        out = out + " ";
+                        out = out.concat(winText);
+                        builder.setTitle(out);
+                        points = punti1.getText().toString();
+                        points = points.concat(" - ");
+                        points = points.concat(punti2.getText().toString());
+                        //Play sound
+                        Boolean soundActive = sharedPreferences.getBoolean("sound", true);
+                        if (soundActive) {
+                            sound.start();
+                        }
+                        //If player1 wins, a dialog will be displayed
+                        WebView webview = generateWebView();
+                        builder.setView(webview);
+                        builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                }
+                //save the new score
+                onSave();
             }
-            //save the new score
-            onSave();
+        }
+        catch (NullPointerException e){
+            Snackbar.make(getView(),getString(R.string.error00), BaseTransientBottomBar.LENGTH_LONG).show();
+        }
+        catch (NumberFormatException e){
+            Snackbar.make(getView(),getString(R.string.error04), BaseTransientBottomBar.LENGTH_LONG).show();
         }
     }
 
@@ -1046,7 +1044,7 @@ public class DoubleFragment extends Fragment {
     public WebView generateWebView(){
         WebView webview = new WebView(getActivity());
         String data = generateHandsDetail();
-        webview.loadData(colors + data, "text/html; charset=UTF-8", null);
+        webview.loadDataWithBaseURL(null, colors + data, "text/html; charset=UTF-8", null, null);
         return webview;
     }
 

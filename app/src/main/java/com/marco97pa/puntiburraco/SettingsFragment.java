@@ -286,9 +286,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
          */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions( new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
-                }
-            else {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+            } else {
                 fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
@@ -310,6 +309,28 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                             }
                         });
             }
+        }
+        else{
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Extract latitude and longitude
+                                double longitude = location.getLongitude();
+                                double latitude = location.getLatitude();
+                                if (SunriseSunset.isDay(latitude, longitude)) {
+                                    //is DAY, so set the theme accordingly
+                                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                                } else {
+                                    //is NIGHT, so set the theme accordingly
+                                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                                }
+                            }
+                        }
+                    });
         }
     }
 

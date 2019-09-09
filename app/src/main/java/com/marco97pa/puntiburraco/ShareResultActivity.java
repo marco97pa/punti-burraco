@@ -206,7 +206,7 @@ private ExtendedFloatingActionButton fab;
         Intent intent = new Intent("com.facebook.stories.ADD_TO_STORY");
         intent.setDataAndType(backgroundAssetUri, "image/jpeg");
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra("https://punti-burraco.firebaseapp.com/", attributionLinkUrl);
+        intent.putExtra("content_url", attributionLinkUrl);
 
         // Instantiate activity and verify it will resolve implicit intent
         Activity activity = this;
@@ -217,6 +217,7 @@ private ExtendedFloatingActionButton fab;
             //Show alert if app is not installed
             Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), "Facebook"), Toast.LENGTH_LONG);
             toast.show();
+            finish();
         }
     }
 
@@ -230,7 +231,7 @@ private ExtendedFloatingActionButton fab;
         Intent intent = new Intent("com.instagram.share.ADD_TO_STORY");
         intent.setDataAndType(backgroundAssetUri, "image/jpeg");
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra("https://punti-burraco.firebaseapp.com/", attributionLinkUrl);
+        intent.putExtra("content_url", attributionLinkUrl);
 
         // Instantiate activity and verify it will resolve implicit intent
         Activity activity = this;
@@ -241,6 +242,7 @@ private ExtendedFloatingActionButton fab;
             //Show alert if app is not installed
             Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), "Instagram"), Toast.LENGTH_LONG);
             toast.show();
+            finish();
         }
     }
 

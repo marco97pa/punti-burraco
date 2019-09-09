@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -518,6 +519,7 @@ public class QuadFragment extends Fragment {
     }
     //AVVIA CALCOLO PUNTI
     public void openStart(){
+        try{
         boolean ciSonoErrori=checkErrors();
         if(ciSonoErrori==false){
             if(BP1.getText().toString().matches("")){bp1=0;}
@@ -657,6 +659,13 @@ public class QuadFragment extends Fragment {
             onSave();
             //salvataggiSeVince
 
+        }
+        }
+        catch (NullPointerException e){
+            Snackbar.make(getView(),getString(R.string.error00), BaseTransientBottomBar.LENGTH_LONG).show();
+        }
+        catch (NumberFormatException e){
+            Snackbar.make(getView(),getString(R.string.error04), BaseTransientBottomBar.LENGTH_LONG).show();
         }
     }
 
@@ -860,7 +869,7 @@ public class QuadFragment extends Fragment {
     public WebView generateWebView(){
         WebView webview = new WebView(getActivity());
         String data = generateHandsDetail();
-        webview.loadData(colors + data, "text/html; charset=UTF-8", null);
+        webview.loadDataWithBaseURL(null,colors + data, "text/html; charset=UTF-8", null, null);
         return webview;
     }
 

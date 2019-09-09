@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    private final static int INTERVAL = 1000 * 1 * 5; //5 minutes
+    private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
     private static final int REQUEST_LOCATION = 100;
 
     public static Context contextOfApplication;
@@ -533,7 +533,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.i("language", "EN");
                 }
                 //Set theme (adds a parameter that a javascript script on the webpage can detect)
-                if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+                int nightModeflag = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                if(nightModeflag == Configuration.UI_MODE_NIGHT_YES){
                     URLtoLaunch = URLtoLaunch+"?dark";
                 }
                 //Launch custom tabs
@@ -684,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 runnableCode = new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "RUNNING...", Toast.LENGTH_SHORT).show();
+                        Log.d("runnableDayNight","is running...");
                         if (SunriseSunset.isDay(latitude, longitude)) {
                             if (!sharedPreferences.getBoolean("lastCheckWasDay", true)) {
                                 //is DAY, so set the theme accordingly

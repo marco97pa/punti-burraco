@@ -35,6 +35,8 @@
     <string name="error01">You can\'t select more than one checkbox</string>
     <string name="error02">You can\'t close the game with cards in your hand</string>
     <string name="error03">You must have points in your hand to take the pots</string>
+    <string name="error04">You inserted non-number values</string>
+    <string name="error00">Generic error</string>
     <string name="action_dpp">Hands detail</string>
 
     <!-- Settings -->

@@ -50,7 +50,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         webview = (WebView) view.findViewById(R.id.web);
         WebSettings settings = webview.getSettings();
         settings.setTextZoom(120);
-        webview.loadData(data, "text/html; charset=UTF-8", null);
+        webview.loadDataWithBaseURL(null, data, "text/html; charset=UTF-8", null,null);
         return view;
     }
 
