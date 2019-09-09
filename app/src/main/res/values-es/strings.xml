@@ -108,6 +108,8 @@
     <string name="change_background_hint">Toque para cambiar el fondo</string>
     <string name="app_not_installed">%1$s no instalado. Instálalo y podrás compartir tus resultados</string>
     <string name="error_location">¡Revocaste el permiso de ubicación!\nTema de la aplicación configurado en Claro</string>
+    <string name="error04">Error</string>
+    <string name="error00">Error</string>
 
 
 </resources>

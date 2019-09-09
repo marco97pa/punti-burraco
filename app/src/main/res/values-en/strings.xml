@@ -95,4 +95,6 @@
     <string name="channel_description">If you leave the app without ending the game, you will receive a notification to continue the game</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
     <string name="error_location">You revoked Location permission!\nApp theme set to Light</string>
+    <string name="error04">You inserted non-number values</string>
+    <string name="error00">Generic error</string>
 </resources>

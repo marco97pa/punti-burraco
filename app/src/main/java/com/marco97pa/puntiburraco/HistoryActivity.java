@@ -198,7 +198,7 @@ public class HistoryActivity extends AppCompatActivity {
             String colors = "<html><body bgcolor=\"" + bgColor + "\" style=\"color: " + txtColor + "\">";
             String title = "<h3>" + getString(R.string.action_dpp) + "</h3>";
             //Load webview
-            webview.loadData(colors + title + details, "text/html; charset=UTF-8", null);
+            webview.loadDataWithBaseURL(null,colors + title + details, "text/html; charset=UTF-8", null, null);
         }
         else{
             //if details are not available then hide the webview and its separator (from other actions in the menu)
