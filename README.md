@@ -47,11 +47,12 @@ For more information, visit the full [**Changelog**](docs/CHANGELOG.md)
 
 # Specs / Open-source libraries:
 
-- Minimum **SDK 15**
+- Minimum **SDK 16**
 - [**uCrop**](https://github.com/Yalantis/uCrop) for cropping profile images
-- **Firebase** analytics, crash reporting, ads
+- **Firebase** performance, crash reporting
 - **Android X**, the almighty ;)
 - **Android Custom Tabs**, to show the user Guide
+- [**SunriseSunset**](https://github.com/caarmen/SunriseSunset), to get actual sun position and set the app theme accordingly (day/night)
 
 # Contribution
 
