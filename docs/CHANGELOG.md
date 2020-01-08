@@ -1,3 +1,7 @@
+### 11.0.1
+* Bug fixes on Android 10
+* Improved app update process
+
 ## 11.0.0
 * New Material Components UI
 * New dark theme
