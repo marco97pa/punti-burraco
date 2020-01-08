@@ -114,15 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         setAppTheme();
-         /* Boolean isNight = sharedPreferences.getBoolean("night", false);
-        if (isNight) {
-            setTheme(R.style.DarkMode);
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.barBlack));
-            }
-        } else {
-            setTheme(R.style.AppTheme_NoActionBar);
-        }*/
+        isAppUpgraded();
 
         isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
 
@@ -618,6 +610,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //the method above invokes onPrepareOptionsMenu();
     }
 
+    /**
+     * Checks if app has been updated to do things like upgrade databases or show a message to the user
+     * <p>It checks if <b>Build VERSION_CODE</b> differs from last runtime and saves it</p>
+     */
+    public void isAppUpgraded(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        int actualVersion = BuildConfig.VERSION_CODE;
+        int lastVersion = sharedPreferences.getInt("last_version", 0);
+        if(actualVersion != lastVersion){
+            //App has been updated, do something like upgrade or show a message to user
+            switch (actualVersion){
+                case 5040:
+                    break;
+            }
+        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("last_version", actualVersion);
+        editor.commit();
+    }
 
 
     public void setAppTheme() {
