@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,6 +23,8 @@ import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
@@ -66,10 +69,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.Locale;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-import static androidx.appcompat.app.AppCompatDelegate.getDefaultNightMode;
-
 
 /**
  * MAIN ACTIVITY
@@ -86,9 +85,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
-
-    private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
-    private static final int REQUEST_LOCATION = 100;
 
     public static Context contextOfApplication;
     String CHANNEL_ID = "channel_suspended";
@@ -392,10 +388,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume(){
         super.onResume();
-        //restart theme handler
-        if(mHandler!=null){
-            mHandler.postDelayed(runnableCode, INTERVAL);
-        }
         //Check if there was a setting change
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean settingsChanged = sharedPreferences.getBoolean("setChange", false) ;
@@ -483,9 +475,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_guide) {
             //Check if the device is connected
-            ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            boolean isConnected = checkConnectivity(this);
 
             if(isConnected) {
                 //I am using CustomTabs
@@ -646,100 +636,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case "system":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 break;
-            case "auto":
-                setAppThemeAuto();
-                break;
             default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                }
+                else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
                 break;
         }
     }
 
+    @SuppressLint("MissingPermission") //Lint asks for a ACCESS_NETWORK_STATE PERMISSION that is already in the Manifest
+    public static boolean checkConnectivity(Context mContext) {
+        if (mContext == null) return false;
 
-    public void setAppThemeAuto(){
-        /* SETTING APP THEME AUTOMATICALLY
-         * Here I set the app theme according to the current sun position
-         * Based on time and location, I can determine if the sun is up.
-         */
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+        ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                final Network network = connectivityManager.getActiveNetwork();
+                if (network != null) {
+                    final NetworkCapabilities nc = connectivityManager.getNetworkCapabilities(network);
+
+                    return (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                            nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            nc.hasTransport((NetworkCapabilities.TRANSPORT_ETHERNET)));
+                }
             } else {
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-                fusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                // Got last known location. In some rare situations this can be null.
-                                if (location != null) {
-                                    // Extract latitude and longitude
-                                    longitude = location.getLongitude();
-                                    latitude = location.getLatitude();
-                                    if (SunriseSunset.isDay(latitude, longitude)) {
-                                        //is DAY, so set the theme accordingly
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putBoolean("lastCheckWasDay", true);
-                                        editor.commit();
-                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                                    } else {
-                                        //is NIGHT, so set the theme accordingly
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putBoolean("lastCheckWasDay", false);
-                                        editor.commit();
-                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                                    }
-                                }
-                            }
-                        });
-
-                mHandler = new Handler();
-
-                runnableCode = new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("runnableDayNight","is running...");
-                        if (SunriseSunset.isDay(latitude, longitude)) {
-                            if (!sharedPreferences.getBoolean("lastCheckWasDay", true)) {
-                                //is DAY, so set the theme accordingly
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean("lastCheckWasDay", true);
-                                editor.commit();
-                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                            }
-                        } else {
-                            if (sharedPreferences.getBoolean("lastCheckWasDay", true)) {
-                                //is NIGHT, so set the theme accordingly
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean("lastCheckWasDay", false);
-                                editor.commit();
-                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                            }
-                        }
-                        //Repeat this after an interval
-                        mHandler.postDelayed(this, INTERVAL);
+                NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+                for (NetworkInfo tempNetworkInfo : networkInfos) {
+                    if (tempNetworkInfo.isConnected()) {
+                        return true;
                     }
-                };
-
-            }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);;
-        switch (requestCode) {
-            case REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setAppThemeAuto();
-                } else {
-                    // permission denied, boo!
-                    Toast.makeText(this,getString(R.string.error_location),Toast.LENGTH_LONG).show();
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("theme", "light");
-                    editor.commit();
                 }
             }
         }
+        return false;
     }
+
 }

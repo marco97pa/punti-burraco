@@ -11,7 +11,6 @@
     <string-array name="theme_entries">
         <item>Light</item>
         <item>Dark</item>
-        <item>Auto (based on time and location)</item>
         <item>Follow system setting</item>
     </string-array>
 </resources>

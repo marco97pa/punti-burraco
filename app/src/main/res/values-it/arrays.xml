@@ -11,7 +11,6 @@
     <string-array name="theme_entries">
         <item>Chiaro</item>
         <item>Scuro</item>
-        <item>Automatico (basato su orario e posizione)</item>
         <item>Segui le impostazioni di sistema</item>
     </string-array>
 </resources>

@@ -11,7 +11,6 @@
     <string-array name="theme_entries">
         <item> Luz </item>
         <item> Escuro </item>
-        <item> Automático (com base na hora e no local) </item>
         <item> Siga as configurações do sistema </item>
     </string-array>
 </resources>

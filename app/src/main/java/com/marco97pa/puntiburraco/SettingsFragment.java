@@ -49,8 +49,6 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final int REQUEST_LOCATION = 100;
-    private FusedLocationProviderClient fusedLocationClient;
     int taps = 0;
 
     @Override
@@ -183,11 +181,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         ArrayList<String> theme_entries = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.theme_entries)));
         if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             //remove follow-system-theme option on <= Android P
-            theme_values.remove(3);
-            theme_entries.remove(3);
-        }
-        if (!isPlayServicesAvailable()){
-            //remove auto option on device without Google Play APIs available
             theme_values.remove(2);
             theme_entries.remove(2);
         }
@@ -198,8 +191,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         switch (sp.getString("theme", "light")){
             case "light": summ = theme[0]; break;
             case "dark": summ = theme[1]; break;
-            case "auto": summ = theme[2]; break;
-            case "system": summ = theme[3]; break;
+            case "system": summ = theme[2]; break;
             default: summ = theme[0]; break;
         }
         ListPrefTheme.setSummary(summ);
@@ -269,102 +261,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "system":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 break;
-            case "auto":
-                setAppThemeAuto();
-                break;
             default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-        }
-    }
-
-
-    public void setAppThemeAuto(){
-        /* SETTING APP THEME AUTOMATICALLY
-         * Here I set the app theme according to the current sun position
-         * Based on time and location, I can determine if the sun is up.
-         */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
-            } else {
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-                fusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                // Got last known location. In some rare situations this can be null.
-                                if (location != null) {
-                                    // Extract latitude and longitude
-                                    double longitude = location.getLongitude();
-                                    double latitude = location.getLatitude();
-                                    if (SunriseSunset.isDay(latitude, longitude)) {
-                                        //is DAY, so set the theme accordingly
-                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                                    } else {
-                                        //is NIGHT, so set the theme accordingly
-                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                                    }
-                                }
-                            }
-                        });
-            }
-        }
-        else{
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                // Extract latitude and longitude
-                                double longitude = location.getLongitude();
-                                double latitude = location.getLatitude();
-                                if (SunriseSunset.isDay(latitude, longitude)) {
-                                    //is DAY, so set the theme accordingly
-                                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                                } else {
-                                    //is NIGHT, so set the theme accordingly
-                                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                                }
-                            }
-                        }
-                    });
-        }
-    }
-
-    protected Boolean isPlayServicesAvailable() {
-        int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity());
-
-        if (resultCode == ConnectionResult.SUCCESS){
-            return true;
-        } else {
-            GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), resultCode, 1).show();
-            return false;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setAppThemeAuto();
-                } else {
-                    // permission denied, boo!
-                    Toast.makeText(getActivity(),getString(R.string.error_location),Toast.LENGTH_LONG).show();
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("theme", "light");
-                    editor.commit();
-                    ListPreference ListPrefTheme = (ListPreference) findPreference("theme");
-                    String theme[] = getResources().getStringArray(R.array.theme_entries);
-                    ListPrefTheme.setSummary(theme[0]);
+                if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 }
-            }
+                else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+                break;
         }
     }
 
