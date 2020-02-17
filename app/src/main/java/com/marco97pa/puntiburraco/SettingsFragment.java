@@ -1,41 +1,29 @@
 package com.marco97pa.puntiburraco;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 import android.provider.Settings;
 
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import ca.rmen.sunrisesunset.SunriseSunset;
+import androidx.preference.PreferenceFragmentCompat;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
@@ -47,14 +35,12 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
  * @author Marco Fantauzzo
  */
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     int taps = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onCreatePreferences(Bundle savedInstanceState, String s) {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
@@ -115,20 +101,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             }
         });
 
-        //Sets intent to redirect user to App Settings in Android
-        Preference advanced_p = findPreference("advanced");
-        advanced_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-            public boolean onPreferenceClick(Preference preference) {
-                final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
-                //redirect user to app Settings
-                Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                i.addCategory(Intent.CATEGORY_DEFAULT);
-                i.setData(Uri.parse("package:" + appPackageName));
-                startActivity(i);
-                return true;
-            }
-        });
+        //Show/hide developer options
+        Preference developer = findPreference("developer");
+        if(BuildConfig.DEBUG){
+            developer.setVisible(true);
+        }
+        else {
+            developer.setVisible(false);
+        }
 
         //Sets intent to redirect user to App Notification in Android Oreo
         PreferenceCategory pCategory = (PreferenceCategory) findPreference("interface_settings");

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.Preference
+        android:title="@string/setting_advanced"
+        android:summary="@string/setting_advanced_d"
+        android:key="advanced">
+    </androidx.preference.Preference>
+
+    <androidx.preference.SwitchPreference
+        android:defaultValue="true"
+        android:key="ads"
+        android:summary="@string/setting_ads_d"
+        android:title="@string/setting_ads"
+        />
+
+</androidx.preference.PreferenceScreen>

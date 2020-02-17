@@ -34,9 +34,6 @@ import android.preference.PreferenceManager;
 
 import androidx.browser.customtabs.CustomTabsIntent;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -57,7 +54,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.emoji.text.FontRequestEmojiCompatConfig;
-import ca.rmen.sunrisesunset.SunriseSunset;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -92,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Boolean ddp_visibility = true;
     Boolean newgame_show = false;
     double latitude, longitude;
-    private FusedLocationProviderClient fusedLocationClient;
     private boolean isDrawerFixed;
     SharedPreferences sharedPreferences;
     Handler mHandler;

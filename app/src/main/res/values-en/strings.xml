@@ -64,8 +64,8 @@
     <string name="nav_4gioc">4 Players</string>
     <string name="nav_title_alt">Other</string>
     <string name="nav_title_mod">Mode</string>
-    <string name="setting_advanced">Advanced options</string>
-    <string name="setting_advanced_d">Set up advanced app options</string>
+    <string name="setting_advanced">Delete cache or data</string>
+    <string name="setting_advanced_d">Go to advanced app options</string>
     <string name="marshmallow_alert_2">Permission denied to publish your score</string>
     <string name="setting_img">Show images</string>
     <string name="setting_img_d">Enables the images in 2 and 4 players mode</string>

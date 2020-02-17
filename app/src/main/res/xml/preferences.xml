@@ -1,49 +1,50 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_pro" android:key="interface_settings">
 
-            <SwitchPreference
+            <androidx.preference.SwitchPreference
                 android:defaultValue="false"
                 android:key="img"
                 android:summary="@string/setting_img_d"
                 android:title="@string/setting_img" />
 
-            <SwitchPreference
+            <androidx.preference.SwitchPreference
                 android:defaultValue="false"
                 android:key="wake"
                 android:summary="@string/setting_schermo_d"
                 android:title="@string/setting_schermo" />
 
-            <ListPreference
+            <androidx.preference.ListPreference
                 android:key="theme"
                 android:title="@string/setting_notte"
                 android:defaultValue="light"/>
 
-            <SwitchPreference
+            <androidx.preference.SwitchPreference
                 android:defaultValue="true"
                 android:key="sound"
                 android:summary="@string/setting_sound_d"
                 android:title="@string/setting_sound" />
                 
             <!-- Doppia tipologia di preferenza, per accedere a impostazioni di notifiche di sistema se Android 8.0+ -->
-            <Preference
+            <androidx.preference.Preference
                 android:title="@string/setting_notification"
                 android:summary="@string/setting_notification_d"
                 android:key="notification">
-            </Preference>
-            <SwitchPreference
+            </androidx.preference.Preference>
+            <androidx.preference.SwitchPreference
                 android:defaultValue="true"
                 android:title="@string/setting_notification"
                 android:summary="@string/setting_notification_d"
                 android:key="notification_old">
-            </SwitchPreference>
+            </androidx.preference.SwitchPreference>
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
     
-    <PreferenceCategory android:title="@string/setting_title_game">
+    <androidx.preference.PreferenceCategory android:title="@string/setting_title_game">
             <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-            <EditTextPreference
+            <androidx.preference.EditTextPreference
                 android:defaultValue="2005"
                 android:inputType="number"
                 android:key="limite"
@@ -51,50 +52,56 @@
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:title="@string/setting_limite" />
+            <androidx.preference.Preference
+                android:title="@string/setting_limite"
+                android:summary="@string/setting_advanced_d"
+                app:fragment="com.marco97pa.puntiburraco.InsertMethodSettings"
+            />
 
-            <SwitchPreference
+            <androidx.preference.SwitchPreference
                 android:defaultValue="false"
                 android:key="input_direct"
                 android:summary="@string/setting_inputdirect_d"
                 android:title="@string/setting_inputdirect"
                 android:disableDependentsState="true"/>
 
-            <SwitchPreference
+            <androidx.preference.SwitchPreference
                 android:defaultValue="true"
                 android:key="input_puntimano"
                 android:summary="@string/setting_pm_d"
                 android:title="@string/setting_pm"
                 android:dependency="input_direct"/>
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_title_app">
-        
-        <Preference
-            android:title="@string/setting_advanced"
-            android:summary="@string/setting_advanced_d"
-            android:key="advanced">
-        </Preference>
+    <androidx.preference.PreferenceCategory android:title="@string/setting_title_app">
 
-        <Preference
+        <androidx.preference.Preference
             android:title="@string/setting_share"
             android:summary="@string/setting_share_d"
             android:key="share">
-        </Preference>
+        </androidx.preference.Preference>
 
-        <Preference
+        <androidx.preference.Preference
             android:title="@string/setting_valuta"
             android:summary="@string/setting_valuta_d">
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco" />
-        </Preference>
+        </androidx.preference.Preference>
 
-        <Preference
+        <androidx.preference.Preference
             android:title="@string/setting_version"
             android:summary="@string/setting_version_d"
             android:key="version">
-        </Preference>
+        </androidx.preference.Preference>
 
-    </PreferenceCategory>
+        <androidx.preference.Preference
+            android:title="@string/setting_limite"
+            android:summary="@string/setting_advanced_d"
+            android:key="developer"
+            app:fragment="com.marco97pa.puntiburraco.DeveloperSettings"
+            />
+
+    </androidx.preference.PreferenceCategory>
 
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

@@ -10,4 +10,14 @@
         <item>dark</item>
         <item>system</item>
     </string-array>
+    <string-array name="input_methods_values" translatable="false">
+        <item>direct</item>
+        <item>simple</item>
+        <item>advanced</item>
+    </string-array>
+    <string-array name="input_methods" translatable="false">
+        <item>Input points of a single match directly</item>
+        <item>A new and simple method</item>
+        <item>Standard, long way</item>
+    </string-array>
 </resources>

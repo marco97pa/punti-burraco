@@ -44,8 +44,10 @@
     <string name="setting_valuta_d">You will be redirected to the Play Store to write a review. Thanks for your support</string>
     <string name="setting_share">Send this app</string>
     <string name="setting_share_d">Share Points Buraco with friends</string>
-    <string name="setting_advanced">Advanced options</string>
-    <string name="setting_advanced_d">Set up advanced app options</string>
+    <string name="setting_advanced">Delete cache or data</string>
+    <string name="setting_advanced_d">Go to advanced app options</string>
+    <string name="setting_ads" translatable="false">Ads</string>
+    <string name="setting_ads_d" translatable="false">Enable/disable ads</string>
     <string name="setting_notte">Theme</string>
     <string name="setting_notte_d">Suggested for low light ambients</string>
     <string name="setting_img">Show images</string>

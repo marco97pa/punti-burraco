@@ -42,8 +42,7 @@
     <string name="setting_valuta_d">Verrai indirizzato al Play Store per lasciare una recensione. Grazie per il tuo supporto</string>
     <string name="setting_share">Invia questa app</string>
     <string name="setting_share_d">Condividi Punti Burraco con uno o più amici</string>
-    <string name="setting_advanced">Opzioni avanzate</string>
-    <string name="setting_advanced_d">Regola impostazioni avanzate dell\'app</string>
+    <string name="setting_advanced_d">Vai alle impostazioni avanzate dell\'app</string>
     <string name="setting_notte">Tema</string>
     <string name="setting_notte_d">Attiva il tema scuro per ambienti poco illuminati</string>
     <string name="setting_img">Mostra immagini</string>
@@ -110,6 +109,7 @@
     <string name="error_location">Non hai dato il permesso alla posizione, necessaria per il tema automatico\nTema dell\'app impostato su Chiaro</string>
     <string name="error04">Hai inserito dei valori non numerici</string>
     <string name="error00">Errore generico, riavvia l\'app e se il problema persiste contatta lo sviluppatore dalla sezione Guida e Feedback</string>
+    <string name="setting_advanced">Pulisci cache o dati</string>
 
 
 </resources>
