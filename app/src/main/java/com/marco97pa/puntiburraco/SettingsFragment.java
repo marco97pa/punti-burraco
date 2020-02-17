@@ -160,21 +160,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         editTextPref
                 .setSummary(sp.getString("limite", "2005"));
 
-        //Sets label of the background of stories
-        ListPreference ListPref = (ListPreference) findPreference("background_stories");
-        String v[] = getResources().getStringArray(R.array.listentries);
-        String smy;
-        switch (sp.getString("background_stories", "1")){
-            case "1": ListPref.setIcon(R.drawable.gradient_1_circle); smy = v[0];  break;
-            case "2": ListPref.setIcon(R.drawable.gradient_2_circle); smy = v[1]; break;
-            case "3": ListPref.setIcon(R.drawable.gradient_3_circle); smy = v[2]; break;
-            case "4": ListPref.setIcon(R.drawable.gradient_4_circle); smy = v[3]; break;
-            case "5": ListPref.setIcon(R.drawable.gradient_5_circle); smy = v[4]; break;
-            case "6": ListPref.setIcon(R.drawable.gradient_6_circle); smy = v[5]; break;
-            default: ListPref.setIcon(R.drawable.gradient_1_circle); smy = v[0];
-        }
-        ListPref.setSummary(smy);
-
         //Sets the theme setting
         ListPreference ListPrefTheme = (ListPreference) findPreference("theme");
         ArrayList<String> theme_values = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.theme_values)));
@@ -223,19 +208,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if (pref instanceof EditTextPreference) {
             EditTextPreference etp = (EditTextPreference) pref;
             pref.setSummary(etp.getText());
-        }
-        //check if is EditText to update summary
-        if (pref == findPreference("background_stories")) {
-            ListPreference lp = (ListPreference) pref;
-            switch (lp.getValue()){
-                case "1": lp.setIcon(R.drawable.gradient_1_circle); break;
-                case "2": lp.setIcon(R.drawable.gradient_2_circle); break;
-                case "3": lp.setIcon(R.drawable.gradient_3_circle); break;
-                case "4": lp.setIcon(R.drawable.gradient_4_circle); break;
-                case "5": lp.setIcon(R.drawable.gradient_5_circle); break;
-                case "6": lp.setIcon(R.drawable.gradient_6_circle); break;
-            }
-            pref.setSummary(lp.getEntry());
         }
 
         //...Notify MainActivity about the change

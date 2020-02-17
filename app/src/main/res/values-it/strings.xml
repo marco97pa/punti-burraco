@@ -105,7 +105,7 @@
     <string name="dialog_delete">Elimina</string>
     <string name="no_data_available">Non hai ancora giocato nessuna partita...</string>
     <string name="audio_up">Volume multimediale alzato al massimo</string>
-    <string name="change_background_hint">Tocca per cambiare lo sfondo</string>
+    <string name="change_background_hint">Scorri per cambiare lo sfondo</string>
     <string name="app_not_installed">%1$s non installato. Installalo e potrai condividere i tuoi risultati</string>
     <string name="error_location">Non hai dato il permesso alla posizione, necessaria per il tema automatico\nTema dell\'app impostato su Chiaro</string>
     <string name="error04">Hai inserito dei valori non numerici</string>

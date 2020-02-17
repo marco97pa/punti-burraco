@@ -91,39 +91,31 @@ private ExtendedFloatingActionButton fab;
 
         //Set background based on user selection
         root = (LinearLayout) findViewById(R.id.rootLayout);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String background_selection = sharedPreferences.getString("background_stories", "1");
-        selection = Integer.parseInt(background_selection);
+        selection = 1;
         changeBackground();
         /* Handling swipes on rootView
          * Change background of the story if BottomSheet is not open
          */
         root.setOnTouchListener(new OnSwipeTouchListener(ShareResultActivity.this) {
-            public void onSwipeRight() {
-                //Check if BottomSheet is open
+            @Override
+            public void onTouchDown() {
                 if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
                     //if is open, hide BottomSheet and show Fab button, but don't change background
                     fab_show();
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-                else {
-                    //if is closed than change background
-                    selection++;
-                    changeBackground();
                 }
             }
+
+            public void onSwipeRight() {
+                //if is closed than change background
+                selection--;
+                changeBackground();
+            }
+
             public void onSwipeLeft() {
-                //Check if BottomSheet is open
-                if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
-                    //if is open, hide BottomSheet and show Fab button, but don't change background
-                    fab_show();
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-                else {
-                    //if is closed than change background
-                    selection--;
-                    changeBackground();
-                }
+                //if is closed than change background
+                selection++;
+                changeBackground();
             }
 
         });
@@ -191,6 +183,9 @@ private ExtendedFloatingActionButton fab;
 
     public void changeBackground(){
         switch (selection){
+            case 0:
+                selection = 6;
+                root.setBackgroundResource(R.drawable.gradient_6); break;
             case 1: root.setBackgroundResource(R.drawable.gradient_1); break;
             case 2: root.setBackgroundResource(R.drawable.gradient_2); break;
             case 3: root.setBackgroundResource(R.drawable.gradient_3); break;
@@ -349,6 +344,7 @@ private ExtendedFloatingActionButton fab;
 
             @Override
             public boolean onDown(MotionEvent e) {
+                onTouchDown();
                 return true;
             }
 
@@ -393,6 +389,9 @@ private ExtendedFloatingActionButton fab;
         }
 
         public void onSwipeBottom() {
+        }
+
+        public void onTouchDown(){
         }
     }
 }

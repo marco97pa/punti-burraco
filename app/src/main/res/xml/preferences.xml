@@ -39,12 +39,6 @@
                 android:key="notification_old">
             </SwitchPreference>
 
-            <ListPreference
-                android:key="background_stories"
-                android:title="@string/setting_background"
-                android:entries="@array/listentries"
-                android:entryValues="@array/listvalues" />
-
     </PreferenceCategory>
     
     <PreferenceCategory android:title="@string/setting_title_game">

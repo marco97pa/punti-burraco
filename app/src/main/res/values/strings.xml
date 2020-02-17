@@ -109,7 +109,7 @@
     <string name="audio_up">Turned up the volume</string>
     <string name="facebook" translatable="false">Facebook Stories</string>
     <string name="instagram" translatable="false">Instagram Stories</string>
-    <string name="change_background_hint">Touch to change background</string>
+    <string name="change_background_hint">Swipe to change background</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
     <string name="error_location">You revoked Location permission!\nApp theme set to Light</string>
 

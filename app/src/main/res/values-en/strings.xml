@@ -91,7 +91,7 @@
     <string name="setting_sound">Sound</string>
     <string name="setting_sound_d">Play sound when someone wins</string>
     <string name="setting_background">Stories background color</string>
-    <string name="change_background_hint">Touch to change background</string>
+    <string name="change_background_hint">Swipe to change background</string>
     <string name="channel_description">If you leave the app without ending the game, you will receive a notification to continue the game</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
     <string name="error_location">You revoked Location permission!\nApp theme set to Light</string>

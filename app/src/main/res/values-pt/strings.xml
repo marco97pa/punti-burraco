@@ -92,7 +92,7 @@
     <string name="setting_sound_d">Reproduzir som quando alguém ganha</string>
     <string name="setting_sound">Som</string>
     <string name="setting_background">Fundo da história</string>
-    <string name="change_background_hint">Toque para mudar o fundo</string>
+    <string name="change_background_hint">Rolagem para mudar o fundo</string>
     <string name="app_not_installed">%1$s Erro</string>
     <string name="error_location">Você revogou a permissão de localização!\nTema do aplicativo definido como Leve</string>
     <string name="error04">Erro</string>

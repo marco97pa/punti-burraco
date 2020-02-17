@@ -105,7 +105,7 @@
     <string name="dialog_delete">Borrar</string>
     <string name="no_data_available">Aún no has jugado ningún juego ...</string>
     <string name="audio_up">Volumen multimedia subido al máximo</string>
-    <string name="change_background_hint">Toque para cambiar el fondo</string>
+    <string name="change_background_hint">Voluta para cambiar el fondo</string>
     <string name="app_not_installed">%1$s no instalado. Instálalo y podrás compartir tus resultados</string>
     <string name="error_location">¡Revocaste el permiso de ubicación!\nTema de la aplicación configurado en Claro</string>
     <string name="error04">Error</string>
