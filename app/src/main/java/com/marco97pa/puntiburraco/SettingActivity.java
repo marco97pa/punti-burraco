@@ -109,6 +109,10 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+    public void setTitle(String title){
+        getSupportActionBar().setTitle(title);
+    }
+
     public void setRandomColor(){
 
         String color = "#fff";

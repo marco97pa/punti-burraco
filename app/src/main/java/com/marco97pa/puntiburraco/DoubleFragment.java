@@ -366,8 +366,8 @@ public class DoubleFragment extends Fragment {
                 PM2.setVisibility(View.GONE);
                 bypass = true; //PERMETTI DI CHIUDERE SENZA POZZETTO E SENZA PUNTI IN MANO
             }
-            Boolean isDirectModeActivated = sharedPref.getBoolean("input_direct", false) ;
-            if(isDirectModeActivated){
+            int input_method = sharedPref.getInt("input_method", 1) ;
+            if(input_method == 3){
                 PM1.setVisibility(View.GONE);
                 BP1.setVisibility(View.GONE);
                 BI1.setVisibility(View.GONE);

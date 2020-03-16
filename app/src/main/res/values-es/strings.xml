@@ -110,6 +110,10 @@
     <string name="error_location">¡Revocaste el permiso de ubicación!\nTema de la aplicación configurado en Claro</string>
     <string name="error04">Error</string>
     <string name="error00">Error</string>
+    <string name="setting_insert_method_d">Elija su método de entrada preferido</string>
+    <string name="setting_insert_method">Método de entrada</string>
+    <string name="setting_developer">Opciones de desarrollador</string>
+    <string name="setting_developer_d">Abrir opciones de desarrollador</string>
 
 
 </resources>

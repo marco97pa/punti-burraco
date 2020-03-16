@@ -82,7 +82,7 @@
     <string name="setting_notification_d">Definir configurações de notificação</string>
     <string name="setting_pm_d">Ativar ou desativar subtração de pontos na mão</string>
     <string name="setting_pm">Pontos na mão</string>
-    <string name="setting_inputdirect">"Modo fácil "</string>
+    <string name="setting_inputdirect">"Fácil "</string>
     <string name="setting_inputdirect_d">Pontos de entrada de um único jogo diretamente</string>
     <string name="setting_title_game">Buraco</string>
     <string name="dialog_share">Compartilhar</string>
@@ -97,4 +97,8 @@
     <string name="error_location">Você revogou a permissão de localização!\nTema do aplicativo definido como Leve</string>
     <string name="error04">Erro</string>
     <string name="error00">Erro</string>
+    <string name="setting_insert_method_d">Escolha o seu método de entrada preferido</string>
+    <string name="setting_insert_method">Método de entrada</string>
+    <string name="setting_developer">Opções de desenvolvedor</string>
+    <string name="setting_developer_d">Abrir opções de desenvolvedor</string>
 </resources>

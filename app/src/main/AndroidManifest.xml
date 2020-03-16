@@ -3,18 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.marco97pa.puntiburraco"> <!-- Chrome Custom Tabs -->
     <uses-sdk tools:overrideLibrary="android.support.customtabs" />
-
     <!-- Save screenshot and set profile images -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- Support ChromeBook -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Support ChromeBook -->
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false" />
-    <!-- Internet -->
+        android:required="false" /> <!-- Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- Vibration -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Vibration -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -25,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.marco97pa.puntiburraco.provider"
@@ -33,9 +29,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider>
-
-        <!-- Support 18:9 displays -->
+        </provider> <!-- Support 18:9 displays -->
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
@@ -63,7 +57,9 @@
                     android:host="hh29c.app.goo.gl"
                     android:scheme="https" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
@@ -82,6 +78,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".InputMethodChooser"
+            android:label="@string/setting_insert_method"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
             android:name=".HistoryActivity"
             android:label="@string/nav_history"
             android:parentActivityName=".MainActivity"
@@ -93,9 +94,8 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".ShareResultActivity"/>
-        
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".ShareResultActivity" />
     </application>
 
 </manifest>

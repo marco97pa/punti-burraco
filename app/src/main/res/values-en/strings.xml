@@ -81,7 +81,7 @@
     <string name="setting_notification">Notification</string>
     <string name="setting_pm">Points in hand</string>
     <string name="setting_inputdirect">Easy mode</string>
-    <string name="setting_inputdirect_d">Input points of a single match directly</string>
+    <string name="setting_inputdirect_d">Input points of a single match directly \nOnly a field is available to input the sum of the points of a player. \nSuggested for experienced players</string>
     <string name="setting_pm_d">Enable or disable subtraction of points in hand</string>
     <string name="setting_title_game">Game</string>
     <string name="dialog_share">Share</string>
@@ -97,4 +97,8 @@
     <string name="error_location">You revoked Location permission!\nApp theme set to Light</string>
     <string name="error04">You inserted non-number values</string>
     <string name="error00">Generic error</string>
+    <string name="setting_developer_d">Open developer options</string>
+    <string name="setting_insert_method">Input method</string>
+    <string name="setting_insert_method_d">Choose your preferred input method</string>
+    <string name="setting_developer">Developer options</string>
 </resources>

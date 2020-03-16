@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static Context contextOfApplication;
+    public static final int OPEN_SETTINGS = 9001;
     String CHANNEL_ID = "channel_suspended";
     //action bar settings
     Boolean ddp_visibility = true;
@@ -383,16 +384,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume(){
         super.onResume();
-        //Check if there was a setting change
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean settingsChanged = sharedPreferences.getBoolean("setChange", false) ;
-        if(settingsChanged){
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("setChange", false);
-            editor.commit();
-            recreate();
-        }
 
         //Delete notification (if there is any)
         NotificationManager notifManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -461,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_setting) {
             //Launches Settings Activity
             Intent myIntent = new Intent(this, SettingActivity.class);
-            this.startActivity(myIntent);
+            this.startActivityForResult(myIntent, OPEN_SETTINGS);
 
         } else if (id == R.id.nav_history) {
             //Launches History Activity
@@ -539,6 +530,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(GravityCompat.START);
         }
         return true;
+    }
+
+    /**
+     * This method handles resuming from other Activities
+     * @param requestCode  int  if it is equal to OPEN_SETTING, it will invoke Activity recreate() method
+     *                     because we are coming back from SettingActivity and we need to refresh the UI accordingly
+     *                     to the new settings
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == OPEN_SETTINGS) {
+            recreate();
+        }
     }
 
 

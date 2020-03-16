@@ -3,7 +3,10 @@ package com.marco97pa.puntiburraco;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
 public class DeveloperSettings extends SettingsFragment {
@@ -14,6 +17,7 @@ public class DeveloperSettings extends SettingsFragment {
     }
 
     public void onCreatePreferences(Bundle bundle, String rootKey) {
+
         addPreferencesFromResource(R.xml.developer_preference);
 
         //Sets intent to redirect user to App Settings in Android
@@ -30,5 +34,12 @@ public class DeveloperSettings extends SettingsFragment {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //Setting activity title
+        ((SettingActivity) getActivity()).setTitle(getString(R.string.setting_developer));
     }
 }

@@ -7,6 +7,10 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -15,6 +19,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import android.provider.Settings;
 
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -38,11 +43,15 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     int taps = 0;
+    FragmentManager fragmentManager;
+    boolean mAlreadyLoaded = false;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String s) {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
+
+        fragmentManager = getFragmentManager();
 
         //Sets version name programatically
         Preference version = findPreference("version");
@@ -67,22 +76,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }
         });
 
-                //Sets version name easter egg
-                version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        //Sets version name easter egg
+        version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
-                    public boolean onPreferenceClick(Preference preference) {
+            public boolean onPreferenceClick(Preference preference) {
 
-                        if (taps == 7) {
-                            Toast.makeText(getActivity(), getString(R.string.easter_egg), Toast.LENGTH_SHORT).show();
-                        }
-                        if (taps >= 7) {
-                            ((SettingActivity) getActivity()).setRandomColor();
-                        }
+                if (taps == 7) {
+                    Toast.makeText(getActivity(), getString(R.string.easter_egg), Toast.LENGTH_SHORT).show();
+                }
+                if (taps >= 7) {
+                    ((SettingActivity) getActivity()).setRandomColor();
+                }
 
-                        taps++;
-                        return true;
-                    }
-                });
+                taps++;
+                return true;
+            }
+        });
 
         //Sets intent to share app with friends
         Preference share_p = findPreference("share");
@@ -97,6 +106,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                 share.putExtra(Intent.EXTRA_TEXT, testo);
                 startActivity(Intent.createChooser(share, getString(R.string.share_hint)));
+                return true;
+            }
+        });
+
+        //Sets intent to open input method chooser activity
+        Preference input_method = findPreference("input_method");
+        input_method.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                fragmentManager.beginTransaction()
+                        .replace(android.R.id.content, new InputMethodChooser())
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             }
         });
@@ -178,23 +200,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     //WHEN A PREFERENCE IS CHANGED...
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference pref = findPreference(key);
+
         //check if is changed to update theme
         if(pref == findPreference("theme")){
             ListPreference th = (ListPreference) pref;
             pref.setSummary(th.getEntry());
             setAppTheme(th.getValue());
         }
+
         //check if is EditText to update summary
         if (pref instanceof EditTextPreference) {
             EditTextPreference etp = (EditTextPreference) pref;
             pref.setSummary(etp.getText());
         }
 
-        //...Notify MainActivity about the change
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("setChange", true);
-        editor.commit();
     }
 
 
@@ -224,4 +243,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //Setting activity title
+        ((SettingActivity) getActivity()).setTitle(getString(R.string.nav_settings));
+    }
 }

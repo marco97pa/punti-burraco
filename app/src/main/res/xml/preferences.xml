@@ -52,25 +52,13 @@
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:title="@string/setting_limite" />
+
             <androidx.preference.Preference
-                android:title="@string/setting_limite"
-                android:summary="@string/setting_advanced_d"
-                app:fragment="com.marco97pa.puntiburraco.InsertMethodSettings"
+                android:title="@string/setting_insert_method"
+                android:summary="@string/setting_insert_method_d"
+                android:key="input_method"
             />
 
-            <androidx.preference.SwitchPreference
-                android:defaultValue="false"
-                android:key="input_direct"
-                android:summary="@string/setting_inputdirect_d"
-                android:title="@string/setting_inputdirect"
-                android:disableDependentsState="true"/>
-
-            <androidx.preference.SwitchPreference
-                android:defaultValue="true"
-                android:key="input_puntimano"
-                android:summary="@string/setting_pm_d"
-                android:title="@string/setting_pm"
-                android:dependency="input_direct"/>
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/setting_title_app">
@@ -95,8 +83,8 @@
         </androidx.preference.Preference>
 
         <androidx.preference.Preference
-            android:title="@string/setting_limite"
-            android:summary="@string/setting_advanced_d"
+            android:title="@string/setting_developer"
+            android:summary="@string/setting_developer_d"
             android:key="developer"
             app:fragment="com.marco97pa.puntiburraco.DeveloperSettings"
             />

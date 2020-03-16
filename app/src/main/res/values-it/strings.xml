@@ -67,8 +67,8 @@
     <string name="setting_notification">Notifiche</string>
     <string name="setting_pm_d">Permette di segnare gli eventuali punti in mano del singolo giocatore, che verranno sottratti ai punti tavolo</string>
     <string name="setting_pm">Abilita punti in mano</string>
-    <string name="setting_inputdirect">Inserimento diretto</string>
-    <string name="setting_inputdirect_d">Inserisci direttamente il punteggio della giocata. L\'interfaccia sarà più minimale, ma è consigliata a giocatori esperti, senza bisogno di aiuti</string>
+    <string name="setting_inputdirect">Diretto</string>
+    <string name="setting_inputdirect_d">Inserisci direttamente il punteggio della giocata. \nSarà disponibile un solo campo in cui inserire tutti i punti del singolo giocatore, calcolati dall\'utente \nE\' consigliata a giocatori esperti, senza bisogno di aiuti</string>
     <string name="setting_background">Sfondo delle Storie da condividere</string>
 
     <!-- Navigation drawer -->
@@ -110,6 +110,10 @@
     <string name="error04">Hai inserito dei valori non numerici</string>
     <string name="error00">Errore generico, riavvia l\'app e se il problema persiste contatta lo sviluppatore dalla sezione Guida e Feedback</string>
     <string name="setting_advanced">Pulisci cache o dati</string>
+    <string name="setting_developer">Opzioni sviluppatore</string>
+    <string name="setting_developer_d">Apri le opzioni avanzate per sviluppatori</string>
+    <string name="setting_insert_method">Metodo d\'inserimento</string>
+    <string name="setting_insert_method_d">Scegli il tuo metodo d\'inserimento dei punti preferito</string>
 
 
 </resources>
