@@ -11,7 +11,7 @@ import androidx.preference.Preference;
 
 public class DeveloperSettings extends SettingsFragment {
 
-    public static final String FRAGMENT_TAG = "developer_fragment";
+    public static final String LOG_TAG = "developer_fragment";
 
     public DeveloperSettings() {
     }

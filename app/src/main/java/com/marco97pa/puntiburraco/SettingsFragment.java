@@ -20,6 +20,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import android.provider.Settings;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -46,7 +47,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     int taps = 0;
     FragmentManager fragmentManager;
-    boolean mAlreadyLoaded = false;
+    public static final String LOG_TAG = "SettingsFragment";
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String s) {
@@ -65,6 +66,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             boolean isLowRamDevice = am.isLowRamDevice();
             img.setDefaultValue(!isLowRamDevice);
+            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
         }
         else{
             img.setDefaultValue(true);
