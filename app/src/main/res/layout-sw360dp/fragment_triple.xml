@@ -211,17 +211,56 @@
         android:maxLength="4"/>
 
     <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editPB1"
+        android:width="@dimen/tab"
+        android:ems="10"
+        android:hint="@string/SuggPB"
+        android:inputType="number|numberSigned"
+        android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
+        grid:layout_column="0"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_row="6" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editPB2"
+        android:width="@dimen/tab"
+        android:ems="10"
+        android:hint="@string/SuggPB"
+        android:inputType="number|numberSigned"
+        android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
+        grid:layout_column="1"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_row="6" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editPB3"
+        android:width="@dimen/tab"
+        android:ems="10"
+        android:hint="@string/SuggPB"
+        android:inputType="number|numberSigned"
+        android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
+        grid:layout_column="2"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_row="6" />
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editP1"
         android:width="@dimen/tab"
         android:ems="10"
         android:hint="@string/SuggP"
         android:inputType="number|numberSigned"
         android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
         grid:layout_column="0"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        app:backgroundTint="@color/textColorSecondary"
-        grid:layout_row="6" />
+        grid:layout_row="7" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editP2"
@@ -234,7 +273,7 @@
         grid:layout_column="1"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="6" />
+        grid:layout_row="7" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editP3"
@@ -247,99 +286,100 @@
         grid:layout_column="2"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="6" />
+        grid:layout_row="7" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editPM1"
-        grid:layout_column="0"
-        grid:layout_columnWeight="1"
-        grid:layout_gravity="fill_horizontal"
-        grid:layout_row="7"
-        app:backgroundTint="@color/textColorSecondary"
+        android:width="@dimen/tab"
         android:ems="10"
         android:hint="@string/SuggPM"
         android:inputType="number"
-        android:width="@dimen/tab"
-        android:maxLength="4"/>
+        android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
+        grid:layout_column="0"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_row="8" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editPM2"
+        android:width="@dimen/tab"
+        android:ems="10"
+        android:hint="@string/SuggPM"
+        android:inputType="number"
+        android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
         grid:layout_column="1"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="7"
-        android:ems="10"
-        app:backgroundTint="@color/textColorSecondary"
-        android:hint="@string/SuggPM"
-        android:inputType="number"
-        android:width="@dimen/tab"
-        android:maxLength="4"/>
+        grid:layout_row="8" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editPM3"
+        android:width="@dimen/tab"
+        android:ems="10"
+        android:hint="@string/SuggPM"
+        android:inputType="number"
+        android:maxLength="4"
+        app:backgroundTint="@color/textColorSecondary"
         grid:layout_column="2"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="7"
-        android:ems="10"
-        app:backgroundTint="@color/textColorSecondary"
-        android:hint="@string/SuggPM"
-        android:inputType="number"
-        android:width="@dimen/tab"
-        android:maxLength="4"/>
+        grid:layout_row="8" />
 
     <CheckBox
         android:id="@+id/chiusura1"
+        android:text="@string/chius"
+        android:textColor="@color/dialogText"
         grid:layout_column="0"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="8"
-        android:text="@string/chius"
-        android:textColor="@color/dialogText"/>
+        grid:layout_row="9" />
 
     <CheckBox
         android:id="@+id/chiusura3"
+        android:text="@string/chius"
+        android:textColor="@color/dialogText"
         grid:layout_column="2"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="8"
-        android:text="@string/chius"
-        android:textColor="@color/dialogText"/>
+        grid:layout_row="9" />
 
     <CheckBox
         android:id="@+id/chiusura2"
+        android:text="@string/chius"
+        android:textColor="@color/dialogText"
         grid:layout_column="1"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="8"
-        android:text="@string/chius"
-        android:textColor="@color/dialogText"/>
+        grid:layout_row="9" />
+
     <CheckBox
         android:id="@+id/pozzetto1"
+        android:text="@string/pozz"
+        android:textColor="@color/dialogText"
         grid:layout_column="0"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="9"
-        android:text="@string/pozz"
-        android:textColor="@color/dialogText"/>
+        grid:layout_row="10" />
 
     <CheckBox
         android:id="@+id/pozzetto2"
+        android:text="@string/pozz"
+        android:textColor="@color/dialogText"
         grid:layout_column="1"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="9"
-        android:text="@string/pozz"
-        android:textColor="@color/dialogText"/>
+        grid:layout_row="10" />
 
     <CheckBox
         android:id="@+id/pozzetto3"
+        android:text="@string/pozz"
+        android:textColor="@color/dialogText"
         grid:layout_column="2"
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
-        grid:layout_row="9"
-        android:text="@string/pozz"
-        android:textColor="@color/dialogText"/>
+        grid:layout_row="10" />
 
     <CheckBox
         android:id="@+id/rB1"

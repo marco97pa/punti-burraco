@@ -83,13 +83,14 @@ public class DoubleFragment extends Fragment {
      */
 
     private final Boolean google_has_fixed_nightmode_bug = false;
-    int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2;
+    int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
     private EditText BP1, BP2; //Clean run EditText
     private EditText BI1, BI2; //Semi clean run EditText
     private EditText BS1, BS2; //Dirty run EditText
     private EditText PN1, PN2; //Points on table EditText
+    private EditText PB1, PB2; //Base points EditText
     private EditText PM1, PM2; //Points in hand EditText
     private CheckBox CH1, CH2, PZ1, PZ2; //Close and No Pots Checkbox
     private ImageView IMG1, IMG2; //Images of players
@@ -140,6 +141,8 @@ public class DoubleFragment extends Fragment {
         BS2 = (EditText) rootView.findViewById(R.id.editBS2);
         PN2 = (EditText) rootView.findViewById(R.id.editP2);
         PM2 = (EditText) rootView.findViewById(R.id.editPM2);
+        PB1 = (EditText) rootView.findViewById(R.id.editPB1);
+        PB2 = (EditText) rootView.findViewById(R.id.editPB2);
         CH1 = (CheckBox) rootView.findViewById(R.id.chiusura1);
         CH2 = (CheckBox) rootView.findViewById(R.id.chiusura2);
         PZ1 = (CheckBox) rootView.findViewById(R.id.pozzetto1);
@@ -315,7 +318,7 @@ public class DoubleFragment extends Fragment {
          * Images are showed only if user has choose it in settings
          */
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Boolean isImgActivated = sharedPref.getBoolean("img", false) ;
+        Boolean isImgActivated = sharedPref.getBoolean("img", true) ;
         if(isImgActivated) {
             //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
             Bitmap bitmap1 = null, bitmap2 = null;
@@ -367,19 +370,42 @@ public class DoubleFragment extends Fragment {
                 bypass = true; //PERMETTI DI CHIUDERE SENZA POZZETTO E SENZA PUNTI IN MANO
             }
             int input_method = sharedPref.getInt("input_method", 1) ;
-            if(input_method == 3){
-                PM1.setVisibility(View.GONE);
-                BP1.setVisibility(View.GONE);
-                BI1.setVisibility(View.GONE);
-                BS1.setVisibility(View.GONE);
-                PM2.setVisibility(View.GONE);
-                BP2.setVisibility(View.GONE);
-                BI2.setVisibility(View.GONE);
-                BS2.setVisibility(View.GONE);
-                CH1.setVisibility(View.GONE);
-                CH2.setVisibility(View.GONE);
-                PZ1.setVisibility(View.GONE);
-                PZ2.setVisibility(View.GONE);
+            switch(input_method){
+                case 1:
+                    PB1.setVisibility(View.GONE);
+                    PB2.setVisibility(View.GONE);
+                break;
+                case 2:
+                    PM1.setVisibility(View.GONE);
+                    BP1.setVisibility(View.GONE);
+                    BI1.setVisibility(View.GONE);
+                    BS1.setVisibility(View.GONE);
+                    PM2.setVisibility(View.GONE);
+                    BP2.setVisibility(View.GONE);
+                    BI2.setVisibility(View.GONE);
+                    BS2.setVisibility(View.GONE);
+                    CH1.setVisibility(View.GONE);
+                    CH2.setVisibility(View.GONE);
+                    PZ1.setVisibility(View.GONE);
+                    PZ2.setVisibility(View.GONE);
+                break;
+                case 3:
+                    PM1.setVisibility(View.GONE);
+                    BP1.setVisibility(View.GONE);
+                    BI1.setVisibility(View.GONE);
+                    BS1.setVisibility(View.GONE);
+                    PM2.setVisibility(View.GONE);
+                    BP2.setVisibility(View.GONE);
+                    BI2.setVisibility(View.GONE);
+                    BS2.setVisibility(View.GONE);
+                    CH1.setVisibility(View.GONE);
+                    CH2.setVisibility(View.GONE);
+                    PZ1.setVisibility(View.GONE);
+                    PZ2.setVisibility(View.GONE);
+
+                    PB1.setVisibility(View.GONE);
+                    PB2.setVisibility(View.GONE);
+                break;
             }
 
         return rootView;
@@ -556,6 +582,8 @@ public class DoubleFragment extends Fragment {
         BS2.setText("");
         PN2.setText("");
         PM2.setText("");
+        PB1.setText("");
+        PB2.setText("");
         CH1.setChecked(false);
         CH2.setChecked(false);
         PZ1.setChecked(false);
@@ -616,6 +644,16 @@ public class DoubleFragment extends Fragment {
                 } else {
                     pn1 = Integer.parseInt(PN1.getText().toString());
                 }
+                if (PB1.getText().toString().matches("")) {
+                    pb1 = 0;
+                } else {
+                    pb1 = Integer.parseInt(PB1.getText().toString());
+                }
+                if (PB2.getText().toString().matches("")) {
+                    pb2 = 0;
+                } else {
+                    pb2 = Integer.parseInt(PB2.getText().toString());
+                }
                 if (PM1.getText().toString().matches("")) {
                     pm1 = 0;
                 } else {
@@ -627,7 +665,7 @@ public class DoubleFragment extends Fragment {
                 old_tot2 = tot2;
 
                 //Calculating new total
-                tot1 = tot1 + (((bp1 * 200) + (bi1 * 100) + (bs1 * 150) + pn1) - pm1);
+                tot1 = tot1 + (((bp1 * 200) + (bi1 * 100) + (bs1 * 150) + pn1 + pb1) - pm1);
 
                 //Adding Closing points
                 if (CH1.isChecked()) {
@@ -673,7 +711,7 @@ public class DoubleFragment extends Fragment {
                 }
 
                 //Calculating total
-                tot2 = tot2 + (((bp2 * 200) + (bi2 * 100) + (bs2 * 150) + pn2) - pm2);
+                tot2 = tot2 + (((bp2 * 200) + (bi2 * 100) + (bs2 * 150) + pn2 + pb2) - pm2);
 
                 if (CH2.isChecked()) {
                     tot2 = tot2 + 100;
@@ -705,6 +743,8 @@ public class DoubleFragment extends Fragment {
                 BS2.setText("");
                 PN2.setText("");
                 PM2.setText("");
+                PB1.setText("");
+                PB2.setText("");
                 CH1.setChecked(false);
                 CH2.setChecked(false);
                 PZ1.setChecked(false);

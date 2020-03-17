@@ -41,41 +41,6 @@ public class SettingActivity extends AppCompatActivity {
         return true;
     }
 
-    public String[] mColors = {
-            "#F44336", //red
-            "#E91E63", //pink
-            "#9C27B0", //purple
-            "#673AB7", //deep purple
-            "#3F51B5", //indigo
-            "#2196F3", //blue
-            "#03A9F4", //light blue
-            "#00BCD4", //cyan
-            "#009688", //teal
-            "#4CAF50", //green
-            "#8BC34A", //light green
-            "#CDDC39", //lime
-            "#FFEB3B", //yellow
-            "#FFC107", //amber
-            "#FF5722" //deep orange
-    };
-    public String[] mColorsDark = {
-            "#D32F2F", //red
-            "#C2185B", //pink
-            "#7B1FA2", //purple
-            "#512DA8", //deep purple
-            "#303F9F", //indigo
-            "#1976D2", //blue
-            "#0288D1", //light blue
-            "#0097A7", //cyan
-            "#00796B", //teal
-            "#388E3C", //green
-            "#689F38", //light green
-            "#AFB42B", //lime
-            "#FBC02D", //yellow
-            "#FFA000", //amber
-            "#E64A19" //deep orange
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,27 +79,25 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void setRandomColor(){
+        String mColors[] =  getResources().getStringArray(R.array.easteregg_colors_light);
+        String mColorsDark[] =  getResources().getStringArray(R.array.easteregg_colors_dark);
 
-        String color = "#fff";
-        String colorDark = "#fff";
         // Randomly select a fact
         Random randomGenerator = new Random(); // Construct a new Random number generator
         int randomNumber = randomGenerator.nextInt(mColors.length);
 
         //Primary color
-        color = mColors[randomNumber];
-        int colorAsInt = Color.parseColor(color);
+        int color = Color.parseColor(mColors[randomNumber]);
         //Dark color
-        colorDark = mColorsDark[randomNumber];
-        int colorDarkAsInt = Color.parseColor(colorDark);
+        int colorDark = Color.parseColor(mColorsDark[randomNumber]);
 
         //set that color as Action bar color
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(colorAsInt));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
 
         //set that color as Navigation bar color and Status bar color
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(colorDarkAsInt);
-            getWindow().setStatusBarColor(colorDarkAsInt);
+            getWindow().setNavigationBarColor(colorDark);
+            getWindow().setStatusBarColor(colorDark);
         }
 
     }

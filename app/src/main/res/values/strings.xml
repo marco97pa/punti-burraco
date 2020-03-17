@@ -118,6 +118,7 @@
     <string name="setting_developer">Developer options</string>
     <string name="setting_insert_method">Input method</string>
     <string name="setting_insert_method_d">Choose your preferred input method</string>
+    <string name="SuggPB">Base points</string>
 
 
 </resources>

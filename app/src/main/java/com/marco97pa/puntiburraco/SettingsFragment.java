@@ -1,5 +1,6 @@
 package com.marco97pa.puntiburraco;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceFragmentCompat;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
@@ -56,6 +58,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         //Sets version name programatically
         Preference version = findPreference("version");
         version.setSummary(BuildConfig.VERSION_NAME);
+
+        //Set default value for img setting
+        Preference img = findPreference("img");
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            boolean isLowRamDevice = am.isLowRamDevice();
+            img.setDefaultValue(!isLowRamDevice);
+        }
+        else{
+            img.setDefaultValue(true);
+        }
 
 
         //Sets sound and volume level
@@ -136,7 +149,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         PreferenceCategory pCategory = (PreferenceCategory) findPreference("interface_settings");
         Preference notification_p = findPreference("notification");
         Preference notification_old = findPreference("notification_old");
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             pCategory.removePreference(notification_old);   // remove preference
             notification_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -166,7 +179,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         ListPreference ListPrefTheme = (ListPreference) findPreference("theme");
         ArrayList<String> theme_values = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.theme_values)));
         ArrayList<String> theme_entries = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.theme_entries)));
-        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             //remove follow-system-theme option on <= Android P
             theme_values.remove(2);
             theme_entries.remove(2);

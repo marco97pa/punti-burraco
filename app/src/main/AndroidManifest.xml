@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.marco97pa.puntiburraco"> <!-- Chrome Custom Tabs -->
+    package="com.marco97pa.puntiburraco">
+    <!-- Chrome Custom Tabs -->
     <uses-sdk tools:overrideLibrary="android.support.customtabs" />
     <!-- Save screenshot and set profile images -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Support ChromeBook -->
@@ -76,11 +77,6 @@
 
                 <category android:name="android.intent.category.NOTIFICATION_PREFERENCES" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".InputMethodChooser"
-            android:label="@string/setting_insert_method"
-            android:parentActivityName=".MainActivity" >
         </activity>
         <activity
             android:name=".HistoryActivity"

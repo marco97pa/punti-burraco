@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    //On return from another activity
+
     @Override
     public void onResume(){
         super.onResume();

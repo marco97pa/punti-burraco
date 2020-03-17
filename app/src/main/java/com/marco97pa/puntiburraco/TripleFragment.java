@@ -53,7 +53,7 @@ import java.util.Calendar;
  */
 
 public class TripleFragment extends Fragment {
-    int bp1,bp2,bp3, bi1, bi2,bi3, bs1, bs2,bs3,pn1,pn2,pn3,tot1,tot2,tot3,pm1,pm2,pm3;
+    int bp1,bp2,bp3, bi1, bi2,bi3, bs1, bs2,bs3,pn1,pn2,pn3,tot1,tot2,tot3,pm1,pm2,pm3, pb1, pb2, pb3;
     int tot=0;
     private TextView textNome1, textNome2, textNome3;
     private TextView punti1, punti2, punti3;
@@ -61,12 +61,13 @@ public class TripleFragment extends Fragment {
     private EditText BI1, BI2, BI3;
     private EditText BS1, BS2, BS3;
     private EditText PN1, PN2, PN3;
+    private EditText PB1, PB2, PB3;
     private EditText PM1, PM2, PM3;
     private CheckBox CH1, CH2, CH3;
     private CheckBox RB1, RB2, RB3;
     private CheckBox PZ1, PZ2, PZ3;
     boolean check1=false, check2=false, check3=false;
-    int SET;
+    int SET, input_method;
     final int PDefault=0;
     boolean win=false;
     String winner,loser1,loser2;
@@ -79,7 +80,6 @@ public class TripleFragment extends Fragment {
     String bgColor, txtColor, colors;
     boolean bypass = false;
     Boolean isManoModeActivated;
-    Boolean isDirectModeActivated;
     MediaPlayer sound;
 
     public TripleFragment() {
@@ -121,6 +121,9 @@ public class TripleFragment extends Fragment {
         PZ1 = (CheckBox) rootView.findViewById(R.id.pozzetto1);
         PZ2 = (CheckBox) rootView.findViewById(R.id.pozzetto2);
         PZ3 = (CheckBox) rootView.findViewById(R.id.pozzetto3);
+        PB1 = (EditText) rootView.findViewById(R.id.editPB1);
+        PB2 = (EditText) rootView.findViewById(R.id.editPB2);
+        PB3 = (EditText) rootView.findViewById(R.id.editPB3);
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
 
@@ -141,26 +144,57 @@ public class TripleFragment extends Fragment {
             PM3.setVisibility(View.GONE);
             bypass = true; //PERMETTI DI CHIUDERE SENZA POZZETTO E SENZA PUNTI IN MANO
         }
-        int input_method = sharedPref.getInt("input_method", 1) ;
-        if(input_method == 3){
-            PM1.setVisibility(View.GONE);
-            BP1.setVisibility(View.GONE);
-            BI1.setVisibility(View.GONE);
-            BS1.setVisibility(View.GONE);
-            PM2.setVisibility(View.GONE);
-            BP2.setVisibility(View.GONE);
-            BI2.setVisibility(View.GONE);
-            BS2.setVisibility(View.GONE);
-            CH1.setVisibility(View.GONE);
-            CH2.setVisibility(View.GONE);
-            PZ1.setVisibility(View.GONE);
-            PZ2.setVisibility(View.GONE);
-            PZ3.setVisibility(View.GONE);
-            CH3.setVisibility(View.GONE);
-            PM3.setVisibility(View.GONE);
-            BP3.setVisibility(View.GONE);
-            BI3.setVisibility(View.GONE);
-            BS3.setVisibility(View.GONE);
+        input_method = sharedPref.getInt("input_method", 1) ;
+        switch(input_method){
+            case 1:
+                PB1.setVisibility(View.GONE);
+                PB2.setVisibility(View.GONE);
+                PB3.setVisibility(View.GONE);
+                break;
+            case 2:
+                PM1.setVisibility(View.GONE);
+                BP1.setVisibility(View.GONE);
+                BI1.setVisibility(View.GONE);
+                BS1.setVisibility(View.GONE);
+                PM2.setVisibility(View.GONE);
+                BP2.setVisibility(View.GONE);
+                BI2.setVisibility(View.GONE);
+                BS2.setVisibility(View.GONE);
+                CH1.setVisibility(View.GONE);
+                CH2.setVisibility(View.GONE);
+                PZ1.setVisibility(View.GONE);
+                PZ2.setVisibility(View.GONE);
+                PZ3.setVisibility(View.GONE);
+                CH3.setVisibility(View.GONE);
+                PM3.setVisibility(View.GONE);
+                BP3.setVisibility(View.GONE);
+                BI3.setVisibility(View.GONE);
+                BS3.setVisibility(View.GONE);
+                break;
+            case 3:
+                PM1.setVisibility(View.GONE);
+                BP1.setVisibility(View.GONE);
+                BI1.setVisibility(View.GONE);
+                BS1.setVisibility(View.GONE);
+                PM2.setVisibility(View.GONE);
+                BP2.setVisibility(View.GONE);
+                BI2.setVisibility(View.GONE);
+                BS2.setVisibility(View.GONE);
+                CH1.setVisibility(View.GONE);
+                CH2.setVisibility(View.GONE);
+                PZ1.setVisibility(View.GONE);
+                PZ2.setVisibility(View.GONE);
+                PZ3.setVisibility(View.GONE);
+                CH3.setVisibility(View.GONE);
+                PM3.setVisibility(View.GONE);
+                BP3.setVisibility(View.GONE);
+                BI3.setVisibility(View.GONE);
+                BS3.setVisibility(View.GONE);
+
+                PB1.setVisibility(View.GONE);
+                PB2.setVisibility(View.GONE);
+                PB3.setVisibility(View.GONE);
+                break;
         }
 
 
@@ -182,7 +216,7 @@ public class TripleFragment extends Fragment {
                         SET=View.VISIBLE;
                     }
                     PN3.setVisibility(SET);
-                    if(!isDirectModeActivated) {
+                    if(input_method == 1) {
                         BP3.setVisibility(SET);
                         BI3.setVisibility(SET);
                         if(isManoModeActivated) {
@@ -191,6 +225,9 @@ public class TripleFragment extends Fragment {
                         CH3.setVisibility(SET);
                         PZ3.setVisibility(SET);
                         BS3.setVisibility(SET);
+                    }
+                    if(input_method == 2){
+                        PB3.setVisibility(SET);
                     }
                 }
             }
@@ -212,7 +249,7 @@ public class TripleFragment extends Fragment {
                         SET=View.VISIBLE;
                     }
                     PN1.setVisibility(SET);
-                    if(!isDirectModeActivated) {
+                    if(input_method == 1) {
                         BP1.setVisibility(SET);
                         BI1.setVisibility(SET);
                         if(isManoModeActivated) {
@@ -221,6 +258,9 @@ public class TripleFragment extends Fragment {
                         CH1.setVisibility(SET);
                         PZ1.setVisibility(SET);
                         BS1.setVisibility(SET);
+                    }
+                    if(input_method == 2){
+                        PB1.setVisibility(SET);
                     }
                 }
             }
@@ -242,7 +282,7 @@ public class TripleFragment extends Fragment {
                         SET=View.VISIBLE;
                     }
                     PN2.setVisibility(SET);
-                    if(!isDirectModeActivated) {
+                    if(input_method == 1) {
                         BP2.setVisibility(SET);
                         BI2.setVisibility(SET);
                         if(isManoModeActivated) {
@@ -251,6 +291,9 @@ public class TripleFragment extends Fragment {
                         CH2.setVisibility(SET);
                         PZ2.setVisibility(SET);
                         BS2.setVisibility(SET);
+                    }
+                    if(input_method == 2){
+                        PB2.setVisibility(SET);
                     }
                 }
             }
@@ -451,6 +494,9 @@ public class TripleFragment extends Fragment {
         PN3.setText("");
         PM3.setText("");
         BS3.setText("");
+        PB1.setText("");
+        PB2.setText("");
+        PB3.setText("");
         CH1.setChecked(false);
         CH2.setChecked(false);
         CH3.setChecked(false);
@@ -469,7 +515,7 @@ public class TripleFragment extends Fragment {
         PN3.setVisibility(View.VISIBLE);
         PN1.setVisibility(View.VISIBLE);
         PN2.setVisibility(View.VISIBLE);
-        if(!isDirectModeActivated) {
+        if(input_method == 1) {
             BP3.setVisibility(View.VISIBLE);
             BI3.setVisibility(View.VISIBLE);
             BS3.setVisibility(View.VISIBLE);
@@ -523,6 +569,11 @@ public class TripleFragment extends Fragment {
                 else{pn3 = Integer.parseInt(PN3.getText().toString());}
                 if(PM3.getText().toString().matches("")){pm3=0;}
                 else{pm3 = Integer.parseInt(PM3.getText().toString());}
+                if (PB3.getText().toString().matches("")) {
+                    pb3 = 0;
+                } else {
+                    pb3 = Integer.parseInt(PB3.getText().toString());
+                }
             }
             if (RB2.isChecked()==false) {
                 if(BP1.getText().toString().matches("")){bp1=0;}
@@ -535,6 +586,11 @@ public class TripleFragment extends Fragment {
                 else{pn1 = Integer.parseInt(PN1.getText().toString());}
                 if(PM1.getText().toString().matches("")){pm1=0;}
                 else{pm1 = Integer.parseInt(PM1.getText().toString());}
+                if (PB1.getText().toString().matches("")) {
+                    pb1 = 0;
+                } else {
+                    pb1 = Integer.parseInt(PB1.getText().toString());
+                }
             }
             if (RB3.isChecked()==false) {
                 if(BP2.getText().toString().matches("")){bp2=0;}
@@ -547,6 +603,11 @@ public class TripleFragment extends Fragment {
                 else{pn2 = Integer.parseInt(PN2.getText().toString());}
                 if(PM2.getText().toString().matches("")){pm2=0;}
                 else{pm2 = Integer.parseInt(PM2.getText().toString());}
+                if (PB2.getText().toString().matches("")) {
+                    pb2 = 0;
+                } else {
+                    pb2 = Integer.parseInt(PB2.getText().toString());
+                }
             }
 
             old_tot1 = tot1;
@@ -554,7 +615,7 @@ public class TripleFragment extends Fragment {
             old_tot3 = tot3;
 
             if(RB1.isChecked()){
-                tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1)-pm1);
+                tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1+pb1)-pm1);
                 if (CH1.isChecked()) {
                     tot1=tot1+100;
                 }
@@ -563,7 +624,7 @@ public class TripleFragment extends Fragment {
                 }
                 punti1.setText(Integer.toString(tot1));
 
-                tot=( ((bp2*200)+(bi2*100)+(bs2*150)+pn2)-pm2);
+                tot=( ((bp2*200)+(bi2*100)+(bs2*150)+pn2+pb2)-pm2);
                 if (CH2.isChecked()) {
                     tot=tot+100;
                 }
@@ -577,7 +638,7 @@ public class TripleFragment extends Fragment {
             }
 
             if(RB2.isChecked()){
-                tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2)-pm2);
+                tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2+pb2)-pm2);
                 if (CH2.isChecked()) {
                     tot2=tot2+100;
                 }
@@ -586,7 +647,7 @@ public class TripleFragment extends Fragment {
                 }
                 punti2.setText(Integer.toString(tot2));
 
-                tot=( ((bp3*200)+(bi3*100)+(bs3*150)+pn3)-pm3);
+                tot=( ((bp3*200)+(bi3*100)+(bs3*150)+pn3+pb3)-pm3);
                 if (CH3.isChecked()) {
                     tot=tot+100;
                 }
@@ -600,7 +661,7 @@ public class TripleFragment extends Fragment {
             }
 
             if(RB3.isChecked()){
-                tot3=tot3+( ((bp3*200)+(bi3*100)+(bs3*150)+pn3)-pm3);
+                tot3=tot3+( ((bp3*200)+(bi3*100)+(bs3*150)+pn3+pb3)-pm3);
                 if (CH3.isChecked()) {
                     tot3=tot3+100;
                 }
@@ -609,7 +670,7 @@ public class TripleFragment extends Fragment {
                 }
                 punti3.setText(Integer.toString(tot3));
 
-                tot=( ((bp1*200)+(bi1*100)+(bs1*150)+pn1)-pm1);
+                tot=( ((bp1*200)+(bi1*100)+(bs1*150)+pn1+pb1)-pm1);
                 if (CH1.isChecked()) {
                     tot=tot+100;
                 }
@@ -622,21 +683,21 @@ public class TripleFragment extends Fragment {
                 punti2.setText(Integer.toString(tot2));
             }
             if(RB1.isChecked()==false&&RB2.isChecked()==false&&RB3.isChecked()==false){
-                tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1)-pm1);
+                tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1+pb1)-pm1);
                 if (CH1.isChecked()) {
                     tot1=tot1+100;
                 }
                 if (PZ1.isChecked()) {
                     tot1=tot1-100;
                 }
-                tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2)-pm2);
+                tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2+pb2)-pm2);
                 if (CH2.isChecked()) {
                     tot2=tot2+100;
                 }
                 if (PZ2.isChecked()) {
                     tot2=tot2-100;
                 }
-                tot3=tot3+( ((bp3*200)+(bi3*100)+(bs3*150)+pn3)-pm3);
+                tot3=tot3+( ((bp3*200)+(bi3*100)+(bs3*150)+pn3+pb3)-pm3);
                 if (CH3.isChecked()) {
                     tot3=tot3+100;
                 }
@@ -669,6 +730,9 @@ public class TripleFragment extends Fragment {
             BS3.setText("");
             PN3.setText("");
             PM3.setText("");
+            PB1.setText("");
+            PB2.setText("");
+            PB3.setText("");
             CH1.setChecked(false);
             CH2.setChecked(false);
             CH3.setChecked(false);
@@ -682,7 +746,7 @@ public class TripleFragment extends Fragment {
             PN3.setVisibility(View.VISIBLE);
             PN1.setVisibility(View.VISIBLE);
             PN2.setVisibility(View.VISIBLE);
-            if(!isDirectModeActivated) {
+            if(input_method == 1) {
                 BP3.setVisibility(View.VISIBLE);
                 BI3.setVisibility(View.VISIBLE);
                 BS3.setVisibility(View.VISIBLE);
@@ -823,9 +887,11 @@ public class TripleFragment extends Fragment {
 
         }
         }
+        /*
         catch (NullPointerException e){
             Snackbar.make(getView(),getString(R.string.error00), BaseTransientBottomBar.LENGTH_LONG).show();
         }
+        */
         catch (NumberFormatException e){
             Snackbar.make(getView(),getString(R.string.error04), BaseTransientBottomBar.LENGTH_LONG).show();
         }
