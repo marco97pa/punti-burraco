@@ -30,7 +30,13 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider> <!-- Support 18:9 displays -->
+        </provider>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id"/>
+
+        <!-- Support 18:9 displays -->
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
