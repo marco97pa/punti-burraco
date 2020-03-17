@@ -64,6 +64,12 @@
     <androidx.preference.PreferenceCategory android:title="@string/setting_title_app">
 
         <androidx.preference.Preference
+            android:title="@string/setting_ads"
+            android:summary="@string/setting_ads_d"
+            android:key="ads_choice">
+        </androidx.preference.Preference>
+
+        <androidx.preference.Preference
             android:title="@string/setting_share"
             android:summary="@string/setting_share_d"
             android:key="share">

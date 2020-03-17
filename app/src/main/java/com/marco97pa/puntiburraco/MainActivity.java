@@ -34,6 +34,11 @@ import android.preference.PreferenceManager;
 
 import androidx.browser.customtabs.CustomTabsIntent;
 
+import com.google.ads.consent.ConsentForm;
+import com.google.ads.consent.ConsentFormListener;
+import com.google.ads.consent.ConsentInfoUpdateListener;
+import com.google.ads.consent.ConsentInformation;
+import com.google.ads.consent.ConsentStatus;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -63,6 +68,8 @@ import android.widget.Toast;
 
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
 
 
@@ -82,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+    private String TAG = this.getClass().getSimpleName();
+
     public static Context contextOfApplication;
     public static final int OPEN_SETTINGS = 9001;
     String CHANNEL_ID = "channel_suspended";
@@ -90,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Boolean newgame_show = false;
     double latitude, longitude;
     private boolean isDrawerFixed;
+    private ConsentForm form;
+    public boolean adsPersonalized = true;
     SharedPreferences sharedPreferences;
     Handler mHandler;
     Runnable runnableCode;
@@ -107,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         setAppTheme();
         isAppUpgraded();
+        checkForConsent();
 
         isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
 
@@ -534,17 +546,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * This method handles resuming from other Activities
-     * @param requestCode  int  if it is equal to OPEN_SETTING, it will invoke Activity recreate() method
+     * @param requestCode  [int]  if it is equal to OPEN_SETTING, it will invoke Activity recreate() method
      *                     because we are coming back from SettingActivity and we need to refresh the UI accordingly
      *                     to the new settings
-     * @param resultCode
-     * @param data
+     * @param resultCode  [int] if is RESULT_OK SettingsActivity passed to this Activity some Extra data
+     * @param data   it contains extra values passed from SettingsActivity such as:
+     *                    - askAds  [boolean]  if true, we have to show ad consent dialog calling requestConsent();
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OPEN_SETTINGS) {
             recreate();
+            if(resultCode == RESULT_OK){
+                if(data.getBooleanExtra("askAds", false)){
+                    requestConsent();
+                }
+            }
         }
     }
 
@@ -622,6 +640,113 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editor.commit();
     }
 
+    private void checkForConsent() {
+        ConsentInformation consentInformation = ConsentInformation.getInstance(MainActivity.this);
+        String[] publisherIds = {getString(R.string.admob_pub_id)};
+        consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
+            @Override
+            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                // User's consent status successfully updated.
+                switch (consentStatus) {
+                    case PERSONALIZED:
+                        Log.d(TAG, "Showing Personalized ads");
+                        adsPersonalized = true;
+                        ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
+                        break;
+                    case NON_PERSONALIZED:
+                        Log.d(TAG, "Showing Non-Personalized ads");
+                        adsPersonalized = false;
+                        ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                        break;
+                    case UNKNOWN:
+                        Log.d(TAG, "Requesting Consent");
+                        if (ConsentInformation.getInstance(getBaseContext()).isRequestLocationInEeaOrUnknown()) {
+                            requestConsent();
+                        } else {
+                            adsPersonalized = true;
+                            ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailedToUpdateConsentInfo(String errorDescription) {
+                // User's consent status failed to update.
+            }
+        });
+    }
+
+    private void requestConsent() {
+        URL privacyUrl = null;
+        try {
+            privacyUrl = new URL("https://marco97pa.github.io/punti-burraco/privacy_policy");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            // Handle error
+            Log.d(TAG, "Requesting Consent: Bad or missing privacy policy URL");
+        }
+        form = new ConsentForm.Builder(MainActivity.this, privacyUrl)
+                .withListener(new ConsentFormListener() {
+                    @Override
+                    public void onConsentFormLoaded() {
+                        // Consent form loaded successfully.
+                        Log.d(TAG, "Requesting Consent: onConsentFormLoaded");
+                        showForm();
+                    }
+
+                    @Override
+                    public void onConsentFormOpened() {
+                        // Consent form was displayed.
+                        Log.d(TAG, "Requesting Consent: onConsentFormOpened");
+                    }
+
+                    @Override
+                    public void onConsentFormClosed(
+                            ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                        Log.d(TAG, "Requesting Consent: onConsentFormClosed");
+                            switch (consentStatus) {
+                                case PERSONALIZED:
+                                    adsPersonalized = true;
+                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
+                                    break;
+                                case NON_PERSONALIZED:
+                                    adsPersonalized = false;
+                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                                    break;
+                                case UNKNOWN:
+                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                                    adsPersonalized = false;
+                                    break;
+                            }
+
+                        }
+
+                    @Override
+                    public void onConsentFormError(String errorDescription) {
+                        Log.d(TAG, "Requesting Consent: onConsentFormError. Error - " + errorDescription);
+                        // Consent form error.
+                    }
+                })
+                .withPersonalizedAdsOption()
+                .withNonPersonalizedAdsOption()
+                .build();
+        form.load();
+    }
+
+    private void showForm() {
+        if (form == null) {
+            Log.d(TAG, "Consent form is null");
+        }
+        if (form != null) {
+            Log.d(TAG, "Showing consent form");
+            form.show();
+        } else {
+            Log.d(TAG, "Not Showing consent form");
+        }
+    }
 
     public void setAppTheme() {
         /* SETTING APP THEME

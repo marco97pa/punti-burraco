@@ -1,5 +1,6 @@
 package com.marco97pa.puntiburraco;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -135,6 +136,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                         .replace(android.R.id.content, new InputMethodChooser())
                         .addToBackStack(null)
                         .commit();
+                return true;
+            }
+        });
+
+        //Sets intent to open ads settings
+        Preference ads = findPreference("ads_choice");
+        ads.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("askAds", true);
+                getActivity().setResult(Activity.RESULT_OK, resultIntent);
+                getActivity().finish();
                 return true;
             }
         });

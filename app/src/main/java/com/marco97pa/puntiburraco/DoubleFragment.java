@@ -25,6 +25,9 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -94,6 +97,7 @@ public class DoubleFragment extends Fragment {
     private EditText PM1, PM2; //Points in hand EditText
     private CheckBox CH1, CH2, PZ1, PZ2; //Close and No Pots Checkbox
     private ImageView IMG1, IMG2; //Images of players
+    private AdView mAdView;
     final int PDefault=0;
     boolean win=false; //Actual state of game
     String winner,loser; //Names of winner and loser
@@ -152,6 +156,14 @@ public class DoubleFragment extends Fragment {
         IMG2= (ImageView) rootView.findViewById(R.id.image2);
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
+
+        //TODO: Uncomment
+        //mAdView = rootView.findViewById(R.id.adView);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
+        if(adsEnabled) {
+            showAds();
+        }
 
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(), R.color.dialogBackground)));
@@ -317,7 +329,6 @@ public class DoubleFragment extends Fragment {
          * RECOVER IMAGES OF LAST GAME
          * Images are showed only if user has choose it in settings
          */
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Boolean isImgActivated = sharedPref.getBoolean("img", true) ;
         if(isImgActivated) {
             //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
@@ -1029,6 +1040,25 @@ public class DoubleFragment extends Fragment {
         db.open();
         long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
         db.close();
+    }
+
+    /**
+     * Show ads
+     */
+    private void showAds(){
+        AdRequest adRequest;
+        if(((MainActivity)getActivity()).adsPersonalized) {
+            adRequest = new AdRequest.Builder()
+                    .build();
+        }
+        else{
+            Bundle extras = new Bundle();
+            extras.putString("npa", "1");
+            adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .build();
+        }
+        //mAdView.loadAd(adRequest);
     }
 
     /**
