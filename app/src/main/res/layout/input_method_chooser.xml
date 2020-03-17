@@ -17,10 +17,11 @@
         <TextView
             android:id="@+id/textHint"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:padding="@dimen/activity_vertical_marginMOD"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_vertical_margin"
             android:text="@string/setting_insert_method_d"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorAccent" />
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -52,15 +53,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/setting_inputnormal"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <TextView
                         android:id="@+id/description1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView"
+                        android:text="@string/setting_inputnormal_d"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
                 </LinearLayout>
 
@@ -91,15 +93,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/setting_inputalternative"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <TextView
                         android:id="@+id/description2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView"
+                        android:text="@string/setting_inputalternative_d"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
                 </LinearLayout>
 
@@ -129,8 +132,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
                         android:text="@string/setting_inputdirect"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <TextView
                         android:id="@+id/description3"
@@ -179,14 +183,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/setting_pm"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/setting_pm_d"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
             </LinearLayout>
 
         </LinearLayout>

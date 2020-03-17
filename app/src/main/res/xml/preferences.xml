@@ -1,14 +1,32 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.preference.PreferenceCategory android:title="@string/setting_title_game">
+        <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+        <androidx.preference.EditTextPreference
+            android:defaultValue="2005"
+            android:inputType="number"
+            android:key="limite"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/setting_limite" />
+
+        <androidx.preference.Preference
+            android:title="@string/setting_insert_method"
+            android:summary="@string/setting_insert_method_d"
+            android:key="input_method"
+            />
+
+    </androidx.preference.PreferenceCategory>
+
     <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_pro" android:key="interface_settings">
 
-            <androidx.preference.SwitchPreference
-                android:defaultValue="true"
-                android:key="img"
-                android:summary="@string/setting_img_d"
-                android:title="@string/setting_img" />
+            <androidx.preference.ListPreference
+                android:key="theme"
+                android:title="@string/setting_notte"
+                android:defaultValue="light"/>
 
             <androidx.preference.SwitchPreference
                 android:defaultValue="false"
@@ -16,10 +34,11 @@
                 android:summary="@string/setting_schermo_d"
                 android:title="@string/setting_schermo" />
 
-            <androidx.preference.ListPreference
-                android:key="theme"
-                android:title="@string/setting_notte"
-                android:defaultValue="light"/>
+            <androidx.preference.SwitchPreference
+                android:defaultValue="true"
+                android:key="img"
+                android:summary="@string/setting_img_d"
+                android:title="@string/setting_img" />
 
             <androidx.preference.SwitchPreference
                 android:defaultValue="true"
@@ -39,25 +58,6 @@
                 android:summary="@string/setting_notification_d"
                 android:key="notification_old">
             </androidx.preference.SwitchPreference>
-
-    </androidx.preference.PreferenceCategory>
-    
-    <androidx.preference.PreferenceCategory android:title="@string/setting_title_game">
-            <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-            <androidx.preference.EditTextPreference
-                android:defaultValue="2005"
-                android:inputType="number"
-                android:key="limite"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"
-                android:title="@string/setting_limite" />
-
-            <androidx.preference.Preference
-                android:title="@string/setting_insert_method"
-                android:summary="@string/setting_insert_method_d"
-                android:key="input_method"
-            />
 
     </androidx.preference.PreferenceCategory>
 

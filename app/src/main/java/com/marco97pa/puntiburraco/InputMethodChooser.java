@@ -2,10 +2,7 @@ package com.marco97pa.puntiburraco;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.content.SharedPreferences;
@@ -42,7 +39,7 @@ public class InputMethodChooser extends Fragment {
         //Setting activity title
         ((SettingActivity) getActivity()).setTitle(getString(R.string.setting_insert_method));
 
-        View rootView = inflater.inflate(R.layout.activity_input_method_chooser, container,false);
+        View rootView = inflater.inflate(R.layout.input_method_chooser, container,false);
 
         option1 = (LinearLayout) rootView.findViewById(R.id.input_method_1);
         option2 = (LinearLayout) rootView.findViewById(R.id.input_method_2);

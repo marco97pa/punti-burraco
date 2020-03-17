@@ -67,8 +67,8 @@
     <string name="setting_advanced">Opções Avançadas</string>
     <string name="setting_advanced_d">Abrir opções avançadas</string>
     <string name="marshmallow_alert_2">Permission denied to publish your score</string>
-    <string name="setting_img">Mostrar imagens</string>
-    <string name="setting_img_d">Ativa as imagens em modo de 2 e 4 jogadores</string>
+    <string name="setting_img">Imagens</string>
+    <string name="setting_img_d">Ativa as imagens de jogadores</string>
     <string name="easter_egg">Yeah!</string>
     <string name="notification">Jogo suspenso</string>
     <string name="gioc_1">Jogador 1</string>
@@ -91,14 +91,19 @@
     <string name="audio_up">Volume 100%</string>
     <string name="setting_sound_d">Reproduzir som quando alguém ganha</string>
     <string name="setting_sound">Som</string>
-    <string name="setting_background">Fundo da história</string>
     <string name="change_background_hint">Rolagem para mudar o fundo</string>
     <string name="app_not_installed">%1$s Erro</string>
-    <string name="error_location">Você revogou a permissão de localização!\nTema do aplicativo definido como Leve</string>
     <string name="error04">Erro</string>
     <string name="error00">Erro</string>
     <string name="setting_insert_method_d">Escolha o seu método de entrada preferido</string>
     <string name="setting_insert_method">Método de entrada</string>
     <string name="setting_developer">Opções de desenvolvedor</string>
     <string name="setting_developer_d">Abrir opções de desenvolvedor</string>
+    <string name="SuggPB">Pontos base</string>
+    <string name="setting_ads">Publicidades</string>
+    <string name="setting_ads_d">Habilitar anúncios</string>
+    <string name="setting_inputnormal_d">Adequado para iniciantes, mas não da maneira mais rápida\nPontos de entrada de forma detalhada, com execuções limpas, semi-limpas e sujas. Você pode usar apenas parte de todos os campos.</string>
+    <string name="setting_inputnormal">Completo</string>
+    <string name="setting_inputalternative_d">Apenas dois campos: pontos base e pontos da tabela\nOs pontos base são a soma das execuções com os pontos de fechamento e subtração em mãos (calculados pelo usuário). Os pontos da mesa são os pontos das cartas na mesa.</string>
+    <string name="setting_inputalternative">Esperto</string>
 </resources>

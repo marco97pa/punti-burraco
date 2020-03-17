@@ -61,6 +61,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         version.setSummary(BuildConfig.VERSION_NAME);
 
         //Set default value for img setting
+        //Images are activated by default, except if isLowRamDevice is true
         Preference img = findPreference("img");
         ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
