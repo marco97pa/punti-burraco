@@ -27,7 +27,9 @@ import android.preference.PreferenceManager;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -157,11 +159,12 @@ public class DoubleFragment extends Fragment {
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
 
-        //TODO: Uncomment
-        //mAdView = rootView.findViewById(R.id.adView);
+
+        mAdView = rootView.findViewById(R.id.adView);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
         if(adsEnabled) {
+            MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
             showAds();
         }
 
@@ -1058,7 +1061,7 @@ public class DoubleFragment extends Fragment {
                     .addNetworkExtrasBundle(AdMobAdapter.class, extras)
                     .build();
         }
-        //mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);
     }
 
     /**

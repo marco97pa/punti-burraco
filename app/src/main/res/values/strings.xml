@@ -121,6 +121,8 @@
     <string name="instagram" translatable="false">Instagram Stories</string>
     <string name="change_background_hint">Swipe to change background</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
+    <string name="setting_ads_choice">Choose your ads setting</string>
+    <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 
 
 </resources>

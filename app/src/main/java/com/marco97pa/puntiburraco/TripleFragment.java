@@ -17,6 +17,10 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -68,6 +72,7 @@ public class TripleFragment extends Fragment {
     private CheckBox PZ1, PZ2, PZ3;
     boolean check1=false, check2=false, check3=false;
     int SET, input_method;
+    private AdView mAdView;
     final int PDefault=0;
     boolean win=false;
     String winner,loser1,loser2;
@@ -127,6 +132,14 @@ public class TripleFragment extends Fragment {
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
 
+        mAdView = rootView.findViewById(R.id.adView);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
+        if(adsEnabled) {
+            MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
+            showAds();
+        }
+
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
         txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogText)));
@@ -136,7 +149,6 @@ public class TripleFragment extends Fragment {
          * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
          *
          * */
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         isManoModeActivated = sharedPref.getBoolean("input_puntimano", true) ;
         if(!isManoModeActivated){
             PM1.setVisibility(View.GONE);
@@ -1044,6 +1056,25 @@ public class TripleFragment extends Fragment {
         db.open();
         long id = db.insertScore(player1, player2, player3, point1, point2, point3, date, generateHandsDetail());
         db.close();
+    }
+
+    /**
+     * Show ads
+     */
+    private void showAds(){
+        AdRequest adRequest;
+        if(((MainActivity)getActivity()).adsPersonalized) {
+            adRequest = new AdRequest.Builder()
+                    .build();
+        }
+        else{
+            Bundle extras = new Bundle();
+            extras.putString("npa", "1");
+            adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .build();
+        }
+        mAdView.loadAd(adRequest);
     }
 
     //AVVIA SET NOMI

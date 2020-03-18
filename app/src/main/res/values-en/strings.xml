@@ -106,4 +106,5 @@
     <string name="setting_inputalternative_d">Only two fields: base points and table points \nBase points are the sum of the runs with the closing, subtracting points in hand (calculated by the user). Table points are the points of cards on the table.</string>
     <string name="setting_inputnormal">Complete</string>
     <string name="setting_inputnormal_d">Suitable for newcomers, but not the fastest way \nInput points in a detailed form, with clean runs, semi-clean runs and dirty runs. You can even use only part of all the fields.</string>
+    <string name="setting_ads_choice">Choose your ads setting</string>
 </resources>

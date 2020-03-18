@@ -65,7 +65,7 @@
 
         <androidx.preference.Preference
             android:title="@string/setting_ads"
-            android:summary="@string/setting_ads_d"
+            android:summary="@string/setting_ads_choice"
             android:key="ads_choice">
         </androidx.preference.Preference>
 

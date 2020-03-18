@@ -24,6 +24,10 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -80,6 +84,7 @@ public class QuadFragment extends Fragment {
     private EditText PM1, PM2;
     private CheckBox CH1, CH2, PZ1, PZ2;
     private ImageView IMG1, IMG2;
+    private AdView mAdView;
     final int PDefault=0;
     boolean win=false;
     String winner,loser;
@@ -133,6 +138,14 @@ public class QuadFragment extends Fragment {
         IMG2= (ImageView) rootView.findViewById(R.id.image2);
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
+
+        mAdView = rootView.findViewById(R.id.adView);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
+        if(adsEnabled) {
+            MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
+            showAds();
+        }
 
         Restore();
 
@@ -290,7 +303,6 @@ public class QuadFragment extends Fragment {
 
 
         //SETUP IMMAGINI - Recupera immagini dalla memoria interna solo se attivate
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             Boolean isImgActivated = sharedPref.getBoolean("img", true) ;
             if(isImgActivated) {
                 //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
@@ -988,6 +1000,25 @@ public class QuadFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Show ads
+     */
+    private void showAds(){
+        AdRequest adRequest;
+        if(((MainActivity)getActivity()).adsPersonalized) {
+            adRequest = new AdRequest.Builder()
+                    .build();
+        }
+        else{
+            Bundle extras = new Bundle();
+            extras.putString("npa", "1");
+            adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .build();
+        }
+        mAdView.loadAd(adRequest);
     }
 
     /**

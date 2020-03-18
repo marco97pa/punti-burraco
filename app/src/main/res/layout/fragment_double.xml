@@ -6,21 +6,21 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:gravity="center">
+        android:paddingRight="16dp">
 
         <androidx.gridlayout.widget.GridLayout
 
             android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
             android:screenOrientation="portrait"
             ads:columnCount="2"
             ads:rowCount="25"
@@ -41,16 +41,16 @@
 
                 android:id="@+id/pozzetto1"
                 android:text="@string/pozzetto"
-                ads:layout_column="0"
                 android:textColor="@color/dialogText"
+                ads:layout_column="0"
                 ads:layout_row="10" />
 
             <CheckBox
 
                 android:id="@+id/chiusura1"
                 android:text="@string/chiusura"
-                ads:layout_column="0"
                 android:textColor="@color/dialogText"
+                ads:layout_column="0"
                 ads:layout_row="9" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -60,8 +60,8 @@
                 android:hint="@string/SuggPM"
                 android:inputType="number"
                 android:maxLength="4"
-                ads:layout_column="0"
                 ads:backgroundTint="@color/textColorSecondary"
+                ads:layout_column="0"
                 ads:layout_row="8" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -93,8 +93,8 @@
                 android:hint="@string/SuggBS"
                 android:inputType="number"
                 android:maxLength="4"
-                ads:layout_column="0"
                 ads:backgroundTint="@color/textColorSecondary"
+                ads:layout_column="0"
                 ads:layout_row="5" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -104,8 +104,8 @@
                 android:hint="@string/SuggBI"
                 android:inputType="number"
                 android:maxLength="4"
-                ads:layout_column="0"
                 ads:backgroundTint="@color/textColorSecondary"
+                ads:layout_column="0"
                 ads:layout_row="4" />
 
             <TextView
@@ -116,7 +116,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/textBig"
                 ads:layout_column="0"
-                
+
                 ads:layout_row="2" />
 
             <androidx.emoji.widget.EmojiTextView
@@ -138,23 +138,23 @@
                 android:hint="@string/SuggBP"
                 android:inputType="number"
                 android:maxLength="4"
-                ads:layout_column="0"
                 ads:backgroundTint="@color/textColorSecondary"
+                ads:layout_column="0"
                 ads:layout_row="3" />
 
             <CheckBox
                 android:id="@+id/pozzetto2"
                 android:text="@string/pozzetto"
-                ads:layout_column="1"
                 android:textColor="@color/dialogText"
+                ads:layout_column="1"
                 ads:layout_row="10" />
 
 
             <CheckBox
                 android:id="@+id/chiusura2"
                 android:text="@string/chiusura"
-                ads:layout_column="1"
                 android:textColor="@color/dialogText"
+                ads:layout_column="1"
                 ads:layout_row="9" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -164,8 +164,8 @@
                 android:hint="@string/SuggPM"
                 android:inputType="number"
                 android:maxLength="4"
-                ads:layout_column="1"
                 ads:backgroundTint="@color/textColorSecondary"
+                ads:layout_column="1"
                 ads:layout_row="8" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -197,8 +197,8 @@
                 android:hint="@string/SuggBS"
                 android:inputType="number"
                 android:maxLength="4"
-                ads:layout_column="1"
                 ads:backgroundTint="@color/textColorSecondary"
+                ads:layout_column="1"
                 ads:layout_row="5" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -208,8 +208,8 @@
                 android:hint="@string/SuggBI"
                 android:inputType="number"
                 android:maxLength="4"
-                ads:layout_column="1"
                 ads:backgroundTint="@color/textColorSecondary"
+                ads:layout_column="1"
                 ads:layout_row="4" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -219,8 +219,8 @@
                 android:hint="@string/SuggBP"
                 android:inputType="number"
                 android:maxLength="4"
-                ads:layout_column="1"
                 ads:backgroundTint="@color/textColorSecondary"
+                ads:layout_column="1"
                 ads:layout_row="3" />
 
             <TextView
@@ -231,7 +231,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/textBig"
                 ads:layout_column="1"
-                
+
                 ads:layout_row="2" />
 
             <androidx.emoji.widget.EmojiTextView
@@ -257,6 +257,13 @@
                 ads:layout_row="0" />
 
         </androidx.gridlayout.widget.GridLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_2players_unit_id"/>
 
 
     </LinearLayout>
