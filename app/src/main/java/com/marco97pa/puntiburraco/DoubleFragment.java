@@ -64,6 +64,8 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -332,7 +334,7 @@ public class DoubleFragment extends Fragment {
          * RECOVER IMAGES OF LAST GAME
          * Images are showed only if user has choose it in settings
          */
-        Boolean isImgActivated = sharedPref.getBoolean("img", true) ;
+                Boolean isImgActivated = sharedPref.getBoolean("img", true) ;
         if(isImgActivated) {
             //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
             Bitmap bitmap1 = null, bitmap2 = null;
@@ -373,10 +375,10 @@ public class DoubleFragment extends Fragment {
         }
 
 
-          /**
-           * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
-           *
-           * */
+        /**
+         * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
+         *
+         * */
             Boolean isManoModeActivated = sharedPref.getBoolean("input_puntimano", true) ;
             if(!isManoModeActivated){
                 PM1.setVisibility(View.GONE);

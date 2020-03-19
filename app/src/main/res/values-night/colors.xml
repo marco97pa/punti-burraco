@@ -5,6 +5,7 @@
     <color name="colorAccent">#80d8ff</color>
     <color name="colorSecondary">#81d4fa</color>
     <color name="colorOnSecondary">#000</color>
+    <color name="colorBackground">#121212</color>
     <color name="textColorHint">#898989</color>
     <color name="textColorSecondary">#b8b8b8</color>
     <color name="dialogBackground">#ff424242</color>

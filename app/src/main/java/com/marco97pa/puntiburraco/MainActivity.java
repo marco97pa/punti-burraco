@@ -114,14 +114,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //CREATING ACTIVITY AND FAB BUTTON
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         setAppTheme();
-        isAppUpgraded();
-        checkForConsent();
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+
 
         isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
-
 
         /* CREATING ACTIVITY
          * Creating activity and setting its contents, the toolbar, the fab and the first Fragment
@@ -135,6 +134,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fragment = new DoubleFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "2").commit();
+
+        isAppUpgraded();
+        checkForConsent();
 
         //Setting the FAB button - It launches the openStart method of the active Fragment inside activity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -577,6 +579,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can restore the view hierarchy
@@ -619,6 +622,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         invalidateOptionsMenu();
         //the method above invokes onPrepareOptionsMenu();
     }
+
 
     /**
      * Checks if app has been updated to do things like upgrade databases or show a message to the user
