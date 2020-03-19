@@ -2,10 +2,6 @@
 
     <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="android:buttonBarButtonStyle">@style/AppTheme.Dialog.Button</item>
-        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.Dialog.Button</item>
-        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.Dialog.Button</item>
-        <item name="buttonBarNeutralButtonStyle">@style/AppTheme.Dialog.Button</item>
-        <item name="buttonBarButtonStyle">@style/AppTheme.Dialog.Button</item>
         <item name="android:background">@color/dialogBackground</item>
         <item name="android:textColor">@color/dialogText</item>
         <item name="colorAccent">@color/colorAccent</item>

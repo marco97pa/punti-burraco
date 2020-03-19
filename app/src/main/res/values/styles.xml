@@ -14,6 +14,7 @@
         <item name="android:textColor">@color/dialogText</item>
         <item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
     </style>
 
     <style name="AppTheme.Placeholder">
@@ -27,6 +28,10 @@
 
     <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="android:buttonBarButtonStyle">@style/AppTheme.Dialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.Dialog.Button</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.Dialog.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AppTheme.Dialog.Button</item>
+        <item name="buttonBarButtonStyle">@style/AppTheme.Dialog.Button</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimary">@color/dialogButton</item>
     </style>
