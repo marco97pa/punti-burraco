@@ -552,7 +552,7 @@ public class QuadFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp4", "");
         editor.putInt("interrupted", 0);
-        editor.commit();
+        editor.apply();
         //make action bar standard again
         ((MainActivity)getActivity()).setMenuAlternative(false);
         Snackbar.make(getView(), R.string.reset, Snackbar.LENGTH_SHORT).show();
@@ -616,7 +616,7 @@ public class QuadFragment extends Fragment {
             String html=sharedPref.getString("dpp4", "");
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("dpp4",html+"<tr><td>"+tot1+"</td><td>"+tot2+"</td></tr>");
-            editor.commit();
+            editor.apply();
             //reset (no tot)
             BP1.setText("");
             BI1.setText("");
@@ -745,7 +745,7 @@ public class QuadFragment extends Fragment {
             editor.putString("squadra1",textNome1.getText().toString());
             editor.putString("squadra2",textNome2.getText().toString());
             editor.putInt("interrupted", 4);
-            editor.commit();
+            editor.apply();
         }
         else{
             editor.putInt("punti1", PDefault);
@@ -756,7 +756,7 @@ public class QuadFragment extends Fragment {
             editor.putString("dpp4", "");
             //set alternative bar
             ((MainActivity)getActivity()).setMenuAlternative(true);
-            editor.commit();
+            editor.apply();
         }
     }
 

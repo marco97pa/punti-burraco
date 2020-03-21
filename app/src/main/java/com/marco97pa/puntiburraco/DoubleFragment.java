@@ -616,7 +616,7 @@ public class DoubleFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp", "");
         editor.putInt("interrupted", 0);
-        editor.commit();
+        editor.apply();
         //make action bar standard again
         ((MainActivity)getActivity()).setMenuAlternative(false);
         //make a Snackbar to alert the user
@@ -746,7 +746,7 @@ public class DoubleFragment extends Fragment {
                 String html = sharedPref.getString("dpp", "");
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("dpp", html + "<tr><td>" + tot1 + "</td><td>" + tot2 + "</td></tr>");
-                editor.commit();
+                editor.apply();
 
                 //reset the interface widget (polish EditText and uncheck checkboxes)
                 BP1.setText("");
@@ -890,7 +890,7 @@ public class DoubleFragment extends Fragment {
             editor.putString("sq1",textNome1.getText().toString());
             editor.putString("sq2",textNome2.getText().toString());
             editor.putInt("interrupted", 2);
-            editor.commit();
+            editor.apply();
         }
         else{
             editor.putInt("p1", PDefault);
@@ -901,7 +901,7 @@ public class DoubleFragment extends Fragment {
             editor.putString("dpp", "");
             //set alternative bar
             ((MainActivity)getActivity()).setMenuAlternative(true);
-            editor.commit();
+            editor.apply();
         }
     }
 

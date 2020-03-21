@@ -5,7 +5,7 @@ apply plugin: 'io.fabric' // Add the Fabric plugin.
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.marco97pa.puntiburraco"

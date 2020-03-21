@@ -557,7 +557,7 @@ public class TripleFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp3", "");
         editor.putInt("interrupted", 0);
-        editor.commit();
+        editor.apply();
         //make action bar standard again
         ((MainActivity)getActivity()).setMenuAlternative(false);
         Snackbar.make(getView(), R.string.reset, Snackbar.LENGTH_SHORT).show();
@@ -725,7 +725,7 @@ public class TripleFragment extends Fragment {
             String html=sharedPref.getString("dpp3", "");
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("dpp3",html+"<tr><td>"+tot1+"</td><td>"+tot2+"</td><td>"+tot3+"</td></tr>");
-            editor.commit();
+            editor.apply();
             //reset (no tot)
             BP1.setText("");
             BI1.setText("");
@@ -938,7 +938,7 @@ public class TripleFragment extends Fragment {
             editor.putString("sqd2",textNome2.getText().toString());
             editor.putString("sqd3",textNome3.getText().toString());
             editor.putInt("interrupted", 3);
-            editor.commit();
+            editor.apply();
         }
         else{
             editor.putInt("t1", PDefault);
@@ -951,7 +951,7 @@ public class TripleFragment extends Fragment {
             editor.putString("dpp3", "");
             //set alternative bar
             ((MainActivity)getActivity()).setMenuAlternative(true);
-            editor.commit();
+            editor.apply();
         }
     }
 

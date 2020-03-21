@@ -641,7 +641,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("last_version", actualVersion);
-        editor.commit();
+        editor.apply();
     }
 
     private void checkForConsent() {
