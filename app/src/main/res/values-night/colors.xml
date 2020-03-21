@@ -10,7 +10,6 @@
     <color name="textColorSecondary">#b8b8b8</color>
     <color name="dialogBackground">#ff424242</color>
     <color name="dialogText">#fff</color>
-    <color name="dialogButton">#81d4fa</color>
     <color name="instagram">#F06292</color>
     <color name="facebook">#7986CB</color>
 </resources>

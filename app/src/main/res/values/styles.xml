@@ -33,12 +33,12 @@
         <item name="buttonBarNeutralButtonStyle">@style/AppTheme.Dialog.Button</item>
         <item name="buttonBarButtonStyle">@style/AppTheme.Dialog.Button</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/dialogButton</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="backgroundTint">@android:color/transparent</item>
-        <item name="android:textColor">@color/dialogButton</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
