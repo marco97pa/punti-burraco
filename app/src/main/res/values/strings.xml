@@ -48,7 +48,7 @@
     <string name="setting_advanced">Delete cache or data</string>
     <string name="setting_advanced_d">Go to advanced app options</string>
     <string name="setting_ads">Ads</string>
-    <string name="setting_ads_d">Enable/disable ads</string>
+    <string name="setting_ads_d">Enable/disable banner ads</string>
     <string name="setting_notte">Theme</string>
     <string name="setting_notte_d">Suggested for low light ambients</string>
     <string name="setting_img">Images</string>
@@ -123,6 +123,7 @@
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
     <string name="setting_ads_choice">Choose your ads setting</string>
     <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="setting_crash">Invoke a crash</string>
 
 
 </resources>

@@ -120,6 +120,7 @@
     <string name="setting_inputalternative_d">Metodo alternativo che prevede solo due campi.\nI punti base sono la somma dei burrachi con la chiusura e la sottrazione dei punti rimasti in mano e dell\'eventuale pozzetto, calcolato a mente.\nI punti tavolo sono i punti calati sul tavolo</string>
     <string name="setting_inputnormal_d">Adatto a tutti, ma non il metodo più veloce.\nInserisci i punteggi in maniera dettagliata, inserendo il numero vari burrachi (puri, semipuri, sporchi), i punti delle carte sul tavolo e quelle rimaste in mano.\nIl calcolo dei punti è completamente automatico.</string>
     <string name="setting_ads_choice">Scegli le tue impostazioni per le inserzioni</string>
+    <string name="setting_crash">Fai crashare l\'app</string>
 
 
 </resources>

@@ -120,6 +120,7 @@
     <string name="setting_inputalternative_d">Solo dos campos: puntos base y puntos de tabla\nLos puntos base son la suma de las corridas con el cierre, restando puntos en la mano (calculado por el usuario). Los puntos de la mesa son los puntos de las cartas sobre la mesa.</string>
     <string name="setting_inputalternative">Astuto</string>
     <string name="setting_ads_choice">Elija la configuración de sus anuncios</string>
+    <string name="setting_crash">Crash</string>
 
 
 </resources>

@@ -107,4 +107,5 @@
     <string name="setting_inputalternative_d">Apenas dois campos: pontos base e pontos da tabela\nOs pontos base são a soma das execuções com os pontos de fechamento e subtração em mãos (calculados pelo usuário). Os pontos da mesa são os pontos das cartas na mesa.</string>
     <string name="setting_inputalternative">Esperto</string>
     <string name="setting_ads_choice">Escolha a configuração dos seus anúncios</string>
+    <string name="setting_crash">Crash</string>
 </resources>

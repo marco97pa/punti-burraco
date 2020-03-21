@@ -107,4 +107,5 @@
     <string name="setting_inputnormal">Complete</string>
     <string name="setting_inputnormal_d">Suitable for newcomers, but not the fastest way \nInput points in a detailed form, with clean runs, semi-clean runs and dirty runs. You can even use only part of all the fields.</string>
     <string name="setting_ads_choice">Choose your ads setting</string>
+    <string name="setting_crash">Invoke a crash</string>
 </resources>

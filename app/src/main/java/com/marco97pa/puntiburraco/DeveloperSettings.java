@@ -3,7 +3,10 @@ package com.marco97pa.puntiburraco;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import com.crashlytics.android.Crashlytics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +34,17 @@ public class DeveloperSettings extends SettingsFragment {
                 i.addCategory(Intent.CATEGORY_DEFAULT);
                 i.setData(Uri.parse("package:" + appPackageName));
                 startActivity(i);
+                return true;
+            }
+        });
+
+        //Sets intent to crash
+        Preference crash_p = findPreference("crash");
+        crash_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                Crashlytics.log(Log.DEBUG, LOG_TAG, "Forcing a manual crash");
+                Crashlytics.getInstance().crash(); // Force a crash
                 return true;
             }
         });
