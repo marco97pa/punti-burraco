@@ -24,6 +24,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -86,6 +88,7 @@ public class TripleFragment extends Fragment {
     boolean bypass = false;
     Boolean isManoModeActivated;
     MediaPlayer sound;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public TripleFragment() {
         // Empty constructor required for fragment subclasses
@@ -139,6 +142,9 @@ public class TripleFragment extends Fragment {
             MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
             showAds();
         }
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
@@ -796,8 +802,9 @@ public class TripleFragment extends Fragment {
                 loser2=textNome3.getText().toString();
                 //save score to DB
                 saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
+                //save event
+                saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
                 //make alert
-
                 MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
 
                 String out=textNome1.getText().toString();
@@ -830,8 +837,9 @@ public class TripleFragment extends Fragment {
                 loser2=textNome3.getText().toString();
                 //save score to DB
                 saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
+                //save event
+                saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
                 //make alert
-
                 win=true;
                 MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                 String out=textNome2.getText().toString();
@@ -865,8 +873,10 @@ public class TripleFragment extends Fragment {
 
                 //save score to DB
                 saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
-                //make alert
+                //save event
+                saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
 
+                //make alert
                 win=true;
                 MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                 String out=textNome3.getText().toString();
@@ -1056,6 +1066,31 @@ public class TripleFragment extends Fragment {
         db.open();
         long id = db.insertScore(player1, player2, player3, point1, point2, point3, date, generateHandsDetail());
         db.close();
+    }
+
+    private void saveScoreToFirebase(String player1, String player2, String player3, int score1, int score2, int score3){
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(FirebaseAnalytics.Param.CHARACTER, player1);
+        bundle1.putLong(FirebaseAnalytics.Param.LEVEL, 3);
+        bundle1.putLong(FirebaseAnalytics.Param.SCORE, score1);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle1);
+
+        Bundle bundle2 = new Bundle();
+        bundle2.putString(FirebaseAnalytics.Param.CHARACTER, player2);
+        bundle2.putLong(FirebaseAnalytics.Param.LEVEL, 3);
+        bundle2.putLong(FirebaseAnalytics.Param.SCORE, score2);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle2);
+
+        Bundle bundle3 = new Bundle();
+        bundle3.putString(FirebaseAnalytics.Param.CHARACTER, player3);
+        bundle3.putLong(FirebaseAnalytics.Param.LEVEL, 3);
+        bundle3.putLong(FirebaseAnalytics.Param.SCORE, score3);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle3);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, "3 Player Mode");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
+
     }
 
     /**

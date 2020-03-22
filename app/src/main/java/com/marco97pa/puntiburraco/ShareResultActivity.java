@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,6 +44,7 @@ int selection;
 private LinearLayout root;
 private BottomSheetBehavior bottomSheetBehavior;
 private ExtendedFloatingActionButton fab;
+private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +172,9 @@ private ExtendedFloatingActionButton fab;
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
 
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
     }
 
     public void onResume() {
@@ -200,6 +205,12 @@ private ExtendedFloatingActionButton fab;
 
     public void shareOnOtherApps(){
         Uri image = takeScreenshot();
+
+        //add event to Firebase
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Other apps");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
         //Share
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/jpeg");
@@ -222,6 +233,12 @@ private ExtendedFloatingActionButton fab;
         // Instantiate activity and verify it will resolve implicit intent
         Activity activity = this;
         if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+
+            //add event to Firebase
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Facebook stories");
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
             activity.startActivityForResult(intent, 0);
         }
         else{
@@ -247,6 +264,12 @@ private ExtendedFloatingActionButton fab;
         // Instantiate activity and verify it will resolve implicit intent
         Activity activity = this;
         if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+
+            //add event to Firebase
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Instagram stories");
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
             activity.startActivityForResult(intent, 0);
         }
         else {

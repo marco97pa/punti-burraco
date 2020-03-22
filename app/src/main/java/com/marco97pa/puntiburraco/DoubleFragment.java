@@ -53,6 +53,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -121,6 +122,7 @@ public class DoubleFragment extends Fragment {
     String bgColor, txtColor, colors;
     boolean bypass = false;
     MediaPlayer sound;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public DoubleFragment() {
         // Empty constructor required for fragment subclasses
@@ -178,6 +180,8 @@ public class DoubleFragment extends Fragment {
         //Invoking method to recover the state of an interrupted game
         Restore();
 
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         //Setting OnclickListeners for each Player TextView
         textNome1.setOnClickListener(new View.OnClickListener() {
@@ -792,6 +796,8 @@ public class DoubleFragment extends Fragment {
                         loser = textNome2.getText().toString();
                         //save score to DB
                         saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                        //save event
+                        saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                         //make alert
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                         String out = textNome1.getText().toString();
@@ -824,6 +830,8 @@ public class DoubleFragment extends Fragment {
                         loser = textNome1.getText().toString();
                         //save score to DB
                         saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                        //save event
+                        saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                         //make alert
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                         String out = textNome2.getText().toString();
@@ -1045,6 +1053,25 @@ public class DoubleFragment extends Fragment {
         db.open();
         long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
         db.close();
+    }
+
+    private void saveScoreToFirebase(String player1, String player2, int score1, int score2){
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(FirebaseAnalytics.Param.CHARACTER, player1);
+        bundle1.putLong(FirebaseAnalytics.Param.LEVEL, 2);
+        bundle1.putLong(FirebaseAnalytics.Param.SCORE, score1);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle1);
+
+        Bundle bundle2 = new Bundle();
+        bundle2.putString(FirebaseAnalytics.Param.CHARACTER, player2);
+        bundle2.putLong(FirebaseAnalytics.Param.LEVEL, 2);
+        bundle2.putLong(FirebaseAnalytics.Param.SCORE, score2);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle2);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, "2 Player Mode");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
+
     }
 
     /**

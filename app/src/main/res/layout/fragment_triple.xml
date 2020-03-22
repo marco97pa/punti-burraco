@@ -22,6 +22,40 @@
             grid:columnCount="3"
             grid:rowCount="13">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image1"
+                android:layout_width="82dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:src="@drawable/circle_placeholder"
+                ads:layout_column="0"
+                ads:layout_row="0"
+                grid:layout_gravity="center" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image2"
+                android:layout_width="82dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:src="@drawable/circle_placeholder"
+                ads:layout_column="1"
+                ads:layout_row="0"
+                grid:layout_gravity="center" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image3"
+                android:layout_width="82dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:src="@drawable/circle_placeholder"
+                ads:layout_column="2"
+                ads:layout_row="0"
+                grid:layout_gravity="center" />
+
+
             <androidx.emoji.widget.EmojiTextView
                 android:id="@+id/editNome1"
                 android:layout_width="wrap_content"
@@ -33,7 +67,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="18sp"
                 grid:layout_column="0"
-                grid:layout_row="0" />
+                grid:layout_row="1" />
 
             <androidx.emoji.widget.EmojiTextView
                 android:id="@+id/editNome2"
@@ -46,7 +80,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="18sp"
                 grid:layout_column="1"
-                grid:layout_row="0" />
+                grid:layout_row="1" />
 
             <androidx.emoji.widget.EmojiTextView
                 android:id="@+id/editNome3"
@@ -59,7 +93,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="18sp"
                 grid:layout_column="2"
-                grid:layout_row="0" />
+                grid:layout_row="1" />
 
             <TextView
                 android:id="@+id/Punti1"
@@ -70,7 +104,7 @@
                 android:textSize="@dimen/textBigi"
                 grid:layout_column="0"
                 grid:layout_gravity="center_horizontal|top"
-                grid:layout_row="1" />
+                grid:layout_row="2" />
 
             <TextView
                 android:id="@+id/Punti2"
@@ -81,7 +115,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/textBigi"
                 grid:layout_column="1"
-                grid:layout_row="1" />
+                grid:layout_row="2" />
 
             <TextView
                 android:id="@+id/Punti3"
@@ -92,7 +126,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/textBigi"
                 grid:layout_column="2"
-                grid:layout_row="1" />
+                grid:layout_row="2" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBP1"
@@ -104,7 +138,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="0"
-                grid:layout_row="3" />
+                grid:layout_row="4" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBP2"
@@ -115,7 +149,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="1"
-                grid:layout_row="3" />
+                grid:layout_row="4" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBP3"
@@ -126,7 +160,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="2"
-                grid:layout_row="3" />
+                grid:layout_row="4" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBI1"
@@ -137,7 +171,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="0"
-                grid:layout_row="4" />
+                grid:layout_row="5" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBI2"
@@ -148,7 +182,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="1"
-                grid:layout_row="4" />
+                grid:layout_row="5" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBI3"
@@ -159,7 +193,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="2"
-                grid:layout_row="4" />
+                grid:layout_row="5" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBS1"
@@ -170,7 +204,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="0"
-                grid:layout_row="5" />
+                grid:layout_row="6" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBS2"
@@ -181,7 +215,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="1"
-                grid:layout_row="5" />
+                grid:layout_row="6" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBS3"
@@ -192,7 +226,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="2"
-                grid:layout_row="5" />
+                grid:layout_row="6" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPB1"
@@ -203,7 +237,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="0"
-                grid:layout_row="6" />
+                grid:layout_row="7" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPB2"
@@ -214,7 +248,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="1"
-                grid:layout_row="6" />
+                grid:layout_row="7" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPB3"
@@ -225,7 +259,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="2"
-                grid:layout_row="6" />
+                grid:layout_row="7" />
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -237,7 +271,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="0"
-                grid:layout_row="7" />
+                grid:layout_row="8" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editP2"
@@ -248,7 +282,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="1"
-                grid:layout_row="7" />
+                grid:layout_row="8" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editP3"
@@ -259,7 +293,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="2"
-                grid:layout_row="7" />
+                grid:layout_row="8" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPM1"
@@ -270,7 +304,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="0"
-                grid:layout_row="8" />
+                grid:layout_row="9" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPM2"
@@ -281,7 +315,7 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="1"
-                grid:layout_row="8" />
+                grid:layout_row="9" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPM3"
@@ -292,49 +326,49 @@
                 android:maxLength="4"
                 ads:backgroundTint="@color/textColorSecondary"
                 grid:layout_column="2"
-                grid:layout_row="8" />
+                grid:layout_row="9" />
 
             <CheckBox
                 android:id="@+id/chiusura1"
                 android:text="@string/chius"
                 android:textColor="@color/dialogText"
                 grid:layout_column="0"
-                grid:layout_row="9" />
+                grid:layout_row="10" />
 
             <CheckBox
                 android:id="@+id/chiusura3"
                 android:text="@string/chius"
                 android:textColor="@color/dialogText"
                 grid:layout_column="2"
-                grid:layout_row="9" />
+                grid:layout_row="10" />
 
             <CheckBox
                 android:id="@+id/chiusura2"
                 android:text="@string/chius"
                 android:textColor="@color/dialogText"
                 grid:layout_column="1"
-                grid:layout_row="9" />
+                grid:layout_row="10" />
 
             <CheckBox
                 android:id="@+id/pozzetto1"
                 android:text="@string/pozz"
                 android:textColor="@color/dialogText"
                 grid:layout_column="0"
-                grid:layout_row="10" />
+                grid:layout_row="11" />
 
             <CheckBox
                 android:id="@+id/pozzetto2"
                 android:text="@string/pozz"
                 android:textColor="@color/dialogText"
                 grid:layout_column="1"
-                grid:layout_row="10" />
+                grid:layout_row="11" />
 
             <CheckBox
                 android:id="@+id/pozzetto3"
                 android:text="@string/pozz"
                 android:textColor="@color/dialogText"
                 grid:layout_column="2"
-                grid:layout_row="10" />
+                grid:layout_row="11" />
 
             <CheckBox
                 android:id="@+id/rB1"
@@ -343,7 +377,7 @@
                 android:textColor="@color/colorSecondary"
                 ads:buttonTint="@color/colorSecondary"
                 grid:layout_column="0"
-                grid:layout_row="2" />
+                grid:layout_row="3" />
 
             <CheckBox
                 android:id="@+id/rB2"
@@ -352,7 +386,7 @@
                 android:textColor="@color/colorSecondary"
                 ads:buttonTint="@color/colorSecondary"
                 grid:layout_column="1"
-                grid:layout_row="2" />
+                grid:layout_row="3" />
 
             <CheckBox
                 android:id="@+id/rB3"
@@ -361,7 +395,7 @@
                 android:textColor="@color/colorSecondary"
                 ads:buttonTint="@color/colorSecondary"
                 grid:layout_column="2"
-                grid:layout_row="2" />
+                grid:layout_row="3" />
 
         </androidx.gridlayout.widget.GridLayout>
 

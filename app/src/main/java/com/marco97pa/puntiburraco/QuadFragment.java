@@ -49,6 +49,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -102,6 +103,7 @@ public class QuadFragment extends Fragment {
     String bgColor, txtColor, colors;
     boolean bypass = false;
     MediaPlayer sound;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     public QuadFragment() {
@@ -148,6 +150,9 @@ public class QuadFragment extends Fragment {
         }
 
         Restore();
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
@@ -650,6 +655,8 @@ public class QuadFragment extends Fragment {
                     loser=textNome2.getText().toString();
                     //save score to DB
                     saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                    //save event
+                    saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                     //make alert
                     MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                     String out=textNome1.getText().toString();
@@ -682,6 +689,8 @@ public class QuadFragment extends Fragment {
                     loser=textNome1.getText().toString();
                     //save score to DB
                     saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                    //save event
+                    saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                     //make alert
                     MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                     String out=textNome2.getText().toString();
@@ -844,6 +853,25 @@ public class QuadFragment extends Fragment {
         db.open();
         long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
         db.close();
+    }
+
+    private void saveScoreToFirebase(String player1, String player2, int score1, int score2){
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(FirebaseAnalytics.Param.CHARACTER, player1);
+        bundle1.putLong(FirebaseAnalytics.Param.LEVEL, 4);
+        bundle1.putLong(FirebaseAnalytics.Param.SCORE, score1);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle1);
+
+        Bundle bundle2 = new Bundle();
+        bundle2.putString(FirebaseAnalytics.Param.CHARACTER, player2);
+        bundle2.putLong(FirebaseAnalytics.Param.LEVEL, 4);
+        bundle2.putLong(FirebaseAnalytics.Param.SCORE, score2);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle2);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, "4 Player Mode");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
+
     }
 
     //CONTROLLI ERRORI
