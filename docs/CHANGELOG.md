@@ -6,7 +6,9 @@
 * You can now change Stories background with a swipe
 * Reordered Settings section, based on most used options
 * Added little banner ads to better support development
+* App now follows system theme by default on Android 10
 * Removed location permission: removed auto theme feature on pre-Android 10 devices
+
 ### 11.0.1
 * Bug fixes on Android 10
 * Improved app update process
