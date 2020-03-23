@@ -26,7 +26,7 @@
             <androidx.preference.ListPreference
                 android:key="theme"
                 android:title="@string/setting_notte"
-                android:defaultValue="light"/>
+                />
 
             <androidx.preference.SwitchPreference
                 android:defaultValue="false"

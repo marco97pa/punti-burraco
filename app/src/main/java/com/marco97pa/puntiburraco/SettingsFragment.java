@@ -201,11 +201,16 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             theme_values.remove(2);
             theme_entries.remove(2);
         }
+        String default_theme = "light";
+        if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
+            default_theme = "system";
+        }
         ListPrefTheme.setEntries(theme_entries.toArray(new CharSequence[theme_entries.size()]));
         ListPrefTheme.setEntryValues(theme_values.toArray(new CharSequence[theme_values.size()]));
+        ListPrefTheme.setDefaultValue(default_theme);
         String theme[] = getResources().getStringArray(R.array.theme_entries);
         String summ;
-        switch (sp.getString("theme", "light")){
+        switch (sp.getString("theme", default_theme)){
             case "light": summ = theme[0]; break;
             case "dark": summ = theme[1]; break;
             case "system": summ = theme[2]; break;

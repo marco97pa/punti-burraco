@@ -5,6 +5,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +38,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.appcompat.widget.PopupMenu;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +65,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * QUAD FRAGMENT
@@ -74,6 +78,7 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class QuadFragment extends Fragment {
+    public static final String LOG_TAG = "4PlayersFragment";
     int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
@@ -308,7 +313,15 @@ public class QuadFragment extends Fragment {
 
 
         //SETUP IMMAGINI - Recupera immagini dalla memoria interna solo se attivate
-            Boolean isImgActivated = sharedPref.getBoolean("img", true) ;
+        //On lowRamDevice images are disabled par default
+        boolean isLowRamDevice = false;
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            isLowRamDevice = am.isLowRamDevice();
+            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+        }
+
+        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
             if(isImgActivated) {
                 //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
                 Bitmap bitmap1 = null, bitmap2 = null;
@@ -340,13 +353,14 @@ public class QuadFragment extends Fragment {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
             }
-            //improves usability in Android N with MultiWindow and avoids bugs
-            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                if (getActivity().isInMultiWindowMode()) {
-                    IMG1.setVisibility(View.GONE);
-                    IMG2.setVisibility(View.GONE);
-                }
+        //improves usability in Android N with MultiWindow and avoids bugs
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (getActivity().isInMultiWindowMode()) {
+                IMG1.setVisibility(View.GONE);
+                IMG2.setVisibility(View.GONE);
+                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
             }
+        }
 
 
         /**

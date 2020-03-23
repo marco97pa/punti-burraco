@@ -757,7 +757,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          * Here I set the app theme according to the user choice
          * This method MUST be called before the "setContentView(...)"
          */
-        switch (sharedPreferences.getString("theme", "light")) {
+        String default_theme = "light";
+        if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
+            default_theme = "system";
+        }
+        switch (sharedPreferences.getString("theme", default_theme)) {
             case "light":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
@@ -766,14 +770,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case "system":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                break;
-            default:
-                if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                }
-                else{
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                }
                 break;
         }
     }

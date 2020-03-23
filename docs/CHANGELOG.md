@@ -1,3 +1,12 @@
+## 12.0.0
+* Choose your favourite input method in the Setting section
+* Added a new alternative input method
+* Profile images are also available in the 3 Players Mode
+* Images are now activated by default (except on Android GO devices)
+* You can now change Stories background with a swipe
+* Reordered Settings section, based on most used options
+* Added little banner ads to better support development
+* Removed location permission: removed auto theme feature on pre-Android 10 devices
 ### 11.0.1
 * Bug fixes on Android 10
 * Improved app update process

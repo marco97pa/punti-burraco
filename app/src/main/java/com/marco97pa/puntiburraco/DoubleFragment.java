@@ -8,6 +8,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.widget.PopupMenu;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,6 +71,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * DOUBLE FRAGMENT
@@ -90,7 +93,7 @@ public class DoubleFragment extends Fragment {
      *      int bp2 = Clean run player 2 = value of BP2 EditText
      */
 
-    private final Boolean google_has_fixed_nightmode_bug = false;
+    public static final String LOG_TAG = "2PlayersFragment";
     int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
@@ -338,7 +341,15 @@ public class DoubleFragment extends Fragment {
          * RECOVER IMAGES OF LAST GAME
          * Images are showed only if user has choose it in settings
          */
-                Boolean isImgActivated = sharedPref.getBoolean("img", true) ;
+        //On lowRamDevice images are disabled par default
+        boolean isLowRamDevice = false;
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            isLowRamDevice = am.isLowRamDevice();
+            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+        }
+
+        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
         if(isImgActivated) {
             //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
             Bitmap bitmap1 = null, bitmap2 = null;
@@ -375,6 +386,7 @@ public class DoubleFragment extends Fragment {
             if (getActivity().isInMultiWindowMode()) {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
+                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
             }
         }
 
