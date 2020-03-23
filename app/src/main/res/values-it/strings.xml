@@ -42,12 +42,11 @@
     <string name="setting_valuta_d">Verrai indirizzato al Play Store per lasciare una recensione. Grazie per il tuo supporto</string>
     <string name="setting_share">Invia questa app</string>
     <string name="setting_share_d">Condividi Punti Burraco con uno o più amici</string>
-    <string name="setting_advanced">Opzioni avanzate</string>
-    <string name="setting_advanced_d">Regola impostazioni avanzate dell\'app</string>
+    <string name="setting_advanced_d">Vai alle impostazioni avanzate dell\'app</string>
     <string name="setting_notte">Tema</string>
     <string name="setting_notte_d">Attiva il tema scuro per ambienti poco illuminati</string>
-    <string name="setting_img">Mostra immagini</string>
-    <string name="setting_img_d">Attiva le immagini di profilo nelle modalità 2 e 4 giocatori</string>
+    <string name="setting_img">Immagini</string>
+    <string name="setting_img_d">Attiva le immagini di profilo del giocatore</string>
     <string name="setting_schermo">Mantieni lo schermo acceso</string>
     <string name="setting_schermo_d">Leggi e aggiorna i punteggi comodamente e senza interruzioni</string>
     <string name="setting_limite">Imposta punteggio di arrivo</string>
@@ -68,9 +67,8 @@
     <string name="setting_notification">Notifiche</string>
     <string name="setting_pm_d">Permette di segnare gli eventuali punti in mano del singolo giocatore, che verranno sottratti ai punti tavolo</string>
     <string name="setting_pm">Abilita punti in mano</string>
-    <string name="setting_inputdirect">Inserimento diretto</string>
-    <string name="setting_inputdirect_d">Inserisci direttamente il punteggio della giocata. L\'interfaccia sarà più minimale, ma è consigliata a giocatori esperti, senza bisogno di aiuti</string>
-    <string name="setting_background">Sfondo delle Storie da condividere</string>
+    <string name="setting_inputdirect">Diretto</string>
+    <string name="setting_inputdirect_d">Inserisci direttamente il punteggio della giocata. \nSarà disponibile un solo campo in cui inserire tutti i punti del singolo giocatore, calcolati dall\'utente \nE\' consigliata a giocatori esperti, senza bisogno di aiuti</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Apri navigation drawer</string>
@@ -105,11 +103,24 @@
     <string name="dialog_delete">Elimina</string>
     <string name="no_data_available">Non hai ancora giocato nessuna partita...</string>
     <string name="audio_up">Volume multimediale alzato al massimo</string>
-    <string name="change_background_hint">Tocca per cambiare lo sfondo</string>
+    <string name="change_background_hint">Scorri per cambiare lo sfondo</string>
     <string name="app_not_installed">%1$s non installato. Installalo e potrai condividere i tuoi risultati</string>
-    <string name="error_location">Non hai dato il permesso alla posizione, necessaria per il tema automatico\nTema dell\'app impostato su Chiaro</string>
     <string name="error04">Hai inserito dei valori non numerici</string>
     <string name="error00">Errore generico, riavvia l\'app e se il problema persiste contatta lo sviluppatore dalla sezione Guida e Feedback</string>
+    <string name="setting_advanced">Pulisci cache o dati</string>
+    <string name="setting_developer">Opzioni sviluppatore</string>
+    <string name="setting_developer_d">Apri le opzioni avanzate per sviluppatori</string>
+    <string name="setting_insert_method">Metodo d\'inserimento</string>
+    <string name="setting_insert_method_d">Scegli il tuo metodo d\'inserimento dei punti preferito</string>
+    <string name="SuggPB">Punti base</string>
+    <string name="setting_ads">Pubblicità</string>
+    <string name="setting_ads_d">Attiva o disattiva la pubblicità</string>
+    <string name="setting_inputalternative">Rapido</string>
+    <string name="setting_inputnormal">Dettagliato (standard)</string>
+    <string name="setting_inputalternative_d">Metodo alternativo che prevede solo due campi.\nI punti base sono la somma dei burrachi con la chiusura e la sottrazione dei punti rimasti in mano e dell\'eventuale pozzetto, calcolato a mente.\nI punti tavolo sono i punti calati sul tavolo</string>
+    <string name="setting_inputnormal_d">Adatto a tutti, ma non il metodo più veloce.\nInserisci i punteggi in maniera dettagliata, inserendo il numero vari burrachi (puri, semipuri, sporchi), i punti delle carte sul tavolo e quelle rimaste in mano.\nIl calcolo dei punti è completamente automatico.</string>
+    <string name="setting_ads_choice">Scegli le tue impostazioni per le inserzioni</string>
+    <string name="setting_crash">Fai crashare l\'app</string>
 
 
 </resources>

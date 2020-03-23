@@ -5,6 +5,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +26,10 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,6 +38,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.appcompat.widget.PopupMenu;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +52,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -57,6 +65,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * QUAD FRAGMENT
@@ -69,16 +78,19 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class QuadFragment extends Fragment {
-    int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2;
+    public static final String LOG_TAG = "4PlayersFragment";
+    int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
     private EditText BP1, BP2;
     private EditText BI1, BI2;
     private EditText BS1, BS2;
     private EditText PN1, PN2;
+    private EditText PB1, PB2;
     private EditText PM1, PM2;
     private CheckBox CH1, CH2, PZ1, PZ2;
     private ImageView IMG1, IMG2;
+    private AdView mAdView;
     final int PDefault=0;
     boolean win=false;
     String winner,loser;
@@ -96,6 +108,7 @@ public class QuadFragment extends Fragment {
     String bgColor, txtColor, colors;
     boolean bypass = false;
     MediaPlayer sound;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     public QuadFragment() {
@@ -125,13 +138,26 @@ public class QuadFragment extends Fragment {
         CH2 = (CheckBox) rootView.findViewById(R.id.chiusura2);
         PZ1 = (CheckBox) rootView.findViewById(R.id.pozzetto1);
         PZ2 = (CheckBox) rootView.findViewById(R.id.pozzetto2);
+        PB1 = (EditText) rootView.findViewById(R.id.editPB1);
+        PB2 = (EditText) rootView.findViewById(R.id.editPB2);
 
         IMG1= (ImageView) rootView.findViewById(R.id.image1);
         IMG2= (ImageView) rootView.findViewById(R.id.image2);
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
 
+        mAdView = rootView.findViewById(R.id.adView);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
+        if(adsEnabled) {
+            MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
+            showAds();
+        }
+
         Restore();
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
@@ -287,8 +313,15 @@ public class QuadFragment extends Fragment {
 
 
         //SETUP IMMAGINI - Recupera immagini dalla memoria interna solo se attivate
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            Boolean isImgActivated = sharedPref.getBoolean("img", false) ;
+        //On lowRamDevice images are disabled par default
+        boolean isLowRamDevice = false;
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            isLowRamDevice = am.isLowRamDevice();
+            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+        }
+
+        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
             if(isImgActivated) {
                 //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
                 Bitmap bitmap1 = null, bitmap2 = null;
@@ -320,13 +353,14 @@ public class QuadFragment extends Fragment {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
             }
-            //improves usability in Android N with MultiWindow and avoids bugs
-            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                if (getActivity().isInMultiWindowMode()) {
-                    IMG1.setVisibility(View.GONE);
-                    IMG2.setVisibility(View.GONE);
-                }
+        //improves usability in Android N with MultiWindow and avoids bugs
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (getActivity().isInMultiWindowMode()) {
+                IMG1.setVisibility(View.GONE);
+                IMG2.setVisibility(View.GONE);
+                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
             }
+        }
 
 
         /**
@@ -339,20 +373,43 @@ public class QuadFragment extends Fragment {
             PM2.setVisibility(View.GONE);
             bypass = true; //PERMETTI DI CHIUDERE SENZA POZZETTO E SENZA PUNTI IN MANO
         }
-        Boolean isDirectModeActivated = sharedPref.getBoolean("input_direct", false) ;
-        if(isDirectModeActivated){
-            PM1.setVisibility(View.GONE);
-            BP1.setVisibility(View.GONE);
-            BI1.setVisibility(View.GONE);
-            BS1.setVisibility(View.GONE);
-            PM2.setVisibility(View.GONE);
-            BP2.setVisibility(View.GONE);
-            BI2.setVisibility(View.GONE);
-            BS2.setVisibility(View.GONE);
-            CH1.setVisibility(View.GONE);
-            CH2.setVisibility(View.GONE);
-            PZ1.setVisibility(View.GONE);
-            PZ2.setVisibility(View.GONE);
+        int input_method = sharedPref.getInt("input_method", 1) ;
+        switch(input_method){
+            case 1:
+                PB1.setVisibility(View.GONE);
+                PB2.setVisibility(View.GONE);
+                break;
+            case 2:
+                PM1.setVisibility(View.GONE);
+                BP1.setVisibility(View.GONE);
+                BI1.setVisibility(View.GONE);
+                BS1.setVisibility(View.GONE);
+                PM2.setVisibility(View.GONE);
+                BP2.setVisibility(View.GONE);
+                BI2.setVisibility(View.GONE);
+                BS2.setVisibility(View.GONE);
+                CH1.setVisibility(View.GONE);
+                CH2.setVisibility(View.GONE);
+                PZ1.setVisibility(View.GONE);
+                PZ2.setVisibility(View.GONE);
+                break;
+            case 3:
+                PM1.setVisibility(View.GONE);
+                BP1.setVisibility(View.GONE);
+                BI1.setVisibility(View.GONE);
+                BS1.setVisibility(View.GONE);
+                PM2.setVisibility(View.GONE);
+                BP2.setVisibility(View.GONE);
+                BI2.setVisibility(View.GONE);
+                BS2.setVisibility(View.GONE);
+                CH1.setVisibility(View.GONE);
+                CH2.setVisibility(View.GONE);
+                PZ1.setVisibility(View.GONE);
+                PZ2.setVisibility(View.GONE);
+
+                PB1.setVisibility(View.GONE);
+                PB2.setVisibility(View.GONE);
+                break;
         }
 
         return rootView;
@@ -496,6 +553,8 @@ public class QuadFragment extends Fragment {
         BS2.setText("");
         PN2.setText("");
         PM2.setText("");
+        PB1.setText("");
+        PB2.setText("");
         CH1.setChecked(false);
         CH2.setChecked(false);
         PZ1.setChecked(false);
@@ -512,7 +571,7 @@ public class QuadFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp4", "");
         editor.putInt("interrupted", 0);
-        editor.commit();
+        editor.apply();
         //make action bar standard again
         ((MainActivity)getActivity()).setMenuAlternative(false);
         Snackbar.make(getView(), R.string.reset, Snackbar.LENGTH_SHORT).show();
@@ -532,10 +591,20 @@ public class QuadFragment extends Fragment {
             else{pn1 = Integer.parseInt(PN1.getText().toString());}
             if(PM1.getText().toString().matches("")){pm1=0;}
             else{pm1 = Integer.parseInt(PM1.getText().toString());}
+            if (PB1.getText().toString().matches("")) {
+                pb1 = 0;
+            } else {
+                pb1 = Integer.parseInt(PB1.getText().toString());
+            }
+            if (PB2.getText().toString().matches("")) {
+                pb2 = 0;
+            } else {
+                pb2 = Integer.parseInt(PB2.getText().toString());
+            }
             old_tot1 = tot1;
             old_tot2 = tot2;
 
-            tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1)-pm1);
+            tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1+pb1)-pm1);
             if (CH1.isChecked()) {
                 tot1=tot1+100;
             }
@@ -553,7 +622,7 @@ public class QuadFragment extends Fragment {
             else{pn2 = Integer.parseInt(PN2.getText().toString());}
             if(PM2.getText().toString().matches("")){pm2=0;}
             else{pm2 = Integer.parseInt(PM2.getText().toString());}
-            tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2)-pm2);
+            tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2+pb2)-pm2);
             if (CH2.isChecked()) {
                 tot2=tot2+100;
             }
@@ -566,7 +635,7 @@ public class QuadFragment extends Fragment {
             String html=sharedPref.getString("dpp4", "");
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("dpp4",html+"<tr><td>"+tot1+"</td><td>"+tot2+"</td></tr>");
-            editor.commit();
+            editor.apply();
             //reset (no tot)
             BP1.setText("");
             BI1.setText("");
@@ -578,6 +647,8 @@ public class QuadFragment extends Fragment {
             BS2.setText("");
             PN2.setText("");
             PM2.setText("");
+            PB1.setText("");
+            PB2.setText("");
             CH1.setChecked(false);
             CH2.setChecked(false);
             PZ1.setChecked(false);
@@ -598,6 +669,8 @@ public class QuadFragment extends Fragment {
                     loser=textNome2.getText().toString();
                     //save score to DB
                     saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                    //save event
+                    saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                     //make alert
                     MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                     String out=textNome1.getText().toString();
@@ -630,6 +703,8 @@ public class QuadFragment extends Fragment {
                     loser=textNome1.getText().toString();
                     //save score to DB
                     saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                    //save event
+                    saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                     //make alert
                     MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                     String out=textNome2.getText().toString();
@@ -693,7 +768,7 @@ public class QuadFragment extends Fragment {
             editor.putString("squadra1",textNome1.getText().toString());
             editor.putString("squadra2",textNome2.getText().toString());
             editor.putInt("interrupted", 4);
-            editor.commit();
+            editor.apply();
         }
         else{
             editor.putInt("punti1", PDefault);
@@ -704,7 +779,7 @@ public class QuadFragment extends Fragment {
             editor.putString("dpp4", "");
             //set alternative bar
             ((MainActivity)getActivity()).setMenuAlternative(true);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -792,6 +867,25 @@ public class QuadFragment extends Fragment {
         db.open();
         long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
         db.close();
+    }
+
+    private void saveScoreToFirebase(String player1, String player2, int score1, int score2){
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(FirebaseAnalytics.Param.CHARACTER, player1);
+        bundle1.putLong(FirebaseAnalytics.Param.LEVEL, 4);
+        bundle1.putLong(FirebaseAnalytics.Param.SCORE, score1);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle1);
+
+        Bundle bundle2 = new Bundle();
+        bundle2.putString(FirebaseAnalytics.Param.CHARACTER, player2);
+        bundle2.putLong(FirebaseAnalytics.Param.LEVEL, 4);
+        bundle2.putLong(FirebaseAnalytics.Param.SCORE, score2);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle2);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, "4 Player Mode");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
+
     }
 
     //CONTROLLI ERRORI
@@ -948,6 +1042,25 @@ public class QuadFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Show ads
+     */
+    private void showAds(){
+        AdRequest adRequest;
+        if(((MainActivity)getActivity()).adsPersonalized) {
+            adRequest = new AdRequest.Builder()
+                    .build();
+        }
+        else{
+            Bundle extras = new Bundle();
+            extras.putString("npa", "1");
+            adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .build();
+        }
+        mAdView.loadAd(adRequest);
     }
 
     /**

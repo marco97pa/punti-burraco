@@ -5,6 +5,7 @@ import androidx.core.content.FileProvider;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -15,7 +16,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,6 +44,7 @@ int selection;
 private LinearLayout root;
 private BottomSheetBehavior bottomSheetBehavior;
 private ExtendedFloatingActionButton fab;
+private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +93,34 @@ private ExtendedFloatingActionButton fab;
 
         //Set background based on user selection
         root = (LinearLayout) findViewById(R.id.rootLayout);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String background_selection = sharedPreferences.getString("background_stories", "1");
-        selection = Integer.parseInt(background_selection);
+        selection = 1;
         changeBackground();
+        /* Handling swipes on rootView
+         * Change background of the story if BottomSheet is not open
+         */
+        root.setOnTouchListener(new OnSwipeTouchListener(ShareResultActivity.this) {
+            @Override
+            public void onTouchDown() {
+                if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
+                    //if is open, hide BottomSheet and show Fab button, but don't change background
+                    fab_show();
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            }
+
+            public void onSwipeRight() {
+                //if is closed than change background
+                selection--;
+                changeBackground();
+            }
+
+            public void onSwipeLeft() {
+                //if is closed than change background
+                selection++;
+                changeBackground();
+            }
+
+        });
 
         //BUTTONS
         //fab
@@ -133,26 +162,7 @@ private ExtendedFloatingActionButton fab;
                 shareOnOtherApps();
             }
         });
-
-        /* Handling clicks on rootView
-         * Change background of the story if BottomSheet is not open
-        */
-        root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Check if BottomSheet is open
-                if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
-                    //if is open, hide BottomSheet and show Fab button, but don't change background
-                    fab_show();
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-                else {
-                    //if is closed than change background
-                    selection++;
-                    changeBackground();
-                }
-            }
-        });
+        ;
 
         //Activity started
         diRitornoDaCondivisione = false;
@@ -161,6 +171,9 @@ private ExtendedFloatingActionButton fab;
         Toast toast = Toast.makeText(this,getString(R.string.change_background_hint), Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
     }
 
@@ -175,6 +188,9 @@ private ExtendedFloatingActionButton fab;
 
     public void changeBackground(){
         switch (selection){
+            case 0:
+                selection = 6;
+                root.setBackgroundResource(R.drawable.gradient_6); break;
             case 1: root.setBackgroundResource(R.drawable.gradient_1); break;
             case 2: root.setBackgroundResource(R.drawable.gradient_2); break;
             case 3: root.setBackgroundResource(R.drawable.gradient_3); break;
@@ -189,6 +205,12 @@ private ExtendedFloatingActionButton fab;
 
     public void shareOnOtherApps(){
         Uri image = takeScreenshot();
+
+        //add event to Firebase
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Other apps");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
         //Share
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/jpeg");
@@ -211,6 +233,12 @@ private ExtendedFloatingActionButton fab;
         // Instantiate activity and verify it will resolve implicit intent
         Activity activity = this;
         if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+
+            //add event to Firebase
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Facebook stories");
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
             activity.startActivityForResult(intent, 0);
         }
         else{
@@ -236,6 +264,12 @@ private ExtendedFloatingActionButton fab;
         // Instantiate activity and verify it will resolve implicit intent
         Activity activity = this;
         if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+
+            //add event to Firebase
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Instagram stories");
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
             activity.startActivityForResult(intent, 0);
         }
         else {
@@ -312,4 +346,75 @@ private ExtendedFloatingActionButton fab;
         }
     }
 
+
+    public class OnSwipeTouchListener implements View.OnTouchListener {
+
+        private final GestureDetector gestureDetector;
+
+        public OnSwipeTouchListener (Context ctx){
+            gestureDetector = new GestureDetector(ctx, new GestureListener());
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
+
+        private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+            private static final int SWIPE_THRESHOLD = 100;
+            private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+            @Override
+            public boolean onDown(MotionEvent e) {
+                onTouchDown();
+                return true;
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                boolean result = false;
+                try {
+                    float diffY = e2.getY() - e1.getY();
+                    float diffX = e2.getX() - e1.getX();
+                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                        if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                            if (diffX > 0) {
+                                onSwipeRight();
+                            } else {
+                                onSwipeLeft();
+                            }
+                            result = true;
+                        }
+                    }
+                    else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffY > 0) {
+                            onSwipeBottom();
+                        } else {
+                            onSwipeTop();
+                        }
+                        result = true;
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+                return result;
+            }
+        }
+
+        public void onSwipeRight() {
+        }
+
+        public void onSwipeLeft() {
+        }
+
+        public void onSwipeTop() {
+        }
+
+        public void onSwipeBottom() {
+        }
+
+        public void onTouchDown(){
+        }
+    }
 }

@@ -1,7 +1,7 @@
-<img src="https://punti-burraco.firebaseapp.com/images/icon.png" align="right" width="100px" height="100px"/>
+<img src="https://marco97pa.github.io/punti-burraco/images/icon.png" align="right" width="100px" height="100px"/>
 
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](http://choosealicense.com/licenses/gpl-3.0/)
-[![Downloads](https://img.shields.io/badge/google%20play%20downloads-10.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
+[![Downloads](https://img.shields.io/badge/google%20play%20downloads-16.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
 
 # Points Buraco  
 
@@ -10,7 +10,7 @@ An **open-source** Android Burraco scorekeeper with social functions, different 
  
 ## Download
  
- **Points Buraco** can be downloaded on [Google Play](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco):
+ **Points Buraco** can be downloaded on Google Play:
  
  <a href="https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco">
      <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="80px"/>
@@ -23,6 +23,7 @@ An **open-source** Android Burraco scorekeeper with social functions, different 
   - 2, 3 and 4 players mode
   - Set name and profile image of the players
   - Set the arrive score, when the game ends (default: 2005)
+  - Choose you preferred input method
   - Ability to pause a game and continue later
   - Automatically counts the score, based on the number of run
   - History of your matches
@@ -35,7 +36,7 @@ An **open-source** Android Burraco scorekeeper with social functions, different 
 - _**Much more...**_
   - _Points Buraco is actively developed. More features will come!_
 
-> **Points Buraco** is a FREE app without ads, in-app purchases or other freemium models of revenue
+> **Points Buraco** is a FREE app but contains [ads](docs/ads.md)
 
 # History
 
@@ -48,11 +49,11 @@ For more information, visit the full [**Changelog**](docs/CHANGELOG.md)
 # Specs / Open-source libraries:
 
 - Minimum **SDK 16**
-- [**uCrop**](https://github.com/Yalantis/uCrop) for cropping profile images
-- **Firebase** performance, crash reporting
-- **Android X**, the almighty ;)
+- **Firebase** analytics, performance, crash reporting
+- **Android X**
 - **Android Custom Tabs**, to show the user Guide
-- [**SunriseSunset**](https://github.com/caarmen/SunriseSunset), to get actual sun position and set the app theme accordingly (day/night)
+- [**CircleImageView**](https://github.com/hdodenhof/CircleImageView)
+- [**uCrop**](https://github.com/Yalantis/uCrop) to crop profile images
 
 # Contribution
 
@@ -62,7 +63,7 @@ Read the [**contribution guide**](https://github.com/marco97pa/punti-burraco/wik
 
 # License
 
-> Copyright (C) [Marco Fantauzzo](http://marcofantauzzo.it). 
+> Copyright (C) [Marco Fantauzzo](https://marco97pa.github.io/). 
 > Licensed under the [GPL-3.0](https://www.gnu.org/licenses/gpl.html) license.
 > (See the [LICENSE](https://github.com/marco97pa/punti-burraco/blob/master/LICENSE) file for the whole license text.)
 

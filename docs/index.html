@@ -15,8 +15,8 @@
       function download(){
          if(getAndroidVersion()==false){
             var userLang = navigator.language || navigator.userLanguage; 
-            if(userLang == "it-IT"){
-              var risposta = confirm("L'app e' disponibile solo per smartphone Android e il tuo dispositivo non sembra esserlo.\n Vuoi comunque visitare il Play Store?");
+            if(userLang == "it-IT" || userLang == "it"){
+              var risposta = confirm("L'app è disponibile solo per smartphone Android e il tuo dispositivo non sembra esserlo.\n Vuoi comunque visitare il Play Store?");
             }
             else{
               var risposta = confirm("The app is only avaible on Android. \n Do you want to visit the Play Store anyway?");
@@ -56,16 +56,11 @@
         <br>
         </center>
       <div id="button" onclick="download();">installa</div>
-      <center>
-        <br>
-        <a href='https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' style="width: 38%"/></a>
-        <a href='https://appstore.huawei.com/app/C100881587'><img alt='Get it on Huawei App Store' src='images/en_badge_web_generic.png' style="width: 38%"/></a>
-      </center>
     </div>
   </body>
   <script>
     var userLang = navigator.language || navigator.userLanguage; 
-      if(userLang != "it-IT"){
+      if(userLang != "it-IT" && userLang != "it"){
         document.getElementById("app_name").innerHTML = "Points Buraco";
         document.getElementById("app_desc").innerHTML = "More than a simple scorekeeper for your Buraco match with friends";
         document.getElementById("app_price").innerHTML = "Free";

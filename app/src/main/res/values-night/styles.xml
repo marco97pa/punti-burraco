@@ -5,12 +5,12 @@
         <item name="android:background">@color/dialogBackground</item>
         <item name="android:textColor">@color/dialogText</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/dialogButton</item>
+        <item name="colorPrimary">@color/colorDialog</item>
     </style>
 
-    <style name="AppTheme.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="AppTheme.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="backgroundTint">@android:color/transparent</item>
-        <item name="android:textColor">@color/dialogButton</item>
+        <item name="android:textColor">@color/colorDialog</item>
     </style>
 
 </resources>

@@ -14,6 +14,11 @@
         <item name="android:textColor">@color/dialogText</item>
         <item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
+    </style>
+
+    <style name="AppTheme.Placeholder">
+        <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -23,23 +28,22 @@
 
     <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="android:buttonBarButtonStyle">@style/AppTheme.Dialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.Dialog.Button</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.Dialog.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AppTheme.Dialog.Button</item>
+        <item name="buttonBarButtonStyle">@style/AppTheme.Dialog.Button</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/dialogButton</item>
+        <item name="colorPrimary">@color/colorDialog</item>
     </style>
 
     <style name="AppTheme.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="backgroundTint">@android:color/transparent</item>
-        <item name="android:textColor">@color/dialogButton</item>
+        <item name="android:textColor">@color/colorDialog</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/splash</item>
-    </style>
 
 
 </resources>

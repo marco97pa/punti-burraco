@@ -2,45 +2,69 @@ package com.marco97pa.puntiburraco;
 
 import android.Manifest;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.yalantis.ucrop.UCrop;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * TRIPLE FRAGMENT
@@ -53,7 +77,9 @@ import java.util.Calendar;
  */
 
 public class TripleFragment extends Fragment {
-    int bp1,bp2,bp3, bi1, bi2,bi3, bs1, bs2,bs3,pn1,pn2,pn3,tot1,tot2,tot3,pm1,pm2,pm3;
+
+    public static final String LOG_TAG = "3PlayersFragment";
+    int bp1,bp2,bp3, bi1, bi2,bi3, bs1, bs2,bs3,pn1,pn2,pn3,tot1,tot2,tot3,pm1,pm2,pm3, pb1, pb2, pb3;
     int tot=0;
     private TextView textNome1, textNome2, textNome3;
     private TextView punti1, punti2, punti3;
@@ -61,15 +87,29 @@ public class TripleFragment extends Fragment {
     private EditText BI1, BI2, BI3;
     private EditText BS1, BS2, BS3;
     private EditText PN1, PN2, PN3;
+    private EditText PB1, PB2, PB3;
     private EditText PM1, PM2, PM3;
     private CheckBox CH1, CH2, CH3;
     private CheckBox RB1, RB2, RB3;
     private CheckBox PZ1, PZ2, PZ3;
+    private ImageView IMG1, IMG2, IMG3; //Images of players
     boolean check1=false, check2=false, check3=false;
-    int SET;
+    int SET, input_method;
+    private AdView mAdView;
     final int PDefault=0;
     boolean win=false;
     String winner,loser1,loser2;
+    //Constants response to import images in app
+    private static int REQUEST_PICTURE_3 = 13;
+    private static int REQUEST_CROP_PICTURE_3 = 23;
+    private static int REQUEST_PICTURE_2 = 12;
+    private static int REQUEST_CROP_PICTURE_2 = 22;
+    private static int REQUEST_PICTURE_1 = 11;
+    private static int REQUEST_CROP_PICTURE_1 = 21;
+    //Constants response to permission request (Android 6.0+)
+    private final static int STORAGE_PERMISSION_PICTURE_1 = 13;
+    private final static int STORAGE_PERMISSION_PICTURE_2 = 23;
+    private final static int STORAGE_PERMISSION_PICTURE_3 = 33;
     private final static int STORAGE_PERMISSION_SCREENSHOT = 30;
 
     public int old_tot1;
@@ -79,8 +119,8 @@ public class TripleFragment extends Fragment {
     String bgColor, txtColor, colors;
     boolean bypass = false;
     Boolean isManoModeActivated;
-    Boolean isDirectModeActivated;
     MediaPlayer sound;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public TripleFragment() {
         // Empty constructor required for fragment subclasses
@@ -121,8 +161,25 @@ public class TripleFragment extends Fragment {
         PZ1 = (CheckBox) rootView.findViewById(R.id.pozzetto1);
         PZ2 = (CheckBox) rootView.findViewById(R.id.pozzetto2);
         PZ3 = (CheckBox) rootView.findViewById(R.id.pozzetto3);
+        PB1 = (EditText) rootView.findViewById(R.id.editPB1);
+        PB2 = (EditText) rootView.findViewById(R.id.editPB2);
+        PB3 = (EditText) rootView.findViewById(R.id.editPB3);
+        IMG1= (ImageView) rootView.findViewById(R.id.image1);
+        IMG2= (ImageView) rootView.findViewById(R.id.image2);
+        IMG3= (ImageView) rootView.findViewById(R.id.image3); 
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
+
+        mAdView = rootView.findViewById(R.id.adView);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
+        if(adsEnabled) {
+            MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
+            showAds();
+        }
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
@@ -133,7 +190,6 @@ public class TripleFragment extends Fragment {
          * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
          *
          * */
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         isManoModeActivated = sharedPref.getBoolean("input_puntimano", true) ;
         if(!isManoModeActivated){
             PM1.setVisibility(View.GONE);
@@ -141,26 +197,57 @@ public class TripleFragment extends Fragment {
             PM3.setVisibility(View.GONE);
             bypass = true; //PERMETTI DI CHIUDERE SENZA POZZETTO E SENZA PUNTI IN MANO
         }
-        isDirectModeActivated = sharedPref.getBoolean("input_direct", false) ;
-        if(isDirectModeActivated){
-            PM1.setVisibility(View.GONE);
-            BP1.setVisibility(View.GONE);
-            BI1.setVisibility(View.GONE);
-            BS1.setVisibility(View.GONE);
-            PM2.setVisibility(View.GONE);
-            BP2.setVisibility(View.GONE);
-            BI2.setVisibility(View.GONE);
-            BS2.setVisibility(View.GONE);
-            CH1.setVisibility(View.GONE);
-            CH2.setVisibility(View.GONE);
-            PZ1.setVisibility(View.GONE);
-            PZ2.setVisibility(View.GONE);
-            PZ3.setVisibility(View.GONE);
-            CH3.setVisibility(View.GONE);
-            PM3.setVisibility(View.GONE);
-            BP3.setVisibility(View.GONE);
-            BI3.setVisibility(View.GONE);
-            BS3.setVisibility(View.GONE);
+        input_method = sharedPref.getInt("input_method", 1) ;
+        switch(input_method){
+            case 1:
+                PB1.setVisibility(View.GONE);
+                PB2.setVisibility(View.GONE);
+                PB3.setVisibility(View.GONE);
+                break;
+            case 2:
+                PM1.setVisibility(View.GONE);
+                BP1.setVisibility(View.GONE);
+                BI1.setVisibility(View.GONE);
+                BS1.setVisibility(View.GONE);
+                PM2.setVisibility(View.GONE);
+                BP2.setVisibility(View.GONE);
+                BI2.setVisibility(View.GONE);
+                BS2.setVisibility(View.GONE);
+                CH1.setVisibility(View.GONE);
+                CH2.setVisibility(View.GONE);
+                PZ1.setVisibility(View.GONE);
+                PZ2.setVisibility(View.GONE);
+                PZ3.setVisibility(View.GONE);
+                CH3.setVisibility(View.GONE);
+                PM3.setVisibility(View.GONE);
+                BP3.setVisibility(View.GONE);
+                BI3.setVisibility(View.GONE);
+                BS3.setVisibility(View.GONE);
+                break;
+            case 3:
+                PM1.setVisibility(View.GONE);
+                BP1.setVisibility(View.GONE);
+                BI1.setVisibility(View.GONE);
+                BS1.setVisibility(View.GONE);
+                PM2.setVisibility(View.GONE);
+                BP2.setVisibility(View.GONE);
+                BI2.setVisibility(View.GONE);
+                BS2.setVisibility(View.GONE);
+                CH1.setVisibility(View.GONE);
+                CH2.setVisibility(View.GONE);
+                PZ1.setVisibility(View.GONE);
+                PZ2.setVisibility(View.GONE);
+                PZ3.setVisibility(View.GONE);
+                CH3.setVisibility(View.GONE);
+                PM3.setVisibility(View.GONE);
+                BP3.setVisibility(View.GONE);
+                BI3.setVisibility(View.GONE);
+                BS3.setVisibility(View.GONE);
+
+                PB1.setVisibility(View.GONE);
+                PB2.setVisibility(View.GONE);
+                PB3.setVisibility(View.GONE);
+                break;
         }
 
 
@@ -182,7 +269,7 @@ public class TripleFragment extends Fragment {
                         SET=View.VISIBLE;
                     }
                     PN3.setVisibility(SET);
-                    if(!isDirectModeActivated) {
+                    if(input_method == 1) {
                         BP3.setVisibility(SET);
                         BI3.setVisibility(SET);
                         if(isManoModeActivated) {
@@ -191,6 +278,9 @@ public class TripleFragment extends Fragment {
                         CH3.setVisibility(SET);
                         PZ3.setVisibility(SET);
                         BS3.setVisibility(SET);
+                    }
+                    if(input_method == 2){
+                        PB3.setVisibility(SET);
                     }
                 }
             }
@@ -212,7 +302,7 @@ public class TripleFragment extends Fragment {
                         SET=View.VISIBLE;
                     }
                     PN1.setVisibility(SET);
-                    if(!isDirectModeActivated) {
+                    if(input_method == 1) {
                         BP1.setVisibility(SET);
                         BI1.setVisibility(SET);
                         if(isManoModeActivated) {
@@ -221,6 +311,9 @@ public class TripleFragment extends Fragment {
                         CH1.setVisibility(SET);
                         PZ1.setVisibility(SET);
                         BS1.setVisibility(SET);
+                    }
+                    if(input_method == 2){
+                        PB1.setVisibility(SET);
                     }
                 }
             }
@@ -242,7 +335,7 @@ public class TripleFragment extends Fragment {
                         SET=View.VISIBLE;
                     }
                     PN2.setVisibility(SET);
-                    if(!isDirectModeActivated) {
+                    if(input_method == 1) {
                         BP2.setVisibility(SET);
                         BI2.setVisibility(SET);
                         if(isManoModeActivated) {
@@ -252,10 +345,15 @@ public class TripleFragment extends Fragment {
                         PZ2.setVisibility(SET);
                         BS2.setVisibility(SET);
                     }
+                    if(input_method == 2){
+                        PB2.setVisibility(SET);
+                    }
                 }
             }
         });
+        
         Restore();
+        
         textNome1.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -280,6 +378,265 @@ public class TripleFragment extends Fragment {
                 onSave();
             }
         });
+        
+        IMG1.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                //Animation
+                IMG1.bringToFront();
+                IMG1.invalidate();
+                IMG1.animate()
+                        .scaleX(10)
+                        .scaleY(10)
+                        .setDuration(500)
+                        .setInterpolator(new LinearInterpolator())
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator){
+                                IMG1.setScaleX(1);
+                                IMG1.setScaleY(1);
+                            }
+                        });
+                //Pick image from user Gallery
+                // First, request permission (Android 6.0+ only)
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            STORAGE_PERMISSION_PICTURE_1);
+                }
+                else {
+                    startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_1);
+                }
+
+            }
+        });
+
+        IMG1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                makeVibration();
+                PopupMenu popup = new PopupMenu(getActivity(), view);
+
+                // This activity implements OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.removeText:
+                                textNome1.setText(getString(R.string.g1));
+                                onSave();
+                                return true;
+                            case R.id.removeImage:
+                                File file1 = new File(getActivity().getFilesDir(), "img_m3_1.jpg");
+                                file1.delete();
+                                IMG1.setImageResource(R.drawable.circle_placeholder);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.actions);
+                popup.show();
+                return false;
+            }
+
+        });
+
+        IMG2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                //Animation
+                IMG2.bringToFront();
+                IMG2.invalidate();
+                IMG2.animate()
+                        .scaleX(10)
+                        .scaleY(10)
+                        .setDuration(500)
+                        .setInterpolator(new LinearInterpolator())
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator){
+                                IMG2.setScaleX(1);
+                                IMG2.setScaleY(1);
+                            }
+                        });
+                //Pick image from user Gallery
+                // First, request permission
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            STORAGE_PERMISSION_PICTURE_2);
+                }
+                else {
+                    startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_2);
+                }
+
+            }
+        });
+
+        IMG2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                makeVibration();
+                PopupMenu popup = new PopupMenu(getActivity(), view);
+
+                // This activity implements OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.removeText:
+                                textNome2.setText(getString(R.string.g2));
+                                onSave();
+                                return true;
+                            case R.id.removeImage:
+                                File file2 = new File(getActivity().getFilesDir(), "img_m3_2.jpg");
+                                file2.delete();
+                                IMG2.setImageResource(R.drawable.circle_placeholder);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.actions);
+                popup.show();
+                return false;
+            }
+
+        });
+
+        IMG3.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                //Animation
+                IMG3.bringToFront();
+                IMG3.invalidate();
+                IMG3.animate()
+                        .scaleX(10)
+                        .scaleY(10)
+                        .setDuration(500)
+                        .setInterpolator(new LinearInterpolator())
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator){
+                                IMG3.setScaleX(1);
+                                IMG3.setScaleY(1);
+                            }
+                        });
+                //Pick image from user Gallery
+                // First, request permission
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            STORAGE_PERMISSION_PICTURE_3);
+                }
+                else {
+                    startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_3);
+                }
+
+            }
+        });
+
+        IMG3.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                makeVibration();
+                PopupMenu popup = new PopupMenu(getActivity(), view);
+
+                // This activity implements OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.removeText:
+                                textNome3.setText(getString(R.string.g3));
+                                onSave();
+                                return true;
+                            case R.id.removeImage:
+                                File file3 = new File(getActivity().getFilesDir(), "img_m3_3.jpg");
+                                file3.delete();
+                                IMG3.setImageResource(R.drawable.circle_placeholder);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.actions);
+                popup.show();
+                return false;
+            }
+
+        });
+
+        /**
+         * RECOVER IMAGES OF LAST GAME
+         * Images are showed only if user has choose it in settings
+         */
+        //On lowRamDevice images are disabled par default
+        boolean isLowRamDevice = false;
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            isLowRamDevice = am.isLowRamDevice();
+            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+        }
+        
+        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
+        if(isImgActivated) {
+            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
+            Bitmap bitmap1 = null, bitmap2 = null, bitmap3 = null;
+            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                try {
+                    File bmp1 = new File(getActivity().getFilesDir() + "/img_m3_1.jpg");
+                    ImageDecoder.Source source1 = ImageDecoder.createSource(bmp1);
+                    bitmap1 = ImageDecoder.decodeBitmap(source1);
+                } catch (IOException e) { e.printStackTrace(); }
+                try {
+                    File bmp2 = new File(getActivity().getFilesDir() + "/img_m3_2.jpg");
+                    ImageDecoder.Source source2 = ImageDecoder.createSource(bmp2);
+                    bitmap2 = ImageDecoder.decodeBitmap(source2);
+                } catch (IOException e) { e.printStackTrace(); }
+                try {
+                    File bmp3 = new File(getActivity().getFilesDir() + "/img_m3_3.jpg");
+                    ImageDecoder.Source source3 = ImageDecoder.createSource(bmp3);
+                    bitmap3 = ImageDecoder.decodeBitmap(source3);
+                } catch (IOException e) { e.printStackTrace(); }
+            }
+            else{
+                bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/img_m3_1.jpg");
+                bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m3_2.jpg");
+                bitmap3 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m3_3.jpg");
+            }
+            //Set Bitmap to Image if not null
+            if(bitmap1 != null) {
+                IMG1.setImageBitmap(bitmap1);
+            }
+            if(bitmap2 != null) {
+                IMG2.setImageBitmap(bitmap2);
+            }
+            if(bitmap3 != null) {
+                IMG3.setImageBitmap(bitmap3);
+            }
+        }
+        else{
+            IMG1.setVisibility(View.GONE);
+            IMG2.setVisibility(View.GONE);
+            IMG3.setVisibility(View.GONE);
+        }
+        //improves usability in Android N with MultiWindow and avoids bugs
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (getActivity().isInMultiWindowMode()) {
+                IMG1.setVisibility(View.GONE);
+                IMG2.setVisibility(View.GONE);
+                IMG3.setVisibility(View.GONE);
+                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
+            }
+        }
 
         return rootView;
     }
@@ -432,6 +789,16 @@ public class TripleFragment extends Fragment {
         textNome2.setText(getString(R.string.g2));
         textNome3.setText(getString(R.string.g3));
         onSave();
+        //reset Immagini
+        File file1 = new File(getActivity().getFilesDir(), "img_m3_1.jpg");
+        file1.delete();
+        File file2 = new File(getActivity().getFilesDir(), "img_m3_2.jpg");
+        file2.delete();
+        File file3 = new File(getActivity().getFilesDir(), "img_m3_3.jpg");
+        file2.delete();
+        IMG1.setImageResource(R.drawable.circle_placeholder);
+        IMG2.setImageResource(R.drawable.circle_placeholder);
+        IMG3.setImageResource(R.drawable.circle_placeholder);
     }
 
     //AVVIA RESET
@@ -451,6 +818,9 @@ public class TripleFragment extends Fragment {
         PN3.setText("");
         PM3.setText("");
         BS3.setText("");
+        PB1.setText("");
+        PB2.setText("");
+        PB3.setText("");
         CH1.setChecked(false);
         CH2.setChecked(false);
         CH3.setChecked(false);
@@ -469,7 +839,7 @@ public class TripleFragment extends Fragment {
         PN3.setVisibility(View.VISIBLE);
         PN1.setVisibility(View.VISIBLE);
         PN2.setVisibility(View.VISIBLE);
-        if(!isDirectModeActivated) {
+        if(input_method == 1) {
             BP3.setVisibility(View.VISIBLE);
             BI3.setVisibility(View.VISIBLE);
             BS3.setVisibility(View.VISIBLE);
@@ -499,7 +869,7 @@ public class TripleFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp3", "");
         editor.putInt("interrupted", 0);
-        editor.commit();
+        editor.apply();
         //make action bar standard again
         ((MainActivity)getActivity()).setMenuAlternative(false);
         Snackbar.make(getView(), R.string.reset, Snackbar.LENGTH_SHORT).show();
@@ -523,6 +893,11 @@ public class TripleFragment extends Fragment {
                 else{pn3 = Integer.parseInt(PN3.getText().toString());}
                 if(PM3.getText().toString().matches("")){pm3=0;}
                 else{pm3 = Integer.parseInt(PM3.getText().toString());}
+                if (PB3.getText().toString().matches("")) {
+                    pb3 = 0;
+                } else {
+                    pb3 = Integer.parseInt(PB3.getText().toString());
+                }
             }
             if (RB2.isChecked()==false) {
                 if(BP1.getText().toString().matches("")){bp1=0;}
@@ -535,6 +910,11 @@ public class TripleFragment extends Fragment {
                 else{pn1 = Integer.parseInt(PN1.getText().toString());}
                 if(PM1.getText().toString().matches("")){pm1=0;}
                 else{pm1 = Integer.parseInt(PM1.getText().toString());}
+                if (PB1.getText().toString().matches("")) {
+                    pb1 = 0;
+                } else {
+                    pb1 = Integer.parseInt(PB1.getText().toString());
+                }
             }
             if (RB3.isChecked()==false) {
                 if(BP2.getText().toString().matches("")){bp2=0;}
@@ -547,6 +927,11 @@ public class TripleFragment extends Fragment {
                 else{pn2 = Integer.parseInt(PN2.getText().toString());}
                 if(PM2.getText().toString().matches("")){pm2=0;}
                 else{pm2 = Integer.parseInt(PM2.getText().toString());}
+                if (PB2.getText().toString().matches("")) {
+                    pb2 = 0;
+                } else {
+                    pb2 = Integer.parseInt(PB2.getText().toString());
+                }
             }
 
             old_tot1 = tot1;
@@ -554,7 +939,7 @@ public class TripleFragment extends Fragment {
             old_tot3 = tot3;
 
             if(RB1.isChecked()){
-                tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1)-pm1);
+                tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1+pb1)-pm1);
                 if (CH1.isChecked()) {
                     tot1=tot1+100;
                 }
@@ -563,7 +948,7 @@ public class TripleFragment extends Fragment {
                 }
                 punti1.setText(Integer.toString(tot1));
 
-                tot=( ((bp2*200)+(bi2*100)+(bs2*150)+pn2)-pm2);
+                tot=( ((bp2*200)+(bi2*100)+(bs2*150)+pn2+pb2)-pm2);
                 if (CH2.isChecked()) {
                     tot=tot+100;
                 }
@@ -577,7 +962,7 @@ public class TripleFragment extends Fragment {
             }
 
             if(RB2.isChecked()){
-                tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2)-pm2);
+                tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2+pb2)-pm2);
                 if (CH2.isChecked()) {
                     tot2=tot2+100;
                 }
@@ -586,7 +971,7 @@ public class TripleFragment extends Fragment {
                 }
                 punti2.setText(Integer.toString(tot2));
 
-                tot=( ((bp3*200)+(bi3*100)+(bs3*150)+pn3)-pm3);
+                tot=( ((bp3*200)+(bi3*100)+(bs3*150)+pn3+pb3)-pm3);
                 if (CH3.isChecked()) {
                     tot=tot+100;
                 }
@@ -600,7 +985,7 @@ public class TripleFragment extends Fragment {
             }
 
             if(RB3.isChecked()){
-                tot3=tot3+( ((bp3*200)+(bi3*100)+(bs3*150)+pn3)-pm3);
+                tot3=tot3+( ((bp3*200)+(bi3*100)+(bs3*150)+pn3+pb3)-pm3);
                 if (CH3.isChecked()) {
                     tot3=tot3+100;
                 }
@@ -609,7 +994,7 @@ public class TripleFragment extends Fragment {
                 }
                 punti3.setText(Integer.toString(tot3));
 
-                tot=( ((bp1*200)+(bi1*100)+(bs1*150)+pn1)-pm1);
+                tot=( ((bp1*200)+(bi1*100)+(bs1*150)+pn1+pb1)-pm1);
                 if (CH1.isChecked()) {
                     tot=tot+100;
                 }
@@ -622,21 +1007,21 @@ public class TripleFragment extends Fragment {
                 punti2.setText(Integer.toString(tot2));
             }
             if(RB1.isChecked()==false&&RB2.isChecked()==false&&RB3.isChecked()==false){
-                tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1)-pm1);
+                tot1=tot1+( ((bp1*200)+(bi1*100)+(bs1*150)+pn1+pb1)-pm1);
                 if (CH1.isChecked()) {
                     tot1=tot1+100;
                 }
                 if (PZ1.isChecked()) {
                     tot1=tot1-100;
                 }
-                tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2)-pm2);
+                tot2=tot2+( ((bp2*200)+(bi2*100)+(bs2*150)+pn2+pb2)-pm2);
                 if (CH2.isChecked()) {
                     tot2=tot2+100;
                 }
                 if (PZ2.isChecked()) {
                     tot2=tot2-100;
                 }
-                tot3=tot3+( ((bp3*200)+(bi3*100)+(bs3*150)+pn3)-pm3);
+                tot3=tot3+( ((bp3*200)+(bi3*100)+(bs3*150)+pn3+pb3)-pm3);
                 if (CH3.isChecked()) {
                     tot3=tot3+100;
                 }
@@ -652,7 +1037,7 @@ public class TripleFragment extends Fragment {
             String html=sharedPref.getString("dpp3", "");
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("dpp3",html+"<tr><td>"+tot1+"</td><td>"+tot2+"</td><td>"+tot3+"</td></tr>");
-            editor.commit();
+            editor.apply();
             //reset (no tot)
             BP1.setText("");
             BI1.setText("");
@@ -669,6 +1054,9 @@ public class TripleFragment extends Fragment {
             BS3.setText("");
             PN3.setText("");
             PM3.setText("");
+            PB1.setText("");
+            PB2.setText("");
+            PB3.setText("");
             CH1.setChecked(false);
             CH2.setChecked(false);
             CH3.setChecked(false);
@@ -682,7 +1070,7 @@ public class TripleFragment extends Fragment {
             PN3.setVisibility(View.VISIBLE);
             PN1.setVisibility(View.VISIBLE);
             PN2.setVisibility(View.VISIBLE);
-            if(!isDirectModeActivated) {
+            if(input_method == 1) {
                 BP3.setVisibility(View.VISIBLE);
                 BI3.setVisibility(View.VISIBLE);
                 BS3.setVisibility(View.VISIBLE);
@@ -720,8 +1108,9 @@ public class TripleFragment extends Fragment {
                 loser2=textNome3.getText().toString();
                 //save score to DB
                 saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
+                //save event
+                saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
                 //make alert
-
                 MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
 
                 String out=textNome1.getText().toString();
@@ -754,8 +1143,9 @@ public class TripleFragment extends Fragment {
                 loser2=textNome3.getText().toString();
                 //save score to DB
                 saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
+                //save event
+                saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
                 //make alert
-
                 win=true;
                 MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                 String out=textNome2.getText().toString();
@@ -789,8 +1179,10 @@ public class TripleFragment extends Fragment {
 
                 //save score to DB
                 saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
-                //make alert
+                //save event
+                saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), textNome3.getText().toString(), tot1, tot2, tot3);
 
+                //make alert
                 win=true;
                 MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                 String out=textNome3.getText().toString();
@@ -823,9 +1215,11 @@ public class TripleFragment extends Fragment {
 
         }
         }
+        /*
         catch (NullPointerException e){
             Snackbar.make(getView(),getString(R.string.error00), BaseTransientBottomBar.LENGTH_LONG).show();
         }
+        */
         catch (NumberFormatException e){
             Snackbar.make(getView(),getString(R.string.error04), BaseTransientBottomBar.LENGTH_LONG).show();
         }
@@ -860,7 +1254,7 @@ public class TripleFragment extends Fragment {
             editor.putString("sqd2",textNome2.getText().toString());
             editor.putString("sqd3",textNome3.getText().toString());
             editor.putInt("interrupted", 3);
-            editor.commit();
+            editor.apply();
         }
         else{
             editor.putInt("t1", PDefault);
@@ -873,7 +1267,7 @@ public class TripleFragment extends Fragment {
             editor.putString("dpp3", "");
             //set alternative bar
             ((MainActivity)getActivity()).setMenuAlternative(true);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -881,6 +1275,56 @@ public class TripleFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
+            case STORAGE_PERMISSION_PICTURE_1:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_1);
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(), getString(R.string.marshmallow_alert), Toast.LENGTH_LONG).show();
+
+                }
+                return;
+            }
+
+            case STORAGE_PERMISSION_PICTURE_2:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_2);
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(), getString(R.string.marshmallow_alert), Toast.LENGTH_LONG).show();
+
+                }
+                return;
+            }
+
+            case STORAGE_PERMISSION_PICTURE_3:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_3);
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(), getString(R.string.marshmallow_alert), Toast.LENGTH_LONG).show();
+
+                }
+                return;
+            }
 
             case STORAGE_PERMISSION_SCREENSHOT:
             {
@@ -980,6 +1424,50 @@ public class TripleFragment extends Fragment {
         db.close();
     }
 
+    private void saveScoreToFirebase(String player1, String player2, String player3, int score1, int score2, int score3){
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(FirebaseAnalytics.Param.CHARACTER, player1);
+        bundle1.putLong(FirebaseAnalytics.Param.LEVEL, 3);
+        bundle1.putLong(FirebaseAnalytics.Param.SCORE, score1);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle1);
+
+        Bundle bundle2 = new Bundle();
+        bundle2.putString(FirebaseAnalytics.Param.CHARACTER, player2);
+        bundle2.putLong(FirebaseAnalytics.Param.LEVEL, 3);
+        bundle2.putLong(FirebaseAnalytics.Param.SCORE, score2);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle2);
+
+        Bundle bundle3 = new Bundle();
+        bundle3.putString(FirebaseAnalytics.Param.CHARACTER, player3);
+        bundle3.putLong(FirebaseAnalytics.Param.LEVEL, 3);
+        bundle3.putLong(FirebaseAnalytics.Param.SCORE, score3);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle3);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, "3 Player Mode");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
+
+    }
+
+    /**
+     * Show ads
+     */
+    private void showAds(){
+        AdRequest adRequest;
+        if(((MainActivity)getActivity()).adsPersonalized) {
+            adRequest = new AdRequest.Builder()
+                    .build();
+        }
+        else{
+            Bundle extras = new Bundle();
+            extras.putString("npa", "1");
+            adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .build();
+        }
+        mAdView.loadAd(adRequest);
+    }
+
     //AVVIA SET NOMI
     public void showNoticeDialog() {
         new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog)
@@ -1022,5 +1510,124 @@ public class TripleFragment extends Fragment {
         return data;
     }
 
+    /**
+     * ON ACTIVITY RESULT
+     * Sets images choosen by user and manages its crop
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == REQUEST_PICTURE_1) && (resultCode == RESULT_OK)) {
+            // When the user is done picking a picture, let's start the CropImage Activity,
+            Uri photo = data.getData();
+
+            File file = new File(getActivity().getFilesDir(), "img_m3_1.jpg");
+            Uri result = Uri.fromFile(file);
+            startActivityForResult(
+                    UCrop.of(photo, result)
+                            .withAspectRatio(1, 1)
+                            .withMaxResultSize(1080, 1080)
+                            .getIntent(getActivity()
+                            ), REQUEST_CROP_PICTURE_1);
+        }
+
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_1) {
+            // When we are done cropping, display it in the ImageView.
+            final Uri resultUri = UCrop.getOutput(data);
+            ImageView IMG1 = (ImageView) getView().findViewById(R.id.image1);
+            IMG1.setImageURI(resultUri);
+
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+        }
+
+
+        if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
+            // When the user is done picking a picture, let's start the CropImage Activity,
+            Uri photo = data.getData();
+
+            File file = new File(getActivity().getFilesDir(), "img_m3_2.jpg");
+            Uri result = Uri.fromFile(file);
+            startActivityForResult(
+                    UCrop.of(photo, result)
+                            .withAspectRatio(1, 1)
+                            .withMaxResultSize(1080, 1080)
+                            .getIntent(getActivity()
+                            ), REQUEST_CROP_PICTURE_2);
+        }
+
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_2) {
+            // When we are done cropping, display it in the ImageView.
+            final Uri resultUri = UCrop.getOutput(data);
+            ImageView IMG2 = (ImageView) getView().findViewById(R.id.image2);
+            IMG2.setImageURI(resultUri);
+
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+        }
+
+        if ((requestCode == REQUEST_PICTURE_3) && (resultCode == RESULT_OK)) {
+            // When the user is done picking a picture, let's start the CropImage Activity,
+            Uri photo = data.getData();
+
+            File file = new File(getActivity().getFilesDir(), "img_m3_3.jpg");
+            Uri result = Uri.fromFile(file);
+            startActivityForResult(
+                    UCrop.of(photo, result)
+                            .withAspectRatio(1, 1)
+                            .withMaxResultSize(1080, 1080)
+                            .getIntent(getActivity()
+                            ), REQUEST_CROP_PICTURE_3);
+        }
+
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_3) {
+            // When we are done cropping, display it in the ImageView.
+            final Uri resultUri = UCrop.getOutput(data);
+            ImageView IMG3 = (ImageView) getView().findViewById(R.id.image3);
+            IMG3.setImageURI(resultUri);
+
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+        }
+
+    }
+
+    /**
+     * SAVE IMAGE
+     * Saves profile images in application data path.
+     * It is invoked when setting a new profile image
+     */
+    public void saveImage(File file, File croppedImageFile){
+        try {
+            FileInputStream inStream = new FileInputStream(croppedImageFile);
+            FileOutputStream outStream = new FileOutputStream(file);
+            FileChannel inChannel = inStream.getChannel();
+            FileChannel outChannel = outStream.getChannel();
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+            inStream.close();
+            outStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * MAKE VIBRATION
+     */
+    public void makeVibration(){
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator.hasVibrator()) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                VibrationEffect effect = VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE);
+                vibrator.vibrate(effect);
+            }
+            else{
+                vibrator.vibrate(50);
+            }
+        }
+    }
 
 }

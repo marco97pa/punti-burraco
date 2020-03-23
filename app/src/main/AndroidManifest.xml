@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.marco97pa.puntiburraco"> <!-- Chrome Custom Tabs -->
+    package="com.marco97pa.puntiburraco">
+    <!-- Chrome Custom Tabs -->
     <uses-sdk tools:overrideLibrary="android.support.customtabs" />
-
     <!-- Save screenshot and set profile images -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- Support ChromeBook -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Support ChromeBook -->
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false" />
-    <!-- Internet -->
+        android:required="false" /> <!-- Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Vibration -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Vibration -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- Location for day/night theme -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.marco97pa.puntiburraco.provider"
@@ -34,6 +31,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id"/>
+        <meta-data
+            android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
+            android:value="true"/>
 
         <!-- Support 18:9 displays -->
         <meta-data
@@ -47,7 +51,7 @@
             android:name=".MainActivity"
             android:appCategory="productivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.Placeholder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,7 +67,9 @@
                     android:host="hh29c.app.goo.gl"
                     android:scheme="https" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
@@ -93,9 +99,8 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".ShareResultActivity"/>
-        
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".ShareResultActivity" />
     </application>
 
 </manifest>

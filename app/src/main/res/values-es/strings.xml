@@ -46,8 +46,8 @@
     <string name="setting_advanced_d">Ajustar la configuración avanzada de la aplicación</string>
     <string name="setting_notte">Tema</string>
     <string name="setting_notte_d">Activa el tema oscuro</string>
-    <string name="setting_img">Mostrar imagenes</string>
-    <string name="setting_img_d">Activar imágenes de perfil en modos de 2 y 4 jugadores</string>
+    <string name="setting_img">Imagenes</string>
+    <string name="setting_img_d">Imágenes de perfil de jugadores</string>
     <string name="setting_schermo">Mantener la pantalla en</string>
     <string name="setting_schermo_d">Lea y actualice sus puntuaciones cómodamente y sin interrupción</string>
     <string name="setting_limite">Establecer puntaje final</string>
@@ -70,7 +70,6 @@
     <string name="setting_pm">Habilitar puntos en mano</string>
     <string name="setting_inputdirect">Entrada directa</string>
     <string name="setting_inputdirect_d">Introduce la puntuación del juego directamente. La interfaz será más mínima, pero se recomienda para jugadores experimentados, sin la necesidad de ayuda</string>
-    <string name="setting_background">Fondo de las Historias para compartir</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">abre navigation drawer</string>
@@ -105,11 +104,23 @@
     <string name="dialog_delete">Borrar</string>
     <string name="no_data_available">Aún no has jugado ningún juego ...</string>
     <string name="audio_up">Volumen multimedia subido al máximo</string>
-    <string name="change_background_hint">Toque para cambiar el fondo</string>
+    <string name="change_background_hint">Voluta para cambiar el fondo</string>
     <string name="app_not_installed">%1$s no instalado. Instálalo y podrás compartir tus resultados</string>
-    <string name="error_location">¡Revocaste el permiso de ubicación!\nTema de la aplicación configurado en Claro</string>
     <string name="error04">Error</string>
     <string name="error00">Error</string>
+    <string name="setting_insert_method_d">Elija su método de entrada preferido</string>
+    <string name="setting_insert_method">Método de entrada</string>
+    <string name="setting_developer">Opciones de desarrollador</string>
+    <string name="setting_developer_d">Abrir opciones de desarrollador</string>
+    <string name="SuggPB">Pontos base</string>
+    <string name="setting_ads">Anuncios</string>
+    <string name="setting_ads_d">Habilitar anuncios</string>
+    <string name="setting_inputnormal_d">Adecuado para los recién llegados, pero no de la manera más rápida.\nPuntos de entrada en forma detallada, con corridas limpias, corridas semi-limpias y sucias. Incluso puede usar solo una parte de todos los campos.</string>
+    <string name="setting_inputnormal">Completo</string>
+    <string name="setting_inputalternative_d">Solo dos campos: puntos base y puntos de tabla\nLos puntos base son la suma de las corridas con el cierre, restando puntos en la mano (calculado por el usuario). Los puntos de la mesa son los puntos de las cartas sobre la mesa.</string>
+    <string name="setting_inputalternative">Astuto</string>
+    <string name="setting_ads_choice">Elija la configuración de sus anuncios</string>
+    <string name="setting_crash">Crash</string>
 
 
 </resources>

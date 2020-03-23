@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,6 +23,8 @@ import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
@@ -31,9 +34,11 @@ import android.preference.PreferenceManager;
 
 import androidx.browser.customtabs.CustomTabsIntent;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.ads.consent.ConsentForm;
+import com.google.ads.consent.ConsentFormListener;
+import com.google.ads.consent.ConsentInfoUpdateListener;
+import com.google.ads.consent.ConsentInformation;
+import com.google.ads.consent.ConsentStatus;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -54,7 +59,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.emoji.text.FontRequestEmojiCompatConfig;
-import ca.rmen.sunrisesunset.SunriseSunset;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,11 +68,9 @@ import android.widget.Toast;
 
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
-
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-import static androidx.appcompat.app.AppCompatDelegate.getDefaultNightMode;
 
 
 /**
@@ -87,17 +89,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
-    private static final int REQUEST_LOCATION = 100;
+    private String TAG = this.getClass().getSimpleName();
 
     public static Context contextOfApplication;
+    public static final int OPEN_SETTINGS = 9001;
     String CHANNEL_ID = "channel_suspended";
     //action bar settings
     Boolean ddp_visibility = true;
     Boolean newgame_show = false;
     double latitude, longitude;
-    private FusedLocationProviderClient fusedLocationClient;
     private boolean isDrawerFixed;
+    private ConsentForm form;
+    public boolean adsPersonalized = true;
     SharedPreferences sharedPreferences;
     Handler mHandler;
     Runnable runnableCode;
@@ -111,13 +114,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //CREATING ACTIVITY AND FAB BUTTON
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         setAppTheme();
-        isAppUpgraded();
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+
 
         isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
-
 
         /* CREATING ACTIVITY
          * Creating activity and setting its contents, the toolbar, the fab and the first Fragment
@@ -131,6 +134,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fragment = new DoubleFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "2").commit();
+
+        isAppUpgraded();
+        checkForConsent();
 
         //Setting the FAB button - It launches the openStart method of the active Fragment inside activity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -388,24 +394,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    //On return from another activity
+
     @Override
     public void onResume(){
         super.onResume();
-        //restart theme handler
-        if(mHandler!=null){
-            mHandler.postDelayed(runnableCode, INTERVAL);
-        }
-        //Check if there was a setting change
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean settingsChanged = sharedPreferences.getBoolean("setChange", false) ;
-        if(settingsChanged){
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("setChange", false);
-            editor.commit();
-            recreate();
-        }
 
         //Delete notification (if there is any)
         NotificationManager notifManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -474,7 +466,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_setting) {
             //Launches Settings Activity
             Intent myIntent = new Intent(this, SettingActivity.class);
-            this.startActivity(myIntent);
+            this.startActivityForResult(myIntent, OPEN_SETTINGS);
 
         } else if (id == R.id.nav_history) {
             //Launches History Activity
@@ -483,9 +475,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_guide) {
             //Check if the device is connected
-            ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            boolean isConnected = checkConnectivity(this);
 
             if(isConnected) {
                 //I am using CustomTabs
@@ -556,6 +546,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * This method handles resuming from other Activities
+     * @param requestCode  [int]  if it is equal to OPEN_SETTING, it will invoke Activity recreate() method
+     *                     because we are coming back from SettingActivity and we need to refresh the UI accordingly
+     *                     to the new settings
+     * @param resultCode  [int] if is RESULT_OK SettingsActivity passed to this Activity some Extra data
+     * @param data   it contains extra values passed from SettingsActivity such as:
+     *                    - askAds  [boolean]  if true, we have to show ad consent dialog calling requestConsent();
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == OPEN_SETTINGS) {
+            recreate();
+            if(resultCode == RESULT_OK){
+                if(data.getBooleanExtra("askAds", false)){
+                    requestConsent();
+                }
+            }
+        }
+    }
+
 
     //HANDLE SCREEN ORENTATION CHANGES
     @Override
@@ -567,6 +579,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can restore the view hierarchy
@@ -610,6 +623,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //the method above invokes onPrepareOptionsMenu();
     }
 
+
     /**
      * Checks if app has been updated to do things like upgrade databases or show a message to the user
      * <p>It checks if <b>Build VERSION_CODE</b> differs from last runtime and saves it</p>
@@ -627,16 +641,127 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("last_version", actualVersion);
-        editor.commit();
+        editor.apply();
     }
 
+    private void checkForConsent() {
+        ConsentInformation consentInformation = ConsentInformation.getInstance(MainActivity.this);
+        String[] publisherIds = {getString(R.string.admob_pub_id)};
+        consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
+            @Override
+            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                // User's consent status successfully updated.
+                switch (consentStatus) {
+                    case PERSONALIZED:
+                        Log.d(TAG, "Showing Personalized ads");
+                        adsPersonalized = true;
+                        ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
+                        break;
+                    case NON_PERSONALIZED:
+                        Log.d(TAG, "Showing Non-Personalized ads");
+                        adsPersonalized = false;
+                        ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                        break;
+                    case UNKNOWN:
+                        Log.d(TAG, "Requesting Consent");
+                        if (ConsentInformation.getInstance(getBaseContext()).isRequestLocationInEeaOrUnknown()) {
+                            requestConsent();
+                        } else {
+                            adsPersonalized = true;
+                            ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailedToUpdateConsentInfo(String errorDescription) {
+                // User's consent status failed to update.
+            }
+        });
+    }
+
+    private void requestConsent() {
+        URL privacyUrl = null;
+        try {
+            privacyUrl = new URL("https://marco97pa.github.io/punti-burraco/privacy_policy");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            // Handle error
+            Log.d(TAG, "Requesting Consent: Bad or missing privacy policy URL");
+        }
+        form = new ConsentForm.Builder(MainActivity.this, privacyUrl)
+                .withListener(new ConsentFormListener() {
+                    @Override
+                    public void onConsentFormLoaded() {
+                        // Consent form loaded successfully.
+                        Log.d(TAG, "Requesting Consent: onConsentFormLoaded");
+                        showForm();
+                    }
+
+                    @Override
+                    public void onConsentFormOpened() {
+                        // Consent form was displayed.
+                        Log.d(TAG, "Requesting Consent: onConsentFormOpened");
+                    }
+
+                    @Override
+                    public void onConsentFormClosed(
+                            ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                        Log.d(TAG, "Requesting Consent: onConsentFormClosed");
+                            switch (consentStatus) {
+                                case PERSONALIZED:
+                                    adsPersonalized = true;
+                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
+                                    break;
+                                case NON_PERSONALIZED:
+                                    adsPersonalized = false;
+                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                                    break;
+                                case UNKNOWN:
+                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                                    adsPersonalized = false;
+                                    break;
+                            }
+
+                        }
+
+                    @Override
+                    public void onConsentFormError(String errorDescription) {
+                        Log.d(TAG, "Requesting Consent: onConsentFormError. Error - " + errorDescription);
+                        // Consent form error.
+                    }
+                })
+                .withPersonalizedAdsOption()
+                .withNonPersonalizedAdsOption()
+                .build();
+        form.load();
+    }
+
+    private void showForm() {
+        if (form == null) {
+            Log.d(TAG, "Consent form is null");
+        }
+        if (form != null) {
+            Log.d(TAG, "Showing consent form");
+            form.show();
+        } else {
+            Log.d(TAG, "Not Showing consent form");
+        }
+    }
 
     public void setAppTheme() {
         /* SETTING APP THEME
          * Here I set the app theme according to the user choice
          * This method MUST be called before the "setContentView(...)"
          */
-        switch (sharedPreferences.getString("theme", "light")) {
+        String default_theme = "light";
+        if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
+            default_theme = "system";
+        }
+        switch (sharedPreferences.getString("theme", default_theme)) {
             case "light":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
@@ -646,100 +771,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case "system":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 break;
-            case "auto":
-                setAppThemeAuto();
-                break;
-            default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
         }
     }
 
+    @SuppressLint("MissingPermission") //Lint asks for a ACCESS_NETWORK_STATE PERMISSION that is already in the Manifest
+    public static boolean checkConnectivity(Context mContext) {
+        if (mContext == null) return false;
 
-    public void setAppThemeAuto(){
-        /* SETTING APP THEME AUTOMATICALLY
-         * Here I set the app theme according to the current sun position
-         * Based on time and location, I can determine if the sun is up.
-         */
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+        ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                final Network network = connectivityManager.getActiveNetwork();
+                if (network != null) {
+                    final NetworkCapabilities nc = connectivityManager.getNetworkCapabilities(network);
+
+                    return (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                            nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            nc.hasTransport((NetworkCapabilities.TRANSPORT_ETHERNET)));
+                }
             } else {
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-                fusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                // Got last known location. In some rare situations this can be null.
-                                if (location != null) {
-                                    // Extract latitude and longitude
-                                    longitude = location.getLongitude();
-                                    latitude = location.getLatitude();
-                                    if (SunriseSunset.isDay(latitude, longitude)) {
-                                        //is DAY, so set the theme accordingly
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putBoolean("lastCheckWasDay", true);
-                                        editor.commit();
-                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                                    } else {
-                                        //is NIGHT, so set the theme accordingly
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putBoolean("lastCheckWasDay", false);
-                                        editor.commit();
-                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                                    }
-                                }
-                            }
-                        });
-
-                mHandler = new Handler();
-
-                runnableCode = new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("runnableDayNight","is running...");
-                        if (SunriseSunset.isDay(latitude, longitude)) {
-                            if (!sharedPreferences.getBoolean("lastCheckWasDay", true)) {
-                                //is DAY, so set the theme accordingly
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean("lastCheckWasDay", true);
-                                editor.commit();
-                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                            }
-                        } else {
-                            if (sharedPreferences.getBoolean("lastCheckWasDay", true)) {
-                                //is NIGHT, so set the theme accordingly
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean("lastCheckWasDay", false);
-                                editor.commit();
-                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                            }
-                        }
-                        //Repeat this after an interval
-                        mHandler.postDelayed(this, INTERVAL);
+                NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+                for (NetworkInfo tempNetworkInfo : networkInfos) {
+                    if (tempNetworkInfo.isConnected()) {
+                        return true;
                     }
-                };
-
-            }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);;
-        switch (requestCode) {
-            case REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setAppThemeAuto();
-                } else {
-                    // permission denied, boo!
-                    Toast.makeText(this,getString(R.string.error_location),Toast.LENGTH_LONG).show();
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("theme", "light");
-                    editor.commit();
                 }
             }
         }
+        return false;
     }
+
 }

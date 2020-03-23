@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="listentries">
-         <item> Instagram violet </item>
-         <item> Naturaleza verde </item>
-         <item> Naranja Buraco </item>
-         <item> Azul océano </item>
-         <item> Rojo cereza </item>
-         <item> Sangre de unicornio </item>
-    </string-array>
     <string-array name="theme_entries">
         <item>Claro</item>
         <item>Oscuro</item>
-        <item>Automático (basado en el tiempo y el lugar)</item>
         <item>Seguir la configuración del sistema</item>
     </string-array>
 </resources>

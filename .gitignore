@@ -8,3 +8,4 @@
 /captures
 /projectFilesBackup
 /app/google-services.json
+**/*/res/values/secret_ids.xml

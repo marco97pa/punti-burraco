@@ -20,11 +20,10 @@
         <!-- To change the popup menu and app text color  -->
         <item name="android:textColor">@color/dialogText</item>
         <item name="android:navigationBarColor">?android:attr/colorPrimaryDark</item>
-        <item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>>
+        <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
     </style>
 
 
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/splash</item>
-    </style>
 </resources>

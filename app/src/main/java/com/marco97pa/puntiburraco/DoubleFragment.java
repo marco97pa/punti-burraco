@@ -8,6 +8,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,11 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -34,6 +40,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.widget.PopupMenu;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +55,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -59,8 +67,11 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * DOUBLE FRAGMENT
@@ -82,17 +93,19 @@ public class DoubleFragment extends Fragment {
      *      int bp2 = Clean run player 2 = value of BP2 EditText
      */
 
-    private final Boolean google_has_fixed_nightmode_bug = false;
-    int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2;
+    public static final String LOG_TAG = "2PlayersFragment";
+    int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
     private EditText BP1, BP2; //Clean run EditText
     private EditText BI1, BI2; //Semi clean run EditText
     private EditText BS1, BS2; //Dirty run EditText
     private EditText PN1, PN2; //Points on table EditText
+    private EditText PB1, PB2; //Base points EditText
     private EditText PM1, PM2; //Points in hand EditText
     private CheckBox CH1, CH2, PZ1, PZ2; //Close and No Pots Checkbox
     private ImageView IMG1, IMG2; //Images of players
+    private AdView mAdView;
     final int PDefault=0;
     boolean win=false; //Actual state of game
     String winner,loser; //Names of winner and loser
@@ -112,6 +125,7 @@ public class DoubleFragment extends Fragment {
     String bgColor, txtColor, colors;
     boolean bypass = false;
     MediaPlayer sound;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public DoubleFragment() {
         // Empty constructor required for fragment subclasses
@@ -140,6 +154,8 @@ public class DoubleFragment extends Fragment {
         BS2 = (EditText) rootView.findViewById(R.id.editBS2);
         PN2 = (EditText) rootView.findViewById(R.id.editP2);
         PM2 = (EditText) rootView.findViewById(R.id.editPM2);
+        PB1 = (EditText) rootView.findViewById(R.id.editPB1);
+        PB2 = (EditText) rootView.findViewById(R.id.editPB2);
         CH1 = (CheckBox) rootView.findViewById(R.id.chiusura1);
         CH2 = (CheckBox) rootView.findViewById(R.id.chiusura2);
         PZ1 = (CheckBox) rootView.findViewById(R.id.pozzetto1);
@@ -150,6 +166,15 @@ public class DoubleFragment extends Fragment {
 
         sound = MediaPlayer.create(getActivity(), R.raw.fischio);
 
+
+        mAdView = rootView.findViewById(R.id.adView);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
+        if(adsEnabled) {
+            MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
+            showAds();
+        }
+
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(), R.color.dialogBackground)));
         txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(), R.color.dialogText)));
@@ -158,6 +183,8 @@ public class DoubleFragment extends Fragment {
         //Invoking method to recover the state of an interrupted game
         Restore();
 
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         //Setting OnclickListeners for each Player TextView
         textNome1.setOnClickListener(new View.OnClickListener() {
@@ -314,8 +341,15 @@ public class DoubleFragment extends Fragment {
          * RECOVER IMAGES OF LAST GAME
          * Images are showed only if user has choose it in settings
          */
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Boolean isImgActivated = sharedPref.getBoolean("img", false) ;
+        //On lowRamDevice images are disabled par default
+        boolean isLowRamDevice = false;
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            isLowRamDevice = am.isLowRamDevice();
+            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+        }
+
+        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
         if(isImgActivated) {
             //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
             Bitmap bitmap1 = null, bitmap2 = null;
@@ -352,34 +386,58 @@ public class DoubleFragment extends Fragment {
             if (getActivity().isInMultiWindowMode()) {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
+                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
             }
         }
 
 
-          /**
-           * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
-           *
-           * */
+        /**
+         * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
+         *
+         * */
             Boolean isManoModeActivated = sharedPref.getBoolean("input_puntimano", true) ;
             if(!isManoModeActivated){
                 PM1.setVisibility(View.GONE);
                 PM2.setVisibility(View.GONE);
                 bypass = true; //PERMETTI DI CHIUDERE SENZA POZZETTO E SENZA PUNTI IN MANO
             }
-            Boolean isDirectModeActivated = sharedPref.getBoolean("input_direct", false) ;
-            if(isDirectModeActivated){
-                PM1.setVisibility(View.GONE);
-                BP1.setVisibility(View.GONE);
-                BI1.setVisibility(View.GONE);
-                BS1.setVisibility(View.GONE);
-                PM2.setVisibility(View.GONE);
-                BP2.setVisibility(View.GONE);
-                BI2.setVisibility(View.GONE);
-                BS2.setVisibility(View.GONE);
-                CH1.setVisibility(View.GONE);
-                CH2.setVisibility(View.GONE);
-                PZ1.setVisibility(View.GONE);
-                PZ2.setVisibility(View.GONE);
+            int input_method = sharedPref.getInt("input_method", 1) ;
+            switch(input_method){
+                case 1:
+                    PB1.setVisibility(View.GONE);
+                    PB2.setVisibility(View.GONE);
+                break;
+                case 2:
+                    PM1.setVisibility(View.GONE);
+                    BP1.setVisibility(View.GONE);
+                    BI1.setVisibility(View.GONE);
+                    BS1.setVisibility(View.GONE);
+                    PM2.setVisibility(View.GONE);
+                    BP2.setVisibility(View.GONE);
+                    BI2.setVisibility(View.GONE);
+                    BS2.setVisibility(View.GONE);
+                    CH1.setVisibility(View.GONE);
+                    CH2.setVisibility(View.GONE);
+                    PZ1.setVisibility(View.GONE);
+                    PZ2.setVisibility(View.GONE);
+                break;
+                case 3:
+                    PM1.setVisibility(View.GONE);
+                    BP1.setVisibility(View.GONE);
+                    BI1.setVisibility(View.GONE);
+                    BS1.setVisibility(View.GONE);
+                    PM2.setVisibility(View.GONE);
+                    BP2.setVisibility(View.GONE);
+                    BI2.setVisibility(View.GONE);
+                    BS2.setVisibility(View.GONE);
+                    CH1.setVisibility(View.GONE);
+                    CH2.setVisibility(View.GONE);
+                    PZ1.setVisibility(View.GONE);
+                    PZ2.setVisibility(View.GONE);
+
+                    PB1.setVisibility(View.GONE);
+                    PB2.setVisibility(View.GONE);
+                break;
             }
 
         return rootView;
@@ -556,6 +614,8 @@ public class DoubleFragment extends Fragment {
         BS2.setText("");
         PN2.setText("");
         PM2.setText("");
+        PB1.setText("");
+        PB2.setText("");
         CH1.setChecked(false);
         CH2.setChecked(false);
         PZ1.setChecked(false);
@@ -572,7 +632,7 @@ public class DoubleFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("dpp", "");
         editor.putInt("interrupted", 0);
-        editor.commit();
+        editor.apply();
         //make action bar standard again
         ((MainActivity)getActivity()).setMenuAlternative(false);
         //make a Snackbar to alert the user
@@ -616,6 +676,16 @@ public class DoubleFragment extends Fragment {
                 } else {
                     pn1 = Integer.parseInt(PN1.getText().toString());
                 }
+                if (PB1.getText().toString().matches("")) {
+                    pb1 = 0;
+                } else {
+                    pb1 = Integer.parseInt(PB1.getText().toString());
+                }
+                if (PB2.getText().toString().matches("")) {
+                    pb2 = 0;
+                } else {
+                    pb2 = Integer.parseInt(PB2.getText().toString());
+                }
                 if (PM1.getText().toString().matches("")) {
                     pm1 = 0;
                 } else {
@@ -627,7 +697,7 @@ public class DoubleFragment extends Fragment {
                 old_tot2 = tot2;
 
                 //Calculating new total
-                tot1 = tot1 + (((bp1 * 200) + (bi1 * 100) + (bs1 * 150) + pn1) - pm1);
+                tot1 = tot1 + (((bp1 * 200) + (bi1 * 100) + (bs1 * 150) + pn1 + pb1) - pm1);
 
                 //Adding Closing points
                 if (CH1.isChecked()) {
@@ -673,7 +743,7 @@ public class DoubleFragment extends Fragment {
                 }
 
                 //Calculating total
-                tot2 = tot2 + (((bp2 * 200) + (bi2 * 100) + (bs2 * 150) + pn2) - pm2);
+                tot2 = tot2 + (((bp2 * 200) + (bi2 * 100) + (bs2 * 150) + pn2 + pb2) - pm2);
 
                 if (CH2.isChecked()) {
                     tot2 = tot2 + 100;
@@ -692,7 +762,7 @@ public class DoubleFragment extends Fragment {
                 String html = sharedPref.getString("dpp", "");
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("dpp", html + "<tr><td>" + tot1 + "</td><td>" + tot2 + "</td></tr>");
-                editor.commit();
+                editor.apply();
 
                 //reset the interface widget (polish EditText and uncheck checkboxes)
                 BP1.setText("");
@@ -705,6 +775,8 @@ public class DoubleFragment extends Fragment {
                 BS2.setText("");
                 PN2.setText("");
                 PM2.setText("");
+                PB1.setText("");
+                PB2.setText("");
                 CH1.setChecked(false);
                 CH2.setChecked(false);
                 PZ1.setChecked(false);
@@ -736,6 +808,8 @@ public class DoubleFragment extends Fragment {
                         loser = textNome2.getText().toString();
                         //save score to DB
                         saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                        //save event
+                        saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                         //make alert
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                         String out = textNome1.getText().toString();
@@ -768,6 +842,8 @@ public class DoubleFragment extends Fragment {
                         loser = textNome1.getText().toString();
                         //save score to DB
                         saveScoreToDB(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
+                        //save event
+                        saveScoreToFirebase(textNome1.getText().toString(), textNome2.getText().toString(), tot1, tot2);
                         //make alert
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
                         String out = textNome2.getText().toString();
@@ -834,7 +910,7 @@ public class DoubleFragment extends Fragment {
             editor.putString("sq1",textNome1.getText().toString());
             editor.putString("sq2",textNome2.getText().toString());
             editor.putInt("interrupted", 2);
-            editor.commit();
+            editor.apply();
         }
         else{
             editor.putInt("p1", PDefault);
@@ -845,7 +921,7 @@ public class DoubleFragment extends Fragment {
             editor.putString("dpp", "");
             //set alternative bar
             ((MainActivity)getActivity()).setMenuAlternative(true);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -989,6 +1065,44 @@ public class DoubleFragment extends Fragment {
         db.open();
         long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
         db.close();
+    }
+
+    private void saveScoreToFirebase(String player1, String player2, int score1, int score2){
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(FirebaseAnalytics.Param.CHARACTER, player1);
+        bundle1.putLong(FirebaseAnalytics.Param.LEVEL, 2);
+        bundle1.putLong(FirebaseAnalytics.Param.SCORE, score1);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle1);
+
+        Bundle bundle2 = new Bundle();
+        bundle2.putString(FirebaseAnalytics.Param.CHARACTER, player2);
+        bundle2.putLong(FirebaseAnalytics.Param.LEVEL, 2);
+        bundle2.putLong(FirebaseAnalytics.Param.SCORE, score2);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, bundle2);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, "2 Player Mode");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
+
+    }
+
+    /**
+     * Show ads
+     */
+    private void showAds(){
+        AdRequest adRequest;
+        if(((MainActivity)getActivity()).adsPersonalized) {
+            adRequest = new AdRequest.Builder()
+                    .build();
+        }
+        else{
+            Bundle extras = new Bundle();
+            extras.putString("npa", "1");
+            adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .build();
+        }
+        mAdView.loadAd(adRequest);
     }
 
     /**
