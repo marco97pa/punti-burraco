@@ -2,7 +2,7 @@
 This app uses ads to support development. It is based on [Google Admob](https://apps.admob.com/) platform.
 
 The Admob app ID is not present on this repository for security reasons.
-You can add your Admob app ID before building, following the [Firebase and Ads section](docs/CONTRIBUTING.md#adding-the-required-files-for-firebase-and-ads) of CONTRIBUTING.md
+You can add your Admob app ID before building, following the [Firebase and Ads section](CONTRIBUTING.md#adding-the-required-files-for-firebase-and-ads) of CONTRIBUTING.md
 
 ## I want to choose my ads preferences
 You will be asked to choose between viewing personalized ads or non-personalized ads on the first launch.
