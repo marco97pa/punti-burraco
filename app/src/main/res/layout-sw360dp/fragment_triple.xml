@@ -24,40 +24,39 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image1"
-                android:layout_width="120dp"
-                android:layout_height="109dp"
+                android:layout_width="@dimen/tab"
+                android:layout_height="@dimen/tab"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
                 android:src="@drawable/circle_placeholder"
                 ads:layout_column="0"
                 ads:layout_columnWeight="1"
-                ads:layout_gravity="fill_horizontal"
-                ads:layout_row="0" />
+                ads:layout_row="0"
+                grid:layout_gravity="center_horizontal" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image2"
-                android:layout_width="120dp"
-                android:layout_height="109dp"
+                android:layout_width="@dimen/tab"
+                android:layout_height="@dimen/tab"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
                 android:src="@drawable/circle_placeholder"
                 ads:layout_column="1"
                 ads:layout_columnWeight="1"
-                ads:layout_gravity="fill_horizontal"
-                ads:layout_row="0" />
+                ads:layout_row="0"
+                grid:layout_gravity="center_horizontal" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image3"
-                android:layout_width="120dp"
-                android:layout_height="109dp"
+                android:layout_width="@dimen/tab"
+                android:layout_height="@dimen/tab"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
                 android:src="@drawable/circle_placeholder"
                 ads:layout_column="2"
                 ads:layout_columnWeight="1"
-                ads:layout_gravity="fill_horizontal"
                 ads:layout_row="0"
-                 />
+                grid:layout_gravity="center_horizontal" />
 
             <androidx.emoji.widget.EmojiTextView
                 android:id="@+id/editNome1"
