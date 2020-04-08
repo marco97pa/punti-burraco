@@ -280,14 +280,21 @@
         firebase.analytics();
 
         const remoteConfig = firebase.remoteConfig();
-        remoteConfig.settings = {
+        remoteConfig
+        .settings = {
           minimumFetchIntervalMillis: 3600000,
-        };
-        remoteConfig.defaultConfig = ({
+        }
+        defaultConfig = ({
           'downloads': 10000,
+        })
+        .fetchAndActivate()
+        .then(() => {
+          document.getElementById("downloads").innerHTML = remoteConfig.getNumber('downloads');
+        })
+        .catch((err) => {
+          console.error(err);
         });
-        remoteConfig.fetchAndActivate();  
-        document.getElementById("downloads").innerHTML = remoteConfig.getNumber('downloads');
+        
        </script>
 </body>
 </html>
