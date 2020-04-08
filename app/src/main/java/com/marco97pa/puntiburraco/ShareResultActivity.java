@@ -221,7 +221,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
     public void shareOnFacebook(){
         // Define image asset URI and attribution link URL
         Uri backgroundAssetUri = takeScreenshot();
-        String attributionLinkUrl = "https://punti-burraco.firebaseapp.com/";
+        String attributionLinkUrl = getString(R.string.link);
 
         // Instantiate implicit intent with ADD_TO_STORY action,
         // background asset, and attribution link
@@ -252,7 +252,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
     public void shareOnInstagram(){
         // Define image asset URI and attribution link URL
         Uri backgroundAssetUri = takeScreenshot();
-        String attributionLinkUrl = "https://punti-burraco.firebaseapp.com/";
+        String attributionLinkUrl = getString(R.string.link);
 
         // Instantiate implicit intent with ADD_TO_STORY action,
         // background asset, and attribution link

@@ -143,7 +143,11 @@
         <div style="display: table-cell; position: relative; top: 50%; transform: translateY(-25%); float: left; margin-left: 20px;">
           <h2>Punti Burraco</h2>
           <p>Android <br>Oltre <b id="downloads">16.000+</b> downloads<br>
-            Codice su <a href="https://github.com/marco97pa/punti-burraco">GitHub</a>
+            Codice open source su <a href="https://github.com/marco97pa/punti-burraco">GitHub</a><br>
+            <b>Segui Punti Burraco su</b> <br>
+            <a href="https://www.facebook.com/puntiburraco/"><img src="images/facebook.png" style="width: 48px;height: auto;margin-right: 8px;" class="circular"/></a>
+            <a href="https://www.instagram.com/puntiburraco/"><img src="images/instagram.png" style="width: 48px;height: auto;margin-right: 8px;" class="circular"/></a>
+            <a href="https://twitter.com/PBurraco"><img src="images/twitter.png" style="width: 48px;height: auto;margin-right: 8px;" class="circular"/></a>
           </p>
         </div>
       <br style="clear: both;">
@@ -280,14 +284,12 @@
         firebase.analytics();
 
         const remoteConfig = firebase.remoteConfig();
-        remoteConfig.settings = {
-          minimumFetchIntervalMillis: 5000,
-        }
-        .defaultConfig = ({
+        remoteConfig.defaultConfig = ({
           'downloads': 10000,
-        })
-        .fetchAndActivate()
-        .then(() => {
+        });
+        remoteConfig.fetchAndActivate()
+        .then(activated => {
+          console.log("Activated?", activated);
           document.getElementById("downloads").innerHTML = remoteConfig.getNumber('downloads');
         })
         .catch((err) => {
