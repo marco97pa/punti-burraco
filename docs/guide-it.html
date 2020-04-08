@@ -286,11 +286,8 @@
         remoteConfig.defaultConfig = ({
           'downloads': 10000,
         });
-        remoteConfig.fetchAndActivate()
-        .then(() => {
-          document.getElementById("downloads").innerHTML = remoteConfig.getNumber('downloads');
-        })
-        
+        remoteConfig.fetchAndActivate();  
+        document.getElementById("downloads").innerHTML = remoteConfig.getNumber('downloads');
        </script>
 </body>
 </html>
