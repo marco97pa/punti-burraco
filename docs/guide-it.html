@@ -142,7 +142,7 @@
         <img src="images/download.png" alt="" class="circular"/>
         <div style="display: table-cell; position: relative; top: 50%; transform: translateY(-25%); float: left; margin-left: 20px;">
           <h2>Punti Burraco</h2>
-          <p>Android <br><b>16.000+</b> downloads<br>
+          <p>Android <br>Oltre <b id="downloads">16.000+</b> downloads<br>
             Codice su <a href="https://github.com/marco97pa/punti-burraco">GitHub</a>
           </p>
         </div>
@@ -164,10 +164,20 @@
   <script src="js/moment.js"></script>
   <script src="js/stmd.js"></script>
   <script src="js/render.js"></script>
-       <script>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-remote-config.js"></script>
+
+  <script>
       //DARK THEME
       if(getAllUrlParams().dark) {
        document.getElementById('stylesheet').href='bottom-nav-dark.css';
+      }
+      //JUMP to BUG section
+      if(getAllUrlParams().bug) {
+       show('bug');
       }
 
        var nascita = moment("19971124", "YYYYMMDD");
@@ -253,6 +263,30 @@
 
         return obj;
         }
+
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+          apiKey: "AIzaSyADfNMKUfLBuHi9DQABVBaQX9Oki7BKDfg",
+          authDomain: "points-buraco.firebaseapp.com",
+          databaseURL: "https://points-buraco.firebaseio.com",
+          projectId: "points-buraco",
+          storageBucket: "points-buraco.appspot.com",
+          messagingSenderId: "9826407298",
+          appId: "1:9826407298:web:1ec1f6104e03bdb078359b",
+          measurementId: "G-HTW51V6DVD"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        const remoteConfig = firebase.remoteConfig();
+        remoteConfig.settings = {
+          minimumFetchIntervalMillis: 3600000,
+        };
+        remoteConfig.defaultConfig = ({
+          'downloads': 10000,
+        });
+        document.getElementById("downloads").innerHTML = remoteConfig.getNumber('downloads');
        </script>
 </body>
 </html>
