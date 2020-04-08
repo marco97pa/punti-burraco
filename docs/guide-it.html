@@ -280,9 +280,8 @@
         firebase.analytics();
 
         const remoteConfig = firebase.remoteConfig();
-        remoteConfig
-        .settings = {
-          minimumFetchIntervalMillis: 3600000,
+        remoteConfig.settings = {
+          minimumFetchIntervalMillis: 5000,
         }
         defaultConfig = ({
           'downloads': 10000,
