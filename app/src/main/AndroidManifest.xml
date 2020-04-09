@@ -5,12 +5,15 @@
     <!-- Chrome Custom Tabs -->
     <uses-sdk tools:overrideLibrary="android.support.customtabs" />
     <!-- Save screenshot and set profile images -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Support ChromeBook -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Support ChromeBook -->
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false" /> <!-- Internet -->
+        android:required="false" />
+    <!-- Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Vibration -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Vibration -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -54,18 +57,7 @@
             android:theme="@style/AppTheme.Placeholder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="hh29c.app.goo.gl"
-                    android:scheme="https" />
             </intent-filter>
 
             <meta-data

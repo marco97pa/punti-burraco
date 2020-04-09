@@ -337,50 +337,7 @@ public class DoubleFragment extends Fragment {
 
         });
 
-        /**
-         * RECOVER IMAGES OF LAST GAME
-         * Images are showed only if user has choose it in settings
-         */
-        //On lowRamDevice images are disabled par default
-        boolean isLowRamDevice = false;
-        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            isLowRamDevice = am.isLowRamDevice();
-            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
-        }
 
-        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
-        if(isImgActivated) {
-            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
-            Bitmap bitmap1 = null, bitmap2 = null;
-            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                try {
-                    File bmp1 = new File(getActivity().getFilesDir() + "/img_m2_1.jpg");
-                    ImageDecoder.Source source1 = ImageDecoder.createSource(bmp1);
-                    bitmap1 = ImageDecoder.decodeBitmap(source1);
-                } catch (IOException e) { e.printStackTrace(); }
-                try {
-                    File bmp2 = new File(getActivity().getFilesDir() + "/img_m2_2.jpg");
-                    ImageDecoder.Source source2 = ImageDecoder.createSource(bmp2);
-                    bitmap2 = ImageDecoder.decodeBitmap(source2);
-                } catch (IOException e) { e.printStackTrace(); }
-            }
-            else{
-                bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/img_m2_1.jpg");
-                bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m2_2.jpg");
-            }
-            //Set Bitmap to Image if not null
-            if(bitmap1 != null) {
-                IMG1.setImageBitmap(bitmap1);
-            }
-            if(bitmap2 != null) {
-                IMG2.setImageBitmap(bitmap2);
-            }
-        }
-        else{
-            IMG1.setVisibility(View.GONE);
-            IMG2.setVisibility(View.GONE);
-        }
         //improves usability in Android N with MultiWindow and avoids bugs
         if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (getActivity().isInMultiWindowMode()) {
@@ -441,6 +398,12 @@ public class DoubleFragment extends Fragment {
             }
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        restoreImages();
     }
 
     protected void dialogGioc1() {
@@ -571,6 +534,54 @@ public class DoubleFragment extends Fragment {
         punti2.setText(Integer.toString(tot2));
         textNome1.setText(sharedPref.getString("sq1",sq1Default));
         textNome2.setText(sharedPref.getString("sq2",sq2Default));
+    }
+
+    /**
+     * RECOVER IMAGES OF LAST GAME
+     *  Images are showed only if user has choose it in settings
+     */
+    public void restoreImages(){
+        //On lowRamDevice images are disabled par default
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        boolean isLowRamDevice = false;
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            isLowRamDevice = am.isLowRamDevice();
+            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+        }
+
+        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
+        if(isImgActivated) {
+            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
+            Bitmap bitmap1 = null, bitmap2 = null;
+            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                try {
+                    File bmp1 = new File(getActivity().getFilesDir() + "/img_m2_1.jpg");
+                    ImageDecoder.Source source1 = ImageDecoder.createSource(bmp1);
+                    bitmap1 = ImageDecoder.decodeBitmap(source1);
+                } catch (IOException e) { e.printStackTrace(); }
+                try {
+                    File bmp2 = new File(getActivity().getFilesDir() + "/img_m2_2.jpg");
+                    ImageDecoder.Source source2 = ImageDecoder.createSource(bmp2);
+                    bitmap2 = ImageDecoder.decodeBitmap(source2);
+                } catch (IOException e) { e.printStackTrace(); }
+            }
+            else{
+                bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/img_m2_1.jpg");
+                bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m2_2.jpg");
+            }
+            //Set Bitmap to Image if not null
+            if(bitmap1 != null) {
+                IMG1.setImageBitmap(bitmap1);
+            }
+            if(bitmap2 != null) {
+                IMG2.setImageBitmap(bitmap2);
+            }
+        }
+        else{
+            IMG1.setVisibility(View.GONE);
+            IMG2.setVisibility(View.GONE);
+        }
     }
 
     public void openInsert(){
@@ -1169,6 +1180,7 @@ public class DoubleFragment extends Fragment {
         String data = header + html_inner + "</table></body></html>";
         return data;
     }
+
 
     /**
      * ON ACTIVITY RESULT
