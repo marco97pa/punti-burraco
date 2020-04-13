@@ -55,7 +55,7 @@
     <string name="setting_version">App version</string>
     <string name="setting_version_d">Unknown version</string>
     <string name="share_hint">Send app using</string>
-    <string name="share_message">Install #PointsBuraco</string>
+    <string name="share_message">%1s is an easy buraco scorekeeper for your smartphone.\nIt\'s FREE, download it on Google Play Store %2s</string>
     <string name="solo">Alone</string>
     <string name="title_activity_setting">Settings</string>
     <string name="win">wins</string>

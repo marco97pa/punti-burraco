@@ -59,7 +59,7 @@
     <string name="setting_title_pro">Interfaz</string>
     <string name="setting_title_game">Jugar</string>
     <string name="setting_title_app">Opciones de aplicación</string>
-    <string name="share_message">También instale #PuntosdeBuraco</string>
+    <string name="share_message">%1s es un marcador de puntaje buraco fácil para su teléfono.\nEs GRATIS, descárguelo en Google Play Store %2s</string>
     <string name="share_hint">Enviar aplicación a través de</string>
     <string name="easter_egg">:D</string>
     <string name="channel_name">Notificación de artículos suspendidos</string>

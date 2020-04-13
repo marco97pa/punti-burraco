@@ -64,7 +64,7 @@
     <string name="setting_title_pro">Interface</string>
     <string name="setting_title_game">Game</string>
     <string name="setting_title_app">App options</string>
-    <string name="share_message">Install #PointsBuraco</string>
+    <string name="share_message">%1s is an easy buraco scorekeeper for your smartphone.\nIt\'s FREE, download it on Google Play Store %2s</string>
     <string name="share_hint">Send app using...</string>
     <string name="easter_egg">Yay! Rainbows everywhere!</string>
     <string name="channel_name">Suspended game notifications</string>
@@ -117,14 +117,17 @@
     <string name="dialog_delete">Delete</string>
     <string name="no_data_available">Nothing here</string>
     <string name="audio_up">Turned up the volume</string>
-    <string name="facebook" translatable="false">Facebook Stories</string>
-    <string name="instagram" translatable="false">Instagram Stories</string>
+    <string name="facebook" translatable="false">Facebook</string>
+    <string name="instagram" translatable="false">Instagram</string>
+    <string name="whatsapp" translatable="false">Whatsapp</string>
+    <string name="stories" translatable="false">%1s Stories</string>
     <string name="change_background_hint">Swipe to change background</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
     <string name="setting_ads_choice">Choose your ads setting</string>
-    <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="setting_crash">Invoke a crash</string>
+    <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="link" translatable="false">https://pointsburaco.page.link/open</string>
+
 
 
 </resources>

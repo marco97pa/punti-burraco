@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,7 @@ private BottomSheetBehavior bottomSheetBehavior;
 private ExtendedFloatingActionButton fab;
 private FirebaseAnalytics mFirebaseAnalytics;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +124,12 @@ private FirebaseAnalytics mFirebaseAnalytics;
 
         });
 
+        //Set Facebook and Instagram text
+        TextView facebook_text = (TextView) findViewById(R.id.bottom_sheet_share_facebook_text);
+        facebook_text.setText(String.format(getString(R.string.stories), getString(R.string.facebook)));
+        TextView instagram_text = (TextView) findViewById(R.id.bottom_sheet_share_instagram_text);
+        instagram_text.setText(String.format(getString(R.string.stories), getString(R.string.instagram)));
+
         //BUTTONS
         //fab
         fab = (ExtendedFloatingActionButton) findViewById(R.id.fab);
@@ -150,6 +158,16 @@ private FirebaseAnalytics mFirebaseAnalytics;
             public void onClick(View v) {
                 bottomSheet.setVisibility(View.GONE); //hide BottomSheet without animations (to boost performance)
                 shareOnFacebook();
+            }
+        });
+
+        //whatsapp
+        LinearLayout whatsapp = (LinearLayout) findViewById(R.id.bottom_sheet_share_whatsapp);
+        whatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheet.setVisibility(View.GONE); //hide BottomSheet without animations (to boost performance)
+                shareOnWhatsapp();
             }
         });
 
@@ -236,14 +254,14 @@ private FirebaseAnalytics mFirebaseAnalytics;
 
             //add event to Firebase
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Facebook stories");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.facebook));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
 
             activity.startActivityForResult(intent, 0);
         }
         else{
             //Show alert if app is not installed
-            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), "Facebook"), Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), getString(R.string.facebook)), Toast.LENGTH_LONG);
             toast.show();
             finish();
         }
@@ -267,14 +285,47 @@ private FirebaseAnalytics mFirebaseAnalytics;
 
             //add event to Firebase
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Instagram stories");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.instagram));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
 
             activity.startActivityForResult(intent, 0);
         }
         else {
             //Show alert if app is not installed
-            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), "Instagram"), Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), getString(R.string.instagram)), Toast.LENGTH_LONG);
+            toast.show();
+            finish();
+        }
+    }
+
+    public void shareOnWhatsapp(){
+        //Define image asset URI and text
+        Uri backgroundAssetUri = takeScreenshot();
+        String text = String.format(getString(R.string.share_message), getString(R.string.app_name), getString(R.string.link));
+
+        //Define intent
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, backgroundAssetUri);
+        sendIntent.setType("image/jpeg");
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        sendIntent.setPackage("com.whatsapp");
+
+        Activity activity = this;
+        //Try to launch the intent
+        try {
+            //add event to Firebase
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.whatsapp));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
+            //start intent
+            activity.startActivity(sendIntent);
+
+        } catch (android.content.ActivityNotFoundException ex) {
+            //Show alert if app is not installed
+            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), getString(R.string.whatsapp)), Toast.LENGTH_LONG);
             toast.show();
             finish();
         }

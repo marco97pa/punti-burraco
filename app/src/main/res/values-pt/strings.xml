@@ -52,7 +52,7 @@
     <string name="setting_version">Versão aplicativo</string>
     <string name="setting_version_d">Versão</string>
     <string name="share_hint">Enviar aplicativo</string>
-    <string name="share_message">Instalar</string>
+    <string name="share_message">%1s é um marcador de buraco fácil para o seu smartphone.\nÉ GRATUITO, faça o download na Google Play Store %2s</string>
     <string name="solo">único</string>
     <string name="title_activity_setting">Configurações</string>
     <string name="win">vitórias</string>

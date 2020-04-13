@@ -58,7 +58,7 @@
     <string name="setting_title_pro">Interfaccia</string>
     <string name="setting_title_game">Meccaniche di gioco</string>
     <string name="setting_title_app">Opzioni app</string>
-    <string name="share_message">Installa anche tu #PuntiBurraco</string>
+    <string name="share_message">%1s è un segnapunti digitale per le partite a Burraco con i tuoi amici.\nÈ GRATIS, scaricalo dal Google Play Store: %2s</string>
     <string name="share_hint">Invia app via</string>
     <string name="easter_egg">Wow! Arcobaleni ovunque...</string>
     <string name="channel_name">Notifica partite sospese</string>

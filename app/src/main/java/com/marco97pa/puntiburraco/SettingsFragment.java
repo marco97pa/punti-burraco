@@ -115,13 +115,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         share_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference preference) {
-                String testo = getString(R.string.share_message)+ " " + getString(R.string.link); //this is a Dynamic Link
+                String text = String.format(getString(R.string.share_message), getString(R.string.app_name), getString(R.string.link));
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 // Add data to the intent, the receiving app will decide
                 // what to do with it.
                 share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                share.putExtra(Intent.EXTRA_TEXT, testo);
+                share.putExtra(Intent.EXTRA_TEXT, text);
                 startActivity(Intent.createChooser(share, getString(R.string.share_hint)));
                 return true;
             }
