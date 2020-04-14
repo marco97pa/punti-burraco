@@ -38,10 +38,9 @@
     <string name="action_dpp">Puntuaciones detalle</string>
 
     <!-- Settings -->
-    <string name="setting_valuta">Califica la aplicación</string>
-    <string name="setting_valuta_d">Serás dirigido a Play Store para dejar un comentario. Gracias por tu apoyo</string>
-    <string name="setting_share">Enviar esta aplicación</string>
-    <string name="setting_share_d">Compartir Puntos de Buraco con uno o más amigos</string>
+    <string name="setting_rate">¿Qué te parece esta aplicación?</string>
+    <string name="setting_rate_d">Serás dirigido a Play Store para dejar un comentario.\nGracias por tu apoyo</string>
+    <string name="nav_share">Enviar esta aplicación</string>
     <string name="setting_advanced">Opciones avanzadas</string>
     <string name="setting_advanced_d">Ajustar la configuración avanzada de la aplicación</string>
     <string name="setting_notte">Tema</string>
@@ -121,6 +120,12 @@
     <string name="setting_inputalternative">Astuto</string>
     <string name="setting_ads_choice">Elija la configuración de sus anuncios</string>
     <string name="setting_crash">Crash</string>
+    <string name="dislike">Disgusto</string>
+    <string name="like">Me gusta</string>
+    <string name="send_bug_report">Gracias por tu franqueza</string>
+    <string name="send_bug_report_question">¿Le gustaría enviar un informe de lo que no le gusta de esta aplicación?</string>
+    <string name="nav_rate">Retroalimentación</string>
+    <string name="nav_mirroring">Partido compartido</string>
 
 
 </resources>

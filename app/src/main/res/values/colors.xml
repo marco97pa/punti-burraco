@@ -11,8 +11,10 @@
     <color name="appToolbarTitleText">#fff</color>
     <color name="dialogBackground">#fff</color>
     <color name="dialogText">#000</color>
-    <color name="colorDialog">#FFFF9800</color>
+    <color name="colorDialog">#00B8D4</color>
     <color name="instagram">#e91e63</color>
     <color name="facebook">#303F9F</color>
     <color name="whatsapp">#075E54</color>
+    <color name="green">#00701a</color>
+    <color name="red">#8e0000</color>
 </resources>

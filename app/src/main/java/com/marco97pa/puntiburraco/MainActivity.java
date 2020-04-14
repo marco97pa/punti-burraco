@@ -2,6 +2,8 @@ package com.marco97pa.puntiburraco;
 
 import android.Manifest;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -39,6 +41,8 @@ import com.google.ads.consent.ConsentFormListener;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -52,6 +56,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -102,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ConsentForm form;
     public boolean adsPersonalized = true;
     SharedPreferences sharedPreferences;
+    FirebaseRemoteConfig mFirebaseRemoteConfig;
     Handler mHandler;
     Runnable runnableCode;
 
@@ -137,6 +144,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         isAppUpgraded();
         checkForConsent();
+
+        //Firebase Remote Config initialization
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(3600)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+        mFirebaseRemoteConfig.fetchAndActivate()
+                .addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Boolean> task) {
+                        if (task.isSuccessful()) {
+                            boolean updated = task.getResult();
+                            Log.d(TAG, "Fetch and activate succeeded");
+                            Log.d(TAG, "Config params updated: " + updated);
+
+                        } else {
+                            Log.d(TAG, "Fetch failed");
+                        }
+                        setNavFeedback(mFirebaseRemoteConfig.getBoolean("nav_menu_feedback"));
+                    }
+                });
 
         //Setting the FAB button - It launches the openStart method of the active Fragment inside activity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -474,70 +504,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.startActivity(myIntent);
 
         } else if (id == R.id.nav_guide) {
-            //Check if the device is connected
-            boolean isConnected = checkConnectivity(this);
+            //Launch the website in the default section (guide)
+            launchWebsite(getString(R.string.nav_guide), null);
 
-            if(isConnected) {
-                //I am using CustomTabs
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
-                Bitmap backButton = null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                    ImageDecoder.Source source = ImageDecoder.createSource(getResources(), R.drawable.ic_arrow_back);
-                    try {
-                          backButton = ImageDecoder.decodeBitmap(source);
-                    } catch (IOException e) { e.printStackTrace(); }
-                } else{
-                      backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back);
-                }
-                builder.setCloseButtonIcon(backButton);
-                builder.setShowTitle(true);
-                CustomTabsIntent customTabsIntent = builder.build();
-                //Takes the user to the localized page of the user guide
-                Locale lang;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                      lang = getResources().getConfiguration().getLocales().get(0);
-                } else{
-                    //noinspection deprecation
-                      lang = getResources().getConfiguration().locale;
-                }
-                String localeId = lang.toString();
-                Log.i("LINGUA", localeId);
-                //If lang is italian it will be redirected to guide-it.html., else to guide-en.html
-                String URLtoLaunch;
-                if(localeId.equals("it_IT")) {
-                    URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-it.html";
-                    Log.i("language", "IT");
-                }
-                else{
-                    URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-en.html";
-                    Log.i("language", "EN");
-                }
-                //Set theme (adds a parameter that a javascript script on the webpage can detect)
-                int nightModeflag = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                if(nightModeflag == Configuration.UI_MODE_NIGHT_YES){
-                    URLtoLaunch = URLtoLaunch+"?dark";
-                }
-                //Launch custom tabs
-                customTabsIntent.launchUrl(this, Uri.parse(URLtoLaunch));
-            }
-            else{
-                //If user is not connected, shows an alert
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog);
-                builder .setTitle(getString(R.string.nav_guide))
-                        .setMessage(getString(R.string.errore_connection))
-                        .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //do things
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-
-        } 
+        } else if (id == R.id.nav_feedback) {
+            //Show a feedback dialog
+            sendFeedback();
+        } else if (id == R.id.nav_send_app) {
+            //Share app link with other apps
+            shareAppLink();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (!isDrawerFixed) {
@@ -623,6 +599,138 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //the method above invokes onPrepareOptionsMenu();
     }
 
+    public void launchWebsite(String title, @Nullable String options){
+        //Check if the device is connected
+        boolean isConnected = checkConnectivity(this);
+
+        if(isConnected) {
+            //I am using CustomTabs
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
+            Bitmap backButton = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                ImageDecoder.Source source = ImageDecoder.createSource(getResources(), R.drawable.ic_arrow_back);
+                try {
+                    backButton = ImageDecoder.decodeBitmap(source);
+                } catch (IOException e) { e.printStackTrace(); }
+            } else{
+                backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back);
+            }
+            builder.setCloseButtonIcon(backButton);
+            builder.setShowTitle(true);
+            CustomTabsIntent customTabsIntent = builder.build();
+            //Takes the user to the localized page of the user guide
+            Locale lang;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                lang = getResources().getConfiguration().getLocales().get(0);
+            } else{
+                //noinspection deprecation
+                lang = getResources().getConfiguration().locale;
+            }
+            String localeId = lang.toString();
+            Log.i("LINGUA", localeId);
+            //If lang is italian it will be redirected to guide-it.html., else to guide-en.html
+            String URLtoLaunch;
+            if(localeId.equals("it_IT")) {
+                URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-it.html";
+                Log.i("language", "IT");
+            }
+            else{
+                URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-en.html";
+                Log.i("language", "EN");
+            }
+
+            //Add parameters that a javascript script on the webpage can detect
+            int nightModeflag = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            if(nightModeflag == Configuration.UI_MODE_NIGHT_YES || options != null){
+                URLtoLaunch = URLtoLaunch+"?";
+            }
+            //Set theme
+            if(nightModeflag == Configuration.UI_MODE_NIGHT_YES){
+                URLtoLaunch = URLtoLaunch + "dark";
+                if(options != null){
+                    URLtoLaunch = URLtoLaunch + "&";
+                }
+            }
+            //Add options to skip to a certain section
+            if(options != null) {
+                URLtoLaunch = URLtoLaunch + options;
+            }
+
+            //Launch custom tabs
+            customTabsIntent.launchUrl(this, Uri.parse(URLtoLaunch));
+        }
+        else{
+            //If user is not connected, shows an alert
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog);
+            builder .setTitle(title)
+                    .setMessage(getString(R.string.errore_connection))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //do things
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+    private void shareAppLink(){
+        String text = String.format(getString(R.string.share_message), getString(R.string.app_name), getString(R.string.link));
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        // Add data to the intent, the receiving app will decide what to do with it.
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        share.putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(Intent.createChooser(share, getString(R.string.share_hint)));
+    }
+
+    private void setNavFeedback(Boolean set){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem nav_feedback = menu.findItem(R.id.nav_feedback);
+        nav_feedback.setVisible(set);
+    }
+
+    private void sendFeedback(){
+        final Context context = this;
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, R.style.AlertDialogRateTheme);
+        builder .setTitle(getString(R.string.setting_rate))
+                .setMessage(getString(R.string.setting_rate_d))
+                .setPositiveButton(getString(R.string.like), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id="+context.getPackageName()));
+                        context.startActivity(webIntent);
+                    }
+                })
+                .setNeutralButton(getString(R.string.dislike), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MaterialAlertDialogBuilder builder2 = new MaterialAlertDialogBuilder(context, R.style.AppTheme_Dialog);
+                        builder2.setTitle(R.string.send_bug_report)
+                                .setMessage(getString(R.string.send_bug_report_question))
+                                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //Launch the website in the feedback section (called bug)
+                                        launchWebsite(getString(R.string.nav_guide), "bug");
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.ko), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog alert2 = builder2.create();
+                        alert2.show();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     /**
      * Checks if app has been updated to do things like upgrade databases or show a message to the user

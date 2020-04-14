@@ -43,12 +43,11 @@
     <string name="setting_schermo">Modo Always-On</string>
     <string name="setting_notte_d">Ativa o tema escuro para salas escuras</string>
     <string name="setting_schermo_d">Leia a pontuação sem qualquer aborrecimento</string>
-    <string name="setting_share">Enviar aplicativo</string>
-    <string name="setting_share_d">Enviar aos amigos</string>
+    <string name="nav_share">Enviar aplicativo</string>
     <string name="setting_title_app">Aplicativo</string>
     <string name="setting_title_pro">Juego</string>
-    <string name="setting_valuta">Revisar o aplicativo</string>
-    <string name="setting_valuta_d">Obrigado pela vossa ajuda</string>
+    <string name="setting_rate">O que você acha deste aplicativo?</string>
+    <string name="setting_rate_d">Obrigado pela vossa ajuda</string>
     <string name="setting_version">Versão aplicativo</string>
     <string name="setting_version_d">Versão</string>
     <string name="share_hint">Enviar aplicativo</string>
@@ -108,4 +107,10 @@
     <string name="setting_inputalternative">Esperto</string>
     <string name="setting_ads_choice">Escolha a configuração dos seus anúncios</string>
     <string name="setting_crash">Crash</string>
+    <string name="like">Gostar</string>
+    <string name="dislike">Não gostar</string>
+    <string name="send_bug_report">Obrigado pela sua franqueza</string>
+    <string name="send_bug_report_question">Deseja enviar um relatório sobre o que você não gosta deste aplicativo?</string>
+    <string name="nav_rate">Comentários</string>
+    <string name="nav_mirroring">Jogo compartilhado</string>
 </resources>

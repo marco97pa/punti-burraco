@@ -20,4 +20,10 @@
         android:key="crash">
     </androidx.preference.Preference>
 
+    <androidx.preference.Preference
+        android:title="Firebase Remote Config"
+        android:summary="Fetching..."
+        android:key="remote_config">
+    </androidx.preference.Preference>
+
 </androidx.preference.PreferenceScreen>

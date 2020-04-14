@@ -38,10 +38,9 @@
     <string name="action_dpp">Dettaglio punteggi</string>
 
     <!-- Settings -->
-    <string name="setting_valuta">Valuta l\'app</string>
-    <string name="setting_valuta_d">Verrai indirizzato al Play Store per lasciare una recensione. Grazie per il tuo supporto</string>
-    <string name="setting_share">Invia questa app</string>
-    <string name="setting_share_d">Condividi Punti Burraco con uno o più amici</string>
+    <string name="setting_rate">Che ne pensi dell\'app?</string>
+    <string name="setting_rate_d">Verrai indirizzato al Play Store per lasciare una recensione.\nGrazie per il tuo supporto</string>
+    <string name="nav_share">Invia questa app</string>
     <string name="setting_advanced_d">Vai alle impostazioni avanzate dell\'app</string>
     <string name="setting_notte">Tema</string>
     <string name="setting_notte_d">Attiva il tema scuro per ambienti poco illuminati</string>
@@ -73,7 +72,7 @@
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Apri navigation drawer</string>
     <string name="navigation_drawer_close">Chiudi navigation drawer</string>
-    <string name="nav_guide">Guida e feedback</string>
+    <string name="nav_guide">Guida</string>
     <string name="nav_history">Cronologia partite</string>
     <string name="nav_settings">Impostazioni</string>
     <string name="nav_2gioc">2 Giocatori</string>
@@ -121,6 +120,12 @@
     <string name="setting_inputnormal_d">Adatto a tutti, ma non il metodo più veloce.\nInserisci i punteggi in maniera dettagliata, inserendo il numero vari burrachi (puri, semipuri, sporchi), i punti delle carte sul tavolo e quelle rimaste in mano.\nIl calcolo dei punti è completamente automatico.</string>
     <string name="setting_ads_choice">Scegli le tue impostazioni per le inserzioni</string>
     <string name="setting_crash">Fai crashare l\'app</string>
+    <string name="like">Mi piace!</string>
+    <string name="dislike">Non mi piace</string>
+    <string name="send_bug_report">Grazie per la tua franchezza!</string>
+    <string name="send_bug_report_question">Vuoi segnalare un problema con questa app?</string>
+    <string name="nav_rate">Valuta l\'app</string>
+    <string name="nav_mirroring">Partita condivisa</string>
 
 
 </resources>
