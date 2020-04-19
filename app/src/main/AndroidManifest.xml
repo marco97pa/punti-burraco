@@ -89,6 +89,9 @@
                 android:value="com.marco97pa.puntiburraco.MainActivity" />
         </activity>
         <activity
+            android:name=".MainIntroActivity"
+            android:theme="@style/Theme.Intro"/>
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

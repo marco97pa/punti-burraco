@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static Context contextOfApplication;
     public static final int OPEN_SETTINGS = 9001;
+    public static final int REQUEST_CODE_INTRO = 9002;
     String CHANNEL_ID = "channel_suspended";
     //action bar settings
     Boolean ddp_visibility = true;
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "2").commit();
 
         isAppUpgraded();
+        showIntroOnFirstLaunch();
         checkForConsent();
 
         //Firebase Remote Config initialization
@@ -542,6 +544,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         }
+        if (requestCode == REQUEST_CODE_INTRO) {
+            if (resultCode == RESULT_OK) {
+                // Finished the intro, set first_app_launch false
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("first_app_launch", false);
+                editor.apply();
+                //recreate activity to reflect changes
+                recreate();
+            } else {
+                // Cancelled the intro. Finish this activity too.
+                finish();
+            }
+        }
     }
 
 
@@ -742,14 +758,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int lastVersion = sharedPreferences.getInt("last_version", 0);
         if(actualVersion != lastVersion){
             //App has been updated, do something like upgrade or show a message to user
+
+            //Set FirstLaunch to false (old versions of the app don't initialize this value
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("first_app_launch", false);
+            editor.apply();
+
             switch (actualVersion){
-                case 5040:
+                case 5045:
                     break;
             }
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("last_version", actualVersion);
         editor.apply();
+    }
+
+    /*
+    * Checks if this is the first app launch
+    * If <b> first_app_launch </b> is true than lauches MainIntroActivity
+    */
+    private void showIntroOnFirstLaunch(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean first_app_launch = sharedPreferences.getBoolean("first_app_launch", true);
+        if(first_app_launch){
+            Intent myIntent = new Intent(this, MainIntroActivity.class);
+            startActivityForResult(myIntent, REQUEST_CODE_INTRO);
+        }
     }
 
     private void checkForConsent() {

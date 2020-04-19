@@ -83,6 +83,18 @@ public class DeveloperSettings extends SettingsFragment {
                 return true;
             }
         });
+
+        //Sets intent to launch Intro
+        Preference intro_p = findPreference("intro");
+        intro_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                Crashlytics.log(Log.DEBUG, TAG, "Forcing launch of MainIntroActivity");
+                Intent myIntent = new Intent(getActivity(), MainIntroActivity.class);
+                startActivity(myIntent);
+                return true;
+            }
+        });
     }
 
     @Override

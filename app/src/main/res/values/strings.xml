@@ -121,6 +121,13 @@
     <string name="dialog_share">Share</string>
     <string name="dialog_delete">Delete</string>
 
+    <!-- Intro Activity -->
+    <string name="setting_intro">Launch MainIntroActivity</string>
+    <string name="app_description">More than a simple buraco scorekeeper!</string>
+    <string name="intro_share">You can easily share results with your friends on Facebook, Instagram, Whatsapp and other social networks</string>
+    <string name="intro_personalize">Customize</string>
+    <string name="intro_set_input_method">The app calculates the results automatically: you can just insert the number of runs, the points on the table and the (eventually) points in your hands. In the next section you can choose your favorite input method. If this is your first time, I suggest opt for the default option, you can easily change this behaviour later in Settings</string>
+
     <!-- Various String -->
     <string name="no_data_available">Nothing here</string>
     <string name="audio_up">Turned up the volume</string>
@@ -132,8 +139,6 @@
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
     <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="link" translatable="false">https://pointsburaco.page.link/open</string>
-
-
 
 </resources>
 

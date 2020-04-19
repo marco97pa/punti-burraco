@@ -144,8 +144,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         input_method.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference preference) {
+                InputMethodChooser fragment = new InputMethodChooser();
+                Bundle arguments = new Bundle();
+                arguments.putBoolean("intro", false);
+                fragment.setArguments(arguments);
                 fragmentManager.beginTransaction()
-                        .replace(android.R.id.content, new InputMethodChooser())
+                        .replace(android.R.id.content, fragment)
                         .addToBackStack(null)
                         .commit();
                 return true;

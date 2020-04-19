@@ -113,4 +113,9 @@
     <string name="send_bug_report_question">Would you like to send a report of what you don\'t like of this app?</string>
     <string name="nav_rate">Feedback</string>
     <string name="nav_mirroring">Shared match</string>
+    <string name="setting_intro">Launch MainIntroActivity</string>
+    <string name="app_description">More than a simple buraco scorekeeper!</string>
+    <string name="intro_set_input_method">The app calculates the results automatically: you can just insert the number of runs, the points on the table and the (eventually) points in your hands. In the next section you can choose your favorite input method. If this is your first time, I suggest opt for the default option, you can easily change this behaviour later in Settings</string>
+    <string name="intro_personalize">Customize</string>
+    <string name="intro_share">You can easily share results with your friends on Facebook, Instagram, Whatsapp and other social networks</string>
 </resources>

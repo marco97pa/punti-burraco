@@ -113,4 +113,9 @@
     <string name="send_bug_report_question">Deseja enviar um relatório sobre o que você não gosta deste aplicativo?</string>
     <string name="nav_rate">Comentários</string>
     <string name="nav_mirroring">Jogo compartilhado</string>
+    <string name="setting_intro">MainIntroActivity</string>
+    <string name="app_description">Mais do que um simples apontador de buraco!</string>
+    <string name="intro_set_input_method">O aplicativo calcula os resultados automaticamente. Na próxima seção, você pode escolher seu método de entrada favorito. Se for a sua primeira vez, sugiro que opte pela opção padrão. Você pode alterar esse comportamento facilmente posteriormente em Configurações</string>
+    <string name="intro_share">Você pode compartilhar resultados facilmente com seus amigos no Facebook, Instagram, Whatsapp e outras redes sociais</string>
+    <string name="intro_personalize">Customizar</string>
 </resources>
