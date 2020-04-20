@@ -93,7 +93,8 @@
                 ads:layout_column="0"
                 ads:layout_columnWeight="1"
                 ads:layout_gravity="fill_horizontal"
-                ads:layout_row="7" />
+                ads:layout_row="7"
+                />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editBS1"

@@ -78,7 +78,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 
 public class TripleFragment extends Fragment {
 
-    public static final String LOG_TAG = "3PlayersFragment";
+    public static final String TAG = "3PlayersFragment";
     int bp1,bp2,bp3, bi1, bi2,bi3, bs1, bs2,bs3,pn1,pn2,pn3,tot1,tot2,tot3,pm1,pm2,pm3, pb1, pb2, pb3;
     int tot=0;
     private TextView textNome1, textNome2, textNome3;
@@ -581,7 +581,7 @@ public class TripleFragment extends Fragment {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
                 IMG3.setVisibility(View.GONE);
-                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
+                Log.d(TAG, "images disabled: isInMultiWindowMode = true");
             }
         }
 
@@ -592,6 +592,13 @@ public class TripleFragment extends Fragment {
     public void onStart() {
         super.onStart();
         restoreImages();
+        restoreEditedViews();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveEditedViews();
     }
 
     protected void dialogGioc1() {
@@ -747,7 +754,7 @@ public class TripleFragment extends Fragment {
         ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             isLowRamDevice = am.isLowRamDevice();
-            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
         }
 
         Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
@@ -794,6 +801,80 @@ public class TripleFragment extends Fragment {
         }
     }
 
+    private void saveEditedViews() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        //Here we handle saving all inserted values to prevent losing them in a configuration change
+        editor.putString("BP1",BP1.getText().toString());
+        editor.putString("BI1",BI1.getText().toString());
+        editor.putString("BS1",BS1.getText().toString());
+        editor.putString("PN1",PN1.getText().toString());
+        editor.putString("PM1",PM1.getText().toString());
+        editor.putString("BP2",BP2.getText().toString());
+        editor.putString("BI2",BI2.getText().toString());
+        editor.putString("BS2",BS2.getText().toString());
+        editor.putString("PN2",PN2.getText().toString());
+        editor.putString("PM2",PM2.getText().toString());
+        editor.putString("BP3",BP3.getText().toString());
+        editor.putString("BI3",BI3.getText().toString());
+        editor.putString("BS3",BS3.getText().toString());
+        editor.putString("PN3",PN3.getText().toString());
+        editor.putString("PM3",PM3.getText().toString());
+        editor.putString("PB1",PB1.getText().toString());
+        editor.putString("PB2",PB2.getText().toString());
+        editor.putString("PB3",PB3.getText().toString());
+        editor.putBoolean("CH1",CH1.isChecked());
+        editor.putBoolean("CH2",CH2.isChecked());
+        editor.putBoolean("CH3",CH3.isChecked());
+        editor.putBoolean("PZ1",PZ1.isChecked());
+        editor.putBoolean("PZ2",PZ2.isChecked());
+        editor.putBoolean("PZ3",PZ3.isChecked());
+        editor.putBoolean("RB1",RB1.isChecked());
+        editor.putBoolean("RB2",RB2.isChecked());
+        editor.putBoolean("RB3",RB3.isChecked());
+
+        editor.apply();
+    }
+
+    private void restoreEditedViews(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        //Restore EditTexts and Checkboxes state after a configuration change
+        BP1.setText(sharedPref.getString("BP1",""));
+        BI1.setText(sharedPref.getString("BI1",""));
+        BS1.setText(sharedPref.getString("BS1",""));
+        PN1.setText(sharedPref.getString("PN1",""));
+        PM1.setText(sharedPref.getString("PM1",""));
+        BP2.setText(sharedPref.getString("BP2",""));
+        BI2.setText(sharedPref.getString("BI2",""));
+        BS2.setText(sharedPref.getString("BS2",""));
+        PN2.setText(sharedPref.getString("PN2",""));
+        PM2.setText(sharedPref.getString("PM2",""));
+        BP3.setText(sharedPref.getString("BP3",""));
+        BI3.setText(sharedPref.getString("BI3",""));
+        BS3.setText(sharedPref.getString("BS3",""));
+        PN3.setText(sharedPref.getString("PN3",""));
+        PM3.setText(sharedPref.getString("PM3",""));
+        PB1.setText(sharedPref.getString("PB1",""));
+        PB2.setText(sharedPref.getString("PB2",""));
+        PB3.setText(sharedPref.getString("PB3",""));
+        CH1.setChecked(sharedPref.getBoolean("CH1", false));
+        CH2.setChecked(sharedPref.getBoolean("CH2", false));
+        CH3.setChecked(sharedPref.getBoolean("CH3", false));
+        PZ1.setChecked(sharedPref.getBoolean("PZ1", false));
+        PZ2.setChecked(sharedPref.getBoolean("PZ2", false));
+        PZ3.setChecked(sharedPref.getBoolean("PZ3", false));
+
+        if(sharedPref.getBoolean("RB1", false)){
+            RB1.performClick();
+        }
+        if(sharedPref.getBoolean("RB2", false)){
+            RB2.performClick();
+        }
+        if(sharedPref.getBoolean("RB3", false)){
+            RB3.performClick();
+        }
+    }
+    
     //RIPRISTINO NOMI
     public void openNomi(){
         textNome1.setText(getString(R.string.g1));

@@ -549,7 +549,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Finished the intro, set first_app_launch false
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("first_app_launch", false);
+                editor.putBoolean("is_first_app_launch", false);
                 editor.apply();
                 //recreate activity to reflect changes
                 recreate();
@@ -759,11 +759,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(actualVersion != lastVersion){
             //App has been updated, do something like upgrade or show a message to user
 
-            //Set FirstLaunch to false (old versions of the app don't initialize this value
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("first_app_launch", false);
-            editor.apply();
-
             switch (actualVersion){
                 case 5045:
                     break;
@@ -780,7 +775,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     */
     private void showIntroOnFirstLaunch(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean first_app_launch = sharedPreferences.getBoolean("first_app_launch", true);
+        boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
+        Log.d(TAG,"First app launch:" + first_app_launch);
         if(first_app_launch){
             Intent myIntent = new Intent(this, MainIntroActivity.class);
             startActivityForResult(myIntent, REQUEST_CODE_INTRO);

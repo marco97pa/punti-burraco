@@ -78,7 +78,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
  */
 
 public class QuadFragment extends Fragment {
-    public static final String LOG_TAG = "4PlayersFragment";
+    public static final String TAG = "4PlayersFragment";
     int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
@@ -316,7 +316,7 @@ public class QuadFragment extends Fragment {
             if (getActivity().isInMultiWindowMode()) {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
-                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
+                Log.d(TAG, "images disabled: isInMultiWindowMode = true");
             }
         }
 
@@ -377,6 +377,13 @@ public class QuadFragment extends Fragment {
     public void onStart() {
         super.onStart();
         restoreImages();
+        restoreEditedViews();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveEditedViews();
     }
 
 
@@ -498,7 +505,7 @@ public class QuadFragment extends Fragment {
         ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             isLowRamDevice = am.isLowRamDevice();
-            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
         }
 
         Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
@@ -535,6 +542,50 @@ public class QuadFragment extends Fragment {
         }
     }
 
+    private void saveEditedViews() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        //Here we handle saving all inserted values to prevent losing them in a configuration change
+        editor.putString("BP1",BP1.getText().toString());
+        editor.putString("BI1",BI1.getText().toString());
+        editor.putString("BS1",BS1.getText().toString());
+        editor.putString("PN1",PN1.getText().toString());
+        editor.putString("PM1",PM1.getText().toString());
+        editor.putString("BP2",BP2.getText().toString());
+        editor.putString("BI2",BI2.getText().toString());
+        editor.putString("BS2",BS2.getText().toString());
+        editor.putString("PN2",PN2.getText().toString());
+        editor.putString("PM2",PM2.getText().toString());
+        editor.putString("PB1",PB1.getText().toString());
+        editor.putString("PB2",PB2.getText().toString());
+        editor.putBoolean("CH1",CH1.isChecked());
+        editor.putBoolean("CH2",CH2.isChecked());
+        editor.putBoolean("PZ1",PZ1.isChecked());
+        editor.putBoolean("PZ2",PZ2.isChecked());
+
+        editor.apply();
+    }
+
+    private void restoreEditedViews(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        //Restore EditTexts and Checkboxes state after a configuration change
+        BP1.setText(sharedPref.getString("BP1",""));
+        BI1.setText(sharedPref.getString("BI1",""));
+        BS1.setText(sharedPref.getString("BS1",""));
+        PN1.setText(sharedPref.getString("PN1",""));
+        PM1.setText(sharedPref.getString("PM1",""));
+        BP2.setText(sharedPref.getString("BP2",""));
+        BI2.setText(sharedPref.getString("BI2",""));
+        BS2.setText(sharedPref.getString("BS2",""));
+        PN2.setText(sharedPref.getString("PN2",""));
+        PM2.setText(sharedPref.getString("PM2",""));
+        PB1.setText(sharedPref.getString("PB1",""));
+        PB2.setText(sharedPref.getString("PB2",""));
+        CH1.setChecked(sharedPref.getBoolean("CH1", false));
+        CH2.setChecked(sharedPref.getBoolean("CH2", false));
+        PZ1.setChecked(sharedPref.getBoolean("PZ1", false));
+        PZ2.setChecked(sharedPref.getBoolean("PZ2", false));
+    }
 
     //RIPRISTINO NOMI
     public void openNomi(){

@@ -6,10 +6,17 @@ import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 public class MainIntroActivity extends IntroActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Force Light Theme on first startup to address strange colours
+        if(getDelegate().getLocalNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            recreate();
+        }
         setButtonBackVisible(false);
         //First slide: Welcome
         addSlide(new SimpleSlide.Builder()
