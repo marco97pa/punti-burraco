@@ -693,6 +693,7 @@ public class DoubleFragment extends Fragment {
         win=false;
         //save all
         onSave();
+        saveEditedViews();
         //reset dpp (hands detail string)
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -938,6 +939,7 @@ public class DoubleFragment extends Fragment {
                 }
                 //save the new score
                 onSave();
+                saveEditedViews();
             }
         }
         catch (NullPointerException e){

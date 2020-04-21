@@ -956,6 +956,7 @@ public class TripleFragment extends Fragment {
         win=false;
         //salva tutto
         onSave();
+        saveEditedViews();
         //reset dpp
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -1303,6 +1304,7 @@ public class TripleFragment extends Fragment {
             }
             //salva
             onSave();
+            saveEditedViews();
             //salvataggiSeVince
 
         }
