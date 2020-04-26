@@ -12,4 +12,6 @@
     <dimen name="textBigi">40dp</dimen>
     <dimen name="tab">100dp</dimen>
     <dimen name="settings_margin_left">20dp</dimen>
+    <dimen name="nearby_text_names">35sp</dimen>
+    <dimen name="nearby_text_points">80sp</dimen>
 </resources>

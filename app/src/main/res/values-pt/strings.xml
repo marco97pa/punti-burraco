@@ -112,10 +112,26 @@
     <string name="send_bug_report">Obrigado pela sua franqueza</string>
     <string name="send_bug_report_question">Deseja enviar um relatório sobre o que você não gosta deste aplicativo?</string>
     <string name="nav_rate">Comentários</string>
-    <string name="nav_mirroring">Jogo compartilhado</string>
+    <string name="nav_mirroring">Participar de uma partida</string>
     <string name="setting_intro">MainIntroActivity</string>
     <string name="app_description">Mais do que um simples apontador de buraco!</string>
     <string name="intro_set_input_method">O aplicativo calcula os resultados automaticamente. Na próxima seção, você pode escolher seu método de entrada favorito. Se for a sua primeira vez, sugiro que opte pela opção padrão. Você pode alterar esse comportamento facilmente posteriormente em Configurações</string>
     <string name="intro_share">Você pode compartilhar resultados facilmente com seus amigos no Facebook, Instagram, Whatsapp e outras redes sociais</string>
     <string name="intro_personalize">Customizar</string>
+    <string name="discoverable">Este dispositivo pode ser descoberto por dispositivos próximos</string>
+    <string name="searching">Procurando por outros jogadores...</string>
+    <string name="open_nearby_hint">Abra %1s em outro dispositivo e escolha %2s no menu para começar a tocar juntos</string>
+    <string name="join">Sediar esta partida</string>
+    <string name="open_nearby_hint2">Inicie uma partida em outro dispositivo e escolha \"Sediar esta partida\" no menu de três pontos para começar a jogar juntos</string>
+    <string name="shared_match">Partilha compartilhada</string>
+    <string name="shared_match_notif">Por questões de privacidade, uma notificação é exibida quando a partida é compartilhada com jogadores próximos</string>
+    <string name="nearby_error">Não é possível compartilhar a partida</string>
+    <string name="nearby_error_d">Ocorreu um problema ao tentar tornar este dispositivo detectável por outras pessoas. Certifique-se de aceitar a permissão Local para este aplicativo. Se o problema persistir, tente reiniciar o aplicativo ou o próprio dispositivo</string>
+    <string name="connected_to">Conectado a %1s</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="denied_perm_location">Permissão negada para encontrar dispositivos próximos usando serviços de localização</string>
+    <string name="stop">Parar de hospedar esta partida</string>
+    <string name="host_or_join">Qualquer pessoa pode participar de uma partida de outro jogador, mas apenas um usuário PRO pode hospedar uma partida</string>
+    <string name="how_to_upgrade">Para hospedar uma partida e outros recursos interessantes, você pode atualizar para a versão PRO usando o botão abaixo</string>
+    <string name="upgrade">Troque para PRO</string>
 </resources>

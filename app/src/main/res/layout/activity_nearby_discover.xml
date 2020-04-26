@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/myCoordinatorLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NearbyDiscoverActivity"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:titleTextColor="@color/appToolbarTitleText"
+        />
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_vertical_marginMOD"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginRight="@dimen/activity_vertical_marginMOD"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="match_parent"
+                android:layout_height="94dp"
+                android:layout_marginTop="@dimen/activity_vertical_marginMOD"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:tint="@color/textColorSecondary"
+                app:srcCompat="@drawable/ic_search" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/searching"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/open_nearby_hint2" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:background="?android:attr/listDivider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/host_or_join" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="@dimen/activity_vertical_marginMOD"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:tint="@color/textColorSecondary"
+                app:srcCompat="@drawable/ic_mirroring_black_24dp" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/how_to_upgrade" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/upgrade"
+                app:backgroundTint="@color/colorAccent" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/game"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/player_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/player_1_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="@dimen/nearby_text_names" />
+
+            <TextView
+                android:id="@+id/player_1_points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="@dimen/nearby_text_points" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/player_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/player_2_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="@dimen/nearby_text_names" />
+
+            <TextView
+                android:id="@+id/player_2_points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="@dimen/nearby_text_points" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/player_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/player_3_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="@dimen/nearby_text_names" />
+
+            <TextView
+                android:id="@+id/player_3_points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="@dimen/nearby_text_points" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

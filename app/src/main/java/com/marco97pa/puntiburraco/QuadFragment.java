@@ -40,6 +40,7 @@ import androidx.appcompat.widget.PopupMenu;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,6 +102,7 @@ public class QuadFragment extends Fragment {
     private final static int STORAGE_PERMISSION_PICTURE_1 = 13;
     private final static int STORAGE_PERMISSION_PICTURE_2 = 23;
     private final static int STORAGE_PERMISSION_SCREENSHOT = 30;
+    private final static int LOCATION_PERMISSION_NEARBY = 40;
 
     public int old_tot1;
     public int old_tot2;
@@ -109,7 +111,7 @@ public class QuadFragment extends Fragment {
     boolean bypass = false;
     MediaPlayer sound;
     private FirebaseAnalytics mFirebaseAnalytics;
-
+    private NearbyAdvertise advertise;
 
     public QuadFragment() {
         // Empty constructor required for fragment subclasses
@@ -226,6 +228,11 @@ public class QuadFragment extends Fragment {
                             case R.id.removeText:
                                 textNome1.setText(getString(R.string.n1));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file1 = new File(getActivity().getFilesDir(), "img_m4_1.jpg");
@@ -293,6 +300,11 @@ public class QuadFragment extends Fragment {
                             case R.id.removeText:
                                 textNome2.setText(getString(R.string.n2));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file2 = new File(getActivity().getFilesDir(), "img_m4_2.jpg");
@@ -422,6 +434,28 @@ public class QuadFragment extends Fragment {
             case R.id.action_dpp:
                 showDettPuntParz();
                 return true;
+            case R.id.action_advertise:
+                //Start Advertising using Nearby library
+                //First ask the permission in Android 6.0+
+                Log.d(TAG,"Option selected: Advertise");
+                if(advertise == null || !advertise.isRunning()){
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(
+                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                LOCATION_PERMISSION_NEARBY);
+                    }
+                    else {
+                        advertise = new NearbyAdvertise(getContext(), getMatchState());
+                        advertise.start();
+                    }
+                }
+                else{
+                    advertise.stop();
+                    item.setTitle(getString(R.string.join));
+                }
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);}
     }
@@ -441,6 +475,11 @@ public class QuadFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         textNome1.setText(editText.getText());
                         onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.ko),
@@ -470,6 +509,11 @@ public class QuadFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         textNome2.setText(editText.getText());
                         onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.ko),
@@ -542,6 +586,16 @@ public class QuadFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem item = menu.findItem(R.id.action_advertise);
+        if(advertise != null && advertise.isRunning()) {
+            item.setTitle(getString(R.string.stop));
+        }
+    }
+
+
     private void saveEditedViews() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -599,6 +653,11 @@ public class QuadFragment extends Fragment {
         file2.delete();
         IMG1.setImageResource(R.drawable.circle_placeholder);
         IMG2.setImageResource(R.drawable.circle_placeholder);
+        //advertise
+        if(advertise != null && advertise.isRunning()) {
+            Log.d(TAG, "Advertising: " + getMatchState());
+            advertise.update(getMatchState());
+        }
     }
     //AVVIA RESET
     public void openReset(){
@@ -626,6 +685,11 @@ public class QuadFragment extends Fragment {
         //salva tutto
         onSave();
         saveEditedViews();
+        //advertise
+        if(advertise != null && advertise.isRunning()) {
+            Log.d(TAG, "Advertising: " + getMatchState());
+            advertise.update(getMatchState());
+        }
         //reset dpp
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -794,7 +858,11 @@ public class QuadFragment extends Fragment {
             onSave();
             saveEditedViews();
             //salvataggiSeVince
-
+            //advertise
+            if(advertise != null && advertise.isRunning()) {
+                Log.d(TAG, "Advertising: " + getMatchState());
+                advertise.update(getMatchState());
+            }
         }
         }
         catch (NullPointerException e){
@@ -814,7 +882,23 @@ public class QuadFragment extends Fragment {
             punti1.setText(Integer.toString(tot1));
             punti2.setText(Integer.toString(tot2));
             onSave();
+            //advertise
+            if(advertise != null && advertise.isRunning()) {
+                Log.d(TAG, "Advertising: " + getMatchState());
+                advertise.update(getMatchState());
+            }
         }
+    }
+
+    private String getMatchState(){
+        String num_players = "4";
+        String name_player1 = textNome1.getText().toString();
+        String name_player2 = textNome2.getText().toString();
+        String points_player1 = Integer.toString(tot1);
+        String points_player2 = Integer.toString(tot2);
+        String out = num_players + ";" + name_player1 + ";" + name_player2 + ";" + " " + ";" +
+                points_player1 +  ";" + points_player2 + ";" + " " + ";";
+        return out;
     }
 
     //SALVATAGGIO AUTOMATICO
@@ -894,6 +978,24 @@ public class QuadFragment extends Fragment {
 
                     // permission denied, boo!
                     Toast.makeText(getActivity(), getString(R.string.marshmallow_alert_2), Toast.LENGTH_LONG).show();
+
+                }
+                return;
+            }
+
+            case LOCATION_PERMISSION_NEARBY:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    advertise = new NearbyAdvertise(getContext(), getMatchState());
+                    advertise.start();
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(), getString(R.string.denied_perm_location), Toast.LENGTH_LONG).show();
 
                 }
                 return;

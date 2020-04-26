@@ -3,10 +3,8 @@ package com.marco97pa.puntiburraco;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.Manifest;
@@ -16,7 +14,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -30,11 +27,9 @@ import android.preference.PreferenceManager;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,6 +39,7 @@ import androidx.appcompat.widget.PopupMenu;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,9 +64,6 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -120,6 +113,7 @@ public class DoubleFragment extends Fragment {
     private final static int STORAGE_PERMISSION_PICTURE_1 = 13;
     private final static int STORAGE_PERMISSION_PICTURE_2 = 23;
     private final static int STORAGE_PERMISSION_SCREENSHOT = 30;
+    private final static int LOCATION_PERMISSION_NEARBY = 40;
     //Old totals are variable used to revert point changes
     public int old_tot1;
     public int old_tot2;
@@ -128,6 +122,7 @@ public class DoubleFragment extends Fragment {
     boolean bypass = false;
     MediaPlayer sound;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private NearbyAdvertise advertise;
 
     public DoubleFragment() {
         // Empty constructor required for fragment subclasses
@@ -257,6 +252,11 @@ public class DoubleFragment extends Fragment {
                             case R.id.removeText:
                                 textNome1.setText(getString(R.string.gioc_1));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file1 = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
@@ -322,6 +322,11 @@ public class DoubleFragment extends Fragment {
                             case R.id.removeText:
                                 textNome2.setText(getString(R.string.gioc_2));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file2 = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
@@ -431,6 +436,11 @@ public class DoubleFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         textNome1.setText(editText.getText());
                         onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.ko),
@@ -459,6 +469,11 @@ public class DoubleFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         textNome2.setText(editText.getText());
                         onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.ko),
@@ -522,8 +537,39 @@ public class DoubleFragment extends Fragment {
                 showDettPuntParz();
                 return true;
 
+            case R.id.action_advertise:
+                //Start Advertising using Nearby library
+                //First ask the permission in Android 6.0+
+                Log.d(TAG,"Option selected: Advertise");
+                if(advertise == null || !advertise.isRunning()){
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(
+                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                LOCATION_PERMISSION_NEARBY);
+                    }
+                    else {
+                        advertise = new NearbyAdvertise(getContext(), getMatchState());
+                        advertise.start();
+                    }
+                }
+                else{
+                    advertise.stop();
+                    item.setTitle(getString(R.string.join));
+                }
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);}
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem item = menu.findItem(R.id.action_advertise);
+        if(advertise != null && advertise.isRunning()) {
+            item.setTitle(getString(R.string.stop));
+        }
     }
 
 
@@ -663,6 +709,11 @@ public class DoubleFragment extends Fragment {
         file2.delete();
         IMG1.setImageResource(R.drawable.circle_placeholder);
         IMG2.setImageResource(R.drawable.circle_placeholder);
+        //advertise
+        if(advertise != null && advertise.isRunning()) {
+            Log.d(TAG, "Advertising: " + getMatchState());
+            advertise.update(getMatchState());
+        }
     }
 
     /**
@@ -940,6 +991,11 @@ public class DoubleFragment extends Fragment {
                 //save the new score
                 onSave();
                 saveEditedViews();
+                //advertise
+                if(advertise != null && advertise.isRunning()) {
+                    Log.d(TAG, "Advertising: " + getMatchState());
+                    advertise.update(getMatchState());
+                }
             }
         }
         catch (NullPointerException e){
@@ -959,6 +1015,11 @@ public class DoubleFragment extends Fragment {
             punti1.setText(Integer.toString(tot1));
             punti2.setText(Integer.toString(tot2));
             onSave();
+            //advertise
+            if(advertise != null && advertise.isRunning()) {
+                Log.d(TAG, "Advertising: " + getMatchState());
+                advertise.update(getMatchState());
+            }
         }
     }
 
@@ -991,6 +1052,17 @@ public class DoubleFragment extends Fragment {
             ((MainActivity)getActivity()).setMenuAlternative(true);
             editor.apply();
         }
+    }
+
+    private String getMatchState(){
+        String num_players = "2";
+        String name_player1 = textNome1.getText().toString();
+        String name_player2 = textNome2.getText().toString();
+        String points_player1 = Integer.toString(tot1);
+        String points_player2 = Integer.toString(tot2);
+        String out = num_players + ";" + name_player1 + ";" + name_player2 + ";" + " " + ";" +
+                points_player1 +  ";" + points_player2 + ";" + " " + ";";
+        return out;
     }
 
     //ASK PERMISSION Android 6.0+ (Marshmallow)
@@ -1043,6 +1115,24 @@ public class DoubleFragment extends Fragment {
 
                     // permission denied, boo!
                     Toast.makeText(getActivity(), getString(R.string.marshmallow_alert_2), Toast.LENGTH_LONG).show();
+
+                }
+                return;
+            }
+
+            case LOCATION_PERMISSION_NEARBY:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    advertise = new NearbyAdvertise(getContext(), getMatchState());
+                    advertise.start();
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(), getString(R.string.denied_perm_location), Toast.LENGTH_LONG).show();
 
                 }
                 return;

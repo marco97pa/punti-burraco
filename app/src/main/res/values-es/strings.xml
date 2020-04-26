@@ -125,12 +125,28 @@
     <string name="send_bug_report">Gracias por tu franqueza</string>
     <string name="send_bug_report_question">¿Le gustaría enviar un informe de lo que no le gusta de esta aplicación?</string>
     <string name="nav_rate">Retroalimentación</string>
-    <string name="nav_mirroring">Partido compartido</string>
+    <string name="nav_mirroring">Unirse a un partido</string>
     <string name="setting_intro">MainIntroActivity</string>
     <string name="app_description">¡Más que un simple anotador de buraco!</string>
     <string name="intro_share">Puede compartir fácilmente los resultados con sus amigos en Facebook, Instagram, Whatsapp y otras redes sociales.</string>
     <string name="intro_set_input_method">La aplicación calcula los resultados automáticamente. En la siguiente sección, puede elegir su método de entrada favorito. Si es la primera vez, sugiero optar por la opción predeterminada, puede cambiar fácilmente este comportamiento más adelante en Configuración</string>
     <string name="intro_personalize">Personalizar</string>
+    <string name="discoverable">Este dispositivo es reconocible por dispositivos cercanos</string>
+    <string name="searching">Buscando otros jugadores...</string>
+    <string name="open_nearby_hint">Abra %1s en otro dispositivo y elija %2s del menú para comenzar a jugar juntos</string>
+    <string name="open_nearby_hint2">Comienza una partida en otro dispositivo y elige \"Organizar esta partida\" en el menú de tres puntos para comenzar a jugar juntos</string>
+    <string name="shared_match">Partido compartido</string>
+    <string name="shared_match_notif">Por cuestiones de privacidad, se muestra una notificación cuando el partido se comparte con jugadores cercanos</string>
+    <string name="nearby_error">No se puede compartir el partido</string>
+    <string name="nearby_error_d">Hubo un problema al intentar hacer que este dispositivo fuera reconocible para otros. Asegúrese de aceptar el permiso de ubicación para esta aplicación. Si el problema persiste, intente reiniciar la aplicación o el dispositivo.</string>
+    <string name="connected_to">Conectado a %1s</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="denied_perm_location">Permiso denegado para encontrar dispositivos cercanos utilizando servicios de ubicación</string>
+    <string name="join">Organiza este partido</string>
+    <string name="stop">Deja de organizar el partido</string>
+    <string name="host_or_join">Cualquiera puede unirse a una partida de otro jugador, pero solo un usuario PRO puede organizar una partida.</string>
+    <string name="how_to_upgrade">Para organizar una partida y otras características interesantes, puedes actualizar a la versión PRO usando el botón a continuación</string>
+    <string name="upgrade">Cambiar a PRO</string>
 
 
 </resources>

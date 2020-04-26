@@ -125,12 +125,28 @@
     <string name="send_bug_report">Grazie per la tua franchezza!</string>
     <string name="send_bug_report_question">Vuoi segnalare un problema con questa app?</string>
     <string name="nav_rate">Valuta l\'app</string>
-    <string name="nav_mirroring">Partita condivisa</string>
+    <string name="nav_mirroring">Unisciti a una partita</string>
     <string name="setting_intro">Avvia l\'introduzione (MainIntroActivity)</string>
     <string name="app_description">Molto più di un semplice segnapunti per le tue partite di Burraco</string>
     <string name="intro_personalize">Personalizza</string>
     <string name="intro_share">Puoi condividere facilmente i risultati delle tue partite con i tuoi amici su Facebook, Instagram, Whatsapp o altri social network</string>
     <string name="intro_set_input_method">L\'app calcola i risultati automaticamente: ti basta inserire il numero di burrachi, i punti sul tavolo e gli eventuali punti in mano. Nella prossima sezione puoi scegliere il tuo metodo d\'inserimento preferito.\n\nSe è la prima volta che usi l\'app, ti consiglio di usare l\'opzione predefinita. Potrai cambiarla successivamente nelle Impostazioni.</string>
+    <string name="discoverable">Questi dispositivo è visibile ai dispositivi vicini</string>
+    <string name="searching">Cercando altri giocatori...</string>
+    <string name="open_nearby_hint">Avvia %1s su un altro dispositivo e scegli la voce %2s dal menu laterale per giocare insieme</string>
+    <string name="open_nearby_hint2">Inizia una partita su un altro dispositivo e scegli \"Invita a questa partita\" del menu a tre punti per iniziare a giocare insieme</string>
+    <string name="shared_match">Partita condivisa</string>
+    <string name="shared_match_notif">Per motivi di privacy, una notifica viene mostrata quando la partita è condivisa con i giocatori nelle vicinanze</string>
+    <string name="nearby_error">Impossibile condividere questa partita</string>
+    <string name="nearby_error_d">C\'è stato un problema nel tentativo di rendere questo dispositivo visibile ad altri.\nControlla che non stavi già condividendo un\'altra partita e riprova.\nAccertati di aver consentito l\'uso della posizione per questa app.\nSe il problema persiste, riavvia l\'app o il dispositivo.</string>
+    <string name="connected_to">Connesso a %1s</string>
+    <string name="disconnected">Disconnesso</string>
+    <string name="denied_perm_location">Impossibile trovare dispositivi vicini: hai negato il permesso ai servizi di posizione</string>
+    <string name="join">Invita a questa partita</string>
+    <string name="stop">Interrompi condivisione partita</string>
+    <string name="host_or_join">Chiunque può partecipare a una partita di un altro giocatore, ma solo un utente PRO può invitare altri giocatori alla propria partita</string>
+    <string name="how_to_upgrade">Per invitare giocatori alla tua partita e altre fantastiche funzionalità, puoi aggiornare l\'app alla versione PRO usando il bottone qui sotto</string>
+    <string name="upgrade">Passa a PRO</string>
 
 
 </resources>

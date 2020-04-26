@@ -112,10 +112,26 @@
     <string name="send_bug_report">Thanks for your frankness</string>
     <string name="send_bug_report_question">Would you like to send a report of what you don\'t like of this app?</string>
     <string name="nav_rate">Feedback</string>
-    <string name="nav_mirroring">Shared match</string>
+    <string name="nav_mirroring">Join a match</string>
     <string name="setting_intro">Launch MainIntroActivity</string>
     <string name="app_description">More than a simple buraco scorekeeper!</string>
     <string name="intro_set_input_method">The app calculates the results automatically: you can just insert the number of runs, the points on the table and the (eventually) points in your hands. In the next section you can choose your favorite input method. If this is your first time, I suggest opt for the default option, you can easily change this behaviour later in Settings</string>
     <string name="intro_personalize">Customize</string>
     <string name="intro_share">You can easily share results with your friends on Facebook, Instagram, Whatsapp and other social networks</string>
+    <string name="discoverable">This device is discoverable by nearby devices</string>
+    <string name="searching">Looking for other players…</string>
+    <string name="open_nearby_hint">Open %1s on another device and choose %2s from the menu to start playing together</string>
+    <string name="open_nearby_hint2">Start a match on another device and choose \"Host this match\" from the three dots menu to start playing together</string>
+    <string name="shared_match">Shared Match</string>
+    <string name="shared_match_notif">For privacy concerns, a notification is shown when the match is shared with nearby players</string>
+    <string name="nearby_error">Can\'t share the match</string>
+    <string name="connected_to">Connected to %1s</string>
+    <string name="nearby_error_d">There was a problem trying to make this device discoverable to others.\nCheck if you were already hosting a match and try again.\nMake sure you accept the Location permission for this app.\nIf the problem still occurs try to restart the app or the device itself</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="denied_perm_location">Permission denied to find nearby devices using location services</string>
+    <string name="join">Host this match</string>
+    <string name="stop">Stop hosting match</string>
+    <string name="host_or_join">Anyone can join a match of another player but only a PRO user can host a match</string>
+    <string name="how_to_upgrade">To host a match and other cool features, you can upgrade to the PRO version using the button below</string>
+    <string name="upgrade">Upgrade</string>
 </resources>

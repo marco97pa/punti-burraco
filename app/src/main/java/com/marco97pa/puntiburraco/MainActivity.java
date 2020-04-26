@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String TAG = this.getClass().getSimpleName();
 
     public static Context contextOfApplication;
+    public static String SERVICE_ID;
     public static final int OPEN_SETTINGS = 9001;
     public static final int REQUEST_CODE_INTRO = 9002;
     String CHANNEL_ID = "channel_suspended";
@@ -169,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         setNavFeedback(mFirebaseRemoteConfig.getBoolean("nav_menu_feedback"));
                     }
                 });
+
+        //Set SERVICE_ID to package name
+        SERVICE_ID = getApplicationContext().getPackageName();
 
         //Setting the FAB button - It launches the openStart method of the active Fragment inside activity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -512,9 +516,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_feedback) {
             //Show a feedback dialog
             sendFeedback();
+
         } else if (id == R.id.nav_send_app) {
             //Share app link with other apps
             shareAppLink();
+
+        } else if (id == R.id.nav_mirroring) {
+            //Launches Nearby Activity
+            Intent myIntent = new Intent(this, NearbyDiscoverActivity.class);
+            this.startActivity(myIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -747,6 +757,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+
 
     /**
      * Checks if app has been updated to do things like upgrade databases or show a message to the user
