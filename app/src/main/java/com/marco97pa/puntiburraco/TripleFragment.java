@@ -633,7 +633,7 @@ public class TripleFragment extends Fragment {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        textNome1.setText(editText.getText());
+                        textNome1.setText(editText.getText().toString());
                         onSave();
                         //advertise
                         if(advertise != null && advertise.isRunning()) {
@@ -666,7 +666,7 @@ public class TripleFragment extends Fragment {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        textNome2.setText(editText.getText());
+                        textNome2.setText(editText.getText().toString());
                         onSave();
                         //advertise
                         if(advertise != null && advertise.isRunning()) {
@@ -699,7 +699,7 @@ public class TripleFragment extends Fragment {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        textNome3.setText(editText.getText());
+                        textNome3.setText(editText.getText().toString());
                         onSave();
                         //advertise
                         if(advertise != null && advertise.isRunning()) {
