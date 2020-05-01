@@ -29,6 +29,10 @@
                 android:icon="@drawable/ic_outline_history_24px"
                 android:title="@string/nav_history" />
             <item
+                android:id="@+id/nav_upgrade"
+                android:icon="@drawable/ic_local_mall_24dp"
+                android:title="@string/upgrade" />
+            <item
                 android:id="@+id/nav_send_app"
                 android:icon="@drawable/ic_send_24dp"
                 android:title="@string/nav_share" />

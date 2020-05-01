@@ -106,6 +106,8 @@
     <string name="close">Close</string>
     <string name="like">Like</string>
     <string name="dislike">Dislike</string>
+    <string name="error">Error</string>
+    <string name="error_network">You are not connected</string>
     <string name="add_point">Points added</string>
     <string name="marshmallow_alert">Permission denied to read your External storage</string>
     <string name="marshmallow_alert_2">Permission denied to publish your score</string>
@@ -147,6 +149,36 @@
 
     <!-- In App Billing Strings -->
     <string name="upgrade">Upgrade</string>
+    <string name="loading">Loading…</string>
+    <string name="action_restore">Restore purchases</string>
+    <string name="action_redeem">Redeem a promo code</string>
+    <string name="full_description">
+        \nAre you a good buraco\'s player? You should upgrade to the <b>PRO version</b> of Points Buraco to enjoy an ad-free experience and some cool features.
+        \n\nThe <b>PRO version</b> includes:
+        \n\n<big><b>Invite friends to join your match</b></big>
+        \nPlay a match together and see the results on different devices. Stop your friends from taking you smartphone to see the score.
+        \nYou can share your match with anyone within a range of 10 metres without using an Internet connection, so don\'t worry about your data plan!
+        \nYour friends don\'t need to be a PRO user to join your matches
+        \n\n<big><b>Remove the ads</b></big>
+        \nEnjoy an ad-free experience during the game
+        \n\n<big><b>Access to all future PRO exclusive features</b></big>
+        \nThis app is actively developed and I am working on new awesome features. You will get them as soon as they are available.
+        \n\n<big><b>Support the development</b></big>
+        \nThere is only one person behind this app: I make huge efforts to bring to you the best Buraco scorekeeper of the Google Play Store
+        \nAt the price of a coffee you will help me working on new features.
+    </string>
+    <string name="thanks">Thanks for your support!</string>
+    <string name="buy_success">You are now a PRO user\nA restart of the app is required in order to unlock all the features and remove ads</string>
+    <string name="error_buy_play">Google Play Store is not available.\nTry to open the Google Play Store or restart the device If the problem persist, maybe your device is not Google Play certified: contact the manufacturer for more information</string>
+    <string name="error_buy_api">Google Play Store needs an update.\nTry to open Google Play Store and check for updates</string>
+    <string name="error_restore_fail">Seems you haven\'t brought the PRO version before.\nIf you think this is a mistake, send an email to %1s</string>
+    <string name="error_buy_network">You don\'t seem to be connected to a network.\nTo upgrade to the PRO version an Internet connection is required</string>
+    <string name="error_buy_user_cancel">Purchase process canceled</string>
+    <string name="error_buy_product">The requested product is not available to purchase</string>
+    <string name="error_buy_developer">There was an error during the purchase: contact the developer at %1s</string>
+    <string name="error_buy_generic">There was a generic error during the purchase</string>
+    <string name="error_buy_already_own">You already own the PRO version</string>
+    <string name="only_for_pro">This feature is available only for PRO users</string>
 
     <!-- Various String -->
     <string name="no_data_available">Nothing here</string>
@@ -159,6 +191,7 @@
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
     <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="link" translatable="false">https://pointsburaco.page.link/open</string>
+    <string name="email" translatable="false">marco97pa@gmail.com</string>
 
 </resources>
 

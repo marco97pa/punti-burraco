@@ -147,6 +147,38 @@
     <string name="host_or_join">Cualquiera puede unirse a una partida de otro jugador, pero solo un usuario PRO puede organizar una partida.</string>
     <string name="how_to_upgrade">Para organizar una partida y otras características interesantes, puedes actualizar a la versión PRO usando el botón a continuación</string>
     <string name="upgrade">Cambiar a PRO</string>
+    <string name="full_description">
+    \n¿Eres un buen jugador de buraco? Debe actualizar a la <b>versión PRO</b> de Puntos de Buraco para disfrutar de una experiencia sin publicidad y algunas características interesantes.
+    \n\nLa <b>versión PRO</b> incluye:
+    \n\n<big><b>Invita a amigos a unirse a tu partido</b></big>
+    \nJugar una partida y ver los resultados en diferentes dispositivos. Evita que tus amigos te lleven tu teléfono inteligente para ver el puntaje.
+    \nPuedes compartir tu coincidencia con cualquier persona dentro de un rango de 10 metros sin usar una conexión a Internet, ¡así que no te preocupes por tu plan de datos!
+    \nTus amigos no necesitan ser un usuario PRO para unirse a tus partidos
+    \n\n<big><b>Eliminar los anuncios</b></big>
+    \nDisfruta de una experiencia sin publicidad durante el juego
+    \n\n<big><b>Acceso a todas las futuras funciones exclusivas de PRO</b></big>
+    \nEsta aplicación está desarrollada activamente y estoy trabajando en nuevas funciones increíbles. Los recibirá tan pronto como estén disponibles.
+    \n\n<big><b>Apoyar</b></big>
+    \nSolo hay una persona detrás de esta aplicación: hago grandes esfuerzos para ofrecerte el mejor anotador de Buraco de Google Play Store
+    \nAl precio de un café, me ayudarás a trabajar en nuevas funciones.
+    </string>
+    <string name="error">Error</string>
+    <string name="error_network">No estas conectado</string>
+    <string name="loading">Cargando…</string>
+    <string name="action_restore">Restaurar las compras</string>
+    <string name="action_redeem">Canjear un código promocional</string>
+    <string name="thanks">¡Gracias por su apoyo!</string>
+    <string name="buy_success">Ahora eres un usuario PRO. Se requiere reiniciar la aplicación para desbloquear todas las funciones y eliminar anuncios</string>
+    <string name="error_buy_play">Google Play Store no está disponible.\nIntente abrir Google Play Store o reinicie el dispositivo. Si el problema persiste, tal vez su dispositivo no esté certificado por Google Play: póngase en contacto con el fabricante para obtener más información.</string>
+    <string name="error_buy_api">Google Play Store necesita una actualización.\nIntenta abrir Google Play Store y busca actualizaciones</string>
+    <string name="error_restore_fail">Parece que no has traído la versión PRO antes.\nSi cree que esto es un error, envíe un correo electrónico a %1s</string>
+    <string name="error_buy_network">Parece que no estás conectado a una red.\nPara actualizar a la versión PRO se requiere una conexión a Internet</string>
+    <string name="error_buy_user_cancel">Proceso de compra cancelado</string>
+    <string name="error_buy_product">El producto solicitado no está disponible para comprar</string>
+    <string name="error_buy_developer">Hubo un error durante la compra: comuníquese con el desarrollador al %1s</string>
+    <string name="error_buy_generic">Hubo un error genérico durante la compra</string>
+    <string name="error_buy_already_own">Ya tienes la versión PRO</string>
+    <string name="only_for_pro">Esta función está disponible solo para usuarios PRO</string>
 
 
 </resources>

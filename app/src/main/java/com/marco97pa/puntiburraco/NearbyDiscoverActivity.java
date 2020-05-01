@@ -8,11 +8,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +49,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
     private TextView player1_name, player2_name, player3_name;
     private TextView player1_points, player2_points, player3_points;
     private LinearLayout player3, game, search;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,19 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
 
         game = (LinearLayout) findViewById(R.id.game);
         search = (LinearLayout) findViewById(R.id.search);
+
+        button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Nearby.getConnectionsClient(context).stopDiscovery();
+                if(endPointID != null) {
+                    Nearby.getConnectionsClient(context).disconnectFromEndpoint(endPointID);
+                }
+                Intent myIntent = new Intent(context, UpgradeActivity.class);
+                startActivity(myIntent);
+            }
+        });
     }
 
     @Override
@@ -110,8 +126,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
         player3_points.setText(v_points_3);
 
 
-        //Snackbar.make(getWindow().getDecorView().getRootView(),getString(R.string.connected_to, endPointName), Snackbar.LENGTH_LONG);
-    }
+        }
 
 
     private void startDiscovery() {
@@ -137,6 +152,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, R.style.AppTheme_Dialog);
                                 builder .setTitle(context.getString(R.string.nearby_error))
                                         .setMessage(context.getString(R.string.nearby_error_d))
+                                        .setCancelable(false)
                                         .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener(){
                                             public void onClick(DialogInterface dialog, int id) {
                                                 //nothing, dismiss

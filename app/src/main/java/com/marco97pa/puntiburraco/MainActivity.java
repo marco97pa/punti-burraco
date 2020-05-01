@@ -525,6 +525,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Launches Nearby Activity
             Intent myIntent = new Intent(this, NearbyDiscoverActivity.class);
             this.startActivity(myIntent);
+
+        } else if (id == R.id.nav_upgrade) {
+            //Launches Upgrade Activity
+            Intent myIntent = new Intent(this, UpgradeActivity.class);
+            this.startActivity(myIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -877,6 +882,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     break;
                             }
 
+                            if(userPrefersAdFree){
+                                //Launches Upgrade Activity
+                                Intent myIntent = new Intent(getApplicationContext(), UpgradeActivity.class);
+                                startActivity(myIntent);
+                            }
                         }
 
                     @Override
@@ -887,6 +897,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 })
                 .withPersonalizedAdsOption()
                 .withNonPersonalizedAdsOption()
+                .withAdFreeOption()
                 .build();
         form.load();
     }

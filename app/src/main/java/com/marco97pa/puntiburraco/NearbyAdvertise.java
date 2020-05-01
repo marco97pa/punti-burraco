@@ -126,6 +126,7 @@ public class NearbyAdvertise {
                                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, R.style.AppTheme_Dialog);
                                 builder .setTitle(context.getString(R.string.nearby_error))
                                         .setMessage(context.getString(R.string.nearby_error_d))
+                                        .setCancelable(false)
                                         .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener(){
                                             public void onClick(DialogInterface dialog, int id) {
                                                 //nothing, dismiss

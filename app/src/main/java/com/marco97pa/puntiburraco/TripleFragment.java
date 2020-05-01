@@ -176,8 +176,8 @@ public class TripleFragment extends Fragment {
 
         mAdView = rootView.findViewById(R.id.adView);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
-        if(adsEnabled) {
+        Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
+        if(!isPro) {
             MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
             showAds();
         }
@@ -758,23 +758,49 @@ public class TripleFragment extends Fragment {
                 showDettPuntParz();
                 return true;
             case R.id.action_advertise:
-                //Start Advertising using Nearby library
-                //First ask the permission in Android 6.0+
-                Log.d(TAG,"Option selected: Advertise");
-                if(advertise == null || !advertise.isRunning()){
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(
-                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                                LOCATION_PERMISSION_NEARBY);
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
+                if(isPro) {
+                    //Start Advertising using Nearby library
+                    //First ask the permission in Android 6.0+
+                    Log.d(TAG,"Option selected: Advertise");
+                    if(advertise == null || !advertise.isRunning()){
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            requestPermissions(
+                                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                    LOCATION_PERMISSION_NEARBY);
+                        }
+                        else {
+                            advertise = new NearbyAdvertise(getContext(), getMatchState());
+                            advertise.start();
+                        }
                     }
-                    else {
-                        advertise = new NearbyAdvertise(getContext(), getMatchState());
-                        advertise.start();
+                    else{
+                        advertise.stop();
+                        item.setTitle(getString(R.string.join));
                     }
                 }
-                else{
-                    advertise.stop();
-                    item.setTitle(getString(R.string.join));
+                else {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+                    builder .setTitle(getString(R.string.join))
+                            .setMessage(getString(R.string.only_for_pro))
+                            .setIcon(R.drawable.ic_warning_24dp)
+                            .setPositiveButton(getString(R.string.upgrade), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Launches Upgrade Activity
+                                    Intent myIntent = new Intent(getActivity(), UpgradeActivity.class);
+                                    startActivity(myIntent);
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.ko), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
 
                 return true;
