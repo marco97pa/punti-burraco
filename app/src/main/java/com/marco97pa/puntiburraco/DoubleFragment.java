@@ -1364,13 +1364,21 @@ public class DoubleFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if ((requestCode == REQUEST_PICTURE_1) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                     .withAspectRatio(1, 1)
                     .withMaxResultSize(1080, 1080)
                     .getIntent(getActivity()
@@ -1389,13 +1397,21 @@ public class DoubleFragment extends Fragment {
 
 
         if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                             .withAspectRatio(1, 1)
                             .withMaxResultSize(1080, 1080)
                             .getIntent(getActivity()
@@ -1414,25 +1430,5 @@ public class DoubleFragment extends Fragment {
 
     }
 
-    /**
-     * SAVE IMAGE
-     * Saves profile images in application data path.
-     * It is invoked when setting a new profile image
-     */
-    public void saveImage(File file, File croppedImageFile){
-        try {
-            FileInputStream inStream = new FileInputStream(croppedImageFile);
-            FileOutputStream outStream = new FileOutputStream(file);
-            FileChannel inChannel = inStream.getChannel();
-            FileChannel outChannel = outStream.getChannel();
-            inChannel.transferTo(0, inChannel.size(), outChannel);
-            inStream.close();
-            outStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

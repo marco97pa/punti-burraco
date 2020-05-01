@@ -27,7 +27,6 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -41,16 +40,20 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider> <!-- Ads -->
+        </provider>
+        <!-- Ads -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_app_id" /> <!-- Firebase -->
+            android:value="@string/admob_app_id" />
+        <!-- Firebase -->
         <meta-data
             android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
-            android:value="true" /> <!-- Support 18:9 displays -->
+            android:value="true" />
+        <!-- Support 18:9 displays -->
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.1" /> <!-- Custom fonts -->
+            android:value="2.1" />
+        <!-- Custom fonts -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
