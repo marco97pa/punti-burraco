@@ -56,6 +56,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean adsPersonalized = true;
     SharedPreferences sharedPreferences;
     FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private FirebaseAnalytics mFirebaseAnalytics;
     Handler mHandler;
     Runnable runnableCode;
 
@@ -148,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark));
         }
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         isAppUpgraded();
         showIntroOnFirstLaunch();
@@ -569,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (requestCode == REQUEST_CODE_INTRO) {
             if (resultCode == RESULT_OK) {
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_COMPLETE, null);
                 // Finished the intro, set first_app_launch false
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -815,12 +821,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
         Log.d(TAG,"First app launch:" + first_app_launch);
         if(first_app_launch){
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN, null);
             Intent myIntent = new Intent(this, MainIntroActivity.class);
             startActivityForResult(myIntent, REQUEST_CODE_INTRO);
         }
     }
 
     private void checkForConsent() {
+        //Do not check for consent on first app launch: the MainIntroActivity is shown to the user
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
         if(!first_app_launch) {

@@ -63,6 +63,8 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -1649,15 +1651,20 @@ public class TripleFragment extends Fragment {
      * SAVE MATCH TO DATABASE
      * If one of the players wins, the score of the match will be saved in History ScoreDB
      */
-    public void saveScoreToDB(String player1,String player2,String player3, int point1,int point2, int point3) {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
-        String date = dateformat.format(c.getTime());
+    public void saveScoreToDB(final String player1, final String player2, final String player3, final int point1, final int point2, final int point3) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable(){
+            public void run(){
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
+            String date = dateformat.format(c.getTime());
 
-        ScoreDB db = new ScoreDB(getActivity());
-        db.open();
-        long id = db.insertScore(player1, player2, player3, point1, point2, point3, date, generateHandsDetail());
-        db.close();
+            ScoreDB db = new ScoreDB(getActivity());
+            db.open();
+            long id = db.insertScore(player1, player2, player3, point1, point2, point3, date, generateHandsDetail());
+            db.close();
+            }
+        });
     }
 
     private void saveScoreToFirebase(String player1, String player2, String player3, int score1, int score2, int score3){
