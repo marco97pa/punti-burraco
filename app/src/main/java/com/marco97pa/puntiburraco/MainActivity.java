@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //action bar settings
     Boolean ddp_visibility = true;
     Boolean newgame_show = false;
-    double latitude, longitude;
+
     private boolean isDrawerFixed;
     private ConsentForm form;
     public boolean adsPersonalized = true;
@@ -816,42 +816,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void checkForConsent() {
-        ConsentInformation consentInformation = ConsentInformation.getInstance(MainActivity.this);
-        String[] publisherIds = {getString(R.string.admob_pub_id)};
-        consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
-            @Override
-            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
-                // User's consent status successfully updated.
-                switch (consentStatus) {
-                    case PERSONALIZED:
-                        Log.d(TAG, "Showing Personalized ads");
-                        adsPersonalized = true;
-                        ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
-                        break;
-                    case NON_PERSONALIZED:
-                        Log.d(TAG, "Showing Non-Personalized ads");
-                        adsPersonalized = false;
-                        ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
-                        break;
-                    case UNKNOWN:
-                        Log.d(TAG, "Requesting Consent");
-                        if (ConsentInformation.getInstance(getBaseContext()).isRequestLocationInEeaOrUnknown()) {
-                            requestConsent();
-                        } else {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
+        if(!first_app_launch) {
+            ConsentInformation consentInformation = ConsentInformation.getInstance(MainActivity.this);
+            String[] publisherIds = {getString(R.string.admob_pub_id)};
+            consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
+                @Override
+                public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                    // User's consent status successfully updated.
+                    switch (consentStatus) {
+                        case PERSONALIZED:
+                            Log.d(TAG, "Showing Personalized ads");
                             adsPersonalized = true;
                             ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
-                        }
-                        break;
-                    default:
-                        break;
+                            break;
+                        case NON_PERSONALIZED:
+                            Log.d(TAG, "Showing Non-Personalized ads");
+                            adsPersonalized = false;
+                            ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                            break;
+                        case UNKNOWN:
+                            Log.d(TAG, "Requesting Consent");
+                            if (ConsentInformation.getInstance(getBaseContext()).isRequestLocationInEeaOrUnknown()) {
+                                requestConsent();
+                            } else {
+                                adsPersonalized = true;
+                                ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onFailedToUpdateConsentInfo(String errorDescription) {
-                // User's consent status failed to update.
-            }
-        });
+                @Override
+                public void onFailedToUpdateConsentInfo(String errorDescription) {
+                    // User's consent status failed to update.
+                }
+            });
+        }
     }
 
     private void requestConsent() {

@@ -21,8 +21,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
@@ -169,8 +167,14 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
                 action = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //RESTART app
-                        restartApp(getApplicationContext());
+                        //close app
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            finishAndRemoveTask();
+                        }
+                        else{
+                            finishAffinity();
+                        }
+                        System.exit(0);
                     }
                 };
                 break;
@@ -391,15 +395,6 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
             bp.release();
         }
         super.onDestroy();
-    }
-
-    private void restartApp(Context context){
-        Intent mStartActivity = new Intent(context, MainActivity.class);
-        int mPendingIntentId = 975684;
-        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 200, mPendingIntent);
-        System.exit(0);
     }
 
     public static boolean checkConnectivity(Context mContext) {

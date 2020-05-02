@@ -168,7 +168,7 @@
         \nAt the price of a coffee you will help me working on new features.
     </string>
     <string name="thanks">Thanks for your support!</string>
-    <string name="buy_success">You are now a PRO user\nA restart of the app is required in order to unlock all the features and remove ads</string>
+    <string name="buy_success">You are now a PRO user\nA restart of the app is needed in order to unlock all the features and remove ads</string>
     <string name="error_buy_play">Google Play Store is not available.\nTry to open the Google Play Store or restart the device If the problem persist, maybe your device is not Google Play certified: contact the manufacturer for more information</string>
     <string name="error_buy_api">Google Play Store needs an update.\nTry to open Google Play Store and check for updates</string>
     <string name="error_restore_fail">Seems you haven\'t brought the PRO version before.\nIf you think this is a mistake, send an email to %1s</string>
