@@ -171,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
+        //Hide upgrade option on navigation menu if is Pro user
+        setNavUpgrade(!isPro());
+
         //Set SERVICE_ID to package name
         SERVICE_ID = getApplicationContext().getPackageName();
 
@@ -723,6 +726,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = navigationView.getMenu();
         MenuItem nav_feedback = menu.findItem(R.id.nav_feedback);
         nav_feedback.setVisible(set);
+    }
+
+    private void setNavUpgrade(Boolean set){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem nav_upgrade = menu.findItem(R.id.nav_upgrade);
+        nav_upgrade.setVisible(set);
+    }
+
+    public Boolean isPro(){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("pro_user", false) ;
     }
 
     private void sendFeedback(){
