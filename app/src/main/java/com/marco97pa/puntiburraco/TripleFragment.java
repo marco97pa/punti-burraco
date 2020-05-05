@@ -734,7 +734,7 @@ public class TripleFragment extends Fragment {
                 //FIX CHIUDI TASTIERA
                 InputMethodManager inputMethodManager = (InputMethodManager)
                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                inputMethodManager.hideSoftInputFromWindow(textNome1.getWindowToken(), 0);
 
                 // First, request permission
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
