@@ -1,71 +1,236 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Punti Burraco</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport"content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Points Buraco</title>
+        <meta name="application-name" content="Points Buraco">
+        <meta name="description" content="More than a simple buraco scorekeeper">
+        <meta name="keywords" content="android, app, game, buraco, cards, playing">
+        <meta name="author" content="Marco Fantauzzo">
+        <link rel="author" href="https://marco97pa.github.io/">
+        <link rel="icon" sizes="192x192" href="images/icon-med.png">
+        <link rel="apple-touch-icon" href="images/icon-med.png">
+        <meta property="og:title" content="Points Buraco">
+        <meta property="og:image" content="images/icon-med.png">
+        <meta property="og:description" content="More than a simple buraco scorekeeper">
+        <meta itemprop="name" content="Points Buraco">
+        <meta itemprop="description" content="More than a simple buraco scorekeeper">
+        <meta itemprop="image" content="images/icon-med.png">
+        <meta itemprop="author" content="Marco Fantauzzo">
+        <meta itemprop="applicationCategory" content="Application">
+        <meta itemprop="operatingSystem" content="Android">
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+        <link href="css/tailwind.css" type="text/css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Hind:400,700|Montserrat:400,700,800&display=swap" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet"/>
+         <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-remote-config.js"></script>
+        <script src="js/moment.js"></script>
+        <script src="js/index.js"></script>
+    </head>
 
-    <script>
-      function getAndroidVersion(ua) {
-             ua = (ua || navigator.userAgent).toLowerCase();
-             var match = ua.match(/android\s([0-9\.]*)/);
-             return match ? match[1] : false;
-         };
-      
-      function download(){
-         if(getAndroidVersion()==false){
-            var userLang = navigator.language || navigator.userLanguage; 
-            if(userLang == "it-IT" || userLang == "it"){
-              var risposta = confirm("L'app è disponibile solo per smartphone Android e il tuo dispositivo non sembra esserlo.\n Vuoi comunque visitare il Play Store?");
-            }
-            else{
-              var risposta = confirm("The app is only avaible on Android. \n Do you want to visit the Play Store anyway?");
-            }
-            if(risposta){
-              window.location = "https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco";
-            }
-         }
-        else{
-          window.location = "https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco";
-        }
-      }
-    </script>
+    <body class="bg-white" onload="localize()">
+        
+        <!-- App Section -->
+        <div class="grid grid-rows-2 lg:pt-16 lg:grid-cols-2 lg:grid-rows-none bg-orange-500" >
+            <!-- Left Section -->
+            <div class="w-full flex flex-col justify-center items-center lg:justify-start lg:items-start lg:ml-32 text-center lg:text-left">
+                <div class="h-40 w-full lg:w-3/4 flex flex-col mt-8 lg:mt-4 px-4 lg:px-0">
+                    <img src="images/ic_launcher_foreground.png" class="self-center h-32"/>
+                    <p class="text-4xl leading-tight font-heading font-bold text-black self-center" id="app_name">
+                        
+                    </p>
+                    <span class="text-2xl leading-tight mt-4 font-body font-normal text-gray-900" id="app_desc">
+                        
+                    </span>
+                    <span id="downloads" class="text-gray-800 font-body self-center"></span>
+                </div>
+                <div class="w-1/2 flex flex-row mt-32 lg:mt-32 justify-center lg:justify-start self-center">
+                    <a href="https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco">
+                        <img class="h-12 p-1" src="images/google-play-badge.svg"/>
+                    </a>
+                </div>
+            </div>
+            <!-- Screenshots -->
+            <div class="w-full flex justify-center pb-16">
+                <div>
+                    <img
+                        src="images/google_pixel_3_and_google_pixel_4.png"
+                    />
+                </div>
+            </div>
+        </div>
+        <!-- Features Section -->
+        <div class="mt-10">
+            <div class="flex justify-center">
+                <div class="w-full lg:w-2/4 text-center px-10">
+                    <p class="text-3xl font-heading font-bold" id="features">
+                        
+                    </p>
+                    <span class="text-base font-body font-normal" id="features_desc">
+                        
+                    </span>
+                </div>
+            </div>
+            <div class="grid grid-rows-2 lg:grid-cols-3 lg:grid-rows-none p-8">
+                <!-- Left Features -->
+                <div class="flex flex-col pb-20 lg:pb-0">
+                    <!-- First -->
+                    <div class="pb-10">
+                        <i class="fas fa-calculator text-orange-400 text-3xl pb-4 lg:pb-2"></i>
+                        <p class="text-xl font-heading font-bold mb-4" id="feature_1">
+                            
+                        </p>
+                        <span class="text-base font-body font-normal" id="feature_1_desc">
+                            
+                        </span>
+                    </div>
+                    <!-- Second -->
+                    <div class="pb-10">
+                        <i class="fas fa-trophy text-orange-400 text-3xl pb-4 lg:pb-2"></i>
+                        <p class="text-xl font-heading font-bold mb-4" id="feature_2">
+                            
+                        </p>
+                        <span class="text-base font-body font-normal" id="feature_2_desc">
+                            
+                        </span>
+                    </div>
+                    <!-- Third -->
+                    <div>
+                        <i class="fas fa-user-friends text-orange-400 text-3xl pb-4 lg:pb-2"></i>
+                        <p class="text-xl font-heading font-bold mb-4" id="feature_3">
+                            
+                        </p>
+                        <span class="text-base font-body font-normal" id="feature_3_desc">
+                            .
+                        </span>
+                    </div>
+                </div>
+                <!-- Middle Phone Image -->
+                <div class="hidden lg:flex lg:justify-center">
+                    <img
+                        src="images/phone.png"
+                        alt=""
+                        style="width: 240px; height: 480px;"
+                    />
+                </div>
+                <!-- Right Features -->
+                <div class="flex flex-col lg:justify-center">
+                    <!-- First -->
+                    <div class="pb-10">
+                        <i class="fas fa-paint-brush text-orange-400 text-3xl pb-4 lg:pb-2"></i>
+                        <p class="text-xl font-heading font-bold mb-4" id="feature_4">
+                            
+                        </p>
+                        <span class="text-base font-body font-normal" id="feature_4_desc">
+                            
+                        </span>
+                    </div>
+                    <!-- Second -->
+                    <div class="pb-10">
+                        <i class="fas fa-share-square text-orange-400 text-3xl pb-4 lg:pb-2"></i>
+                        <p class="text-xl font-heading font-bold mb-4" id="feature_5">
+                            
+                        </p>
+                        <span class="text-base font-body font-normal" id="feature_5_desc">
+                            
+                        </span>
+                    </div>
+                    <!-- Third -->
+                    <div>
+                        <i class="fas fa-code text-orange-400 text-3xl pb-4 lg:pb-2"></i>
+                        <p class="text-xl font-heading font-bold mb-4" id="feature_6">
+                            
+                        </p>
+                        <span class="text-base font-body font-normal" id="feature_6_desc">
+                            <a class="text-blue-400 font-bold" href="https://github.com/marco97pa/punti-burraco">Github</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Team Section -->
+        <div class="mt-10">
+            <div class="flex justify-center">
+                <div class="w-full lg:w-2/4 text-center px-10">
+                    <p class="text-3xl font-heading font-bold" id="team">
+                        
+                    </p>
+                    <span class="text-xl font-body font-normal" id="team_desc">
+                        
+                    </span>
+                </div>
+            </div>
+            <div class="">
+                <div class="grid lg:grid-cols-3 lg:grid-rows-none mx-2">
+                    <div></div>
+                    <!-- Profile -->
+                    <div class="shadow-lg p-10 m-4 lg:m-10 flex flex-col  rounded-lg ">
+                        <div class="flex lg:flex-col grid grid-cols-2 lg:grid-rows-2 lg:grid-cols-none lg:justify-center">
+                            <img
+                                class="rounded-full shadow-lg self-center" style="margin: auto;"
+                                src="https://graph.facebook.com/1017451071648699/picture?type=normal"
+                                alt=""
+                            />
+                            <div class="flex flex-col">
+                                <p class="text-base text-center font-bold font-heading pt-2"> Marco Fantauzzo </p>
+                                <p class="text-base italic text-center pb-4 font-body" id="dev_role"> devRole </p>
+                                <span class="text-base text-center lg:text-left font-body lg:p-0" id="dev_desc">
+                                    
+                                </span>
+                            </div>
+                        </div>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 600px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 26px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #button { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; cursor: pointer;}
-      #message, #button { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <center>
-        <h1 id="app_name">Punti Burraco</h1>
-        <img src="images/icon.png" width="128px"/>
-        <p id="app_desc">Molto di più di un comodo segnapunti per le tue partite di Burraco con i tuoi amici</p>
-        <h2 id="app_price">Gratis</h2>
-        <br>
-        </center>
-      <div id="button" onclick="download();">installa</div>
-    </div>
-  </body>
-  <script>
-    var userLang = navigator.language || navigator.userLanguage; 
-      if(userLang != "it-IT" && userLang != "it"){
-        document.getElementById("app_name").innerHTML = "Points Buraco";
-        document.getElementById("app_desc").innerHTML = "More than a simple scorekeeper for your Buraco match with friends";
-        document.getElementById("app_price").innerHTML = "Free";
-        document.getElementById("button").innerHTML = "install";
-        document.title = "Points Buraco";
-      }
-  </script>
+                        <div class="row-auto self-center mt-3">
+                            <a href="https://marco97pa.github.io">
+                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" id="dev_info">
+                                    
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Call To Action Section -->
+        <div class="bg-orange-500 my-10 mx-2 lg:mx-56 rounded-lg py-10">
+            <div class="flex flex-col justify-center">
+                <div class="w-full text-center px-4">
+                    <img src="images/ic_launcher_foreground.png" class="shadow-lg self-center w-24" style="margin: auto;"/>
+                    <p class="text-3xl font-heading font-bold" id="recap_app_name">
+                        
+                    </p>
+                    <span class="text-xl font-body font-normal" id="recap_short_desc">
+                        
+                    </span>
+                </div>
+                <div class="flex flex-row mt-12 lg:mt-8 justify-center">
+                    <a href="https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco">
+                        <img class="h-12 p-1" src="images/google-play-badge.svg"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Section -->
+        <div class="bg-black">
+            <div class="flex justify-center flex-col lg:flex-row text-center p-4" >
+                <a class="text-sm text-white hover:text-yellow-500 font-body font-normal p-2"
+                    href="privacy_policy.html">
+                    Privacy Policy</a>
+                <a class="text-sm text-white hover:text-yellow-500 font-body font-normal p-2"
+                    href="mailto:marco97pa@gmail.com?subject=Points%20Buraco">
+                    Contact</a>
+            </div>
+            <div class="text-center pb-4">
+                <span class="text-white text-sm font-body">© Marco Fantauzzo. All rights reserved.<br>Icons: Font Awesome.</span>
+            </div>
+        </div>
+    </body>
 </html>
