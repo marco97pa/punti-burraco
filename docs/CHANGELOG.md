@@ -1,3 +1,17 @@
+## 13.0.0
+* Share your results on Whatsapp
+* You can now invite players near you to join the match, so anyone can see the game's score on his device
+* You can now remove ads and obtain more features with a single in app purchase
+* Added an Intro for the first time you open the app
+* Improvements to the side menu, now with more options
+* Improved performances when saving data
+* Guide improved, now including an "how to play buraco" section
+* Website improved with a new stunning UI
+* Solved problems with fields losing their values when rotating the device or changing settings
+* Fixed glitches with player's name's text formatting
+* Solved a bug during setting images on low RAM conditions
+* Solved a bug in 3 players mode
+
 ## 12.0.0
 * Choose your favourite input method in the Setting section
 * Added a new alternative input method
