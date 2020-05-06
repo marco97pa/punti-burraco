@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +19,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -30,12 +34,14 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class ShareResultActivity extends AppCompatActivity {
 private TextView name1, name2, name3, score1, score2, score3;
@@ -46,6 +52,7 @@ private BottomSheetBehavior bottomSheetBehavior;
 private ExtendedFloatingActionButton fab;
 private FirebaseAnalytics mFirebaseAnalytics;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +129,12 @@ private FirebaseAnalytics mFirebaseAnalytics;
 
         });
 
+        //Set Facebook and Instagram text
+        TextView facebook_text = (TextView) findViewById(R.id.bottom_sheet_share_facebook_text);
+        facebook_text.setText(String.format(getString(R.string.stories), getString(R.string.facebook)));
+        TextView instagram_text = (TextView) findViewById(R.id.bottom_sheet_share_instagram_text);
+        instagram_text.setText(String.format(getString(R.string.stories), getString(R.string.instagram)));
+
         //BUTTONS
         //fab
         fab = (ExtendedFloatingActionButton) findViewById(R.id.fab);
@@ -150,6 +163,16 @@ private FirebaseAnalytics mFirebaseAnalytics;
             public void onClick(View v) {
                 bottomSheet.setVisibility(View.GONE); //hide BottomSheet without animations (to boost performance)
                 shareOnFacebook();
+            }
+        });
+
+        //whatsapp
+        LinearLayout whatsapp = (LinearLayout) findViewById(R.id.bottom_sheet_share_whatsapp);
+        whatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheet.setVisibility(View.GONE); //hide BottomSheet without animations (to boost performance)
+                shareOnWhatsapp();
             }
         });
 
@@ -219,62 +242,113 @@ private FirebaseAnalytics mFirebaseAnalytics;
     }
 
     public void shareOnFacebook(){
-        // Define image asset URI and attribution link URL
-        Uri backgroundAssetUri = takeScreenshot();
-        String attributionLinkUrl = getString(R.string.link);
+        try{
+            // Define image asset URI and attribution link URL
+            Uri backgroundAssetUri = takeScreenshot();
+            String attributionLinkUrl = getString(R.string.link);
 
-        // Instantiate implicit intent with ADD_TO_STORY action,
-        // background asset, and attribution link
-        Intent intent = new Intent("com.facebook.stories.ADD_TO_STORY");
-        intent.setDataAndType(backgroundAssetUri, "image/jpeg");
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra("content_url", attributionLinkUrl);
+            // Instantiate implicit intent with ADD_TO_STORY action,
+            // background asset, and attribution link
+            Intent intent = new Intent("com.facebook.stories.ADD_TO_STORY");
+            intent.setDataAndType(backgroundAssetUri, "image/jpeg");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra("content_url", attributionLinkUrl);
 
-        // Instantiate activity and verify it will resolve implicit intent
-        Activity activity = this;
-        if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+            // Instantiate activity and verify it will resolve implicit intent
+            Activity activity = this;
 
             //add event to Firebase
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Facebook stories");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.facebook));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
 
             activity.startActivityForResult(intent, 0);
-        }
-        else{
+
+        } catch (android.content.ActivityNotFoundException ex) {
             //Show alert if app is not installed
-            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), "Facebook"), Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), getString(R.string.facebook)), Toast.LENGTH_LONG);
+            toast.show();
+            finish();
+
+        } catch (NullPointerException e){
+            //Show alert if Uri is null
+            Toast toast = Toast.makeText(this,getString(R.string.error), Toast.LENGTH_LONG);
             toast.show();
             finish();
         }
     }
 
     public void shareOnInstagram(){
-        // Define image asset URI and attribution link URL
-        Uri backgroundAssetUri = takeScreenshot();
-        String attributionLinkUrl = getString(R.string.link);
+        try{
+            // Define image asset URI and attribution link URL
+            Uri backgroundAssetUri = takeScreenshot();
+            String attributionLinkUrl = getString(R.string.link);
 
-        // Instantiate implicit intent with ADD_TO_STORY action,
-        // background asset, and attribution link
-        Intent intent = new Intent("com.instagram.share.ADD_TO_STORY");
-        intent.setDataAndType(backgroundAssetUri, "image/jpeg");
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra("content_url", attributionLinkUrl);
+            // Instantiate implicit intent with ADD_TO_STORY action,
+            // background asset, and attribution link
+            Intent intent = new Intent("com.instagram.share.ADD_TO_STORY");
+            intent.setDataAndType(backgroundAssetUri, "image/jpeg");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra("content_url", attributionLinkUrl);
 
-        // Instantiate activity and verify it will resolve implicit intent
-        Activity activity = this;
-        if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+            // Instantiate activity and verify it will resolve implicit intent
+            Activity activity = this;
+
 
             //add event to Firebase
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Instagram stories");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.instagram));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
 
             activity.startActivityForResult(intent, 0);
-        }
-        else {
+
+        } catch (android.content.ActivityNotFoundException ex) {
             //Show alert if app is not installed
-            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), "Instagram"), Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), getString(R.string.instagram)), Toast.LENGTH_LONG);
+            toast.show();
+            finish();
+
+        } catch (NullPointerException e){
+            //Show alert if Uri is null
+            Toast toast = Toast.makeText(this,getString(R.string.error), Toast.LENGTH_LONG);
+            toast.show();
+            finish();
+        }
+    }
+
+    public void shareOnWhatsapp(){
+        try{
+            //Define image asset URI and text
+            Uri backgroundAssetUri = takeScreenshot();
+            String text = String.format(getString(R.string.share_message), getString(R.string.app_name), getString(R.string.link));
+
+            //Define intent
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, backgroundAssetUri);
+            sendIntent.setType("image/jpeg");
+            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            sendIntent.setPackage("com.whatsapp");
+
+            Activity activity = this;
+
+            //add event to Firebase
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.whatsapp));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
+            //start intent
+            activity.startActivity(sendIntent);
+
+        } catch (android.content.ActivityNotFoundException ex) {
+            //Show alert if app is not installed
+            Toast toast = Toast.makeText(this,String.format(getString(R.string.app_not_installed), getString(R.string.whatsapp)), Toast.LENGTH_LONG);
+            toast.show();
+            finish();
+        } catch (NullPointerException e){
+            //Show alert if Uri is null
+            Toast toast = Toast.makeText(this,getString(R.string.error), Toast.LENGTH_LONG);
             toast.show();
             finish();
         }
@@ -285,41 +359,100 @@ private FirebaseAnalytics mFirebaseAnalytics;
      * This method hides the BottomSheetDialog then
      * A screenshot of the app will be taken, saved in memory
      */
-    public Uri takeScreenshot(){
+    public Uri takeScreenshot() throws NullPointerException{
         //First hide the ControllerView
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet_share));;
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         diRitornoDaCondivisione = true;
 
-        //Then Take screenshot and save as JPG
+        //Then Take screenshot
         View v = getWindow().getDecorView().getRootView();
         v.setDrawingCacheEnabled(true);
         v.buildDrawingCache(true);
         Bitmap bmp = Bitmap.createBitmap(v.getDrawingCache());
         v.setDrawingCacheEnabled(false);
-        String nomeFoto = "SCREEN"+ System.currentTimeMillis() + ".jpg";
-        File imageFileToShare;
-        try {
-            // Save as png
-            FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), nomeFoto));
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
 
-            //Get URI
-            Uri uri = FileProvider.getUriForFile(getApplicationContext(),
-                    "com.marco97pa.puntiburraco.provider",
-                    imageFileToShare);
-
-            return uri;
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        //and save as JPG
+        Uri jpg = saveImage(bmp);
+        if(jpg == null){
+            throw new NullPointerException("Image screenshot not saved");
         }
 
-        return null;
+        return jpg;
+    }
+
+    private Uri saveImage(Bitmap bitmap){
+        String name = "Score_"+ System.currentTimeMillis() + ".jpg";
+        Uri uri = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            String relativeLocation = Environment.DIRECTORY_PICTURES + File.separator + getString(R.string.app_name);
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, name);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            // without this part causes "Failed to create new MediaStore record" exception to be invoked (uri is null below)
+            values.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, relativeLocation);
+
+            final ContentResolver resolver = getContentResolver();
+            OutputStream stream = null;
+            uri = null;
+            try {
+                final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                uri = resolver.insert(contentUri, values);
+
+                if (uri == null) {
+                    throw new IOException("Failed to create new MediaStore record.");
+                }
+
+                stream = resolver.openOutputStream(uri);
+
+                if (stream == null) {
+                    throw new IOException("Failed to get output stream.");
+                }
+
+                if (bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream) == false) {
+                    throw new IOException("Failed to save bitmap.");
+                }
+            } catch (IOException e) {
+                if (uri != null) {
+                    // Don't leave an orphan entry in the MediaStore
+                    resolver.delete(uri, null, null);
+                }
+            } finally {
+                if (stream != null) {
+                    try {
+                        stream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }
+
+        else {
+            File imageFileToShare;
+            try {
+                // Save as jpg
+                FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), name));
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 95, fos);
+                fos.flush();
+                fos.close();
+
+                //Get URI
+                uri = FileProvider.getUriForFile(getApplicationContext(),
+                        "com.marco97pa.puntiburraco.provider",
+                        imageFileToShare);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return uri;
     }
 
     public void fab_show(){

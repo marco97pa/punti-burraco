@@ -2,6 +2,8 @@ package com.marco97pa.puntiburraco;
 
 import android.Manifest;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -39,6 +41,8 @@ import com.google.ads.consent.ConsentFormListener;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -52,6 +56,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -92,16 +99,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String TAG = this.getClass().getSimpleName();
 
     public static Context contextOfApplication;
+    public static String SERVICE_ID;
     public static final int OPEN_SETTINGS = 9001;
+    public static final int REQUEST_CODE_INTRO = 9002;
     String CHANNEL_ID = "channel_suspended";
     //action bar settings
     Boolean ddp_visibility = true;
     Boolean newgame_show = false;
-    double latitude, longitude;
+
     private boolean isDrawerFixed;
     private ConsentForm form;
     public boolean adsPersonalized = true;
     SharedPreferences sharedPreferences;
+    FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private FirebaseAnalytics mFirebaseAnalytics;
     Handler mHandler;
     Runnable runnableCode;
 
@@ -135,8 +146,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "2").commit();
 
+        //Set status bar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark));
+        }
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         isAppUpgraded();
+        showIntroOnFirstLaunch();
         checkForConsent();
+
+        //Firebase Remote Config initialization
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(3600)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+        mFirebaseRemoteConfig.fetchAndActivate()
+                .addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Boolean> task) {
+                        if (task.isSuccessful()) {
+                            boolean updated = task.getResult();
+                            Log.d(TAG, "Fetch and activate succeeded");
+                            Log.d(TAG, "Config params updated: " + updated);
+
+                        } else {
+                            Log.d(TAG, "Fetch failed");
+                        }
+                        setNavFeedback(mFirebaseRemoteConfig.getBoolean("nav_menu_feedback"));
+                    }
+                });
+
+        //Hide upgrade option on navigation menu if is Pro user
+        setNavUpgrade(!isPro());
+
+        //Set SERVICE_ID to package name
+        SERVICE_ID = getApplicationContext().getPackageName();
 
         //Setting the FAB button - It launches the openStart method of the active Fragment inside activity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -197,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         //Set Notification Channel (as of Android 8.0 Oreo)
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             // The id of the channel.
             String id = CHANNEL_ID;
@@ -474,70 +523,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.startActivity(myIntent);
 
         } else if (id == R.id.nav_guide) {
-            //Check if the device is connected
-            boolean isConnected = checkConnectivity(this);
+            //Launch the website in the default section (guide)
+            launchWebsite(getString(R.string.nav_guide), null);
 
-            if(isConnected) {
-                //I am using CustomTabs
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
-                Bitmap backButton = null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                    ImageDecoder.Source source = ImageDecoder.createSource(getResources(), R.drawable.ic_arrow_back);
-                    try {
-                          backButton = ImageDecoder.decodeBitmap(source);
-                    } catch (IOException e) { e.printStackTrace(); }
-                } else{
-                      backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back);
-                }
-                builder.setCloseButtonIcon(backButton);
-                builder.setShowTitle(true);
-                CustomTabsIntent customTabsIntent = builder.build();
-                //Takes the user to the localized page of the user guide
-                Locale lang;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                      lang = getResources().getConfiguration().getLocales().get(0);
-                } else{
-                    //noinspection deprecation
-                      lang = getResources().getConfiguration().locale;
-                }
-                String localeId = lang.toString();
-                Log.i("LINGUA", localeId);
-                //If lang is italian it will be redirected to guide-it.html., else to guide-en.html
-                String URLtoLaunch;
-                if(localeId.equals("it_IT")) {
-                    URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-it.html";
-                    Log.i("language", "IT");
-                }
-                else{
-                    URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-en.html";
-                    Log.i("language", "EN");
-                }
-                //Set theme (adds a parameter that a javascript script on the webpage can detect)
-                int nightModeflag = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                if(nightModeflag == Configuration.UI_MODE_NIGHT_YES){
-                    URLtoLaunch = URLtoLaunch+"?dark";
-                }
-                //Launch custom tabs
-                customTabsIntent.launchUrl(this, Uri.parse(URLtoLaunch));
-            }
-            else{
-                //If user is not connected, shows an alert
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog);
-                builder .setTitle(getString(R.string.nav_guide))
-                        .setMessage(getString(R.string.errore_connection))
-                        .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //do things
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
+        } else if (id == R.id.nav_feedback) {
+            //Show a feedback dialog
+            sendFeedback();
 
-        } 
+        } else if (id == R.id.nav_send_app) {
+            //Share app link with other apps
+            shareAppLink();
+
+        } else if (id == R.id.nav_mirroring) {
+            //Launches Nearby Activity
+            Intent myIntent = new Intent(this, NearbyDiscoverActivity.class);
+            this.startActivity(myIntent);
+
+        } else if (id == R.id.nav_upgrade) {
+            //Launches Upgrade Activity
+            Intent myIntent = new Intent(this, UpgradeActivity.class);
+            this.startActivity(myIntent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (!isDrawerFixed) {
@@ -564,6 +570,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(data.getBooleanExtra("askAds", false)){
                     requestConsent();
                 }
+            }
+        }
+        if (requestCode == REQUEST_CODE_INTRO) {
+            if (resultCode == RESULT_OK) {
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_COMPLETE, null);
+                // Finished the intro, set first_app_launch false
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("is_first_app_launch", false);
+                editor.apply();
+                //recreate activity to reflect changes
+                recreate();
+            } else {
+                // Cancelled the intro. Finish this activity too.
+                finish();
             }
         }
     }
@@ -623,6 +644,152 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //the method above invokes onPrepareOptionsMenu();
     }
 
+    public void launchWebsite(String title, @Nullable String options){
+        //Check if the device is connected
+        boolean isConnected = checkConnectivity(this);
+
+        if(isConnected) {
+            //I am using CustomTabs
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
+            Bitmap backButton = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                ImageDecoder.Source source = ImageDecoder.createSource(getResources(), R.drawable.ic_arrow_back);
+                try {
+                    backButton = ImageDecoder.decodeBitmap(source);
+                } catch (IOException e) { e.printStackTrace(); }
+            } else{
+                backButton = BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back);
+            }
+            builder.setCloseButtonIcon(backButton);
+            builder.setShowTitle(true);
+            CustomTabsIntent customTabsIntent = builder.build();
+            //Takes the user to the localized page of the user guide
+            Locale lang;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                lang = getResources().getConfiguration().getLocales().get(0);
+            } else{
+                //noinspection deprecation
+                lang = getResources().getConfiguration().locale;
+            }
+            String localeId = lang.toString();
+            Log.i("LINGUA", localeId);
+            //If lang is italian it will be redirected to guide-it.html., else to guide-en.html
+            String URLtoLaunch;
+            if(localeId.equals("it_IT")) {
+                URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-it.html";
+                Log.i("language", "IT");
+            }
+            else{
+                URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-en.html";
+                Log.i("language", "EN");
+            }
+
+            //Add parameters that a javascript script on the webpage can detect
+            int nightModeflag = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            if(nightModeflag == Configuration.UI_MODE_NIGHT_YES || options != null){
+                URLtoLaunch = URLtoLaunch+"?";
+            }
+            //Set theme
+            if(nightModeflag == Configuration.UI_MODE_NIGHT_YES){
+                URLtoLaunch = URLtoLaunch + "dark";
+                if(options != null){
+                    URLtoLaunch = URLtoLaunch + "&";
+                }
+            }
+            //Add options to skip to a certain section
+            if(options != null) {
+                URLtoLaunch = URLtoLaunch + options;
+            }
+
+            //Launch custom tabs
+            customTabsIntent.launchUrl(this, Uri.parse(URLtoLaunch));
+        }
+        else{
+            //If user is not connected, shows an alert
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog);
+            builder .setTitle(title)
+                    .setMessage(getString(R.string.errore_connection))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //do things
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+    private void shareAppLink(){
+        String text = String.format(getString(R.string.share_message), getString(R.string.app_name), getString(R.string.link));
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        // Add data to the intent, the receiving app will decide what to do with it.
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        share.putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(Intent.createChooser(share, getString(R.string.share_hint)));
+    }
+
+    private void setNavFeedback(Boolean set){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem nav_feedback = menu.findItem(R.id.nav_feedback);
+        nav_feedback.setVisible(set);
+    }
+
+    private void setNavUpgrade(Boolean set){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem nav_upgrade = menu.findItem(R.id.nav_upgrade);
+        nav_upgrade.setVisible(set);
+    }
+
+    public Boolean isPro(){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("pro_user", false) ;
+    }
+
+    private void sendFeedback(){
+        final Context context = this;
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, R.style.AlertDialogRateTheme);
+        builder .setTitle(getString(R.string.setting_rate))
+                .setMessage(getString(R.string.setting_rate_d))
+                .setPositiveButton(getString(R.string.like), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id="+context.getPackageName()));
+                        context.startActivity(webIntent);
+                    }
+                })
+                .setNeutralButton(getString(R.string.dislike), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MaterialAlertDialogBuilder builder2 = new MaterialAlertDialogBuilder(context, R.style.AppTheme_Dialog);
+                        builder2.setTitle(R.string.send_bug_report)
+                                .setMessage(getString(R.string.send_bug_report_question))
+                                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //Launch the website in the feedback section (called bug)
+                                        launchWebsite(getString(R.string.nav_guide), "bug");
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.ko), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog alert2 = builder2.create();
+                        alert2.show();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
 
     /**
      * Checks if app has been updated to do things like upgrade databases or show a message to the user
@@ -634,8 +801,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int lastVersion = sharedPreferences.getInt("last_version", 0);
         if(actualVersion != lastVersion){
             //App has been updated, do something like upgrade or show a message to user
+
             switch (actualVersion){
-                case 5040:
+                case 5045:
                     break;
             }
         }
@@ -644,43 +812,63 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editor.apply();
     }
 
+    /*
+    * Checks if this is the first app launch
+    * If <b> first_app_launch </b> is true than lauches MainIntroActivity
+    */
+    private void showIntroOnFirstLaunch(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
+        Log.d(TAG,"First app launch:" + first_app_launch);
+        if(first_app_launch){
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN, null);
+            Intent myIntent = new Intent(this, MainIntroActivity.class);
+            startActivityForResult(myIntent, REQUEST_CODE_INTRO);
+        }
+    }
+
     private void checkForConsent() {
-        ConsentInformation consentInformation = ConsentInformation.getInstance(MainActivity.this);
-        String[] publisherIds = {getString(R.string.admob_pub_id)};
-        consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
-            @Override
-            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
-                // User's consent status successfully updated.
-                switch (consentStatus) {
-                    case PERSONALIZED:
-                        Log.d(TAG, "Showing Personalized ads");
-                        adsPersonalized = true;
-                        ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
-                        break;
-                    case NON_PERSONALIZED:
-                        Log.d(TAG, "Showing Non-Personalized ads");
-                        adsPersonalized = false;
-                        ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
-                        break;
-                    case UNKNOWN:
-                        Log.d(TAG, "Requesting Consent");
-                        if (ConsentInformation.getInstance(getBaseContext()).isRequestLocationInEeaOrUnknown()) {
-                            requestConsent();
-                        } else {
+        //Do not check for consent on first app launch: the MainIntroActivity is shown to the user
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
+        if(!first_app_launch) {
+            ConsentInformation consentInformation = ConsentInformation.getInstance(MainActivity.this);
+            String[] publisherIds = {getString(R.string.admob_pub_id)};
+            consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
+                @Override
+                public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                    // User's consent status successfully updated.
+                    switch (consentStatus) {
+                        case PERSONALIZED:
+                            Log.d(TAG, "Showing Personalized ads");
                             adsPersonalized = true;
                             ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
-                        }
-                        break;
-                    default:
-                        break;
+                            break;
+                        case NON_PERSONALIZED:
+                            Log.d(TAG, "Showing Non-Personalized ads");
+                            adsPersonalized = false;
+                            ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                            break;
+                        case UNKNOWN:
+                            Log.d(TAG, "Requesting Consent");
+                            if (ConsentInformation.getInstance(getBaseContext()).isRequestLocationInEeaOrUnknown()) {
+                                requestConsent();
+                            } else {
+                                adsPersonalized = true;
+                                ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onFailedToUpdateConsentInfo(String errorDescription) {
-                // User's consent status failed to update.
-            }
-        });
+                @Override
+                public void onFailedToUpdateConsentInfo(String errorDescription) {
+                    // User's consent status failed to update.
+                }
+            });
+        }
     }
 
     private void requestConsent() {
@@ -726,6 +914,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     break;
                             }
 
+                            if(userPrefersAdFree){
+                                //Launches Upgrade Activity
+                                Intent myIntent = new Intent(getApplicationContext(), UpgradeActivity.class);
+                                startActivity(myIntent);
+                            }
                         }
 
                     @Override
@@ -736,6 +929,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 })
                 .withPersonalizedAdsOption()
                 .withNonPersonalizedAdsOption()
+                .withAdFreeOption()
                 .build();
         form.load();
     }

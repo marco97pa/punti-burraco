@@ -2,13 +2,6 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.preference.SwitchPreference
-        android:defaultValue="true"
-        android:key="ads"
-        android:summary="@string/setting_ads_d"
-        android:title="@string/setting_ads"
-        />
-
     <androidx.preference.Preference
         android:title="@string/setting_advanced"
         android:summary="@string/setting_advanced_d"
@@ -18,6 +11,17 @@
     <androidx.preference.Preference
         android:title="@string/setting_crash"
         android:key="crash">
+    </androidx.preference.Preference>
+
+    <androidx.preference.Preference
+        android:title="@string/setting_intro"
+        android:key="intro">
+    </androidx.preference.Preference>
+
+    <androidx.preference.Preference
+        android:title="Firebase Remote Config"
+        android:summary="Fetching..."
+        android:key="remote_config">
     </androidx.preference.Preference>
 
 </androidx.preference.PreferenceScreen>

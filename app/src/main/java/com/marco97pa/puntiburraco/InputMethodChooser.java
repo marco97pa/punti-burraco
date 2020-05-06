@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
-public class InputMethodChooser extends Fragment {
+import com.heinrichreimersoftware.materialintro.app.SlideFragment;
+
+public class InputMethodChooser extends SlideFragment {
 
     LinearLayout option1, option2, option3, layout_hand;
     RadioButton radioButton1, radioButton2, radioButton3;
@@ -22,6 +24,14 @@ public class InputMethodChooser extends Fragment {
     SharedPreferences sharedPref;
     Boolean point_hand;
     int input_method;
+
+    public InputMethodChooser() {
+        // Required empty public constructor
+    }
+
+    public static InputMethodChooser newInstance() {
+        return new InputMethodChooser();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,8 +46,19 @@ public class InputMethodChooser extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        //Setting activity title
-        ((SettingActivity) getActivity()).setTitle(getString(R.string.setting_insert_method));
+        Bundle arguments = getArguments();
+        Boolean isIntro = true;
+        if (arguments != null) {
+            isIntro = arguments.getBoolean("intro", true);
+        }
+
+        if(isIntro){
+            getContext().getTheme().applyStyle(R.style.AppTheme, true);
+        }
+        else {
+            //Setting activity title
+            ((SettingActivity) getActivity()).setTitle(getString(R.string.setting_insert_method));
+        }
 
         View rootView = inflater.inflate(R.layout.input_method_chooser, container,false);
 

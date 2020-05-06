@@ -153,7 +153,7 @@
     <LinearLayout app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/bottom_sheet_share"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="240dp"
         android:orientation="vertical"
         android:background="@color/dialogBackground"
         app:behavior_hideable="true"
@@ -175,6 +175,7 @@
                 />
 
             <TextView
+                android:id="@+id/bottom_sheet_share_facebook.text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -199,11 +200,36 @@
                 />
 
             <TextView
+                android:id="@+id/bottom_sheet_share_instagram.text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="16dp"
                 android:text="@string/instagram"
+                android:textColor="@color/dialogText" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottom_sheet_share_whatsapp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="16dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/whatsapp"
+                android:tint="@color/whatsapp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:text="@string/whatsapp"
                 android:textColor="@color/dialogText" />
         </LinearLayout>
 

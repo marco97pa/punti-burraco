@@ -5,9 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link id="stylesheet" href="css/bottom-nav.css" rel="stylesheet">
     <title>Guide</title>
-	<link id="stylesheet" href="css/bottom-nav.css" rel="stylesheet"></head>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
 
   <body style="margin-top: -100px; ">
     <nav class="bottom-nav">
@@ -33,61 +36,203 @@
     </nav>
 
     <main class="active" id="home">
-               <h1>Guide for users</h1>
-               This guide will help you to use the Points Buraco app, but won't teach you how to play Buraco card game (you can still find some information on <a href="https://en.wikipedia.org/wiki/Buraco">Wikipedia</a>)
-               <ul class="toc">
-                 <h2>Table of contents</h2>
-					 <li><a href="#a1"> Modes </a>
-         			 <li><a href="#a2"> Scorekeeper </a>
-         			 <li><a href="#a2a"> Share results  </a>
-         			 <li><a href="#a3">  Change names  </a>
-         			 <li><a href="#a4">  Change photos  </a>
-         			 <li><a href="#a5"> Show hands details </a>
-					 <li><a href="#a5b"> History </a>
-         			 <li><a href="#a6"> Settings </a>
-               </ul>
-       <h2 id="a1"> Modes </h2>
-       From the side menu <i class="material-icons">&#xE5D2;</i> you can select different modes according to the number of players<br>
-       There are 2, 3 or 4 players mode.<br>
-      <h2 id="a2" > Scorekeeper </h2>
-      Points Buraco is a scorekeeper <br>
-      Choose the right mode and start playing Buraco <br>
-      After an hand, insert the score of each player. A white field is considered zero and you can write scores in the order you prefer<br>
-      When you finished entering the scores, touch <i class="material-icons">&#xE148;</i> and totals will be automatically updated. <br>
-      Continue to play, until one of the players wins. The app will alert you in case of victory<br>
-      Game finishes at 2005 Points, but you can customize it in <a href="#a6"> Settings </a> <br>
-      <h2 id="a2a" > Share results</h2>
-      You can share your scores on <i style="color: blue">Facebook</i>, <i style="color: green">Whatsapp</i>, <i style="color: #d233ae">Instagram</i>, <i style="color: #5DA5CE">Telegram</i> and other apps.<br>
-      Just press <i class="material-icons">&#xE80D;</i> to share your current match with friends <br>
-      TIP: add the hashtag <b>#PointsBuraco</b> to your post. <br>
-     <h2 id="a3"> Change names </h2>
-     It is really easy: touch a name to edit it.<br>
-     To revert to default names, touch <i class="material-icons">&#xE5D3;</i> and select "Restore default names"<br> 
-     <h2 id="a4"> Change photos </h2>
-      Press <i class="material-icons">&#xE39D;</i> to add a photo from your Gallery<br>
-      TIP: you can enable profile pics in Settings<br>
-      <h2 id="a5"> Show hands details </h2>
-      To show it, press <i class="material-icons">&#xE5D3;</i> and then "Hands details"<br>
-      <h2 id="a5b"> History </h2>
-      Here you will see your latest score and you can share them by simply touch on it <br>
-      <h2 id="a6"> Settings </h2>
-      You can set up the app:
-      <br><b>Set the end score</b>
-		  <br>
-      <br><b>Show images in the app</b>
-			<br>
-            <br><b>Keep the screen on</b>
-			<br>
-            <br><b>Theme</b><br>
-            You can use a light or dark Theme<br>
-            You can also set to change it automatically (based on time and location) or follow system settings
-			<br>
-            <br><b>Share app</b>
-			<br>
-            <br><b>Vote app</b>
-			<br>
-            <br><b>Version number</b>
-			<br>
+      <h1>User guide</h1>
+      <p>This is the user guide of Points Burraco. You will discover all app functions but you can also have a refresh on how to play this game</p>
+      <p class="text_light">This guide is only available in English and Italian. If you are able to translate this guide or the app in your language, contact me at <a href="mailto:marco97pa@gmail.com?subject=Points%20Buraco%20Translation">marco97pa@gmail.com</a>. I will give you a <b>free</b> upgrade to the PRO version</p>
+
+      <h2>Contents</h2>
+      <ul class="toc">
+        <li><a href="#play"> How to play Buraco </a>
+            <ul>
+              <li><a href="#deal"> Dealing </a>
+              <li><a href="#flow"> Game play </a>
+              <li><a href="#jokers"> Wildcards </a>
+              <li><a href="#dead"> The pot </a>
+              <li><a href="#bat"> Close </a>
+              <li><a href="#score"> Value of the play </a>
+              <li><a href="#end"> End </a>
+            </ul>
+        </li>
+        <li><a href="#modes"> Modes of the app </a>
+        <li><a href="#points"> Mark points </a>
+        <li><a href="#names"> Names </a>
+        <li><a href="#photos"> Photos </a>
+        <li><a href="#share"> Share results on social networks  </a>
+        <li><a href="#details"> Hands detail </a>
+        <li><a href="#history"> History </a>
+        <li><a href="#join"> Join a match or invite someone </a>
+        <li><a href="#upgrade"> In app purchase </a>
+        <li><a href="#settings"> Settings </a>
+      </ul>
+      <h2 id="play">How to play Buraco</h2>
+      <p><strong>Buraco</strong> is a card game for 2 players or pairs. The object is to create <strong>flushes of the same suit</strong> or groups of <strong>3 or more of the same cards</strong> to get more points than your opponents.</p>
+      <p>The game is very popular in Italy and in Brazil with its different methods, but the most used is the Open Dirty mode</p>
+      <p>It’s played with 2 French decks with wildcards. The games can be played at 2005 or 3000 points per game.</p>
+      <p>This guide is based on the Open Dirty mode</p>
+
+      <h3 id="deal">Dealing</h3>
+      <p>11 cards are dealt to each player and two groups of 11 cards each are left aside, which are called “stock”. The other cards will become the deck from where the players pick up cards.</p>
+
+      <h3 id="flow">Game play</h3>
+      <p>The first player must take one card from the deck, and try to make combinations to place them on the playing area (minimum 3 cards). One can put down as many combinations as desired.</p>
+      <p>When finishing, the player must mandatorily throw one card of his/her hand and lie it down faced-up in the center of the table (pile).</p>
+      <p>At the beginning of their turn, each player has the option to take one card from the deck or stay with all the acculmulated cards in the pile to make the combinations (It’s compulsory to take them all from the deck).</p>
+      <p>As well as making new combinations, you also must incorporate cards into the combinations you already have in play.</p>
+     
+      <h3 id="jokers">Wildcards</h3>
+      <p>The <strong>twos and jokers</strong> have the function of wildcards and can be used in any combination.</p>
+      <p>In a combination there can only be one wildcard. There can be 2 twos only if one of them has the function of a wildcard and the other its normal value.</p>
+      <p>It is possible to replace a joker at stake for the correspondending card. In that case, the joker will be moved in the sequence having another value according to the following conditions:</p>
+      <ul>
+        <li>If the 2 functioning as a joker has the same suit of the combination and it can replace the 2, it will not function as a joker anymore to take the place of the 2.</li>
+        <li>If it is not possible, it will keep on functioning as a joker at the right end of the sequence (where the highest cards are placed).</li>
+        <li>If it is not possible, it will keep on functioning as a joker at the left end (with the lowest cards).</li>
+        <li>If the sequence is completed (from ace to ace), it is not possible to replace the joker.</li>
+      </ul>
+
+      <h3 id="dead">The pot</h3>
+      <p>At one side of the table, two piles with 11 cards each are reserved, they are called “stock”. When one of the players has no cards, he/she catches one of the piles of the stock. Each partner can only use one of the stocks in a game.</p>
+      <p>When the cards of the deck finish, one of the piles of the “stock”, if there are any, will replace the deck.</p>
+
+      <h3 id="can">Canastas</h3>
+      <p>A <strong>canasta</strong> is formed when a combination of 7 or more cards is made.</p>
+      <p>Depending on how they are formed, there are different types of canastas:</p>
+      <ul>
+        <li><strong>Dirty run:</strong> It is formed with the help of a joker.</li>
+        <li><strong>Clear run:</strong> It is formed with no jokers.</li>
+        <li><strong>Semi-clean run:</strong> It is a combination of 8 cards with the help of a joker</li>
+      </ul>
+      <p class="text_light">Note: a dirty run can become a clear run when the 2 used as a joker can be moved to the position of the 2. If this is not possible (for example, if a combination has a joker), it can never be a natural canasta.</p>
+
+      <h3 id="bat">Close</h3>
+      <p>A player “closes” when he/she has no more cards in his/her hand after catching the stock. To be able to go out and end the game, it is necessary to dispose of one card on the pile.</p>
+
+      <h3 id="score">Value of the plays</h3>
+      <p>The points are scored the following way:</p>
+      <ul>
+        <li><strong>3 to 7</strong>: 5 points</li>
+        <li><strong>2 (joker)</strong>: 20 points</li>
+        <li><strong>8 to king</strong>: 10 points</li>
+        <li><strong>Ace</strong>: 15 points</li>
+        <li><strong>Joker</strong>: 30 points</li>
+        <li><strong>Final closing</strong>: 100 points</li>
+        <li><strong>Dirty run</strong>: 100 points</li>
+        <li><strong>Clear run</strong>: 200 points</li>
+        <li><strong>Semi-clean run</strong>: 150 points</li>
+      </ul>
+      <p>Also, not picking up the dead card 100 points are taken. The points of the cards that are left in your hand are also taken away.</p>
+
+      <h3 id="end">End</h3>
+      <p>The game ends when a player or pair gets the amount of points necessary to win (usually 2005 or 3000 points)</p>
+
+
+      <h2 id="modes"> Modes of the app </h2>
+	    <p> From the side menu <i class="material-icons">&#xE5D2;</i>, you can choose one of the different modes according to the number of players.<br>
+      <br>There are 2, 3 or 4 players mode.
+      </p>
+      
+
+      <h2 id="points"> Mark points </h2>
+      <p>You can insert a value by pressing on a field. Doesn't matter the order you fill the fields: you can proceed your own way. A blank field will be considered as zero</p>
+      Fields can vary according to the input method chosen, defaults are:
+      <ul>
+        <li><b>Clean run</b>: input the number of Clean runs, the score will be calculated by the app</li>
+        <li><b>Dirty run</b>: input the number of Dirty runs, the score will be calculated by the app</li>
+        <li><b>Semi clean run</b>: input the number of Semi clean runs, the score will be calculated by the app</li>
+        <li><b>Table points</b>: points of the cards of the player on the table</li>
+        <li><b>Points in hand</b>: points of the cards that are left in your hand that are taken away</li>
+        <li><b>Closes</b>: choose it if the player closed the game</li>
+        <li><b>No pots</b>: choose it if the player didn't pick up the dead cards</li>
+      </ul>
+      <p>After inserting the values, press the circular button <i class="material-icons">&#xE148;</i>: final scores will be calculated by the app.
+      When a player wins, the app will alert you.
+      By default the game ends when a player reaches 2005 points, but you can change this behaviour in <a href="#settings"> Settings </a></p>
+      
+
+      <h2 id="names"> Names </h2>
+      <p>To change player's (or pair's) names touch the name, for example "Player 1".
+      A dialog will be shown to insert the new name </p>
+      <p>To restore default names, long press on the player's image until the menu is shown and then choose "Restore name"
+      or instead you can open the menu <i class="material-icons">&#xE5D3;</i> and choose "Restore default players" to restore all</p>
+      
+      
+      <h2 id="photos"> Photos </h2>
+      <p>To change player's (or pair's) profile pics touch <i class="material-icons">add_a_photo</i> and then choose a photo from your Gallery. You can even rotate and resize the photo in the app </p>
+      <p>To restore default photos, long press on the player's image until the menu is shown and then choose "Restore image"
+      or instead you can open the menu <i class="material-icons">&#xE5D3;</i> and choose "Restore default players" to restore them all</p>
+      <p class="text_light">NOTE: you can disable the photo feature in Settings</p>  
+    
+
+      <h2 id="share"> Share results on social networks</h2>
+      <p>To share results of your matches with your friends on Facebook, Whatsapp, Instagram or other apps
+      just touch <i class="material-icons">&#xE80D;</i> </p>
+      <p>A share window will be shown and you can change the background swiping to left or right. Once you are happy with the result, you can share it as a Facebook story, Instagram story, Whatsapp or using another app</p>
+      
+      <h2 id="details"> Hands detail </h2>
+      <p>To show an hands' summary (similar to what you usually write on paper), touch <i class="material-icons">receipt</i> on the top right corner</p>
+      <p>It will be also displayed at the end of a match/p>
+      
+      
+      <h2 id="history"> Matches' history </h2>
+      <p> From the side menu <i class="material-icons">&#xE5D2;</i>, you can choose History to show the matches' history</p>
+      <p>Tapping on a single match, you can see more details, share or delete it</p>
+      
+      <h2 id="join"> Join a match or invite someone </h2>
+      <p>You can invite nearby players to join your match, so they can see the score on their devices
+      The connection with nearby devices (within 10 metres or 33ft) happens automatically, the app will use a combination of WiFi e Bluetooth to dialog with nearby devices without consuming your data plan</p>
+      
+      <h3> Invite someone to play</h3>
+      <p>In any of the play modes open the menu <i class="material-icons">&#xE5D3;</i> and choose "Host this match" to consent others to join</p>
+      <p class="text_light">This function is exclusive to PRO users</p>
+
+      <h3>Join an existing match</h3>
+      <p>From the side menu <i class="material-icons">&#xE5D2;</i>, you can choose Join a match: your device will start searching for nearby matches to join</p>
+      
+      <h3>Connection</h3>
+      <p>When the master and the host are ready, each device will connect itself in a couple of seconds</p>
+      <p>You can connect even more than two devices</p>
+      <p>If after 60 seconds the connection fails, you should close the device on each device and try again. If the problem persists you should also restart your devices. In some rare conditions certain combinations of devices, protocols or network conditions can prevent the connection between the devices to work properly</p>
+
+      <h2 id="upgrade">In app purchase</h2>
+      <p>To unlock all the features, remove ads and support development it is possibile to make a single in app purchase. More informations about functionalities and price are available in the according section of the side menu <i class="material-icons">&#xE5D2;</i></p>
+
+      <h2 id="settings"> Settings </h2>
+      <p>To open Settings, choose the according option from the side menu <i class="material-icons">&#xE5D2;</i></p>
+      There are many options:
+
+      <h4>Set win point</h4>
+      <p>Set the points needed to consider a game ended. Default is 2005.</p>
+      
+			<h4>Input method</h4>
+      <p>Choose your preferred input method between:</p>
+      <ul>
+        <li><b>Complete (default)</b>: Suitable for newcomers, but not the fastest way. Input points in a detailed form, with clean runs, semi-clean runs and dirty runs. You can even use only part of all the fields.</li>
+        <li><b>Smart</b>: Only two fields: base points and table points. Base points are the sum of the runs with the closing, subtracting points in hand (calculated by the user). Table points are the points of cards on the table.</li>
+        <li><b>Simplest</b>: Input points of a single match directly. Only a field is available to input the sum of the points of a player. Suggested for experienced players</li>
+      </ul>
+
+      <h4>Theme</h4>
+      <p> Choose your favourite app theme</p>
+
+      <h4>Keep screen on</h4>
+      <p>Read the score without any hassle. Could drain battery faster</p>
+      
+      <h4>Images</h4>
+			<p>Enable or disable player profile images</p>
+
+      <h4>Sounds</h4>
+      <p>If enabled, the app will play a sound when someone wins</p>
+      
+      <h4>Notifications</h4>
+			<p>If you leave the app without ending the game, you will receive a notification to continue the game</p>
+      
+      <h4>Ads</h4>
+      <p>You can choose your ads settings. You can even remove them with an in app purchase</p>
+
+      <h4>App version</h4>
+      <p>Shows the version number of the app</p>
+      
+      <br>
     </main>
 	
 	<main id="recents">
@@ -161,127 +306,7 @@
   <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-remote-config.js"></script>
 
-  <script>
+  <script type="text/javascript" src="js/guide.js"></script>
 
-      //DARK THEME
-      if(getAllUrlParams().dark) {
-       document.getElementById('stylesheet').href='css/bottom-nav-dark.css';
-      }
-      //JUMP to BUG section
-      if(getAllUrlParams().bug) {
-       show('bug');
-      }
-
-       var nascita = moment("19971124", "YYYYMMDD");
-       var anni = moment().diff(nascita, 'years', true);
-       anni = parseInt(anni);
-       document.getElementById("anni").innerHTML = anni;
-
-       var now = moment().format("YYYY");
-       document.getElementById("year").innerHTML = now;
-
-       function getAndroidVersion(ua) {
-           ua = (ua || navigator.userAgent).toLowerCase();
-           var match = ua.match(/android\s([0-9\.]*)/);
-           return match ? match[1] : false;
-       };
-       if(getAndroidVersion()!=false){
-          document.getElementById("android").value = "Android "+getAndroidVersion();
-       }
-
-       ///URL EXTRACTOR
-       function getAllUrlParams(url) {
-
-        // get query string from url (optional) or window
-        var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
-
-        // we'll store the parameters here
-        var obj = {};
-
-        // if query string exists
-        if (queryString) {
-
-          // stuff after # is not part of query string, so get rid of it
-          queryString = queryString.split('#')[0];
-
-          // split our query string into its component parts
-          var arr = queryString.split('&');
-
-          for (var i = 0; i < arr.length; i++) {
-            // separate the keys and the values
-            var a = arr[i].split('=');
-
-            // set parameter name and value (use 'true' if empty)
-            var paramName = a[0];
-            var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
-
-            // (optional) keep case consistent
-            paramName = paramName.toLowerCase();
-            if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
-
-            // if the paramName ends with square brackets, e.g. colors[] or colors[2]
-            if (paramName.match(/\[(\d+)?\]$/)) {
-
-              // create key if it doesn't exist
-              var key = paramName.replace(/\[(\d+)?\]/, '');
-              if (!obj[key]) obj[key] = [];
-
-              // if it's an indexed array e.g. colors[2]
-              if (paramName.match(/\[\d+\]$/)) {
-                // get the index value and add the entry at the appropriate position
-                var index = /\[(\d+)\]/.exec(paramName)[1];
-                obj[key][index] = paramValue;
-              } else {
-                // otherwise add the value to the end of the array
-                obj[key].push(paramValue);
-              }
-            } else {
-              // we're dealing with a string
-              if (!obj[paramName]) {
-                // if it doesn't exist, create property
-                obj[paramName] = paramValue;
-              } else if (obj[paramName] && typeof obj[paramName] === 'string'){
-                // if property does exist and it's a string, convert it to an array
-                obj[paramName] = [obj[paramName]];
-                obj[paramName].push(paramValue);
-              } else {
-                // otherwise add the property
-                obj[paramName].push(paramValue);
-              }
-            }
-          }
-        }
-
-        return obj;
-        }
-
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-          apiKey: "AIzaSyADfNMKUfLBuHi9DQABVBaQX9Oki7BKDfg",
-          authDomain: "points-buraco.firebaseapp.com",
-          databaseURL: "https://points-buraco.firebaseio.com",
-          projectId: "points-buraco",
-          storageBucket: "points-buraco.appspot.com",
-          messagingSenderId: "9826407298",
-          appId: "1:9826407298:web:1ec1f6104e03bdb078359b",
-          measurementId: "G-HTW51V6DVD"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-
-        const remoteConfig = firebase.remoteConfig();
-        remoteConfig.defaultConfig = ({
-          'downloads': 10000,
-        });
-        remoteConfig.fetchAndActivate()
-        .then(activated => {
-          console.log("Activated?", activated);
-          document.getElementById("downloads").innerHTML = remoteConfig.getNumber('downloads');
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-       </script>
 </body>
 </html>

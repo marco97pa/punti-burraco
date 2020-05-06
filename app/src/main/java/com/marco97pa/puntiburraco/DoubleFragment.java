@@ -2,9 +2,9 @@ package com.marco97pa.puntiburraco;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+
 import androidx.appcompat.app.AlertDialog;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.Manifest;
@@ -14,7 +14,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -28,11 +27,9 @@ import android.preference.PreferenceManager;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -42,6 +39,7 @@ import androidx.appcompat.widget.PopupMenu;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +64,6 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -93,7 +90,7 @@ public class DoubleFragment extends Fragment {
      *      int bp2 = Clean run player 2 = value of BP2 EditText
      */
 
-    public static final String LOG_TAG = "2PlayersFragment";
+    public static final String TAG = "2PlayersFragment";
     int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
@@ -118,6 +115,7 @@ public class DoubleFragment extends Fragment {
     private final static int STORAGE_PERMISSION_PICTURE_1 = 13;
     private final static int STORAGE_PERMISSION_PICTURE_2 = 23;
     private final static int STORAGE_PERMISSION_SCREENSHOT = 30;
+    private final static int LOCATION_PERMISSION_NEARBY = 40;
     //Old totals are variable used to revert point changes
     public int old_tot1;
     public int old_tot2;
@@ -126,10 +124,12 @@ public class DoubleFragment extends Fragment {
     boolean bypass = false;
     MediaPlayer sound;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private NearbyAdvertise advertise;
 
     public DoubleFragment() {
         // Empty constructor required for fragment subclasses
     }
+
 
     /**
      * ONCREATEVIEW
@@ -169,8 +169,8 @@ public class DoubleFragment extends Fragment {
 
         mAdView = rootView.findViewById(R.id.adView);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
-        if(adsEnabled) {
+        Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
+        if(!isPro) {
             MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
             showAds();
         }
@@ -254,6 +254,11 @@ public class DoubleFragment extends Fragment {
                             case R.id.removeText:
                                 textNome1.setText(getString(R.string.gioc_1));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file1 = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
@@ -319,6 +324,11 @@ public class DoubleFragment extends Fragment {
                             case R.id.removeText:
                                 textNome2.setText(getString(R.string.gioc_2));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file2 = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
@@ -337,56 +347,13 @@ public class DoubleFragment extends Fragment {
 
         });
 
-        /**
-         * RECOVER IMAGES OF LAST GAME
-         * Images are showed only if user has choose it in settings
-         */
-        //On lowRamDevice images are disabled par default
-        boolean isLowRamDevice = false;
-        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            isLowRamDevice = am.isLowRamDevice();
-            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
-        }
 
-        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
-        if(isImgActivated) {
-            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
-            Bitmap bitmap1 = null, bitmap2 = null;
-            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                try {
-                    File bmp1 = new File(getActivity().getFilesDir() + "/img_m2_1.jpg");
-                    ImageDecoder.Source source1 = ImageDecoder.createSource(bmp1);
-                    bitmap1 = ImageDecoder.decodeBitmap(source1);
-                } catch (IOException e) { e.printStackTrace(); }
-                try {
-                    File bmp2 = new File(getActivity().getFilesDir() + "/img_m2_2.jpg");
-                    ImageDecoder.Source source2 = ImageDecoder.createSource(bmp2);
-                    bitmap2 = ImageDecoder.decodeBitmap(source2);
-                } catch (IOException e) { e.printStackTrace(); }
-            }
-            else{
-                bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/img_m2_1.jpg");
-                bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m2_2.jpg");
-            }
-            //Set Bitmap to Image if not null
-            if(bitmap1 != null) {
-                IMG1.setImageBitmap(bitmap1);
-            }
-            if(bitmap2 != null) {
-                IMG2.setImageBitmap(bitmap2);
-            }
-        }
-        else{
-            IMG1.setVisibility(View.GONE);
-            IMG2.setVisibility(View.GONE);
-        }
         //improves usability in Android N with MultiWindow and avoids bugs
         if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (getActivity().isInMultiWindowMode()) {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
-                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
+                Log.d(TAG, "images disabled: isInMultiWindowMode = true");
             }
         }
 
@@ -443,6 +410,19 @@ public class DoubleFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        restoreImages();
+        restoreEditedViews();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveEditedViews();
+    }
+
     protected void dialogGioc1() {
 
         // get prompts.xml view
@@ -456,8 +436,13 @@ public class DoubleFragment extends Fragment {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        textNome1.setText(editText.getText());
+                        textNome1.setText(editText.getText().toString());
                         onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.ko),
@@ -484,8 +469,13 @@ public class DoubleFragment extends Fragment {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        textNome2.setText(editText.getText());
+                        textNome2.setText(editText.getText().toString());
                         onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.ko),
@@ -549,10 +539,91 @@ public class DoubleFragment extends Fragment {
                 showDettPuntParz();
                 return true;
 
+            case R.id.action_advertise:
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
+                if(isPro) {
+                    //Start Advertising using Nearby library
+                    //First ask the permission in Android 6.0+
+                    Log.d(TAG,"Option selected: Advertise");
+                    if(advertise == null || !advertise.isRunning()){
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            requestPermissions(
+                                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                    LOCATION_PERMISSION_NEARBY);
+                        }
+                        else {
+                            advertise = new NearbyAdvertise(getContext(), getMatchState());
+                            advertise.start();
+                        }
+                    }
+                    else{
+                        advertise.stop();
+                        item.setTitle(getString(R.string.join));
+                    }
+                }
+                else {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+                    builder .setTitle(getString(R.string.join))
+                            .setMessage(getString(R.string.only_for_pro))
+                            .setIcon(R.drawable.ic_warning_24dp)
+                            .setPositiveButton(getString(R.string.upgrade), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Launches Upgrade Activity
+                                    Intent myIntent = new Intent(getActivity(), UpgradeActivity.class);
+                                    startActivity(myIntent);
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.ko), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);}
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem item = menu.findItem(R.id.action_advertise);
+        if(advertise != null && advertise.isRunning()) {
+            item.setTitle(getString(R.string.stop));
+        }
+    }
+
+
+    private void saveEditedViews() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        //Here we handle saving all inserted values to prevent losing them in a configuration change
+        editor.putString("BP1",BP1.getText().toString());
+        editor.putString("BI1",BI1.getText().toString());
+        editor.putString("BS1",BS1.getText().toString());
+        editor.putString("PN1",PN1.getText().toString());
+        editor.putString("PM1",PM1.getText().toString());
+        editor.putString("BP2",BP2.getText().toString());
+        editor.putString("BI2",BI2.getText().toString());
+        editor.putString("BS2",BS2.getText().toString());
+        editor.putString("PN2",PN2.getText().toString());
+        editor.putString("PM2",PM2.getText().toString());
+        editor.putString("PB1",PB1.getText().toString());
+        editor.putString("PB2",PB2.getText().toString());
+        editor.putBoolean("CH1",CH1.isChecked());
+        editor.putBoolean("CH2",CH2.isChecked());
+        editor.putBoolean("PZ1",PZ1.isChecked());
+        editor.putBoolean("PZ2",PZ2.isChecked());
+
+        editor.apply();
+    }
 
     /**
      * RECOVER SCORES OF LAST GAME
@@ -571,6 +642,75 @@ public class DoubleFragment extends Fragment {
         punti2.setText(Integer.toString(tot2));
         textNome1.setText(sharedPref.getString("sq1",sq1Default));
         textNome2.setText(sharedPref.getString("sq2",sq2Default));
+    }
+
+    /**
+     * RECOVER IMAGES OF LAST GAME
+     *  Images are showed only if user has choose it in settings
+     */
+    public void restoreImages(){
+        //On lowRamDevice images are disabled par default
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        boolean isLowRamDevice = false;
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            isLowRamDevice = am.isLowRamDevice();
+            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+        }
+
+        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
+        if(isImgActivated) {
+            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
+            Bitmap bitmap1 = null, bitmap2 = null;
+            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                try {
+                    File bmp1 = new File(getActivity().getFilesDir() + "/img_m2_1.jpg");
+                    ImageDecoder.Source source1 = ImageDecoder.createSource(bmp1);
+                    bitmap1 = ImageDecoder.decodeBitmap(source1);
+                } catch (IOException e) { e.printStackTrace(); }
+                try {
+                    File bmp2 = new File(getActivity().getFilesDir() + "/img_m2_2.jpg");
+                    ImageDecoder.Source source2 = ImageDecoder.createSource(bmp2);
+                    bitmap2 = ImageDecoder.decodeBitmap(source2);
+                } catch (IOException e) { e.printStackTrace(); }
+            }
+            else{
+                bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/img_m2_1.jpg");
+                bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m2_2.jpg");
+            }
+            //Set Bitmap to Image if not null
+            if(bitmap1 != null) {
+                IMG1.setImageBitmap(bitmap1);
+            }
+            if(bitmap2 != null) {
+                IMG2.setImageBitmap(bitmap2);
+            }
+        }
+        else{
+            IMG1.setVisibility(View.GONE);
+            IMG2.setVisibility(View.GONE);
+        }
+    }
+
+    private void restoreEditedViews(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        //Restore EditTexts and Checkboxes state after a configuration change
+        BP1.setText(sharedPref.getString("BP1",""));
+        BI1.setText(sharedPref.getString("BI1",""));
+        BS1.setText(sharedPref.getString("BS1",""));
+        PN1.setText(sharedPref.getString("PN1",""));
+        PM1.setText(sharedPref.getString("PM1",""));
+        BP2.setText(sharedPref.getString("BP2",""));
+        BI2.setText(sharedPref.getString("BI2",""));
+        BS2.setText(sharedPref.getString("BS2",""));
+        PN2.setText(sharedPref.getString("PN2",""));
+        PM2.setText(sharedPref.getString("PM2",""));
+        PB1.setText(sharedPref.getString("PB1",""));
+        PB2.setText(sharedPref.getString("PB2",""));
+        CH1.setChecked(sharedPref.getBoolean("CH1", false));
+        CH2.setChecked(sharedPref.getBoolean("CH2", false));
+        PZ1.setChecked(sharedPref.getBoolean("PZ1", false));
+        PZ2.setChecked(sharedPref.getBoolean("PZ2", false));
     }
 
     public void openInsert(){
@@ -597,6 +737,11 @@ public class DoubleFragment extends Fragment {
         file2.delete();
         IMG1.setImageResource(R.drawable.circle_placeholder);
         IMG2.setImageResource(R.drawable.circle_placeholder);
+        //advertise
+        if(advertise != null && advertise.isRunning()) {
+            Log.d(TAG, "Advertising: " + getMatchState());
+            advertise.update(getMatchState());
+        }
     }
 
     /**
@@ -627,6 +772,7 @@ public class DoubleFragment extends Fragment {
         win=false;
         //save all
         onSave();
+        saveEditedViews();
         //reset dpp (hands detail string)
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -872,6 +1018,12 @@ public class DoubleFragment extends Fragment {
                 }
                 //save the new score
                 onSave();
+                saveEditedViews();
+                //advertise
+                if(advertise != null && advertise.isRunning()) {
+                    Log.d(TAG, "Advertising: " + getMatchState());
+                    advertise.update(getMatchState());
+                }
             }
         }
         catch (NullPointerException e){
@@ -891,6 +1043,11 @@ public class DoubleFragment extends Fragment {
             punti1.setText(Integer.toString(tot1));
             punti2.setText(Integer.toString(tot2));
             onSave();
+            //advertise
+            if(advertise != null && advertise.isRunning()) {
+                Log.d(TAG, "Advertising: " + getMatchState());
+                advertise.update(getMatchState());
+            }
         }
     }
 
@@ -923,6 +1080,17 @@ public class DoubleFragment extends Fragment {
             ((MainActivity)getActivity()).setMenuAlternative(true);
             editor.apply();
         }
+    }
+
+    private String getMatchState(){
+        String num_players = "2";
+        String name_player1 = textNome1.getText().toString();
+        String name_player2 = textNome2.getText().toString();
+        String points_player1 = Integer.toString(tot1);
+        String points_player2 = Integer.toString(tot2);
+        String out = num_players + ";" + name_player1 + ";" + name_player2 + ";" + " " + ";" +
+                points_player1 +  ";" + points_player2 + ";" + " " + ";";
+        return out;
     }
 
     //ASK PERMISSION Android 6.0+ (Marshmallow)
@@ -975,6 +1143,24 @@ public class DoubleFragment extends Fragment {
 
                     // permission denied, boo!
                     Toast.makeText(getActivity(), getString(R.string.marshmallow_alert_2), Toast.LENGTH_LONG).show();
+
+                }
+                return;
+            }
+
+            case LOCATION_PERMISSION_NEARBY:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    advertise = new NearbyAdvertise(getContext(), getMatchState());
+                    advertise.start();
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(), getString(R.string.denied_perm_location), Toast.LENGTH_LONG).show();
 
                 }
                 return;
@@ -1056,15 +1242,20 @@ public class DoubleFragment extends Fragment {
      * SAVE MATCH TO DATABASE
      * If one of the players wins, the score of the match will be saved in History ScoreDB
      */
-    public void saveScoreToDB(String player1,String player2,int point1,int point2) {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
-        String date = dateformat.format(c.getTime());
+    public void saveScoreToDB(final String player1, final String player2, final int point1, final int point2) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable(){
+            public void run(){
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
+                String date = dateformat.format(c.getTime());
 
-        ScoreDB db = new ScoreDB(getActivity());
-        db.open();
-        long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
-        db.close();
+                ScoreDB db = new ScoreDB(getActivity());
+                db.open();
+                long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
+                db.close();
+            }
+        });
     }
 
     private void saveScoreToFirebase(String player1, String player2, int score1, int score2){
@@ -1170,6 +1361,7 @@ public class DoubleFragment extends Fragment {
         return data;
     }
 
+
     /**
      * ON ACTIVITY RESULT
      * Sets images choosen by user and manages its crop
@@ -1179,13 +1371,21 @@ public class DoubleFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if ((requestCode == REQUEST_PICTURE_1) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                     .withAspectRatio(1, 1)
                     .withMaxResultSize(1080, 1080)
                     .getIntent(getActivity()
@@ -1204,13 +1404,21 @@ public class DoubleFragment extends Fragment {
 
 
         if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                             .withAspectRatio(1, 1)
                             .withMaxResultSize(1080, 1080)
                             .getIntent(getActivity()
@@ -1229,25 +1437,5 @@ public class DoubleFragment extends Fragment {
 
     }
 
-    /**
-     * SAVE IMAGE
-     * Saves profile images in application data path.
-     * It is invoked when setting a new profile image
-     */
-    public void saveImage(File file, File croppedImageFile){
-        try {
-            FileInputStream inStream = new FileInputStream(croppedImageFile);
-            FileOutputStream outStream = new FileOutputStream(file);
-            FileChannel inChannel = inStream.getChannel();
-            FileChannel outChannel = outStream.getChannel();
-            inChannel.transferTo(0, inChannel.size(), outChannel);
-            inStream.close();
-            outStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

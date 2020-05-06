@@ -26,6 +26,10 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +52,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     int taps = 0;
     FragmentManager fragmentManager;
-    public static final String LOG_TAG = "SettingsFragment";
+    FirebaseRemoteConfig mFirebaseRemoteConfig;
+    public static final String TAG = "SettingsFragment";
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String s) {
@@ -68,12 +73,36 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             boolean isLowRamDevice = am.isLowRamDevice();
             img.setDefaultValue(!isLowRamDevice);
-            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
         }
         else{
             img.setDefaultValue(true);
         }
 
+        //Firebase Remote Config initialization
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(3600)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+        mFirebaseRemoteConfig.fetchAndActivate()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Boolean>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Boolean> task) {
+                        if (task.isSuccessful()) {
+                            boolean updated = task.getResult();
+                            Log.d(TAG, "Fetch and activate succeeded");
+                            Log.d(TAG, "Config params updated: " + updated);
+
+                        } else {
+                            Log.d(TAG, "Fetch failed");
+                        }
+                        //Sets visibility of nav_rate
+                        Preference nav_rate = findPreference("nav_rate");
+                        nav_rate.setVisible(!mFirebaseRemoteConfig.getBoolean("nav_menu_feedback"));
+                    }
+                });
 
         //Sets sound and volume level
         final SwitchPreference sound = (SwitchPreference) findPreference("sound");
@@ -110,30 +139,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }
         });
 
-        //Sets intent to share app with friends
-        Preference share_p = findPreference("share");
-        share_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-            public boolean onPreferenceClick(Preference preference) {
-                String testo = getString(R.string.share_message)+ " " + getString(R.string.link); //this is a Dynamic Link
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                // Add data to the intent, the receiving app will decide
-                // what to do with it.
-                share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                share.putExtra(Intent.EXTRA_TEXT, testo);
-                startActivity(Intent.createChooser(share, getString(R.string.share_hint)));
-                return true;
-            }
-        });
-
         //Sets intent to open input method chooser activity
         Preference input_method = findPreference("input_method");
         input_method.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference preference) {
+                InputMethodChooser fragment = new InputMethodChooser();
+                Bundle arguments = new Bundle();
+                arguments.putBoolean("intro", false);
+                fragment.setArguments(arguments);
                 fragmentManager.beginTransaction()
-                        .replace(android.R.id.content, new InputMethodChooser())
+                        .replace(android.R.id.content, fragment)
                         .addToBackStack(null)
                         .commit();
                 return true;

@@ -40,6 +40,7 @@ import androidx.appcompat.widget.PopupMenu;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,8 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -78,7 +81,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
  */
 
 public class QuadFragment extends Fragment {
-    public static final String LOG_TAG = "4PlayersFragment";
+    public static final String TAG = "4PlayersFragment";
     int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
@@ -101,6 +104,7 @@ public class QuadFragment extends Fragment {
     private final static int STORAGE_PERMISSION_PICTURE_1 = 13;
     private final static int STORAGE_PERMISSION_PICTURE_2 = 23;
     private final static int STORAGE_PERMISSION_SCREENSHOT = 30;
+    private final static int LOCATION_PERMISSION_NEARBY = 40;
 
     public int old_tot1;
     public int old_tot2;
@@ -109,7 +113,7 @@ public class QuadFragment extends Fragment {
     boolean bypass = false;
     MediaPlayer sound;
     private FirebaseAnalytics mFirebaseAnalytics;
-
+    private NearbyAdvertise advertise;
 
     public QuadFragment() {
         // Empty constructor required for fragment subclasses
@@ -148,8 +152,8 @@ public class QuadFragment extends Fragment {
 
         mAdView = rootView.findViewById(R.id.adView);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
-        if(adsEnabled) {
+        Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
+        if(!isPro) {
             MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
             showAds();
         }
@@ -226,6 +230,11 @@ public class QuadFragment extends Fragment {
                             case R.id.removeText:
                                 textNome1.setText(getString(R.string.n1));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file1 = new File(getActivity().getFilesDir(), "img_m4_1.jpg");
@@ -293,6 +302,11 @@ public class QuadFragment extends Fragment {
                             case R.id.removeText:
                                 textNome2.setText(getString(R.string.n2));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file2 = new File(getActivity().getFilesDir(), "img_m4_2.jpg");
@@ -311,57 +325,14 @@ public class QuadFragment extends Fragment {
 
         });
 
-
-        //SETUP IMMAGINI - Recupera immagini dalla memoria interna solo se attivate
-        //On lowRamDevice images are disabled par default
-        boolean isLowRamDevice = false;
-        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            isLowRamDevice = am.isLowRamDevice();
-            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
-        }
-
-        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
-            if(isImgActivated) {
-                //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
-                Bitmap bitmap1 = null, bitmap2 = null;
-                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                    try {
-                        File bmp1 = new File(getActivity().getFilesDir() + "/img_m4_1.jpg");
-                        ImageDecoder.Source source1 = ImageDecoder.createSource(bmp1);
-                        bitmap1 = ImageDecoder.decodeBitmap(source1);
-                    } catch (IOException e) { e.printStackTrace(); }
-                    try {
-                        File bmp2 = new File(getActivity().getFilesDir() + "/img_m4_2.jpg");
-                        ImageDecoder.Source source2 = ImageDecoder.createSource(bmp2);
-                        bitmap2 = ImageDecoder.decodeBitmap(source2);
-                    } catch (IOException e) { e.printStackTrace(); }
-                }
-                else{
-                    bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/img_m4_1.jpg");
-                    bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m4_2.jpg");
-                }
-                //Set Bitmap to Image if not null
-                if(bitmap1 != null) {
-                    IMG1.setImageBitmap(bitmap1);
-                }
-                if(bitmap2 != null) {
-                    IMG2.setImageBitmap(bitmap2);
-                }
-            }
-            else{
-                IMG1.setVisibility(View.GONE);
-                IMG2.setVisibility(View.GONE);
-            }
         //improves usability in Android N with MultiWindow and avoids bugs
         if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (getActivity().isInMultiWindowMode()) {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
-                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
+                Log.d(TAG, "images disabled: isInMultiWindowMode = true");
             }
         }
-
 
         /**
          * PUNTI DIRETTI e PUNTI IN MANO NASCOSTI
@@ -416,6 +387,19 @@ public class QuadFragment extends Fragment {
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        restoreImages();
+        restoreEditedViews();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveEditedViews();
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -452,6 +436,52 @@ public class QuadFragment extends Fragment {
             case R.id.action_dpp:
                 showDettPuntParz();
                 return true;
+            case R.id.action_advertise:
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
+                if(isPro) {
+                    //Start Advertising using Nearby library
+                    //First ask the permission in Android 6.0+
+                    Log.d(TAG, "Option selected: Advertise");
+                    if (advertise == null || !advertise.isRunning()) {
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            requestPermissions(
+                                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                    LOCATION_PERMISSION_NEARBY);
+                        } else {
+                            advertise = new NearbyAdvertise(getContext(), getMatchState());
+                            advertise.start();
+                        }
+                    } else {
+                        advertise.stop();
+                        item.setTitle(getString(R.string.join));
+                    }
+                }
+                else {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+                    builder .setTitle(getString(R.string.join))
+                            .setMessage(getString(R.string.only_for_pro))
+                            .setIcon(R.drawable.ic_warning_24dp)
+                            .setPositiveButton(getString(R.string.upgrade), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Launches Upgrade Activity
+                                    Intent myIntent = new Intent(getActivity(), UpgradeActivity.class);
+                                    startActivity(myIntent);
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.ko), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);}
     }
@@ -469,8 +499,13 @@ public class QuadFragment extends Fragment {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        textNome1.setText(editText.getText());
+                        textNome1.setText(editText.getText().toString());
                         onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.ko),
@@ -498,8 +533,13 @@ public class QuadFragment extends Fragment {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        textNome2.setText(editText.getText());
+                        textNome2.setText(editText.getText().toString());
                         onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.ko),
@@ -527,6 +567,105 @@ public class QuadFragment extends Fragment {
         textNome2.setText(sharedPref.getString("squadra2",sq2Default));
     }
 
+    public void restoreImages(){
+        //SETUP IMMAGINI - Recupera immagini dalla memoria interna solo se attivate
+        //On lowRamDevice images are disabled par default
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        boolean isLowRamDevice = false;
+        ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            isLowRamDevice = am.isLowRamDevice();
+            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+        }
+
+        Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
+        if(isImgActivated) {
+            //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
+            Bitmap bitmap1 = null, bitmap2 = null;
+            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                try {
+                    File bmp1 = new File(getActivity().getFilesDir() + "/img_m4_1.jpg");
+                    ImageDecoder.Source source1 = ImageDecoder.createSource(bmp1);
+                    bitmap1 = ImageDecoder.decodeBitmap(source1);
+                } catch (IOException e) { e.printStackTrace(); }
+                try {
+                    File bmp2 = new File(getActivity().getFilesDir() + "/img_m4_2.jpg");
+                    ImageDecoder.Source source2 = ImageDecoder.createSource(bmp2);
+                    bitmap2 = ImageDecoder.decodeBitmap(source2);
+                } catch (IOException e) { e.printStackTrace(); }
+            }
+            else{
+                bitmap1 = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/img_m4_1.jpg");
+                bitmap2 = BitmapFactory.decodeFile(getActivity().getFilesDir()+"/img_m4_2.jpg");
+            }
+            //Set Bitmap to Image if not null
+            if(bitmap1 != null) {
+                IMG1.setImageBitmap(bitmap1);
+            }
+            if(bitmap2 != null) {
+                IMG2.setImageBitmap(bitmap2);
+            }
+        }
+        else{
+            IMG1.setVisibility(View.GONE);
+            IMG2.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem item = menu.findItem(R.id.action_advertise);
+        if(advertise != null && advertise.isRunning()) {
+            item.setTitle(getString(R.string.stop));
+        }
+    }
+
+
+    private void saveEditedViews() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        //Here we handle saving all inserted values to prevent losing them in a configuration change
+        editor.putString("BP1",BP1.getText().toString());
+        editor.putString("BI1",BI1.getText().toString());
+        editor.putString("BS1",BS1.getText().toString());
+        editor.putString("PN1",PN1.getText().toString());
+        editor.putString("PM1",PM1.getText().toString());
+        editor.putString("BP2",BP2.getText().toString());
+        editor.putString("BI2",BI2.getText().toString());
+        editor.putString("BS2",BS2.getText().toString());
+        editor.putString("PN2",PN2.getText().toString());
+        editor.putString("PM2",PM2.getText().toString());
+        editor.putString("PB1",PB1.getText().toString());
+        editor.putString("PB2",PB2.getText().toString());
+        editor.putBoolean("CH1",CH1.isChecked());
+        editor.putBoolean("CH2",CH2.isChecked());
+        editor.putBoolean("PZ1",PZ1.isChecked());
+        editor.putBoolean("PZ2",PZ2.isChecked());
+
+        editor.apply();
+    }
+
+    private void restoreEditedViews(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        //Restore EditTexts and Checkboxes state after a configuration change
+        BP1.setText(sharedPref.getString("BP1",""));
+        BI1.setText(sharedPref.getString("BI1",""));
+        BS1.setText(sharedPref.getString("BS1",""));
+        PN1.setText(sharedPref.getString("PN1",""));
+        PM1.setText(sharedPref.getString("PM1",""));
+        BP2.setText(sharedPref.getString("BP2",""));
+        BI2.setText(sharedPref.getString("BI2",""));
+        BS2.setText(sharedPref.getString("BS2",""));
+        PN2.setText(sharedPref.getString("PN2",""));
+        PM2.setText(sharedPref.getString("PM2",""));
+        PB1.setText(sharedPref.getString("PB1",""));
+        PB2.setText(sharedPref.getString("PB2",""));
+        CH1.setChecked(sharedPref.getBoolean("CH1", false));
+        CH2.setChecked(sharedPref.getBoolean("CH2", false));
+        PZ1.setChecked(sharedPref.getBoolean("PZ1", false));
+        PZ2.setChecked(sharedPref.getBoolean("PZ2", false));
+    }
 
     //RIPRISTINO NOMI
     public void openNomi(){
@@ -540,6 +679,11 @@ public class QuadFragment extends Fragment {
         file2.delete();
         IMG1.setImageResource(R.drawable.circle_placeholder);
         IMG2.setImageResource(R.drawable.circle_placeholder);
+        //advertise
+        if(advertise != null && advertise.isRunning()) {
+            Log.d(TAG, "Advertising: " + getMatchState());
+            advertise.update(getMatchState());
+        }
     }
     //AVVIA RESET
     public void openReset(){
@@ -566,6 +710,12 @@ public class QuadFragment extends Fragment {
         win=false;
         //salva tutto
         onSave();
+        saveEditedViews();
+        //advertise
+        if(advertise != null && advertise.isRunning()) {
+            Log.d(TAG, "Advertising: " + getMatchState());
+            advertise.update(getMatchState());
+        }
         //reset dpp
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -732,8 +882,13 @@ public class QuadFragment extends Fragment {
             }
             //salva
             onSave();
+            saveEditedViews();
             //salvataggiSeVince
-
+            //advertise
+            if(advertise != null && advertise.isRunning()) {
+                Log.d(TAG, "Advertising: " + getMatchState());
+                advertise.update(getMatchState());
+            }
         }
         }
         catch (NullPointerException e){
@@ -753,7 +908,23 @@ public class QuadFragment extends Fragment {
             punti1.setText(Integer.toString(tot1));
             punti2.setText(Integer.toString(tot2));
             onSave();
+            //advertise
+            if(advertise != null && advertise.isRunning()) {
+                Log.d(TAG, "Advertising: " + getMatchState());
+                advertise.update(getMatchState());
+            }
         }
+    }
+
+    private String getMatchState(){
+        String num_players = "4";
+        String name_player1 = textNome1.getText().toString();
+        String name_player2 = textNome2.getText().toString();
+        String points_player1 = Integer.toString(tot1);
+        String points_player2 = Integer.toString(tot2);
+        String out = num_players + ";" + name_player1 + ";" + name_player2 + ";" + " " + ";" +
+                points_player1 +  ";" + points_player2 + ";" + " " + ";";
+        return out;
     }
 
     //SALVATAGGIO AUTOMATICO
@@ -838,6 +1009,24 @@ public class QuadFragment extends Fragment {
                 return;
             }
 
+            case LOCATION_PERMISSION_NEARBY:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    advertise = new NearbyAdvertise(getContext(), getMatchState());
+                    advertise.start();
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(), getString(R.string.denied_perm_location), Toast.LENGTH_LONG).show();
+
+                }
+                return;
+            }
+
             // other 'case' lines to check for other
             // permissions this app might request
         }
@@ -858,15 +1047,20 @@ public class QuadFragment extends Fragment {
      * SAVE MATCH TO DATABASE
      * If one of the players wins, the score of the match will be saved in History ScoreDB
      */
-    public void saveScoreToDB(String player1,String player2,int point1,int point2) {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
-        String date = dateformat.format(c.getTime());
+    public void saveScoreToDB(final String player1, final String player2, final int point1, final int point2) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable(){
+            public void run(){
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
+            String date = dateformat.format(c.getTime());
 
-        ScoreDB db = new ScoreDB(getActivity());
-        db.open();
-        long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
-        db.close();
+            ScoreDB db = new ScoreDB(getActivity());
+            db.open();
+            long id = db.insertScore(player1, player2, point1, point2, date, generateHandsDetail());
+            db.close();
+            }
+        });
     }
 
     private void saveScoreToFirebase(String player1, String player2, int score1, int score2){
@@ -979,13 +1173,21 @@ public class QuadFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if ((requestCode == REQUEST_PICTURE_1) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m4_1.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m4_1.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                             .withAspectRatio(1, 1)
                             .withMaxResultSize(1080, 1080)
                             .getIntent(getActivity()
@@ -1004,13 +1206,21 @@ public class QuadFragment extends Fragment {
 
 
         if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m4_2.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m4_2.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                             .withAspectRatio(1, 1)
                             .withMaxResultSize(1080, 1080)
                             .getIntent(getActivity()
@@ -1025,22 +1235,6 @@ public class QuadFragment extends Fragment {
 
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
-        }
-    }
-
-    public void saveImage(File file, File croppedImageFile){
-        try {
-            FileInputStream inStream = new FileInputStream(croppedImageFile);
-            FileOutputStream outStream = new FileOutputStream(file);
-            FileChannel inChannel = inStream.getChannel();
-            FileChannel outChannel = outStream.getChannel();
-            inChannel.transferTo(0, inChannel.size(), outChannel);
-            inStream.close();
-            outStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

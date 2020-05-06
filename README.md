@@ -1,7 +1,6 @@
 <img src="https://marco97pa.github.io/punti-burraco/images/icon.png" align="right" width="100px" height="100px"/>
 
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](http://choosealicense.com/licenses/gpl-3.0/)
-[![Downloads](https://img.shields.io/badge/google%20play%20downloads-16.000%2B-brightgreen.svg)](https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco)
 
 # Points Buraco  
 
@@ -19,41 +18,43 @@ An **open-source** Android Burraco scorekeeper with social functions, different 
 
 # Features
 
-- **Game**
-  - 2, 3 and 4 players mode
-  - Set name and profile image of the players
-  - Set the arrive score, when the game ends (default: 2005)
-  - Choose you preferred input method
-  - Ability to pause a game and continue later
-  - Automatically counts the score, based on the number of run
-  - History of your matches
-- **App**
-  - Full Material Design
-  - Share your results on Facebook, Whatsapp, Instagram Stories and others
-  - Use the Night Theme
-  - Keep the screen on
-  - Other personalization options
-- _**Much more...**_
-  - _Points Buraco is actively developed. More features will come!_
+- 2, 3 and 4 players mode
+- Set name and profile image of the players
+- Set the close score, when the game ends (default: 2005)
+- Choose your preferred input method
+- Ability to pause a game and continue later
+- Automatically counts the score, based on the number of run
+- History of your matches
+- Full Material Design
+- Share your results on Facebook, Whatsapp, Instagram and other apps with an integrated "share as stories" editor
+- Invite other people near you to join your matches so anyone can see the game's score on his device
+- Night Theme
+- Keep the screen on
+- Other personalization options
 
-> **Points Buraco** is a FREE app but contains [ads](docs/ads.md)
 
-# History
+> **Points Buraco** is a FREE app but contains [ads](docs/ads.md) and an in app purchase to unlock some extra and non-strictly-necessary features.
 
-I have started writing this app at the age of 16, in 2014. My test device was an old and modded Android 4.0.3 phone.
-I started making this app for personal use. After one year, I released it on the Google Play Store.
-Now, in 2017, after a big rework of the app, I am publishing my code on GitHub.
+# Changelog
 
-For more information, visit the full [**Changelog**](docs/CHANGELOG.md)
+I started writing this app at the age of 16, in 2014 and after one year of improvements, I released it on the Google Play Store.
+In 2017, after a big rework of the app, I published my code on GitHub. You can discover the *rollercoaster ride of development* in the [History on the Wiki](https://github.com/marco97pa/punti-burraco/wiki/History).
+
+For more information on the evolution of the app, visit the full [**Changelog**](docs/CHANGELOG.md)
 
 # Specs / Open-source libraries:
 
-- Minimum **SDK 16**
-- **Firebase** analytics, performance, crash reporting
+- Compatible with **Android 4.1+** (minimum **SDK 16**)
+- **Firebase** for analytics, performance, crash reporting and remote config
 - **Android X**
-- **Android Custom Tabs**, to show the user Guide
-- [**CircleImageView**](https://github.com/hdodenhof/CircleImageView)
+- [**Material Components for Android**](https://github.com/material-components/material-components-android/releases)
+- **Nearby** to handle connections with nearby devices for shared matches
+- **Admob** to display ads
+- **Ads Consent Library** to be compliant with european GDPR
+- [**CircleImageView**](https://github.com/hdodenhof/CircleImageView) to display profile images
 - [**uCrop**](https://github.com/Yalantis/uCrop) to crop profile images
+- [**MaterialIntro**](https://github.com/heinrichreimer/material-intro) to show the intro
+- [**Android IAB v3**](https://github.com/anjlab/android-inapp-billing-v3) to handle in app purchase
 
 # Contribution
 

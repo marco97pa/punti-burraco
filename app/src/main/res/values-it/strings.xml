@@ -38,10 +38,9 @@
     <string name="action_dpp">Dettaglio punteggi</string>
 
     <!-- Settings -->
-    <string name="setting_valuta">Valuta l\'app</string>
-    <string name="setting_valuta_d">Verrai indirizzato al Play Store per lasciare una recensione. Grazie per il tuo supporto</string>
-    <string name="setting_share">Invia questa app</string>
-    <string name="setting_share_d">Condividi Punti Burraco con uno o più amici</string>
+    <string name="setting_rate">Che ne pensi dell\'app?</string>
+    <string name="setting_rate_d">Verrai indirizzato al Play Store per lasciare una recensione.\nGrazie per il tuo supporto</string>
+    <string name="nav_share">Invia questa app</string>
     <string name="setting_advanced_d">Vai alle impostazioni avanzate dell\'app</string>
     <string name="setting_notte">Tema</string>
     <string name="setting_notte_d">Attiva il tema scuro per ambienti poco illuminati</string>
@@ -58,7 +57,7 @@
     <string name="setting_title_pro">Interfaccia</string>
     <string name="setting_title_game">Meccaniche di gioco</string>
     <string name="setting_title_app">Opzioni app</string>
-    <string name="share_message">Installa anche tu #PuntiBurraco</string>
+    <string name="share_message">%1s è un segnapunti digitale per le partite a Burraco con i tuoi amici.\nÈ GRATIS, scaricalo dal Google Play Store: %2s</string>
     <string name="share_hint">Invia app via</string>
     <string name="easter_egg">Wow! Arcobaleni ovunque...</string>
     <string name="channel_name">Notifica partite sospese</string>
@@ -73,7 +72,7 @@
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Apri navigation drawer</string>
     <string name="navigation_drawer_close">Chiudi navigation drawer</string>
-    <string name="nav_guide">Guida e feedback</string>
+    <string name="nav_guide">Guida</string>
     <string name="nav_history">Cronologia partite</string>
     <string name="nav_settings">Impostazioni</string>
     <string name="nav_2gioc">2 Giocatori</string>
@@ -121,6 +120,65 @@
     <string name="setting_inputnormal_d">Adatto a tutti, ma non il metodo più veloce.\nInserisci i punteggi in maniera dettagliata, inserendo il numero vari burrachi (puri, semipuri, sporchi), i punti delle carte sul tavolo e quelle rimaste in mano.\nIl calcolo dei punti è completamente automatico.</string>
     <string name="setting_ads_choice">Scegli le tue impostazioni per le inserzioni</string>
     <string name="setting_crash">Fai crashare l\'app</string>
+    <string name="like">Mi piace!</string>
+    <string name="dislike">Non mi piace</string>
+    <string name="send_bug_report">Grazie per la tua franchezza!</string>
+    <string name="send_bug_report_question">Vuoi segnalare un problema con questa app?</string>
+    <string name="nav_rate">Valuta l\'app</string>
+    <string name="nav_mirroring">Unisciti a una partita</string>
+    <string name="setting_intro">Avvia l\'introduzione (MainIntroActivity)</string>
+    <string name="app_description">Molto più di un semplice segnapunti per le tue partite di Burraco</string>
+    <string name="intro_personalize">Personalizza</string>
+    <string name="intro_share">Puoi condividere facilmente i risultati delle tue partite con i tuoi amici su Facebook, Instagram, Whatsapp o altri social network</string>
+    <string name="intro_set_input_method">L\'app calcola i risultati automaticamente: ti basta inserire il numero di burrachi, i punti sul tavolo e gli eventuali punti in mano. Nella prossima sezione puoi scegliere il tuo metodo d\'inserimento preferito.\n\nSe è la prima volta che usi l\'app, ti consiglio di usare l\'opzione predefinita. Potrai cambiarla successivamente nelle Impostazioni.</string>
+    <string name="discoverable">Questi dispositivo è visibile ai dispositivi vicini</string>
+    <string name="searching">Cercando altri giocatori...</string>
+    <string name="open_nearby_hint">Avvia %1s su un altro dispositivo e scegli la voce %2s dal menu laterale per giocare insieme</string>
+    <string name="open_nearby_hint2">Inizia una partita su un altro dispositivo e scegli \"Invita a questa partita\" del menu a tre punti per iniziare a giocare insieme</string>
+    <string name="shared_match">Partita condivisa</string>
+    <string name="shared_match_notif">Per motivi di privacy, una notifica viene mostrata quando la partita è condivisa con i giocatori nelle vicinanze</string>
+    <string name="nearby_error">Impossibile condividere questa partita</string>
+    <string name="nearby_error_d">C\'è stato un problema nel tentativo di rendere questo dispositivo visibile ad altri.\nControlla che non stavi già condividendo un\'altra partita e riprova.\nAccertati di aver consentito l\'uso della posizione per questa app.\nSe il problema persiste, riavvia l\'app o il dispositivo.</string>
+    <string name="connected_to">Connesso a %1s</string>
+    <string name="disconnected">Disconnesso</string>
+    <string name="denied_perm_location">Impossibile trovare dispositivi vicini: hai negato il permesso ai servizi di posizione</string>
+    <string name="join">Invita a questa partita</string>
+    <string name="stop">Interrompi condivisione partita</string>
+    <string name="host_or_join">Chiunque può partecipare a una partita di un altro giocatore, ma solo un utente PRO può invitare altri giocatori alla propria partita</string>
+    <string name="how_to_upgrade">Per invitare giocatori alla tua partita e altre fantastiche funzionalità, puoi aggiornare l\'app alla versione PRO usando il bottone qui sotto</string>
+    <string name="upgrade">Passa a PRO</string>
+    <string name="error">Errore</string>
+    <string name="error_network">Non sei connesso a una rete</string>
+    <string name="loading">Caricamento..</string>
+    <string name="action_restore">Ripristina gli acquisti</string>
+    <string name="action_redeem">Riscatta un codice promozionale</string>
+    <string name="thanks">Grazie per il tuo supporto!</string>
+    <string name="buy_success">Adesso sei un utente PRO.\nE\' necessario un riavvio dell\'app affichè tutte le funzionalità siano sbloccate e vengano disabilitati i banner pubblicitari</string>
+    <string name="error_buy_play">Il Google Play Store non è disponibile.\nProva ad aprire il Google Play Store o riavvia il dispositivo\nSe il problema persiste il tuo dispositivo potrebbe non essere certificato Google Play: contatta il produttore per maggiori info</string>
+    <string name="error_buy_api">Il Google Play Store ha bisogno di essere aggiornato\nProva ad avviarlo e cercare gli aggiornamenti</string>
+    <string name="error_restore_fail">Sembra che non hai acquistato la versione PRO prima d\'ora\nSe pensi si tratti di un errore, invia una mail a %1s</string>
+    <string name="error_buy_network">Non sei connesso a una rete\nPer passare alla versione PRO è necessaria una connessione a Internet</string>
+    <string name="error_buy_user_cancel">Procedura d\'acquisto annullata</string>
+    <string name="error_buy_product">Il prodotto richiesto non è disponibile per l\'acquisto</string>
+    <string name="error_buy_developer">C\'è stato un errore durante la procedura d\'acquisto: contatta lo sviluppatore a %1s</string>
+    <string name="error_buy_generic">Errore generico durante la procedura d\'acquisto</string>
+    <string name="error_buy_already_own">Possiedi già la versione PRO</string>
+    <string name="only_for_pro">Questa funzione è disponibile solo per utenti PRO</string>
+    <string name="full_description">
+        \nSei un appassionato di Burraco? Dovresti passare alla <b>versione PRO</b> di Punti Burraco che ti offre un\'esperienza priva di pubblicità e tante funzioni aggiuntive.
+        \n\nLa <b>versione PRO</b> include:
+        \n\n<big><b>Invita gli amici a partecipare alle tue partite</b></big>
+        \nGiocate una partita insieme e vedi i punteggi su più dispositivi. Evita che gli amici ti chiedano continuamente il tuo telefono per vedere i risultati.
+        \nCon questa fantastica funzione puoi condividere i punteggi della partita in corso con chiunque nel raggio di 10 metri senza usare una connessione a Internet, quindi non preoccuparti di finire i Giga!
+        \nI tuoi amici <b>non</b> hanno bisogno di essere anche loro utenti PRO per partecipare alle tue partite
+        \n\n<big><b>Rimuovi la pubblicità</b></big>
+        \nUsa l\'app senza alcun banner pubblicitario
+        \n\n<big><b>Accesso a tutte le future funzioni aggiuntive per utenti PRO</b></big>
+        \nL\'app è in continuo sviluppo e sto lavorando a nuove funzionalità: nonappena saranno completate, potrai usufruirne senza ulteriori costi
+        \n\n<big><b>Supporta lo sviluppo</b></big>
+        \nDietro questa app c\'è un giovane sviluppatore indipendente: faccio molti sforzi per cercare di realizzare il miglior segnapunti di Burraco sul Play Store
+        \nAl prezzo di un caffè mi darai il supporto necessario affinchè possa lavorare su nuove funzionalità e mantenere l\'app compatibile con una vasta gamma di dispositivi
+    </string>
 
 
 </resources>

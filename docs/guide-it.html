@@ -4,10 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link id="stylesheet"href="css/bottom-nav.css" rel="stylesheet">
     <title>Guida</title>
-	<link id="stylesheet"href="css/bottom-nav.css" rel="stylesheet"></head>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
 
   <body style="margin-top: -100px;">
     <nav class="bottom-nav">
@@ -33,70 +36,226 @@
     </nav>
 
     <main class="active" id="home">
-               <h1>Guida all'utilizzo</h1>
-               Questa guida permette di conoscere come utilizzare l'app Punti Burraco sul vostro smartphone Android.<br>
-               Non verrà spiegato come giocare a Burraco, per quello è più facile imparare di persona o <a href="https://it.wikipedia.org/wiki/Burraco">leggere qualcosa su internet</a>
-               <ul class="toc">
-                 <h2>Contenuti</h2>
-					 <li><a href="#a1"> Modalità d'uso </a>
-         			 <li><a href="#a2"> Segnare i punti </a>
-         			 <li><a href="#a2a"> Condividere risultati sui social  </a>
-         			 <li><a href="#a3"> Cambiare i nomi </a>
-         			 <li><a href="#a4"> Cambiare le foto </a>
-         			 <li><a href="#a5"> Visualizzare il riepilogo delle smazzate </a>
-					 <li><a href="#a5b"> Cronologia partite </a>
-         			 <li><a href="#a6"> Impostazioni </a>
-               </ul>
-<br>
-       <h2 id="a1"> Modalità d'uso </h2>
-	   Sono disponibili svariate modalità, selezionabili dal menu laterale <i class="material-icons">&#xE5D2;</i>, a seconda del numero di giocatori.<br>
-	   Ci sono modalità per 2, 3 o 4 giocatori.<br>
-      <h2 id="a2" > Segnare i punti </h2>
-      Punti Burraco è innanzitutto un comodo segnapunti per le vostre partite. <br>
-      Dopo aver selezionato la modalità corretta, potete cominciare a segnare i punti. <br>
-      Potete inserire i punteggi totalizzati toccando un campo, non importa in qual ordine inseriate i dati, procedete come più vi aggrada. Se lasciate qualche campo vuoto, questo verrà considerato come nullo<br>
-      Una volta inseriti i dati richiesti, toccando il grande tasto rotondo <i class="material-icons">&#xE148;</i>, i punteggi totali verranno calcolati automaticamente. <br>
-      Procedete alla mano successiva, finchè uno dei giocatori vince. L'app vi avviserà in caso di vittoria. <br>
-      Normalmente il gioco termina a 2005 punti, ma è possibile personalizzare il punteggio di arrivo nelle <a href="#a6"> Impostazioni </a> <br>
-      <h2 id="a2a" > Condividere risultati sui social</h2>
-      È possibile condividere i propri risultati con i propri amici su <i style="color: blue">Facebook</i>, <i style="color: green">Whatsapp</i>, <i style="color: #d233ae">Instagram</i>, <i style="color: #5DA5CE">Telegram</i> e altro ancora.<br>
-      Basta toccare <i class="material-icons">&#xE80D;</i> per condividere la partita attuale sul tuo social preferito o con altre app. <br>
-      Potete anche aggiungere l'hashtag <b>#PuntiBurraco</b> ai vostri post. <br>
-     <h2 id="a3"> Cambiare i nomi </h2>
-      È possibile cambiare i nomi dei giocatori o delle squadre, toccando il nome attuale, per esempio "Giocatore 1". <br>
-      Si aprirà una finestra in cui potrete inserire il nuovo nome da assegnare. <br>
-      Per ripristinare i nomi predefiniti, basta aprire il menu <i class="material-icons">&#xE5D3;</i> e selezionare "Ripristina nomi predefiniti"<br>
-      <h2 id="a4"> Cambiare le foto </h2>
-      È possibile cambiare le foto dei giocatori o delle squadre, toccando l'icona <i class="material-icons">&#xE39D;</i> <br>
-      Si aprirà una finestra in cui potrete scegliere la foto da assegnare dalla vostra Galleria. <br>
-      NOTA: puoi abilitare le foto di profilo nelle Impostazioni<br>
-      <h2 id="a5"> Visualizzare il riepilogo delle smazzate </h2>
-      È possibile visualizzare il riepilogo delle singole smazzate in qualunque momento, basta aprire il menu <i class="material-icons">&#xE5D3;</i> e selezionare " Dettaglio smazzate"<br>
-      Verrà inoltre visualizzato il riepilogo a fine partita <br>
-      <h2 id="a5b"> Cronologia partite </h2>
-      Permette di mostrare i risultati delle ultime partite giocate e condividerle con gli amici con un semplice tocco <br>
-      <h2 id="a6"> Impostazioni </h2>
-      Per accedere alle Impostazioni bisogna aprire il menu laterale <i class="material-icons">&#xE5D2;</i> e selezionare l'apposita voce.
+      <h1>Guida all'utilizzo</h1>
+      <p>Questa è la guida per l'utente di Punti Burraco. Oltre a scoprire come si utilizza l'app e tutte le sue funzioni, è anche possibile rinfrescarsi le idee su come si gioca a Burraco</p>
+
+      <h2>Contenuti</h2>
+      <ul class="toc">
+        <li><a href="#play"> Come giocare a Burraco </a>
+            <ul>
+              <li><a href="#play_1"> Preparativi </a>
+              <li><a href="#play_2"> Fasi di gioco </a>
+              <li><a href="#play_3"> Regole </a>
+              <li><a href="#play_4"> Scopo </a>
+              <li><a href="#play_5"> Chiusura e mazzetto </a>
+              <li><a href="#play_6"> Punti e valore delle carte </a>
+              <li><a href="#play_7"> Fine del gioco </a>
+            </ul>
+        </li>
+        <li><a href="#modes"> Modalità dell'app </a>
+        <li><a href="#points"> Segnare i punti </a>
+        <li><a href="#names"> Nomi dei giocatori </a>
+        <li><a href="#photos"> Foto dei giocatori </a>
+        <li><a href="#share"> Condividere risultati sui social  </a>
+        <li><a href="#details"> Visualizzare il riepilogo delle smazzate </a>
+        <li><a href="#history"> Cronologia partite </a>
+        <li><a href="#join"> Unirsi a una partita o invitare a questa partita </a>
+        <li><a href="#upgrade"> Versione PRO </a>
+        <li><a href="#settings"> Impostazioni </a>
+      </ul>
+      <h2 id="play"> Come giocare a Burraco </h2>
+      <h3 id="play_1">I preparativi della partita</h3>
+      <p>A burraco si gioca con due mazzi da 52 carte compresi due jolly per ogni mazzo, quindi un totale di 108 carte.</p>
+      <p>Il giocatore posizionato sulla destra del mazziere “smezza” il mazzo, il mazziere lo ricompone posizionando la metà che si trovava più in basso sopra quella che si trovava più in alto.</p>
+      <p>Dal mazzo ottenuto prepara due pile di 11 carte ciascuna, prendendole dal fondo</p>
+      <p>I due <strong>mazzetti</strong> vengono disposti uno sopra l’altro, ricordandosi che il mazzetto al quale è stata assegnata la prima carta dovrà essere quello sopra</p>
+      <p>Il mazziere deve anche distribuire 11 carte a ciascun giocatore in senso orario</p>
+      <p>Le carte rimanenti, rigorosamente coperte, verranno invece posizionate al centro del tavolo e costituiranno il mazzo di pesca.</p>
+      <h3 id="play_2">Le fasi di gioco</h3>
+      <p>Il gioco si svolge in senso orario ed ogni giocatore al proprio turno può:</p>
+      <ul>
+          <li><strong>pescare</strong> dal mazzo che è stato posizionato al centro del tavolo.</li>
+          <li><strong>raccogliere tutti</strong> gli "<strong>scarti</strong>" sul tavolo.</li>
+      </ul>
+      <p>Dopo aver compiuto una delle precedenti azioni può scegliere se creare delle combinazioni di carte valide e/o se legare una o più carte a combinazioni già esistenti.</p>
+      <p>Alla fine del suo turno, inoltre, ciascun giocatore deve scartare una carta, l’unica eccezione a questa regola avviene quando un giocatore “<strong>va a mazzetto al volo</strong>” cioè senza scartare alcuna carta dalla propria “mano”.</p>
+      <p>Le combinazioni valide che si possono giocare e che andranno messe davanti a se o davanti al proprio compagno sono:</p>
+      <ul>
+          <li>Almeno 3 carte dello stesso seme in sequenza a formare una <b>scala</b>.</li>
+          <li>Almeno 3 carte dello stesso valore di qualsiasi seme.</li>
+      </ul>
+      <p>Alla combinazione si può anche legare, in qualsiasi posizione, un <strong>jolly</strong> o una “<strong>pinella</strong>” (le carte di valore 2) per un massimo di 1 per ogni combinazione con l’eccezione della pinella che rappresenta il “2” posto nella posizione del “2” dello stesso seme. In questo ultimo caso è possibile aggiungere un jolly o una pinella.</p>
+      <h3 id="play_3">Regole generali</h3>
+      <ul>
+          <li>Non si possono formare combinazioni di 3 o più pinelle o di 3 o più jolly.</li>
+          <li>Quando si attacca una carta a una combinazione, si può spostare l’eventuale jolly o l’eventuale pinella presente ma sempre all’interno della combinazione stessa.</li>
+          <li>Se si raccoglie una sola carta dagli scarti, non è possibile scartare nello stesso turno la carta stessa, ma si deve scegliere una delle carte che già si possiedono.</li>
+      </ul>
+      <h3 id="play_4">Lo scopo del gioco</h3>
+      <p>Lo scopo del gioco è quello di avere al termine della partita un punteggio superiore a quello dei propri avversari.</p>
+      <p>Per poter realizzare questo obiettivo, ci sono due possibili strategie di gioco:</p>
+      <ul>
+          <li>Creare il maggior numero di combinazioni possibili e quindi totalizzare il maggior numero di punti possibili.</li>
+          <li>Cercare la chiusura il prima possibile in modo da ottenere il <strong>bonus di chiusura</strong> e far totalizzare il minor numero di punti possibile ai propri avversari.</li>
+      </ul>
+      <p>Questo concetto è molto importante e trascurato. Il buon giocatore di Burraco sa (in base alle carte che possiede e alla situazione degli avversari) quale delle due strategie è la migliore. Ovviamente l’ideale sarebbe cercare una combinazione equilibrata di entrambe.</p>
+      <h3 id="play_5">La chiusura e la “presa del mazzetto”</h3>
+      <p>Per poter chiudere, il giocatore o la coppia, deve raggiungere 3 obiettivi:</p>
+      <ol>
+          <li>Rimanere una prima volta senza carte in mano e raccogliere il mazzetto</li>
+          <li>Creare una combinazione valida di almeno 7 carte detta “<strong>burraco</strong>“</li>
+          <li>Dopo aver preso il mazzetto rimanere per una seconda volta senza carte in mano scartando una carta che non sia una pinella o un jolly.</li>
+      </ol>
+      <h3 id="play_6">Il calcolo del punteggio</h3>
+      <p>Dopo che una coppia o (nelle sfide testa a testa) il singolo giocatore ha chiuso si procede al calcolo del punteggio.</p>
+      <p>Bisogna distinguere tra i vari tipi di burraco:</p>
+      <ul>
+          <li><strong>burraco puro</strong>: È la combinazione minima di 7 carte in sequenza che non contiene jolly o pinelle se non nella loro naturale posizione</li>
+          <li><strong>burraco semipuro</strong>: È formato da una combinazione di almeno 8 carte con l’ausilio di jolly o pinella di cui almeno 7 in sequenza come fosse un burraco puro</li>
+          <li><strong>burraco sporco o semplice</strong>: È la combinazione di almeno 7 carte che contengono un jolly o una pinella</li>
+      </ul>
+      <p>Dopo che un giocatore è riuscito a chiudere si procede al conteggio dei punti.</p>
+      <ul>
+          <li>La <b>chiusura</b> dà diritto ad un bonus di 100 punti</li>
+          <li>Il <b>burraco puro</b> dà diritto ad un bonus di 200 punti</li>
+          <li>Il <b>burraco semipuro</b> dà diritto ad un bonus di 150 punti</li>
+          <li>Il <b>burraco sporco</b> dà diritto ad un bonus di 100 punti</li>
+          <li>Se una squadra/giocatore <b>non è riuscita a prendere il pozzetto</b> si scalano 100 punti</li>
+      </ul>
+      <p>Vanno contati anche i punti delle carte messe sul tavolo, secondo questo schema:</p>
+      <ul>
+          <li><b>Jolly</b>: 30 punti</li>
+          <li><b>Pinella </b>: 20 punti</li>
+          <li><b> Asso </b>: 15 punti</li>
+          <li><b> Q, K, J, 10, 9 o 8 </b>: 10 punti</li>
+          <li><b> 7, 6, 5, 4, 3 </b>: 5 punti</li>
+      </ul>
+      <p>Se una squadra ha preso il mazzetto ma nel frattempo l’altra coppia ha chiuso anzichè scalare 100 punti si contano (e si scalano) le 11 carte del mazzetto.</p>
+      <p>Tutte le carte rimaste in mano ad ogni giocatore vengono contate ed i punti totali vengono sottratti dal punteggio totale seguendo gli stessi criteri sopra descritti.</p>
+      <h3 id="play_7">Fine del gioco</h3>
+      <p>Le partite di burraco vengono giocate con varie modalità ma solitamente terminano quando un giocatore arriva a <b>2005</b> punti</p>
+      
+
+      <h2 id="modes"> Modalità dell'app </h2>
+	    <p>Dal menu laterale <i class="material-icons">&#xE5D2;</i>, è possibile selezionare una delle modalità di gioco, in base al numero di giocatori.<br>
+      <br>Sono disponibili modalità per 2, 3 o 4 giocatori.
+      </p>
+      
+
+      <h2 id="points"> Segnare i punti </h2>
+      <p>Dopo aver selezionato la modalità corretta, potrete cominciare a segnare i punti.
+      Per inserire un valore toccando un campo, non importa in qual ordine inseriate i dati, potete procedere come più vi aggrada. Se lasciate qualche campo vuoto, questo verrà considerato come nullo</p>
+      I campi disponibili possono variare in base al metodo d'inserimento scelto, ma i campi predefiniti sono:
+      <ul>
+        <li><b>Burrachi puri</b>: inserisci il numero di burrachi puri, il punteggio verrà automaticamente calcolato</li>
+        <li><b>Burrachi sporchi</b>: anche in questo caso bisogna inserire il numero, il valore viene calcolato dall'app</li>
+        <li><b>Burrachi semi sporchi</b>: come sopra</li>
+        <li><b>Punti tavolo</b>: punti delle carte calate sul tavolo</li>
+        <li><b>Punti in mano</b>: punti delle eventuali carte rimaste in mano</li>
+        <li><b>Chiusura</b>: selezionarlo se il giocatore ha effettuato la chiusura</li>
+        <li><b>No pozzetto</b>: selezionarlo se il giocatore non ha raggiunto il pozzetto</li>
+      </ul>
+      <p>Una volta inseriti i dati richiesti, toccando il grande tasto rotondo <i class="material-icons">&#xE148;</i>, i punteggi totali verranno calcolati automaticamente.
+      Procedete alla mano successiva, finchè uno dei giocatori vince: l'app vi avviserà in caso di vittoria.
+      Solitamente il gioco termina a 2005 punti, ma è possibile personalizzare il punteggio di arrivo nelle <a href="#settings"> Impostazioni </a></p>
+      
+
+      <h2 id="names"> Nomi dei giocatori </h2>
+      <p>Per cambiare i nomi dei giocatori o delle squadre, toccare il nome attuale, per esempio "Giocatore 1".
+      Si aprirà una finestra di dialogo in cui potrete inserire il nuovo nome da assegnare. </p>
+      <p>Per ripristinare i nomi predefiniti, basta tenere premuto a lungo sull'immagine del giocatore finchè non spunta la voce "Ripristina nome"
+      o in alternativa aprire il menu <i class="material-icons">&#xE5D3;</i> e selezionare "Ripristina giocatori predefiniti" per ripristinarli tutti</p>
+      
+      
+      <h2 id="photos"> Foto dei giocatori </h2>
+      <p>Per cambiare le foto dei giocatori o delle squadre, toccando l'icona <i class="material-icons">add_a_photo</i> potrete scegliere una foto dalla vostra Galleria.
+      Una volta scelta potrete ritagliarla e ruotarla e infine inserirla nell'app</p>
+      <p>Per rimuovere una foto, basta tenere premuto a lungo sull'immagine del giocatore finchè non spunta la voce "Rimuovi immagine"
+      o in alternativa aprire il menu <i class="material-icons">&#xE5D3;</i> e selezionare "Ripristina giocatori predefiniti" per ripristinarli tutti</p>
+      <p class="text_light">NOTA: puoi disabilitare le foto di profilo nelle Impostazioni</p>  
+      
+
+      <h2 id="share"> Condividere risultati sui social</h2>
+      <p>Per condividere i risultati delle partite con i propri amici su Facebook, Whatsapp, Instagram, o altre app
+      basta toccare il tasto <i class="material-icons">&#xE80D;</i> </p>
+      <p>Si aprirà la schermata di condivisione in cui potrete cambiare lo sfondo scorrendo verso destra o sinistra. Una volta completata la personalizzazione si potrà scegliere di condividere i risultati come storia Facebook, storia Instagram, Whatsapp oppure con un'altra app del tuo dispositivo</p>
+      <p class="text_light">CONSIGLIO: puoi anche taggare Punti Burraco (@puntiburraco) sui social</p>
+      
+      <h2 id="details"> Visualizzare il riepilogo delle smazzate </h2>
+      <p>Per visualizzare il riepilogo delle singole smazzate (simile a quello che solitamente si scrive su carta), basta selezionare l'icona <i class="material-icons">receipt</i> in alto a destra</p>
+      <p>Verrà inoltre visualizzato il riepilogo a fine partita</p>
+      
+      
+      <h2 id="history"> Cronologia partite </h2>
+      <p>Dal menu laterale <i class="material-icons">&#xE5D2;</i>, è possibile selezionare la Cronologia partite che permette di visualizzare i risultati delle ultime partite completate in qualsiasi modalità</p>
+      <p>Selezionando una singola partita si aprirà una schermata con ulteriori dettagli, le singole smazzate e la possibiltà di condividere i risultati o eliminare la voce dalla cronologia</p>
+      
+      <h2 id="join"> Unirsi a una partita o invitare a questa partita </h2>
+      <p>È possibile invitare a una partita i giocatori vicini, così che anche loro possono vedere i punteggi sul proprio dispositivo.
+      La connessione con i dispositivi vicini (entro 10 metri) avviene in maniera automatica, l'app si occuperà di sfruttare la sinergia di tecnologie WiFi e Bluetooth per comunicare coi dispositivi vicini senza utilizzare connessione a Internet, così da non consumare il tuo piano dati</p>
+      
+      <h3>Invitare a una partita</h3>
+      <p>In una qualsiasi modalità di gioco è sufficiente aprire il menu <i class="material-icons">&#xE5D3;</i> e selezionare "Invita a questa partita" per permettere ad altri di unirsi</p>
+      <p class="text_light">Questa funzionalità è disponibile solo per utenti PRO</p>
+
+      <h3>Partecipare a una partita esistente</h3>
+      <p>Dal menu laterale <i class="material-icons">&#xE5D2;</i>, è possibile selezionare Unisciti a una partita: inizierà la ricerca delle partite nelle vicinanze</p>
+      
+      <h3>Connessione</h3>
+      <p>Quando sia chi invita che chi partecipa saranno pronti, i rispettivi dispositivi si collegheranno nel giro di pochi secondi</p>
+      <p>È possibile collegare anche più di due dispositivi</p>
+      <p>Se dopo 60 secondi la connessione non va a buon fine, è consigliato chiudere l'app su entrambi i dispositivi e riprovare. Se il problema persiste è consigliabile riavviare i dispositivi. Alcune rare combinazioni di dispositivi, protocolli e condizioni radio possono impedire il corretto funzionamento del collegamento tra i device</p>
+
+      <h2 id="upgrade"> Versione PRO </h2>
+      <p>Per sbloccare tutte le funzioni, rimuovere la pubblicità e supportare lo sviluppo è possibile acquistare la versione PRO con un acquisto in app. Maggiori informazioni sulle funzionalità e sui prezzi sono disponbili nell'apposita sezione del menu laterale <i class="material-icons">&#xE5D2;</i> selezionando "Passa a PRO"</p>
+
+      <h2 id="settings"> Impostazioni </h2>
+      <p>Per accedere alle Impostazioni bisogna aprire il menu laterale <i class="material-icons">&#xE5D2;</i> e selezionare l'apposita voce.</p>
       Sono disponibili varie opzioni:
-            <h4>Imposta il punteggio di arrivo</h4>
-			Normalmente è impostato a 2005, ma è possibile cambiarlo a piacere<br>
-			<h4>Mostra immagini</h4>
-			Abilita le immagini di profilo nelle modalità 2 e 4 giocatori<br>
-            <h4>Mantieni lo schermo acceso</h4>
-			Leggi e aggiorna i punteggi comodamente e senza interruzioni<br>
-			Potrebbe consumare maggiore batteria<br>
-            <h4>Modalità notturna</h4>
-      Attiva il tema scuro per ambienti poco illuminati<br>
+
+      <h4>Imposta il punteggio di arrivo</h4>
+      <p>Permette di cambiare il punteggio necessario affinchè venga attribuita la vittoria. Normalmente è impostato a 2005, ma è possibile cambiarlo a piacere</p>
+      
+			<h4>Metodo d'inserimento</h4>
+      <p>È possibile scegliere il proprio metodo d'inserimento dei punti preferito e personalizzare l'interfaccia. Si può scegliere tra:</p>
+      <ul>
+        <li><b>Dettagliato (predefinito)</b>: Adatto a tutti, ma non il metodo più veloce. Inserisci i punteggi in maniera dettagliata, inserendo il numero vari burrachi (puri, semipuri, sporchi), i punti delle carte sul tavolo e quelle rimaste in mano.Il calcolo dei punti è completamente automatico.</li>
+        <li><b>Rapido</b>: Metodo alternativo che prevede solo due campi. I punti base sono la somma dei burrachi con la chiusura e la sottrazione dei punti rimasti in mano e dell'eventuale pozzetto, calcolato a mente. I punti tavolo sono i punti calati sul tavolo</li>
+        <li><b>Diretto</b>: Inserisci direttamente il punteggio della giocata.  Sarà disponibile un solo campo in cui inserire tutti i punti del singolo giocatore, calcolati dall 'utente.  E' consigliata a giocatori esperti, senza bisogno di aiuti</li>
+      </ul>
+
+      <h4>Tema</h4>
+      <p> Scegli il tema dell'app che preferisci tra:</p>
+      <ul>
+        <li>Chiaro</li>
+        <li>Scuro</li>
+        <li>Segui impostazione di sistema (solo su Android 10+)</li>
+      </ul>
+
+      <h4>Mantieni lo schermo acceso</h4>
+      <p>Leggi e aggiorna i punteggi comodamente e senza interruzioni, mantenendo lo schermo acceso. Potrebbe consumare più batteria</p>
+      
+      <h4>Immagini</h4>
+			<p>Attiva o disattiva le immagini di profilo per i giocatori</p>
+
       <h4>Suoni</h4>
-			Se abilitato, sentirai dei suoni in caso di vittoria. Nel momento in cui attivi l'opzione, il tuo volume multimediale verrà alzato per permetterti di sentire il suono<br>
+      <p>Se abilitato, sentirai dei suoni in caso di vittoria. Nel momento in cui attivi l'opzione, il tuo volume multimediale verrà alzato per permetterti di sentire il suono</p>
+      
       <h4>Notifiche</h4>
-			Attiva o disattiva le notifiche in caso di sospensione della partita
-      <h4>Invia app</h4>
-			Invia l'app Punti Burraco a uno o più amici<br>
-            <h4>Valuta app</h4>
-			Verrai indirizzato al Play Store per lasciare una recensione<br>
-            <h4>Versione app</h4>
-			Visualizza il numero di versione dell'app<br>
+			<p>Attiva o disattiva le notifiche in caso di sospensione della partita. Ti consentono di riprendere facilemente una partita lasciata in sospeso</p>
+      
+      <h4>Pubblicità</h4>
+      <p>Permette di scegliere le proprie impostazioni per le inserzioni pubblicitarie, in ottemperanza del GDPR. Le scelte possibili sono:</p>
+      <ul>
+        <li>Visualizzare pubblicità personalizzata</li>
+        <li>Visualizzare pubblicità non personalizzata</li>
+        <li>Rimuovere la pubblicità acquistando la versione PRO</li>
+      </ul>
+
+      <h4>Versione app</h4>
+      <p>Visualizza il numero di versione dell'app</p>
+      
+      <br>
     </main>
 	
 	<main id="recents">
@@ -174,128 +333,7 @@
   <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-remote-config.js"></script>
 
-  <script>
-      //DARK THEME
-      if(getAllUrlParams().dark) {
-       document.getElementById('stylesheet').href='css/bottom-nav-dark.css';
-      }
-      //JUMP to BUG section
-      if(getAllUrlParams().bug) {
-       show('bug');
-      }
-
-       var nascita = moment("19971124", "YYYYMMDD");
-       var anni = moment().diff(nascita, 'years', true);
-       anni = parseInt(anni);
-       document.getElementById("anni").innerHTML = anni;
-
-       var now = moment().format("YYYY");
-       document.getElementById("year").innerHTML = now;
-
-       function getAndroidVersion(ua) {
-           ua = (ua || navigator.userAgent).toLowerCase();
-           var match = ua.match(/android\s([0-9\.]*)/);
-           return match ? match[1] : false;
-       };
-       if(getAndroidVersion()!=false){
-          document.getElementById("android").value = "Android "+getAndroidVersion();
-       }
-
-
-       ///URL EXTRACTOR
-       function getAllUrlParams(url) {
-
-        // get query string from url (optional) or window
-        var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
-
-        // we'll store the parameters here
-        var obj = {};
-
-        // if query string exists
-        if (queryString) {
-
-          // stuff after # is not part of query string, so get rid of it
-          queryString = queryString.split('#')[0];
-
-          // split our query string into its component parts
-          var arr = queryString.split('&');
-
-          for (var i = 0; i < arr.length; i++) {
-            // separate the keys and the values
-            var a = arr[i].split('=');
-
-            // set parameter name and value (use 'true' if empty)
-            var paramName = a[0];
-            var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
-
-            // (optional) keep case consistent
-            paramName = paramName.toLowerCase();
-            if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
-
-            // if the paramName ends with square brackets, e.g. colors[] or colors[2]
-            if (paramName.match(/\[(\d+)?\]$/)) {
-
-              // create key if it doesn't exist
-              var key = paramName.replace(/\[(\d+)?\]/, '');
-              if (!obj[key]) obj[key] = [];
-
-              // if it's an indexed array e.g. colors[2]
-              if (paramName.match(/\[\d+\]$/)) {
-                // get the index value and add the entry at the appropriate position
-                var index = /\[(\d+)\]/.exec(paramName)[1];
-                obj[key][index] = paramValue;
-              } else {
-                // otherwise add the value to the end of the array
-                obj[key].push(paramValue);
-              }
-            } else {
-              // we're dealing with a string
-              if (!obj[paramName]) {
-                // if it doesn't exist, create property
-                obj[paramName] = paramValue;
-              } else if (obj[paramName] && typeof obj[paramName] === 'string'){
-                // if property does exist and it's a string, convert it to an array
-                obj[paramName] = [obj[paramName]];
-                obj[paramName].push(paramValue);
-              } else {
-                // otherwise add the property
-                obj[paramName].push(paramValue);
-              }
-            }
-          }
-        }
-
-        return obj;
-        }
-
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-          apiKey: "AIzaSyADfNMKUfLBuHi9DQABVBaQX9Oki7BKDfg",
-          authDomain: "points-buraco.firebaseapp.com",
-          databaseURL: "https://points-buraco.firebaseio.com",
-          projectId: "points-buraco",
-          storageBucket: "points-buraco.appspot.com",
-          messagingSenderId: "9826407298",
-          appId: "1:9826407298:web:1ec1f6104e03bdb078359b",
-          measurementId: "G-HTW51V6DVD"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-
-        const remoteConfig = firebase.remoteConfig();
-        remoteConfig.defaultConfig = ({
-          'downloads': 10000,
-        });
-        remoteConfig.fetchAndActivate()
-        .then(activated => {
-          console.log("Activated?", activated);
-          document.getElementById("downloads").innerHTML = remoteConfig.getNumber('downloads');
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-        
-       </script>
+  <script type="text/javascript" src="js/guide.js"></script>
+  
 </body>
 </html>

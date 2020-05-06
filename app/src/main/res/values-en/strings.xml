@@ -1,111 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Points Buraco</string>
-    <string name="SuggBI">Dirty run</string>
+
+    <!-- Side Menu -->
+    <string name="action_set">Change names</string>
+    <string name="action_share">Share results</string>
+    <string name="action_reset">New game</string>
+    <string name="action_nomi">Reset to default names</string>
+    <string name="reset">New game, points reset</string>
+
+    <!-- Interface -->
     <string name="SuggBP">Clean run</string>
+    <string name="SuggBI">Dirty run</string>
     <string name="SuggBS">Semi-clean run</string>
-    <string name="SuggMiniBI">Dirty run</string>
     <string name="SuggMiniBP">Clean run</string>
+    <string name="SuggMiniBI">Dirty run</string>
     <string name="SuggMiniBS">Semi run</string>
     <string name="SuggP">Table points</string>
     <string name="SuggPM">Cards in hand</string>
-    <string name="action_dpp">Hands detail</string>
-    <string name="action_nomi">Reset to default names</string>
-    <string name="action_reset">New game</string>
-    <string name="action_set">Change names</string>
-    <string name="action_share">Share results</string>
-    <string name="add_point">Points added</string>
-    <string name="back_to_exit">Press back again to exit</string>
-    <string name="change_name">To change names, just touch the player\'s name in the main screen</string>
-    <string name="chius">Closes</string>
-    <string name="chiusura">Closes</string>
-    <string name="close">Close</string>
-    <string name="error01">You can\'t select more than one checkbox</string>
-    <string name="error02">You can\'t close the game with cards in your hand</string>
-    <string name="error03">You must have points in your hand to take the pots</string>
-    <string name="errore_connection">To open the guide, you must be connected to the Internet</string>
-    <string name="errore_dpp">You haven\'t completed a hand</string>
+    <string name="SuggPB">Base points</string>
+    <string name="n1">Team 1</string>
+    <string name="n2">Team 2</string>
+    <string name="gioc_1">Player 1</string>
+    <string name="gioc_2">Player 2</string>
     <string name="g1">Player 1</string>
     <string name="g2">Player 2</string>
     <string name="g3">Player 3</string>
-    <string name="guida">Guide</string>
-    <string name="ko">Cancel</string>
-    <string name="marshmallow_alert">Permission denied to read your External storage</string>
-    <string name="n1">Team 1</string>
-    <string name="n2">Team 2</string>
-    <string name="nav_guide">Guide and feedback</string>
-    <string name="nav_settings">Settings</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="ok">OK</string>
-    <string name="pozz">No Pots</string>
+    <string name="win">wins</string>
+    <string name="chiusura">Closes</string>
     <string name="pozzetto">No Pots</string>
-    <string name="reset">New game, points reset</string>
-    <string name="setting_limite">Set win point</string>
+    <string name="chius">Closes</string>
+    <string name="pozz">No Pots</string>
+    <string name="solo">Alone</string>
+    <string name="error01">You can\'t select more than one checkbox</string>
+    <string name="error02">You can\'t close the game with cards in your hand</string>
+    <string name="error03">You must have points in your hand to take the pots</string>
+    <string name="error04">You inserted non-number values</string>
+    <string name="error00">Generic error</string>
+    <string name="action_dpp">Hands detail</string>
+
+    <!-- Settings -->
+    <string name="setting_rate">What do you think about this app?</string>
+    <string name="setting_rate_d">You will be redirected to the Play Store to write a review.\nThanks for your support</string>
+    <string name="setting_advanced">Delete cache or data</string>
+    <string name="setting_advanced_d">Go to advanced app options</string>
+    <string name="setting_ads">Ads</string>
+    <string name="setting_ads_d">Enable/disable banner ads</string>
     <string name="setting_notte">Theme</string>
     <string name="setting_notte_d">Suggested for low light ambients</string>
+    <string name="setting_img">Images</string>
+    <string name="setting_img_d">Enable player profile images</string>
     <string name="setting_schermo">Keep screen on</string>
     <string name="setting_schermo_d">Read the score without any hassle</string>
-    <string name="setting_share">Send this app</string>
-    <string name="setting_share_d">Share Points Buraco with friends</string>
-    <string name="setting_title_app">App options</string>
-    <string name="setting_title_pro">Interface</string>
-    <string name="setting_valuta">Review the app</string>
-    <string name="setting_valuta_d">You will be redirected to the Play Store to write a review. Thanks for your support</string>
+    <string name="setting_limite">Set win point</string>
     <string name="setting_version">App version</string>
     <string name="setting_version_d">Unknown version</string>
-    <string name="share_hint">Send app using</string>
-    <string name="share_message">Install #PointsBuraco</string>
-    <string name="solo">Alone</string>
+    <string name="setting_sound">Sound</string>
+    <string name="setting_sound_d">Play sound when someone wins</string>
     <string name="title_activity_setting">Settings</string>
-    <string name="win">wins</string>
+    <string name="setting_title_pro">Interface</string>
+    <string name="setting_title_game">Game</string>
+    <string name="setting_title_app">App options</string>
+    <string name="share_message">%1s is an easy buraco scorekeeper for your smartphone.\nIt\'s FREE, download it on Google Play Store %2s</string>
+    <string name="share_hint">Send app using…</string>
+    <string name="easter_egg">Yay! Rainbows everywhere!</string>
+    <string name="channel_name">Suspended game notifications</string>
+    <string name="channel_description">If you leave the app without ending the game, you will receive a notification to continue the game</string>
+    <string name="setting_notification_d">Set notification settings</string>
+    <string name="setting_notification">Notification</string>
+    <string name="setting_pm_d">Enable or disable subtraction of points in hand</string>
+    <string name="setting_pm">Points in hand</string>
+    <string name="setting_inputdirect">Simplest</string>
+    <string name="setting_inputdirect_d">Input points of a single match directly \nOnly a field is available to input the sum of the points of a player. \nSuggested for experienced players</string>
+    <string name="setting_inputnormal">Complete</string>
+    <string name="setting_inputnormal_d">Suitable for newcomers, but not the fastest way \nInput points in a detailed form, with clean runs, semi-clean runs and dirty runs. You can even use only part of all the fields.</string>
+    <string name="setting_inputalternative">Smart</string>
+    <string name="setting_inputalternative_d">Only two fields: base points and table points \nBase points are the sum of the runs with the closing, subtracting points in hand (calculated by the user). Table points are the points of cards on the table.</string>
+    <string name="setting_developer_d">Open developer options</string>
+    <string name="setting_developer">Developer options</string>
+    <string name="setting_insert_method">Input method</string>
+    <string name="setting_insert_method_d">Choose your preferred input method</string>
+    <string name="setting_ads_choice">Choose your ads setting</string>
+    <string name="setting_crash">Invoke a crash</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_guide">Guide</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
     <string name="nav_2gioc">2 Players</string>
     <string name="nav_3gioc">3 Players</string>
     <string name="nav_4gioc">4 Players</string>
-    <string name="nav_title_alt">Other</string>
     <string name="nav_title_mod">Mode</string>
-    <string name="setting_advanced">Delete cache or data</string>
-    <string name="setting_advanced_d">Go to advanced app options</string>
+    <string name="nav_title_alt">Other</string>
+    <string name="nav_rate">Feedback</string>
+    <string name="nav_share">Send this app</string>
+    <string name="nav_mirroring">Join a match</string>
+    <string name="errore_connection">To open the guide, you must be connected to the Internet</string>
+
+    <!-- Alerts -->
+    <string name="ok">OK</string>
+    <string name="ko">Cancel</string>
+    <string name="close">Close</string>
+    <string name="like">Like</string>
+    <string name="dislike">Dislike</string>
+    <string name="error">Error</string>
+    <string name="error_network">You are not connected</string>
+    <string name="add_point">Points added</string>
+    <string name="marshmallow_alert">Permission denied to read your External storage</string>
     <string name="marshmallow_alert_2">Permission denied to publish your score</string>
-    <string name="setting_img">Images</string>
-    <string name="setting_img_d">Enable player profile images</string>
-    <string name="easter_egg">Yay! Rainbows everywhere!</string>
+    <string name="guida">Guide</string>
+    <string name="change_name">To change names, just touch the player\'s name in the main screen</string>
+    <string name="errore_dpp">You haven\'t completed a hand</string>
+    <string name="back_to_exit">Press back again to exit</string>
     <string name="notification">Match suspended</string>
-    <string name="gioc_1">Player 1</string>
-    <string name="gioc_2">Player 2</string>
-    <string name="nav_history">History</string>
-    <string name="channel_name">Suspended game notifications</string>
     <string name="removeImage">Remove photo</string>
     <string name="removeText">Reset name</string>
-    <string name="setting_notification_d">Set notification settings</string>
-    <string name="setting_notification">Notification</string>
-    <string name="setting_pm">Points in hand</string>
-    <string name="setting_inputdirect">Easy mode</string>
-    <string name="setting_inputdirect_d">Input points of a single match directly \nOnly a field is available to input the sum of the points of a player. \nSuggested for experienced players</string>
-    <string name="setting_pm_d">Enable or disable subtraction of points in hand</string>
-    <string name="setting_title_game">Game</string>
+    <string name="send_bug_report">Thanks for your frankness</string>
+    <string name="send_bug_report_question">Would you like to send a report of what you don\'t like of this app?</string>
     <string name="dialog_share">Share</string>
     <string name="dialog_delete">Delete</string>
+
+    <!-- Intro Activity -->
+    <string name="setting_intro">Launch MainIntroActivity</string>
+    <string name="app_description">More than a simple buraco scorekeeper!</string>
+    <string name="intro_share">You can easily share results with your friends on Facebook, Instagram, Whatsapp and other social networks</string>
+    <string name="intro_personalize">Customize</string>
+    <string name="intro_set_input_method">The app calculates the results automatically: you can just insert the number of runs, the points on the table and the (eventually) points in your hands. In the next section you can choose your favorite input method. If this is your first time, I suggest opt for the default option, you can easily change this behaviour later in Settings</string>
+
+    <!-- Nearby Strings -->
+    <string name="discoverable">This device is discoverable by nearby devices</string>
+    <string name="searching">Looking for other players…</string>
+    <string name="open_nearby_hint">Open %1s on another device and choose %2s from the menu to start playing together</string>
+    <string name="open_nearby_hint2">Start a match on another device and choose \"Host this match\" from the three dots menu to start playing together</string>
+    <string name="shared_match">Shared Match</string>
+    <string name="shared_match_notif">For privacy concerns, a notification is shown when the match is shared with nearby players</string>
+    <string name="nearby_error">Can\'t share the match</string>
+    <string name="nearby_error_d">There was a problem trying to make this device discoverable to others.\nCheck if you were already hosting a match and try again.\nMake sure you accept the Location permission for this app.\nIf the problem still occurs try to restart the app or the device itself</string>
+    <string name="connected_to">Connected to %1s</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="denied_perm_location">Permission denied to find nearby devices using location services</string>
+    <string name="join">Host this match</string>
+    <string name="stop">Stop hosting match</string>
+    <string name="host_or_join">Anyone can join a match of another player but only a PRO user can host a match</string>
+    <string name="how_to_upgrade">To host a match and other cool features, you can upgrade to the PRO version using the button below</string>
+
+    <!-- In App Billing Strings -->
+    <string name="upgrade">Upgrade</string>
+    <string name="loading">Loading…</string>
+    <string name="action_restore">Restore purchases</string>
+    <string name="action_redeem">Redeem a promo code</string>
+    <string name="full_description">
+    \nAre you a good buraco\'s player? You should upgrade to the <b>PRO version</b> of Points Buraco to enjoy an ad-free experience and some cool features.
+    \n\nThe <b>PRO version</b> includes:
+    \n\n<big><b>Invite friends to join your match</b></big>
+    \nPlay a match together and see the results on different devices. Stop your friends from taking you smartphone to see the score.
+    \nYou can share your match with anyone within a range of 10 metres without using an Internet connection, so don\'t worry about your data plan!
+    \nYour friends don\'t need to be a PRO user to join your matches
+    \n\n<big><b>Remove the ads</b></big>
+    \nEnjoy an ad-free experience during the game
+    \n\n<big><b>Access to all future PRO exclusive features</b></big>
+    \nThis app is actively developed and I am working on new awesome features. You will get them as soon as they are available.
+    \n\n<big><b>Support the development</b></big>
+    \nThere is only one person behind this app: I make huge efforts to bring to you the best Buraco scorekeeper of the Google Play Store
+    \nAt the price of a coffee you will help me working on new features.
+    </string>
+    <string name="thanks">Thanks for your support!</string>
+    <string name="buy_success">You are now a PRO user.\nA restart of the app is needed in order to unlock all the features and remove ads</string>
+    <string name="error_buy_play">Google Play Store is not available.\nTry to open the Google Play Store or restart the device\nIf the problem persist, maybe your device is not Google Play certified: contact the manufacturer for more information</string>
+    <string name="error_buy_api">Google Play Store needs an update.\nTry to open Google Play Store and check for updates</string>
+    <string name="error_restore_fail">Seems you haven\'t brought the PRO version before.\nIf you think this is a mistake, send an email to %1s</string>
+    <string name="error_buy_network">You don\'t seem to be connected to a network.\nTo upgrade to the PRO version an Internet connection is required</string>
+    <string name="error_buy_user_cancel">Purchase process canceled</string>
+    <string name="error_buy_product">The requested product is not available to purchase</string>
+    <string name="error_buy_developer">There was an error during the purchase: contact the developer at %1s</string>
+    <string name="error_buy_generic">There was a generic error during the purchase</string>
+    <string name="error_buy_already_own">You already own the PRO version</string>
+    <string name="only_for_pro">This feature is available only for PRO users</string>
+
+    <!-- Various String -->
     <string name="no_data_available">Nothing here</string>
     <string name="audio_up">Turned up the volume</string>
-    <string name="setting_sound">Sound</string>
-    <string name="setting_sound_d">Play sound when someone wins</string>
+    <string name="facebook" translatable="false">Facebook</string>
+    <string name="instagram" translatable="false">Instagram</string>
+    <string name="whatsapp" translatable="false">Whatsapp</string>
+    <string name="stories" translatable="false">%1s Stories</string>
     <string name="change_background_hint">Swipe to change background</string>
-    <string name="channel_description">If you leave the app without ending the game, you will receive a notification to continue the game</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
-    <string name="error04">You inserted non-number values</string>
-    <string name="error00">Generic error</string>
-    <string name="setting_developer_d">Open developer options</string>
-    <string name="setting_insert_method">Input method</string>
-    <string name="setting_insert_method_d">Choose your preferred input method</string>
-    <string name="setting_developer">Developer options</string>
-    <string name="SuggPB">Base points</string>
-    <string name="setting_ads">Ads</string>
-    <string name="setting_ads_d">Enable/disable ads</string>
-    <string name="setting_inputalternative">Smart</string>
-    <string name="setting_inputalternative_d">Only two fields: base points and table points \nBase points are the sum of the runs with the closing, subtracting points in hand (calculated by the user). Table points are the points of cards on the table.</string>
-    <string name="setting_inputnormal">Complete</string>
-    <string name="setting_inputnormal_d">Suitable for newcomers, but not the fastest way \nInput points in a detailed form, with clean runs, semi-clean runs and dirty runs. You can even use only part of all the fields.</string>
-    <string name="setting_ads_choice">Choose your ads setting</string>
-    <string name="setting_crash">Invoke a crash</string>
+    <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="link" translatable="false">https://pointsburaco.page.link/open</string>
+    <string name="email" translatable="false">marco97pa@gmail.com</string>
+
 </resources>
+

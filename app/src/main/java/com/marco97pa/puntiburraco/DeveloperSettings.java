@@ -7,6 +7,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +18,8 @@ import androidx.preference.Preference;
 
 public class DeveloperSettings extends SettingsFragment {
 
-    public static final String LOG_TAG = "developer_fragment";
+    public static final String TAG = "developer_fragment";
+    FirebaseRemoteConfig mFirebaseRemoteConfig;
 
     public DeveloperSettings() {
     }
@@ -22,6 +27,36 @@ public class DeveloperSettings extends SettingsFragment {
     public void onCreatePreferences(Bundle bundle, String rootKey) {
 
         addPreferencesFromResource(R.xml.developer_preference);
+
+        //Firebase Remote Config initialization
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(3600)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+        mFirebaseRemoteConfig.fetchAndActivate()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Boolean>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Boolean> task) {
+                        String firebaseConfig = "";
+                        if (task.isSuccessful()) {
+                            boolean updated = task.getResult();
+                            Log.d(TAG, "Fetch and activate succeeded");
+                            Log.d(TAG, "Config params updated: " + updated);
+                            //Generate Configuration String
+                            firebaseConfig += "downloads: " + mFirebaseRemoteConfig.getLong("downloads") + "\n";
+                            firebaseConfig += "nav_menu_feedback: " + mFirebaseRemoteConfig.getBoolean("nav_menu_feedback") + "\n";
+
+                        } else {
+                            Log.d(TAG, "Fetch failed");
+                            firebaseConfig = "Fetch failed";
+                        }
+
+                        Preference remote_config = findPreference("remote_config");
+                        remote_config.setSummary(firebaseConfig);
+                    }
+                });
 
         //Sets intent to redirect user to App Settings in Android
         Preference advanced_p = findPreference("advanced");
@@ -43,8 +78,20 @@ public class DeveloperSettings extends SettingsFragment {
         crash_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference preference) {
-                Crashlytics.log(Log.DEBUG, LOG_TAG, "Forcing a manual crash");
+                Crashlytics.log(Log.DEBUG, TAG, "Forcing a manual crash");
                 Crashlytics.getInstance().crash(); // Force a crash
+                return true;
+            }
+        });
+
+        //Sets intent to launch Intro
+        Preference intro_p = findPreference("intro");
+        intro_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                Crashlytics.log(Log.DEBUG, TAG, "Forcing launch of MainIntroActivity");
+                Intent myIntent = new Intent(getActivity(), MainIntroActivity.class);
+                startActivity(myIntent);
                 return true;
             }
         });

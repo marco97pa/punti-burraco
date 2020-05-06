@@ -70,14 +70,9 @@
         </androidx.preference.Preference>
 
         <androidx.preference.Preference
-            android:title="@string/setting_share"
-            android:summary="@string/setting_share_d"
-            android:key="share">
-        </androidx.preference.Preference>
-
-        <androidx.preference.Preference
-            android:title="@string/setting_valuta"
-            android:summary="@string/setting_valuta_d">
+            android:title="@string/nav_rate"
+            android:summary="@string/setting_rate_d"
+            android:key="nav_rate">
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://play.google.com/store/apps/details?id=com.marco97pa.puntiburraco" />
         </androidx.preference.Preference>

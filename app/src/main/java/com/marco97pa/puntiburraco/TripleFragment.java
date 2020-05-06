@@ -42,6 +42,7 @@ import androidx.core.content.FileProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,8 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -78,7 +81,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 
 public class TripleFragment extends Fragment {
 
-    public static final String LOG_TAG = "3PlayersFragment";
+    public static final String TAG = "3PlayersFragment";
     int bp1,bp2,bp3, bi1, bi2,bi3, bs1, bs2,bs3,pn1,pn2,pn3,tot1,tot2,tot3,pm1,pm2,pm3, pb1, pb2, pb3;
     int tot=0;
     private TextView textNome1, textNome2, textNome3;
@@ -106,11 +109,13 @@ public class TripleFragment extends Fragment {
     private static int REQUEST_CROP_PICTURE_2 = 22;
     private static int REQUEST_PICTURE_1 = 11;
     private static int REQUEST_CROP_PICTURE_1 = 21;
+
     //Constants response to permission request (Android 6.0+)
     private final static int STORAGE_PERMISSION_PICTURE_1 = 13;
     private final static int STORAGE_PERMISSION_PICTURE_2 = 23;
     private final static int STORAGE_PERMISSION_PICTURE_3 = 33;
     private final static int STORAGE_PERMISSION_SCREENSHOT = 30;
+    private final static int LOCATION_PERMISSION_NEARBY = 40;
 
     public int old_tot1;
     public int old_tot2;
@@ -121,6 +126,7 @@ public class TripleFragment extends Fragment {
     Boolean isManoModeActivated;
     MediaPlayer sound;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private NearbyAdvertise advertise;
 
     public TripleFragment() {
         // Empty constructor required for fragment subclasses
@@ -172,8 +178,8 @@ public class TripleFragment extends Fragment {
 
         mAdView = rootView.findViewById(R.id.adView);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Boolean adsEnabled = sharedPref.getBoolean("ads", true) ;
-        if(adsEnabled) {
+        Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
+        if(!isPro) {
             MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
             showAds();
         }
@@ -426,6 +432,11 @@ public class TripleFragment extends Fragment {
                             case R.id.removeText:
                                 textNome1.setText(getString(R.string.g1));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file1 = new File(getActivity().getFilesDir(), "img_m3_1.jpg");
@@ -491,6 +502,11 @@ public class TripleFragment extends Fragment {
                             case R.id.removeText:
                                 textNome2.setText(getString(R.string.g2));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file2 = new File(getActivity().getFilesDir(), "img_m3_2.jpg");
@@ -556,6 +572,11 @@ public class TripleFragment extends Fragment {
                             case R.id.removeText:
                                 textNome3.setText(getString(R.string.g3));
                                 onSave();
+                                //advertise
+                                if(advertise != null && advertise.isRunning()) {
+                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    advertise.update(getMatchState());
+                                }
                                 return true;
                             case R.id.removeImage:
                                 File file3 = new File(getActivity().getFilesDir(), "img_m3_3.jpg");
@@ -574,18 +595,252 @@ public class TripleFragment extends Fragment {
 
         });
 
-        /**
-         * RECOVER IMAGES OF LAST GAME
-         * Images are showed only if user has choose it in settings
-         */
+
+        //improves usability in Android N with MultiWindow and avoids bugs
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (getActivity().isInMultiWindowMode()) {
+                IMG1.setVisibility(View.GONE);
+                IMG2.setVisibility(View.GONE);
+                IMG3.setVisibility(View.GONE);
+                Log.d(TAG, "images disabled: isInMultiWindowMode = true");
+            }
+        }
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        restoreImages();
+        restoreEditedViews();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveEditedViews();
+    }
+
+    protected void dialogGioc1() {
+
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        textNome1.setText(editText.getText().toString());
+                        onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
+                    }
+                })
+                .setNegativeButton(getString(R.string.ko),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+    protected void dialogGioc2() {
+
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        textNome2.setText(editText.getText().toString());
+                        onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
+                    }
+                })
+                .setNegativeButton(getString(R.string.ko),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+    protected void dialogGioc3() {
+
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        textNome3.setText(editText.getText().toString());
+                        onSave();
+                        //advertise
+                        if(advertise != null && advertise.isRunning()) {
+                            Log.d(TAG, "Advertising: " + getMatchState());
+                            advertise.update(getMatchState());
+                        }
+                    }
+                })
+                .setNegativeButton(getString(R.string.ko),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                //FIX CHIUDI TASTIERA
+                InputMethodManager inputMethodManager = (InputMethodManager)
+                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(textNome1.getWindowToken(), 0);
+
+                // First, request permission
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            STORAGE_PERMISSION_SCREENSHOT);
+                }
+                else {
+                    openScreen();
+                }
+                return true;
+
+            case R.id.action_set:
+                showNoticeDialog();
+                return true;
+            case R.id.action_reset:
+                openReset();
+                return true;
+            case R.id.action_nomi:
+                openNomi();
+                return true;
+            case R.id.action_dpp:
+                showDettPuntParz();
+                return true;
+            case R.id.action_advertise:
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
+                if(isPro) {
+                    //Start Advertising using Nearby library
+                    //First ask the permission in Android 6.0+
+                    Log.d(TAG,"Option selected: Advertise");
+                    if(advertise == null || !advertise.isRunning()){
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            requestPermissions(
+                                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                    LOCATION_PERMISSION_NEARBY);
+                        }
+                        else {
+                            advertise = new NearbyAdvertise(getContext(), getMatchState());
+                            advertise.start();
+                        }
+                    }
+                    else{
+                        advertise.stop();
+                        item.setTitle(getString(R.string.join));
+                    }
+                }
+                else {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
+                    builder .setTitle(getString(R.string.join))
+                            .setMessage(getString(R.string.only_for_pro))
+                            .setIcon(R.drawable.ic_warning_24dp)
+                            .setPositiveButton(getString(R.string.upgrade), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Launches Upgrade Activity
+                                    Intent myIntent = new Intent(getActivity(), UpgradeActivity.class);
+                                    startActivity(myIntent);
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.ko), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);}
+    }
+    //Ripristino Save
+    public void Restore(){
+        final String sq1Default=getString(R.string.g1);
+        final String sq2Default=getString(R.string.g2);
+        final String sq3Default=getString(R.string.g3);
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        tot1 = sharedPref.getInt("t1",PDefault);
+        tot2 = sharedPref.getInt("t2",PDefault);
+        tot3 = sharedPref.getInt("t3",PDefault);
+        punti1.setText(Integer.toString(tot1));
+        punti2.setText(Integer.toString(tot2));
+        punti3.setText(Integer.toString(tot3));
+        textNome1.setText(sharedPref.getString("sqd1",sq1Default));
+        textNome2.setText(sharedPref.getString("sqd2",sq2Default));
+        textNome3.setText(sharedPref.getString("sqd3",sq3Default));
+    }
+
+    /**
+     * RECOVER IMAGES OF LAST GAME
+     * Images are showed only if user has choose it in settings
+     */
+    public void restoreImages(){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         //On lowRamDevice images are disabled par default
         boolean isLowRamDevice = false;
         ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             isLowRamDevice = am.isLowRamDevice();
-            Log.d(LOG_TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
         }
-        
+
         Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
         if(isImgActivated) {
             //BitmapFactory -> ImageDecoder per Android 9.0+ P fix
@@ -628,161 +883,91 @@ public class TripleFragment extends Fragment {
             IMG2.setVisibility(View.GONE);
             IMG3.setVisibility(View.GONE);
         }
-        //improves usability in Android N with MultiWindow and avoids bugs
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            if (getActivity().isInMultiWindowMode()) {
-                IMG1.setVisibility(View.GONE);
-                IMG2.setVisibility(View.GONE);
-                IMG3.setVisibility(View.GONE);
-                Log.d(LOG_TAG, "images disabled: isInMultiWindowMode = true");
-            }
-        }
-
-        return rootView;
     }
-
-    protected void dialogGioc1() {
-
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
-        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
-        alertDialogBuilder.setView(promptView);
-
-        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        textNome1.setText(editText.getText());
-                        onSave();
-                    }
-                })
-                .setNegativeButton(getString(R.string.ko),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-    protected void dialogGioc2() {
-
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
-        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
-        alertDialogBuilder.setView(promptView);
-
-        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        textNome2.setText(editText.getText());
-                        onSave();
-                    }
-                })
-                .setNegativeButton(getString(R.string.ko),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-    protected void dialogGioc3() {
-
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        View promptView = layoutInflater.inflate(R.layout.input_gioc, null);
-        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.AppTheme_Dialog);
-        alertDialogBuilder.setView(promptView);
-
-        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        textNome3.setText(editText.getText());
-                        onSave();
-                    }
-                })
-                .setNegativeButton(getString(R.string.ko),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        switch (item.getItemId()) {
-            case R.id.action_share:
-                //FIX CHIUDI TASTIERA
-                InputMethodManager inputMethodManager = (InputMethodManager)
-                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+    public void onPrepareOptionsMenu(Menu menu) {
 
-                // First, request permission
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_SCREENSHOT);
-                }
-                else {
-                    openScreen();
-                }
-                return true;
-
-            case R.id.action_set:
-                showNoticeDialog();
-                return true;
-            case R.id.action_reset:
-                openReset();
-                return true;
-            case R.id.action_nomi:
-                openNomi();
-                return true;
-            case R.id.action_dpp:
-                showDettPuntParz();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);}
-    }
-    //Ripristino Save
-    public void Restore(){
-        final String sq1Default=getString(R.string.g1);
-        final String sq2Default=getString(R.string.g2);
-        final String sq3Default=getString(R.string.g3);
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        tot1 = sharedPref.getInt("t1",PDefault);
-        tot2 = sharedPref.getInt("t2",PDefault);
-        tot3 = sharedPref.getInt("t3",PDefault);
-        punti1.setText(Integer.toString(tot1));
-        punti2.setText(Integer.toString(tot2));
-        punti3.setText(Integer.toString(tot3));
-        textNome1.setText(sharedPref.getString("sqd1",sq1Default));
-        textNome2.setText(sharedPref.getString("sqd2",sq2Default));
-        textNome3.setText(sharedPref.getString("sqd3",sq3Default));
+        MenuItem item = menu.findItem(R.id.action_advertise);
+        if(advertise != null && advertise.isRunning()) {
+            item.setTitle(getString(R.string.stop));
+        }
     }
 
+    private void saveEditedViews() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        //Here we handle saving all inserted values to prevent losing them in a configuration change
+        editor.putString("BP1",BP1.getText().toString());
+        editor.putString("BI1",BI1.getText().toString());
+        editor.putString("BS1",BS1.getText().toString());
+        editor.putString("PN1",PN1.getText().toString());
+        editor.putString("PM1",PM1.getText().toString());
+        editor.putString("BP2",BP2.getText().toString());
+        editor.putString("BI2",BI2.getText().toString());
+        editor.putString("BS2",BS2.getText().toString());
+        editor.putString("PN2",PN2.getText().toString());
+        editor.putString("PM2",PM2.getText().toString());
+        editor.putString("BP3",BP3.getText().toString());
+        editor.putString("BI3",BI3.getText().toString());
+        editor.putString("BS3",BS3.getText().toString());
+        editor.putString("PN3",PN3.getText().toString());
+        editor.putString("PM3",PM3.getText().toString());
+        editor.putString("PB1",PB1.getText().toString());
+        editor.putString("PB2",PB2.getText().toString());
+        editor.putString("PB3",PB3.getText().toString());
+        editor.putBoolean("CH1",CH1.isChecked());
+        editor.putBoolean("CH2",CH2.isChecked());
+        editor.putBoolean("CH3",CH3.isChecked());
+        editor.putBoolean("PZ1",PZ1.isChecked());
+        editor.putBoolean("PZ2",PZ2.isChecked());
+        editor.putBoolean("PZ3",PZ3.isChecked());
+        editor.putBoolean("RB1",RB1.isChecked());
+        editor.putBoolean("RB2",RB2.isChecked());
+        editor.putBoolean("RB3",RB3.isChecked());
+
+        editor.apply();
+    }
+
+    private void restoreEditedViews(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        //Restore EditTexts and Checkboxes state after a configuration change
+        BP1.setText(sharedPref.getString("BP1",""));
+        BI1.setText(sharedPref.getString("BI1",""));
+        BS1.setText(sharedPref.getString("BS1",""));
+        PN1.setText(sharedPref.getString("PN1",""));
+        PM1.setText(sharedPref.getString("PM1",""));
+        BP2.setText(sharedPref.getString("BP2",""));
+        BI2.setText(sharedPref.getString("BI2",""));
+        BS2.setText(sharedPref.getString("BS2",""));
+        PN2.setText(sharedPref.getString("PN2",""));
+        PM2.setText(sharedPref.getString("PM2",""));
+        BP3.setText(sharedPref.getString("BP3",""));
+        BI3.setText(sharedPref.getString("BI3",""));
+        BS3.setText(sharedPref.getString("BS3",""));
+        PN3.setText(sharedPref.getString("PN3",""));
+        PM3.setText(sharedPref.getString("PM3",""));
+        PB1.setText(sharedPref.getString("PB1",""));
+        PB2.setText(sharedPref.getString("PB2",""));
+        PB3.setText(sharedPref.getString("PB3",""));
+        CH1.setChecked(sharedPref.getBoolean("CH1", false));
+        CH2.setChecked(sharedPref.getBoolean("CH2", false));
+        CH3.setChecked(sharedPref.getBoolean("CH3", false));
+        PZ1.setChecked(sharedPref.getBoolean("PZ1", false));
+        PZ2.setChecked(sharedPref.getBoolean("PZ2", false));
+        PZ3.setChecked(sharedPref.getBoolean("PZ3", false));
+
+        if(sharedPref.getBoolean("RB1", false)){
+            RB1.performClick();
+        }
+        if(sharedPref.getBoolean("RB2", false)){
+            RB2.performClick();
+        }
+        if(sharedPref.getBoolean("RB3", false)){
+            RB3.performClick();
+        }
+    }
+    
     //RIPRISTINO NOMI
     public void openNomi(){
         textNome1.setText(getString(R.string.g1));
@@ -795,10 +980,15 @@ public class TripleFragment extends Fragment {
         File file2 = new File(getActivity().getFilesDir(), "img_m3_2.jpg");
         file2.delete();
         File file3 = new File(getActivity().getFilesDir(), "img_m3_3.jpg");
-        file2.delete();
+        file3.delete();
         IMG1.setImageResource(R.drawable.circle_placeholder);
         IMG2.setImageResource(R.drawable.circle_placeholder);
         IMG3.setImageResource(R.drawable.circle_placeholder);
+        //advertise
+        if(advertise != null && advertise.isRunning()) {
+            Log.d(TAG, "Advertising: " + getMatchState());
+            advertise.update(getMatchState());
+        }
     }
 
     //AVVIA RESET
@@ -864,6 +1054,12 @@ public class TripleFragment extends Fragment {
         win=false;
         //salva tutto
         onSave();
+        saveEditedViews();
+        //advertise
+        if(advertise != null && advertise.isRunning()) {
+            Log.d(TAG, "Advertising: " + getMatchState());
+            advertise.update(getMatchState());
+        }
         //reset dpp
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -1211,8 +1407,13 @@ public class TripleFragment extends Fragment {
             }
             //salva
             onSave();
+            saveEditedViews();
             //salvataggiSeVince
-
+            //advertise
+            if(advertise != null && advertise.isRunning()) {
+                Log.d(TAG, "Advertising: " + getMatchState());
+                advertise.update(getMatchState());
+            }
         }
         }
         /*
@@ -1236,6 +1437,11 @@ public class TripleFragment extends Fragment {
             punti2.setText(Integer.toString(tot2));
             punti3.setText(Integer.toString(tot3));
             onSave();
+            //advertise
+            if(advertise != null && advertise.isRunning()) {
+                Log.d(TAG, "Advertising: " + getMatchState());
+                advertise.update(getMatchState());
+            }
         }
     }
 
@@ -1269,6 +1475,19 @@ public class TripleFragment extends Fragment {
             ((MainActivity)getActivity()).setMenuAlternative(true);
             editor.apply();
         }
+    }
+
+    private String getMatchState(){
+        String num_players = "3";
+        String name_player1 = textNome1.getText().toString();
+        String name_player2 = textNome2.getText().toString();
+        String name_player3 = textNome3.getText().toString();
+        String points_player1 = Integer.toString(tot1);
+        String points_player2 = Integer.toString(tot2);
+        String points_player3 = Integer.toString(tot3);
+        String out = num_players + ";" + name_player1 + ";" + name_player2 + ";" + name_player3 + ";" +
+                points_player1 +  ";" + points_player2 + ";" + points_player3 + ";";
+        return out;
     }
 
     //RICHIESTA PERMESSI Android 6.0+ (Marshmallow)
@@ -1343,6 +1562,25 @@ public class TripleFragment extends Fragment {
                 return;
             }
 
+            case LOCATION_PERMISSION_NEARBY:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    advertise = new NearbyAdvertise(getContext(), getMatchState());
+                    advertise.start();
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(getActivity(), getString(R.string.denied_perm_location), Toast.LENGTH_LONG).show();
+
+                }
+                return;
+            }
+
+
             // other 'case' lines to check for other
             // permissions this app might request
         }
@@ -1413,15 +1651,20 @@ public class TripleFragment extends Fragment {
      * SAVE MATCH TO DATABASE
      * If one of the players wins, the score of the match will be saved in History ScoreDB
      */
-    public void saveScoreToDB(String player1,String player2,String player3, int point1,int point2, int point3) {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
-        String date = dateformat.format(c.getTime());
+    public void saveScoreToDB(final String player1, final String player2, final String player3, final int point1, final int point2, final int point3) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable(){
+            public void run(){
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy");
+            String date = dateformat.format(c.getTime());
 
-        ScoreDB db = new ScoreDB(getActivity());
-        db.open();
-        long id = db.insertScore(player1, player2, player3, point1, point2, point3, date, generateHandsDetail());
-        db.close();
+            ScoreDB db = new ScoreDB(getActivity());
+            db.open();
+            long id = db.insertScore(player1, player2, player3, point1, point2, point3, date, generateHandsDetail());
+            db.close();
+            }
+        });
     }
 
     private void saveScoreToFirebase(String player1, String player2, String player3, int score1, int score2, int score3){
@@ -1519,13 +1762,21 @@ public class TripleFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if ((requestCode == REQUEST_PICTURE_1) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m3_1.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m3_1.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                             .withAspectRatio(1, 1)
                             .withMaxResultSize(1080, 1080)
                             .getIntent(getActivity()
@@ -1544,13 +1795,21 @@ public class TripleFragment extends Fragment {
 
 
         if ((requestCode == REQUEST_PICTURE_2) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m3_2.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m3_2.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                             .withAspectRatio(1, 1)
                             .withMaxResultSize(1080, 1080)
                             .getIntent(getActivity()
@@ -1568,13 +1827,21 @@ public class TripleFragment extends Fragment {
         }
 
         if ((requestCode == REQUEST_PICTURE_3) && (resultCode == RESULT_OK)) {
-            // When the user is done picking a picture, let's start the CropImage Activity,
+            // When the user is done picking a picture, let's get data from URI
+            // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-
-            File file = new File(getActivity().getFilesDir(), "img_m3_3.jpg");
-            Uri result = Uri.fromFile(file);
+            //Later we will use this bitmap to create the File
+            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+            //Save this bitmap to a temporary File
+            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+            //Create the definitive file (saved inside App Dir)
+            File destination = new File(getActivity().getFilesDir(), "img_m3_3.jpg");
+            //Start UCrop with the temp and definitive file that will be cropped
             startActivityForResult(
-                    UCrop.of(photo, result)
+                    UCrop.of(
+                            Uri.fromFile(temp),
+                            Uri.fromFile(destination))
                             .withAspectRatio(1, 1)
                             .withMaxResultSize(1080, 1080)
                             .getIntent(getActivity()
@@ -1591,27 +1858,6 @@ public class TripleFragment extends Fragment {
             final Throwable cropError = UCrop.getError(data);
         }
 
-    }
-
-    /**
-     * SAVE IMAGE
-     * Saves profile images in application data path.
-     * It is invoked when setting a new profile image
-     */
-    public void saveImage(File file, File croppedImageFile){
-        try {
-            FileInputStream inStream = new FileInputStream(croppedImageFile);
-            FileOutputStream outStream = new FileOutputStream(file);
-            FileChannel inChannel = inStream.getChannel();
-            FileChannel outChannel = outStream.getChannel();
-            inChannel.transferTo(0, inChannel.size(), outChannel);
-            inStream.close();
-            outStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

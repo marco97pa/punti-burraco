@@ -4,14 +4,24 @@
     package="com.marco97pa.puntiburraco">
     <!-- Chrome Custom Tabs -->
     <uses-sdk tools:overrideLibrary="android.support.customtabs" />
+    <!-- Support ChromeBook -->
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
     <!-- Save screenshot and set profile images -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Support ChromeBook -->
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="false" /> <!-- Internet -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Vibration -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Vibration -->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- In App Billing -->
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <!-- Required for Nearby Connections -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -31,18 +41,19 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
+        <!-- Ads -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_app_id"/>
+            android:value="@string/admob_app_id" />
+        <!-- Firebase -->
         <meta-data
             android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
-            android:value="true"/>
-
+            android:value="true" />
         <!-- Support 18:9 displays -->
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
+        <!-- Custom fonts -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -56,16 +67,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="hh29c.app.goo.gl"
-                    android:scheme="https" />
             </intent-filter>
 
             <meta-data
@@ -97,10 +98,31 @@
                 android:value="com.marco97pa.puntiburraco.MainActivity" />
         </activity>
         <activity
+            android:name=".NearbyDiscoverActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:label="@string/nav_mirroring"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marco97pa.puntiburraco.MainActivity" />
+        </activity>
+        <activity
+            android:name=".UpgradeActivity"
+            android:label="@string/upgrade"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marco97pa.puntiburraco.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MainIntroActivity"
+            android:theme="@style/Theme.Intro" />
+        <activity android:name=".ShareResultActivity" />
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".ShareResultActivity" />
     </application>
 
 </manifest>

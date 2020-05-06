@@ -43,16 +43,15 @@
     <string name="setting_schermo">Modo Always-On</string>
     <string name="setting_notte_d">Ativa o tema escuro para salas escuras</string>
     <string name="setting_schermo_d">Leia a pontuação sem qualquer aborrecimento</string>
-    <string name="setting_share">Enviar aplicativo</string>
-    <string name="setting_share_d">Enviar aos amigos</string>
+    <string name="nav_share">Enviar aplicativo</string>
     <string name="setting_title_app">Aplicativo</string>
     <string name="setting_title_pro">Juego</string>
-    <string name="setting_valuta">Revisar o aplicativo</string>
-    <string name="setting_valuta_d">Obrigado pela vossa ajuda</string>
+    <string name="setting_rate">O que você acha deste aplicativo?</string>
+    <string name="setting_rate_d">Obrigado pela vossa ajuda</string>
     <string name="setting_version">Versão aplicativo</string>
     <string name="setting_version_d">Versão</string>
     <string name="share_hint">Enviar aplicativo</string>
-    <string name="share_message">Instalar</string>
+    <string name="share_message">%1s é um marcador de buraco fácil para o seu smartphone.\nÉ GRATUITO, faça o download na Google Play Store %2s</string>
     <string name="solo">único</string>
     <string name="title_activity_setting">Configurações</string>
     <string name="win">vitórias</string>
@@ -108,4 +107,63 @@
     <string name="setting_inputalternative">Esperto</string>
     <string name="setting_ads_choice">Escolha a configuração dos seus anúncios</string>
     <string name="setting_crash">Crash</string>
+    <string name="like">Gostar</string>
+    <string name="dislike">Não gostar</string>
+    <string name="send_bug_report">Obrigado pela sua franqueza</string>
+    <string name="send_bug_report_question">Deseja enviar um relatório sobre o que você não gosta deste aplicativo?</string>
+    <string name="nav_rate">Comentários</string>
+    <string name="nav_mirroring">Participar de uma partida</string>
+    <string name="setting_intro">MainIntroActivity</string>
+    <string name="app_description">Mais do que um simples apontador de buraco!</string>
+    <string name="intro_set_input_method">O aplicativo calcula os resultados automaticamente. Na próxima seção, você pode escolher seu método de entrada favorito. Se for a sua primeira vez, sugiro que opte pela opção padrão. Você pode alterar esse comportamento facilmente posteriormente em Configurações</string>
+    <string name="intro_share">Você pode compartilhar resultados facilmente com seus amigos no Facebook, Instagram, Whatsapp e outras redes sociais</string>
+    <string name="intro_personalize">Customizar</string>
+    <string name="discoverable">Este dispositivo pode ser descoberto por dispositivos próximos</string>
+    <string name="searching">Procurando por outros jogadores...</string>
+    <string name="open_nearby_hint">Abra %1s em outro dispositivo e escolha %2s no menu para começar a tocar juntos</string>
+    <string name="join">Sediar esta partida</string>
+    <string name="open_nearby_hint2">Inicie uma partida em outro dispositivo e escolha \"Sediar esta partida\" no menu de três pontos para começar a jogar juntos</string>
+    <string name="shared_match">Partilha compartilhada</string>
+    <string name="shared_match_notif">Por questões de privacidade, uma notificação é exibida quando a partida é compartilhada com jogadores próximos</string>
+    <string name="nearby_error">Não é possível compartilhar a partida</string>
+    <string name="nearby_error_d">Ocorreu um problema ao tentar tornar este dispositivo detectável por outras pessoas. Certifique-se de aceitar a permissão Local para este aplicativo. Se o problema persistir, tente reiniciar o aplicativo ou o próprio dispositivo</string>
+    <string name="connected_to">Conectado a %1s</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="denied_perm_location">Permissão negada para encontrar dispositivos próximos usando serviços de localização</string>
+    <string name="stop">Parar de hospedar esta partida</string>
+    <string name="host_or_join">Qualquer pessoa pode participar de uma partida de outro jogador, mas apenas um usuário PRO pode hospedar uma partida</string>
+    <string name="how_to_upgrade">Para hospedar uma partida e outros recursos interessantes, você pode atualizar para a versão PRO usando o botão abaixo</string>
+    <string name="upgrade">Troque para PRO</string>
+    <string name="full_description">
+    \nVocê é um bom jogador de buraco? Você deve atualizar para a <b>versão PRO</b> do Pontos Buraco para desfrutar de uma experiência sem anúncios e de alguns recursos interessantes.
+    \n\nA <b> versão PRO </b> inclui:
+    \n\n<big><b>Convide amigos para participar da sua partida</b></big>
+    \nJogue uma partida juntos e veja os resultados em diferentes dispositivos. Pare seus amigos de levar seu smartphone para ver a pontuação.
+    \nVocê pode compartilhar sua partida com qualquer pessoa dentro de um raio de 10 metros sem usar uma conexão com a Internet; portanto, não se preocupe com seu plano de dados!
+    \nSeus amigos não precisam ser um usuário PRO para participar de suas partidas
+    \n\n<big><b>Remova os anúncios</b></big>
+    \nDesfrute de uma experiência sem anúncios durante o jogo
+    \n\n<big><b>Acesso a todos os futuros recursos exclusivos do PRO</b></big>
+    \nEste aplicativo foi desenvolvido ativamente e estou trabalhando em novos recursos impressionantes. Você os receberá assim que estiverem disponíveis.
+    \n\n<big><b>Apoie o desenvolvimento</b></big>
+    \nExiste apenas uma pessoa por trás deste aplicativo: faço grandes esforços para trazer para você o melhor apontador de pontos do Buraco da Google Play Store
+    \nNo preço de um café, você me ajudará a trabalhar em novos recursos.
+    </string>
+    <string name="error">Erro</string>
+    <string name="error_network">Você não está conectado</string>
+    <string name="loading">Carregando…</string>
+    <string name="action_restore">Restaurar compras</string>
+    <string name="action_redeem">Resgatar um código promocional</string>
+    <string name="thanks">Obrigado por seu apoio!</string>
+    <string name="buy_success">Agora você é um usuário PRO.\nÉ necessário reiniciar o aplicativo para desbloquear todos os recursos e remover anúncios</string>
+    <string name="error_buy_play">A Google Play Store não está disponível. Tente abrir a Google Play Store ou reiniciar o dispositivo Se o problema persistir, talvez o seu dispositivo não seja certificado pelo Google Play: entre em contato com o fabricante para obter mais informações</string>
+    <string name="error_buy_api">A Google Play Store precisa de uma atualização\nTente abrir o Google Play Store e verifique se há atualizações</string>
+    <string name="error_restore_fail">Parece que você não trouxe a versão PRO antes.\nSe você acha que isso é um erro, envie um email para %1s</string>
+    <string name="error_buy_network">Você não parece estar conectado a uma rede.\nPara atualizar para a versão PRO, é necessária uma conexão à Internet</string>
+    <string name="error_buy_user_cancel">Processo de compra cancelado</string>
+    <string name="error_buy_product">O produto solicitado não está disponível para compra</string>
+    <string name="error_buy_developer">Ocorreu um erro durante a compra: entre em contato com o desenvolvedor em %1s</string>
+    <string name="error_buy_generic">Houve um erro genérico durante a compra</string>
+    <string name="error_buy_already_own">Você já possui a versão PRO</string>
+    <string name="only_for_pro">Este recurso está disponível apenas para usuários PRO</string>
 </resources>
