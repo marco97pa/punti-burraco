@@ -1,3 +1,7 @@
+### 13.0.1
+* Improved app shortcuts icons
+* Fixed some untranslated text
+
 ## 13.0.0
 * Share your results on Whatsapp
 * You can now invite players near you to join the match, so anyone can see the game's score on his device

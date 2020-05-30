@@ -106,6 +106,7 @@
     <string name="close">Close</string>
     <string name="like">Like</string>
     <string name="dislike">Dislike</string>
+    <string name="insert_name">Insert the name of the player…</string>
     <string name="error">Error</string>
     <string name="error_network">You are not connected</string>
     <string name="add_point">Points added</string>
