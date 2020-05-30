@@ -3,7 +3,7 @@
     <shortcut
         android:shortcutId="2playersmode"
         android:enabled="true"
-        android:icon="@drawable/ic_outline_looks_2_24px"
+        android:icon="@drawable/ic_shortcut_looks_2"
         android:shortcutShortLabel="@string/nav_2gioc"
         android:shortcutLongLabel="@string/nav_2gioc">
         <intent
@@ -18,7 +18,7 @@
     <shortcut
         android:shortcutId="3playersmode"
         android:enabled="true"
-        android:icon="@drawable/ic_outline_looks_3_24px"
+        android:icon="@drawable/ic_shortcut_looks_3"
         android:shortcutShortLabel="@string/nav_3gioc"
         android:shortcutLongLabel="@string/nav_3gioc">
         <intent
@@ -33,7 +33,7 @@
     <shortcut
         android:shortcutId="4playersmode"
         android:enabled="true"
-        android:icon="@drawable/ic_outline_looks_4_24px"
+        android:icon="@drawable/ic_shortcut_looks_4"
         android:shortcutShortLabel="@string/nav_4gioc"
         android:shortcutLongLabel="@string/nav_4gioc">
         <intent

@@ -10,14 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Modifica nome del giocatore"
+        android:text="@string/action_set"
         android:id="@+id/textView" />
 
     <androidx.emoji.widget.EmojiEditText
         android:id="@+id/edittext"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Inserisci il nome.."
+        android:hint="@string/insert_name"
         android:maxLength="15"
         android:padding="10dp" />
 </LinearLayout>

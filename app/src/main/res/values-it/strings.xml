@@ -179,6 +179,7 @@
         \nDietro questa app c\'è un giovane sviluppatore indipendente: faccio molti sforzi per cercare di realizzare il miglior segnapunti di Burraco sul Play Store
         \nAl prezzo di un caffè mi darai il supporto necessario affinchè possa lavorare su nuove funzionalità e mantenere l\'app compatibile con una vasta gamma di dispositivi
     </string>
+    <string name="insert_name">Inserisci il nome del giocatore…</string>
 
 
 </resources>

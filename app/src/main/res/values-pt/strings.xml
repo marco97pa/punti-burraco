@@ -166,4 +166,5 @@
     <string name="error_buy_generic">Houve um erro genérico durante a compra</string>
     <string name="error_buy_already_own">Você já possui a versão PRO</string>
     <string name="only_for_pro">Este recurso está disponível apenas para usuários PRO</string>
+    <string name="insert_name">Escreva o nome do jogador…</string>
 </resources>
