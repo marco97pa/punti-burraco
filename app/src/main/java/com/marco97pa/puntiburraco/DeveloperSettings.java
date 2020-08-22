@@ -95,6 +95,18 @@ public class DeveloperSettings extends SettingsFragment {
                 return true;
             }
         });
+
+        //Sets intent to launch Intro
+        Preference pro_p = findPreference("pro");
+        pro_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                log.d( "Forcing launch of UpgradeActivity");
+                Intent myIntent = new Intent(getActivity(), UpgradeActivity.class);
+                startActivity(myIntent);
+                return true;
+            }
+        });
     }
 
     @Override
