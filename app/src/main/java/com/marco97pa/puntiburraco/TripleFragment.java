@@ -1051,6 +1051,11 @@ public class TripleFragment extends Fragment {
                 PM2.setVisibility(View.VISIBLE);
             }
         }
+        else if (input_method == 2){
+            PB1.setVisibility(View.VISIBLE);
+            PB2.setVisibility(View.VISIBLE);
+            PB3.setVisibility(View.VISIBLE);
+        }
         win=false;
         //salva tutto
         onSave();
@@ -1287,6 +1292,11 @@ public class TripleFragment extends Fragment {
                     PM1.setVisibility(View.VISIBLE);
                     PM2.setVisibility(View.VISIBLE);
                 }
+            }
+            else if (input_method == 2){
+                PB1.setVisibility(View.VISIBLE);
+                PB2.setVisibility(View.VISIBLE);
+                PB3.setVisibility(View.VISIBLE);
             }
             //SnackBar con annulla
             Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_INDEFINITE)
