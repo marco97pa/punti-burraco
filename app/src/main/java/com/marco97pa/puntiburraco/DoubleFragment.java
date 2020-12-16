@@ -929,7 +929,7 @@ public class DoubleFragment extends Fragment {
                 PZ2.setChecked(false);
 
                 //SnackBar to alert user about the new score
-                Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_LONG)
+                Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_INDEFINITE)
                         .setAction(getString(R.string.ko), new annullaPunti())  // action text on the right side to revert changes
                         .setDuration(10000).show();
 

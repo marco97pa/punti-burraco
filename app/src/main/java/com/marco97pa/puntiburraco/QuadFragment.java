@@ -804,7 +804,7 @@ public class QuadFragment extends Fragment {
             PZ1.setChecked(false);
             PZ2.setChecked(false);
             //SnackBar con annulla
-            Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_LONG)
+            Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.ko), new annullaPunti())  // action text on the right side
                     .setDuration(10000).show();
             //controllo vincita
