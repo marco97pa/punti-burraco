@@ -1431,6 +1431,7 @@ public class TripleFragment extends Fragment {
                 Log.d(TAG, "Advertising: " + getMatchState());
                 advertise.update(getMatchState());
             }
+            ((MainActivity)getActivity()).reviewApp();
         }
         }
         /*

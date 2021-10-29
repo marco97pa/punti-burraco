@@ -896,6 +896,7 @@ public class QuadFragment extends Fragment {
                 Log.d(TAG, "Advertising: " + getMatchState());
                 advertise.update(getMatchState());
             }
+            ((MainActivity)getActivity()).reviewApp();
         }
         }
         catch (NullPointerException e){

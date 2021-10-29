@@ -51,6 +51,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.review.model.ReviewErrorCode;
 import com.google.android.ump.ConsentRequestParameters;
 import com.google.android.ump.FormError;
 import com.google.android.ump.UserMessagingPlatform;
@@ -82,6 +86,7 @@ import com.google.android.ump.ConsentInformation;
 import com.google.android.ump.ConsentRequestParameters;
 import com.google.android.ump.FormError;
 import com.google.android.ump.UserMessagingPlatform;
+import com.marco97pa.puntiburraco.utils.FLog;
 
 
 /**
@@ -309,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.array.com_google_android_gms_fonts_certs);
         EmojiCompat.Config config = new FontRequestEmojiCompatConfig(this, fontRequest);
         EmojiCompat.init(config);
+
 
     }
 
@@ -756,6 +762,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Boolean isPro(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return sharedPref.getBoolean("pro_user", false) ;
+    }
+
+    public void reviewApp(){
+        ReviewManager manager = ReviewManagerFactory.create(this);
+        com.google.android.play.core.tasks.Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            try {
+                if (task.isSuccessful()) {
+                    // We can get the ReviewInfo object
+                    ReviewInfo reviewInfo = task.getResult();
+                    com.google.android.play.core.tasks.Task<Void> flow = manager.launchReviewFlow(MainActivity.this, reviewInfo);
+                    flow.addOnCompleteListener(task2 -> {
+                        // The flow has finished. The API does not indicate whether the user
+                        // reviewed or not, or even whether the review dialog was shown. Thus, no
+                        // matter the result, we continue our app flow.
+                    });
+                } else {
+                    // There was some problem
+                }
+            } catch (Exception ex) {
+                Log.w("Main - reviewApp" , ex);
+            }
+        });
     }
 
     private void sendFeedback(){
