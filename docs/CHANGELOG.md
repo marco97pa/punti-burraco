@@ -1,3 +1,9 @@
+### 13.1.0
+* Added new consent window for ads to comply with GDPR
+* Added new prompt to review the app after a game
+* Solved some bugs
+* Updated libraries and support for Android 12
+
 ### 13.0.1
 * Improved app shortcuts icons
 * Fixed some untranslated text
