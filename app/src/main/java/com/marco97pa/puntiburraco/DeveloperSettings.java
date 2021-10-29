@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.marco97pa.puntiburraco.utils.FLog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +20,7 @@ public class DeveloperSettings extends SettingsFragment {
 
     public static final String TAG = "developer_fragment";
     FirebaseRemoteConfig mFirebaseRemoteConfig;
+    FLog log = new FLog(TAG);
 
     public DeveloperSettings() {
     }
@@ -78,9 +79,8 @@ public class DeveloperSettings extends SettingsFragment {
         crash_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference preference) {
-                Crashlytics.log(Log.DEBUG, TAG, "Forcing a manual crash");
-                Crashlytics.getInstance().crash(); // Force a crash
-                return true;
+                log.d("Forcing a manual crash");
+                throw new RuntimeException("Test Crash"); // Force a crash
             }
         });
 
@@ -89,8 +89,20 @@ public class DeveloperSettings extends SettingsFragment {
         intro_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference preference) {
-                Crashlytics.log(Log.DEBUG, TAG, "Forcing launch of MainIntroActivity");
+                log.d( "Forcing launch of MainIntroActivity");
                 Intent myIntent = new Intent(getActivity(), MainIntroActivity.class);
+                startActivity(myIntent);
+                return true;
+            }
+        });
+
+        //Sets intent to launch Intro
+        Preference pro_p = findPreference("pro");
+        pro_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                log.d( "Forcing launch of UpgradeActivity");
+                Intent myIntent = new Intent(getActivity(), UpgradeActivity.class);
                 startActivity(myIntent);
                 return true;
             }

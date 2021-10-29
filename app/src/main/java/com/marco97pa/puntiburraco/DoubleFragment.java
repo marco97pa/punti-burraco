@@ -29,6 +29,8 @@ import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -171,7 +173,12 @@ public class DoubleFragment extends Fragment {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Boolean isPro = sharedPref.getBoolean("pro_user", false) ;
         if(!isPro) {
-            MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
+            MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
+
             showAds();
         }
 
@@ -929,7 +936,7 @@ public class DoubleFragment extends Fragment {
                 PZ2.setChecked(false);
 
                 //SnackBar to alert user about the new score
-                Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_LONG)
+                Snackbar.make(getView(), getString(R.string.add_point), Snackbar.LENGTH_INDEFINITE)
                         .setAction(getString(R.string.ko), new annullaPunti())  // action text on the right side to revert changes
                         .setDuration(10000).show();
 
@@ -1024,6 +1031,7 @@ public class DoubleFragment extends Fragment {
                     Log.d(TAG, "Advertising: " + getMatchState());
                     advertise.update(getMatchState());
                 }
+                ((MainActivity)getActivity()).reviewApp();
             }
         }
         catch (NullPointerException e){

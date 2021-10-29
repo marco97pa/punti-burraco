@@ -12,8 +12,8 @@ var strings={
         'it': 'Sviluppatore',
     },
     devDesc:{
-        'en': 'years, made in Sicily, based in Pescara, Italy',
-        'it': 'anni, nato in Sicilia, vive a Pescara',
+        'en': 'years, made in Sicily, Italy',
+        'it': 'anni, Sicilia',
     },
     devBtnInfo:{
         'en': 'More info',

@@ -19,6 +19,11 @@
     </androidx.preference.Preference>
 
     <androidx.preference.Preference
+        android:title="@string/upgrade"
+        android:key="pro">
+    </androidx.preference.Preference>
+
+    <androidx.preference.Preference
         android:title="Firebase Remote Config"
         android:summary="Fetching..."
         android:key="remote_config">
