@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PuntiBurraco.iml" filepath="$PROJECT_DIR$/PuntiBurraco.iml" group="PuntiBurraco" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="PuntiBurraco/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PuntiBurraco.iml" filepath="$PROJECT_DIR$/.idea/modules/PuntiBurraco.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PuntiBurraco.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PuntiBurraco.app.iml" />
     </modules>
   </component>
 </project>

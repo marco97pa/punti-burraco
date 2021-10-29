@@ -36,11 +36,6 @@ import android.preference.PreferenceManager;
 
 import androidx.browser.customtabs.CustomTabsIntent;
 
-import com.google.ads.consent.ConsentForm;
-import com.google.ads.consent.ConsentFormListener;
-import com.google.ads.consent.ConsentInfoUpdateListener;
-import com.google.ads.consent.ConsentInformation;
-import com.google.ads.consent.ConsentStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -56,6 +51,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.ump.ConsentRequestParameters;
+import com.google.android.ump.FormError;
+import com.google.android.ump.UserMessagingPlatform;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
@@ -78,6 +76,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
+
+import com.google.android.ump.ConsentForm;
+import com.google.android.ump.ConsentInformation;
+import com.google.android.ump.ConsentRequestParameters;
+import com.google.android.ump.FormError;
+import com.google.android.ump.UserMessagingPlatform;
 
 
 /**
@@ -115,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAnalytics mFirebaseAnalytics;
     Handler mHandler;
     Runnable runnableCode;
+
+    private ConsentInformation consentInformation;
+    private ConsentForm consentForm;
 
     public interface ClickListener {
         void onClick(View view, int position);
@@ -156,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         isAppUpgraded();
         showIntroOnFirstLaunch();
-        checkForConsent();
+        requestConsent(this);
 
         //Firebase Remote Config initialization
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
@@ -568,7 +575,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             recreate();
             if(resultCode == RESULT_OK){
                 if(data.getBooleanExtra("askAds", false)){
-                    requestConsent();
+                    consentInformation.reset();
                 }
             }
         }
@@ -827,123 +834,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void checkForConsent() {
-        //Do not check for consent on first app launch: the MainIntroActivity is shown to the user
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
-        if(!first_app_launch) {
-            ConsentInformation consentInformation = ConsentInformation.getInstance(MainActivity.this);
-            String[] publisherIds = {getString(R.string.admob_pub_id)};
-            consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
-                @Override
-                public void onConsentInfoUpdated(ConsentStatus consentStatus) {
-                    // User's consent status successfully updated.
-                    switch (consentStatus) {
-                        case PERSONALIZED:
-                            Log.d(TAG, "Showing Personalized ads");
-                            adsPersonalized = true;
-                            ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
-                            break;
-                        case NON_PERSONALIZED:
-                            Log.d(TAG, "Showing Non-Personalized ads");
-                            adsPersonalized = false;
-                            ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
-                            break;
-                        case UNKNOWN:
-                            Log.d(TAG, "Requesting Consent");
-                            if (ConsentInformation.getInstance(getBaseContext()).isRequestLocationInEeaOrUnknown()) {
-                                requestConsent();
-                            } else {
-                                adsPersonalized = true;
-                                ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
+    private void requestConsent(Context context){
+        // Set tag for underage of consent. false means users are not underage.
+        ConsentRequestParameters params = new ConsentRequestParameters
+                .Builder()
+                .setTagForUnderAgeOfConsent(false)
+                .build();
 
-                @Override
-                public void onFailedToUpdateConsentInfo(String errorDescription) {
-                    // User's consent status failed to update.
-                }
-            });
-        }
+        consentInformation = UserMessagingPlatform.getConsentInformation(context);
+        consentInformation.requestConsentInfoUpdate(
+                this,
+                params,
+                new ConsentInformation.OnConsentInfoUpdateSuccessListener() {
+                    @Override
+                    public void onConsentInfoUpdateSuccess() {
+                        // The consent information state was updated.
+                        // You are now ready to check if a form is available.
+                        if (consentInformation.isConsentFormAvailable()) {
+                            loadForm();
+                        }
+                    }
+                },
+                new ConsentInformation.OnConsentInfoUpdateFailureListener() {
+                    @Override
+                    public void onConsentInfoUpdateFailure(FormError formError) {
+                        // Handle the error.
+                    }
+                });
     }
 
-    private void requestConsent() {
-        URL privacyUrl = null;
-        try {
-            privacyUrl = new URL("https://marco97pa.github.io/punti-burraco/privacy_policy");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            // Handle error
-            Log.d(TAG, "Requesting Consent: Bad or missing privacy policy URL");
-        }
-        form = new ConsentForm.Builder(MainActivity.this, privacyUrl)
-                .withListener(new ConsentFormListener() {
+    public void loadForm(){
+        UserMessagingPlatform.loadConsentForm(
+                this,
+                new UserMessagingPlatform.OnConsentFormLoadSuccessListener() {
                     @Override
-                    public void onConsentFormLoaded() {
-                        // Consent form loaded successfully.
-                        Log.d(TAG, "Requesting Consent: onConsentFormLoaded");
-                        showForm();
-                    }
+                    public void onConsentFormLoadSuccess(com.google.android.ump.ConsentForm consentForm) {
+                        MainActivity.this.consentForm = consentForm;
+                        if(consentInformation.getConsentStatus() == ConsentInformation.ConsentStatus.REQUIRED) {
+                            consentForm.show(
+                                    MainActivity.this,
+                                    new ConsentForm.OnConsentFormDismissedListener() {
+                                        @Override
+                                        public void onConsentFormDismissed(@Nullable FormError formError) {
+                                            // Handle dismissal by reloading form.
+                                            loadForm();
+                                        }
+                                    });
 
-                    @Override
-                    public void onConsentFormOpened() {
-                        // Consent form was displayed.
-                        Log.d(TAG, "Requesting Consent: onConsentFormOpened");
-                    }
-
-                    @Override
-                    public void onConsentFormClosed(
-                            ConsentStatus consentStatus, Boolean userPrefersAdFree) {
-                        Log.d(TAG, "Requesting Consent: onConsentFormClosed");
-                            switch (consentStatus) {
-                                case PERSONALIZED:
-                                    adsPersonalized = true;
-                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.PERSONALIZED);
-                                    break;
-                                case NON_PERSONALIZED:
-                                    adsPersonalized = false;
-                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
-                                    break;
-                                case UNKNOWN:
-                                    ConsentInformation.getInstance(getApplicationContext()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
-                                    adsPersonalized = false;
-                                    break;
-                            }
-
-                            if(userPrefersAdFree){
-                                //Launches Upgrade Activity
-                                Intent myIntent = new Intent(getApplicationContext(), UpgradeActivity.class);
-                                startActivity(myIntent);
-                            }
                         }
 
-                    @Override
-                    public void onConsentFormError(String errorDescription) {
-                        Log.d(TAG, "Requesting Consent: onConsentFormError. Error - " + errorDescription);
-                        // Consent form error.
                     }
-                })
-                .withPersonalizedAdsOption()
-                .withNonPersonalizedAdsOption()
-                .withAdFreeOption()
-                .build();
-        form.load();
-    }
-
-    private void showForm() {
-        if (form == null) {
-            Log.d(TAG, "Consent form is null");
-        }
-        if (form != null) {
-            Log.d(TAG, "Showing consent form");
-            form.show();
-        } else {
-            Log.d(TAG, "Not Showing consent form");
-        }
+                },
+                new UserMessagingPlatform.OnConsentFormLoadFailureListener() {
+                    @Override
+                    public void onConsentFormLoadFailure(FormError formError) {
+                        /// Handle Error.
+                    }
+                }
+        );
     }
 
     public void setAppTheme() {
