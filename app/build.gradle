@@ -31,7 +31,7 @@ android {
 repositories {
     maven { url "https://maven.google.com" }
     maven { url "https://dl.bintray.com/caarmen/maven/" }
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
@@ -60,7 +60,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.yalantis:ucrop:2.2.4'
     implementation 'com.heinrichreimersoftware:material-intro:2.0.0'
-    implementation 'com.anjlab.android.iab.v3:library:1.1.0'
+    implementation 'com.anjlab.android.iab.v3:library:2.0.0'
     testImplementation 'junit:junit:4.13'
 }
 
