@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.marco97pa.puntiburraco.utils.FLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +55,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     FragmentManager fragmentManager;
     FirebaseRemoteConfig mFirebaseRemoteConfig;
     public static final String TAG = "SettingsFragment";
+    FLog log = new FLog(TAG);
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String s) {
@@ -73,7 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             boolean isLowRamDevice = am.isLowRamDevice();
             img.setDefaultValue(!isLowRamDevice);
-            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+            log.d( "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
         }
         else{
             img.setDefaultValue(true);
@@ -92,11 +94,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     public void onComplete(@NonNull Task<Boolean> task) {
                         if (task.isSuccessful()) {
                             boolean updated = task.getResult();
-                            Log.d(TAG, "Fetch and activate succeeded");
-                            Log.d(TAG, "Config params updated: " + updated);
+                            log.d( "Fetch and activate succeeded");
+                            log.d( "Config params updated: " + updated);
 
                         } else {
-                            Log.d(TAG, "Fetch failed");
+                            log.d( "Fetch failed");
                         }
                         //Sets visibility of nav_rate
                         Preference nav_rate = findPreference("nav_rate");

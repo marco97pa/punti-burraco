@@ -37,11 +37,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+import com.marco97pa.puntiburraco.utils.FLog;
 
 import java.nio.charset.Charset;
 
 public class NearbyDiscoverActivity extends AppCompatActivity {
     private static final String TAG = "NearbyDiscover";
+    FLog log;
+    
     private String SERVICE_ID;
     private Context context;
     private final static int LOCATION_PERMISSION_NEARBY = 40;
@@ -57,6 +60,8 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_discover);
+        
+        log = new FLog(TAG);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -139,7 +144,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
 
 
     private void startDiscovery() {
-        Log.d(TAG, "Nearby starting...");
+        log.d( "Nearby starting...");
         DiscoveryOptions discoveryOptions =
                 new DiscoveryOptions.Builder().setStrategy(Strategy.P2P_STAR).build();
         Nearby.getConnectionsClient(context)
@@ -149,7 +154,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void unused) {
                                 // We're discovering!
-                                Log.d(TAG, "We're discovering!");
+                                log.d( "We're discovering!");
                             }
                         })
                 .addOnFailureListener(
@@ -157,7 +162,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // We're unable to start discovering.
-                                Log.d(TAG, "We're unable to start discovering.");
+                                log.d( "We're unable to start discovering.");
                                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, R.style.AppTheme_Dialog);
                                 builder .setTitle(context.getString(R.string.nearby_error))
                                         .setMessage(context.getString(R.string.nearby_error_d))
@@ -178,7 +183,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                 @Override
                 public void onEndpointFound(String endpointId, DiscoveredEndpointInfo info) {
                     // An endpoint was found. We request a connection to it.
-                    Log.d(TAG,"Found endpoint " + info.getEndpointName());
+                    log.d("Found endpoint " + info.getEndpointName());
                     endPointName = info.getEndpointName();
                     Nearby.getConnectionsClient(context)
                             .requestConnection(getUserNickname(), endpointId, connectionLifecycleCallback)
@@ -188,7 +193,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                                         public void onSuccess(Void unused) {
                                             // We successfully requested a connection. Now both sides
                                             // must accept before the connection is established.
-                                            Log.d(TAG,"We successfully requested a connection.");
+                                            log.d("We successfully requested a connection.");
                                         }
                                     })
                             .addOnFailureListener(
@@ -196,7 +201,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             // Nearby Connections failed to request the connection.
-                                            Log.d(TAG,"Failed to request the connection.");
+                                            log.d("Failed to request the connection.");
                                         }
                                     });
                 }
@@ -204,7 +209,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                 @Override
                 public void onEndpointLost(String endpointId) {
                     // A previously discovered endpoint has gone away.
-                    Log.d(TAG,"A previously discovered endpoint has gone away");
+                    log.d("A previously discovered endpoint has gone away");
                     search.setVisibility(View.VISIBLE);
                     game.setVisibility(View.GONE);
                     Snackbar.make(findViewById(R.id.myCoordinatorLayout),
@@ -227,7 +232,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                     switch (result.getStatus().getStatusCode()) {
                         case ConnectionsStatusCodes.STATUS_OK:
                             // We're connected! Can now start sending and receiving data.
-                            Log.d(TAG, "We're connected! Can now start sending and receiving data");
+                            log.d( "We're connected! Can now start sending and receiving data");
                             endPointID = endpointId;
                             search.setVisibility(View.GONE);
                             game.setVisibility(View.VISIBLE);
@@ -239,11 +244,11 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                         break;
                         case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
                             // The connection was rejected by one or both sides.
-                            Log.d(TAG, "The connection was rejected by one or both sides.");
+                            log.d( "The connection was rejected by one or both sides.");
                             break;
                         case ConnectionsStatusCodes.STATUS_ERROR:
                             // The connection broke before it was able to be accepted.
-                            Log.d(TAG, "The connection broke before it was able to be accepted.");
+                            log.d( "The connection broke before it was able to be accepted.");
                             break;
                         default:
                             // Unknown status code
@@ -254,7 +259,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                 public void onDisconnected(String endpointId) {
                     // We've been disconnected from this endpoint. No more data can be
                     // sent or received.
-                    Log.d(TAG, "We've been disconnected from this endpoint " + endpointId);
+                    log.d( "We've been disconnected from this endpoint " + endpointId);
                     search.setVisibility(View.VISIBLE);
                     game.setVisibility(View.GONE);
                     Snackbar.make(findViewById(R.id.myCoordinatorLayout),
@@ -275,7 +280,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                     byte[] receivedBytes = payload.asBytes();
                     //Converting bytes to String
                     String state = new String(receivedBytes, Charset.forName("UTF-8"));
-                    Log.d(TAG, "Received: " + state);
+                    log.d( "Received: " + state);
                     updateUI(state, endPointName);
 
                 }
@@ -308,6 +313,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
     //ASK PERMISSION Android 6.0+ (Marshmallow)
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case LOCATION_PERMISSION_NEARBY: {
                 // If request is cancelled, the result arrays are empty.

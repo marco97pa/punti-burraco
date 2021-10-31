@@ -21,6 +21,7 @@ import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.marco97pa.puntiburraco.utils.FLog;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ import static com.google.android.gms.nearby.connection.Strategy.P2P_STAR;
 
 public class NearbyAdvertise {
     private static final String TAG = "NearbyAdvertise";
+    FLog log = new FLog(TAG);
+    
     private static String CHANNEL_ID = "channel_shared_match";
     private static int NOTIFICATION_ID = 2;
     private String SERVICE_ID;
@@ -71,7 +74,7 @@ public class NearbyAdvertise {
 
         SERVICE_ID = context.getPackageName();
         connectedEndpoints =  new ArrayList<String>();
-        Log.d(TAG, "Nearby starting...");
+        log.d( "Nearby starting...");
 
         AdvertisingOptions advertisingOptions = new AdvertisingOptions.Builder().setStrategy(P2P_STAR).build();
         Nearby.getConnectionsClient(context)
@@ -82,7 +85,7 @@ public class NearbyAdvertise {
                             @Override
                             public void onSuccess(Void unused) {
                                 // We're advertising!
-                                Log.d(TAG, "We're advertising!");
+                                log.d( "We're advertising!");
 
                                 running = true;
 
@@ -121,7 +124,7 @@ public class NearbyAdvertise {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // We were unable to start advertising.
-                                Log.d(TAG, "We were unable to start advertising.");
+                                log.d( "We were unable to start advertising.");
 
                                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, R.style.AppTheme_Dialog);
                                 builder .setTitle(context.getString(R.string.nearby_error))
@@ -154,7 +157,7 @@ public class NearbyAdvertise {
                 @Override
                 public void onEndpointFound(String endpointId, DiscoveredEndpointInfo info) {
                     // An endpoint was found. We request a connection to it.
-                    Log.d(TAG,"Found endpoint " + info.getEndpointName());
+                    log.d("Found endpoint " + info.getEndpointName());
                     Nearby.getConnectionsClient(context)
                             .requestConnection(getUserNickname(), endpointId, connectionLifecycleCallback)
                             .addOnSuccessListener(
@@ -163,7 +166,7 @@ public class NearbyAdvertise {
                                         public void onSuccess(Void unused) {
                                             // We successfully requested a connection. Now both sides
                                             // must accept before the connection is established.
-                                            Log.d(TAG, "We successfully requested a connection");
+                                            log.d( "We successfully requested a connection");
                                         }
                                     })
                             .addOnFailureListener(
@@ -171,7 +174,7 @@ public class NearbyAdvertise {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             // Nearby Connections failed to request the connection.
-                                            Log.d(TAG, "Failed to request the connection.");
+                                            log.d( "Failed to request the connection.");
                                         }
                                     });
                 }
@@ -179,7 +182,7 @@ public class NearbyAdvertise {
                 @Override
                 public void onEndpointLost(String endpointId) {
                     // A previously discovered endpoint has gone away.
-                    Log.d(TAG, "A previously discovered endpoint has gone away");
+                    log.d( "A previously discovered endpoint has gone away");
                 }
             };
 
@@ -196,17 +199,17 @@ public class NearbyAdvertise {
                     switch (result.getStatus().getStatusCode()) {
                         case ConnectionsStatusCodes.STATUS_OK:
                             // We're connected! Can now start sending and receiving data.
-                            Log.d(TAG, "We're connected! Can now start sending and receiving data");
+                            log.d( "We're connected! Can now start sending and receiving data");
                             connectedEndpoints.add(endpointId);
                             sendState(endpointId);
                             break;
                         case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
                             // The connection was rejected by one or both sides.
-                            Log.d(TAG,"The connection was rejected by one or both sides");
+                            log.d("The connection was rejected by one or both sides");
                             break;
                         case ConnectionsStatusCodes.STATUS_ERROR:
                             // The connection broke before it was able to be accepted.
-                            Log.d(TAG, "The connection broke before it was able to be accepted");
+                            log.d( "The connection broke before it was able to be accepted");
                             break;
                         default:
                             // Unknown status code
@@ -216,7 +219,7 @@ public class NearbyAdvertise {
                 @Override
                 public void onDisconnected(String endpointId) {
                     // We've been disconnected from this endpoint. No more data can be
-                    Log.d(TAG,"We've been disconnected from this endpoint: "+ endpointId);
+                    log.d("We've been disconnected from this endpoint: "+ endpointId);
                     connectedEndpoints.remove(endpointId);
                     // sent or received.
                 }
@@ -252,7 +255,7 @@ public class NearbyAdvertise {
         //Convert String state to byte before sending
         byte[] send = state.getBytes(Charset.forName("UTF-8"));
         //Send bytes
-        Log.d(TAG, "Sending state to " + toEndpointId);
+        log.d( "Sending state to " + toEndpointId);
         Payload bytesPayload = Payload.fromBytes(send);
         Nearby.getConnectionsClient(context).sendPayload(toEndpointId, bytesPayload);
     }

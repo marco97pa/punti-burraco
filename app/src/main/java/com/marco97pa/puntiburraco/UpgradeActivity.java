@@ -1,7 +1,5 @@
 package com.marco97pa.puntiburraco;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,15 +12,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.android.billingclient.api.BillingClient;
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.PurchaseInfo;
 import com.anjlab.android.iab.v3.SkuDetails;
-import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.marco97pa.puntiburraco.utils.FLog;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,30 +37,24 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.anjlab.android.iab.v3.Constants.BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE;
-import static com.anjlab.android.iab.v3.Constants.BILLING_RESPONSE_RESULT_DEVELOPER_ERROR;
-import static com.anjlab.android.iab.v3.Constants.BILLING_RESPONSE_RESULT_ERROR;
-import static com.anjlab.android.iab.v3.Constants.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED;
-import static com.anjlab.android.iab.v3.Constants.BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE;
-import static com.anjlab.android.iab.v3.Constants.BILLING_RESPONSE_RESULT_SERVICE_UNAVAILABLE;
-import static com.anjlab.android.iab.v3.Constants.BILLING_RESPONSE_RESULT_USER_CANCELED;
 
 public class UpgradeActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
 
     private static final int BUY_SUCCESS = 0;
     private static final int GOOGLE_PLAY_NOT_AVAILABLE = 1;
-    private static final int ONE_TIME_PURCHASE_UNSUPPORTED = 2;
+    private static final int GOOGLE_PLAY_NEEDS_UPDATE = 2;
     private static final int RESTORE_FAIL = 3;
     private static final int NO_INTERNET = 4;
 
+    private static final String LOG_TAG = "UpgradeActivity";
+    FLog log;
+
     BillingProcessor bp;
     boolean isAvailable;
-    boolean isOneTimePurchaseSupported;
     private CollapsingToolbarLayout collapsingToolbar;
     private TextView description;
     private ExtendedFloatingActionButton fab;
@@ -71,6 +66,8 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upgrade);
+
+        log = new FLog(LOG_TAG);
 
         details_layout = (LinearLayout) findViewById(R.id.details);
 
@@ -117,12 +114,7 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
             showAlert(NO_INTERNET);
         }
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buy();
-            }
-        });
+        fab.setOnClickListener(view -> buy());
 
     }
 
@@ -130,14 +122,27 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
         bp.purchase(this, getString(R.string.in_app_pro_version));
     }
 
+    /**
+     * Restores already made purchases
+     */
     private void restore(){
-        bp.loadOwnedPurchasesFromGoogle();
-        if(bp.isPurchased(getString(R.string.in_app_pro_version))){
-            upgrade();
-        }
-        else{
-            showAlert(RESTORE_FAIL);
-        }
+        bp.loadOwnedPurchasesFromGoogleAsync(new BillingProcessor.IPurchasesResponseListener() {
+            @Override
+            public void onPurchasesSuccess() {
+                if(bp.isPurchased(getString(R.string.in_app_pro_version))){
+                    upgrade();
+                }
+                else{
+                    showAlert(RESTORE_FAIL);
+                }
+            }
+
+            @Override
+            public void onPurchasesError() {
+                showAlert(NO_INTERNET);
+            }
+        });
+
     }
 
     private void upgrade(){
@@ -185,7 +190,7 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
                 description = getString(R.string.error_buy_play);
                 break;
 
-            case ONE_TIME_PURCHASE_UNSUPPORTED:
+            case GOOGLE_PLAY_NEEDS_UPDATE:
                 icon = R.drawable.ic_warning_24dp;
                 title = getString(R.string.error);
                 description = getString(R.string.error_buy_api);
@@ -211,6 +216,8 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
                 .setCancelable(false);
         AlertDialog alert = builder.create();
         alert.show();
+
+        log.e(description);
     }
 
     private void redeemPromoCode(){
@@ -275,20 +282,25 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
     @Override
     public void onBillingInitialized() {
         /*
-         * Called when BillingProcessor was initialized and it's ready to purchase
+         * Called when BillingProcessor is initialized and it's ready to purchase
          */
-        isOneTimePurchaseSupported = bp.isOneTimePurchaseSupported();
-        if (isOneTimePurchaseSupported) {
-            SkuDetails sku = bp.getPurchaseListingDetails(getString(R.string.in_app_pro_version));
-            collapsingToolbar.setTitle(purgeTitle(sku.title));
-            details_layout.setVisibility(View.VISIBLE);
-            description.setText(sku.description);
-            fab.setText(sku.priceText);
-            fab.setEnabled(true);
-        }
-        else{
-            showAlert(ONE_TIME_PURCHASE_UNSUPPORTED);
-        }
+        bp.getPurchaseListingDetailsAsync(getString(R.string.in_app_pro_version), new BillingProcessor.ISkuDetailsResponseListener() {
+            @Override
+            public void onSkuDetailsResponse(@Nullable List<SkuDetails> products) {
+                SkuDetails sku = products.get(0);
+                collapsingToolbar.setTitle(purgeTitle(sku.title));
+                details_layout.setVisibility(View.VISIBLE);
+                description.setText(sku.description);
+                fab.setText(sku.priceText);
+                fab.setEnabled(true);
+            }
+
+            @Override
+            public void onSkuDetailsError(String error) {
+                Snackbar mySnackbar = Snackbar.make(appbar, getString(R.string.error_buy_product), Snackbar.LENGTH_LONG);
+                mySnackbar.show();
+            }
+        });
     }
 
     /**
@@ -309,7 +321,7 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
     }
 
     @Override
-    public void onProductPurchased(String productId, TransactionDetails details) {
+    public void onProductPurchased(String productId, PurchaseInfo details) {
         /*
          * Called when requested PRODUCT ID was successfully purchased
          */
@@ -328,22 +340,22 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
         switch (errorCode){
 
             //User pressed back or canceled a dialog
-            case BILLING_RESPONSE_RESULT_USER_CANCELED:
+            case BillingClient.BillingResponseCode.USER_CANCELED:
                 error_msg = getString(R.string.error_buy_user_cancel);
                 break;
 
             // Network connection is down
-            case BILLING_RESPONSE_RESULT_SERVICE_UNAVAILABLE:
+            case BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE:
                 error_msg = getString(R.string.error_network);
                 break;
 
             //Billing API version is not supported for the type requested
-            case BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE:
+            case BillingClient.BillingResponseCode.BILLING_UNAVAILABLE:
                 error_msg = getString(R.string.error_buy_api);
                 break;
 
             //Requested product is not available for purchase
-            case BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE:
+            case BillingClient.BillingResponseCode.ITEM_UNAVAILABLE:
                 error_msg = getString(R.string.error_buy_product);
                 break;
 
@@ -351,17 +363,17 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
                 was not correctly signed or properly set up for In-app Billing in Google Play, or
                 does not have the necessary permissions in its manifest
              */
-            case BILLING_RESPONSE_RESULT_DEVELOPER_ERROR:
+            case BillingClient.BillingResponseCode.DEVELOPER_ERROR:
                 error_msg = getString(R.string.error_buy_developer, getString(R.string.email));
                 break;
 
             //Fatal error during the API action
-            case BILLING_RESPONSE_RESULT_ERROR:
+            case BillingClient.BillingResponseCode.ERROR:
                 error_msg = getString(R.string.error_buy_generic);
                 break;
 
             //Failure to purchase since item is already owned
-            case BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED:
+            case BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED:
                 error_msg = getString(R.string.error_buy_already_own);
                 upgrade();
                 break;
@@ -369,6 +381,8 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
 
         Snackbar mySnackbar = Snackbar.make(appbar, error_msg, Snackbar.LENGTH_LONG);
         mySnackbar.show();
+
+        log.e("error_msg");
     }
 
     @Override
@@ -379,15 +393,9 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
          */
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 
     /**
-     * And don't forget to release your BillingProcessor instance!
+     * Don't forget to release your BillingProcessor instance!
      */
     @Override
     public void onDestroy() {
