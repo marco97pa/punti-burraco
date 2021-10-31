@@ -56,6 +56,7 @@ import android.widget.Toast;
 
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.marco97pa.puntiburraco.utils.FLog;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -93,6 +94,8 @@ public class DoubleFragment extends Fragment {
      */
 
     public static final String TAG = "2PlayersFragment";
+    FLog log;
+    
     int bp1,bp2, bi1, bi2, bs1, bs2,pn1,pn2,tot1,tot2,pm1,pm2, pb1, pb2;
     private TextView textNome1, textNome2;
     private TextView punti1, punti2;
@@ -141,6 +144,8 @@ public class DoubleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_double, container, false);
+        
+        log = new FLog(TAG);
 
         textNome1 = (TextView) rootView.findViewById(R.id.editNome1);
         textNome2 = (TextView) rootView.findViewById(R.id.editNome2);
@@ -263,7 +268,7 @@ public class DoubleFragment extends Fragment {
                                 onSave();
                                 //advertise
                                 if(advertise != null && advertise.isRunning()) {
-                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    log.d( "Advertising: " + getMatchState());
                                     advertise.update(getMatchState());
                                 }
                                 return true;
@@ -333,7 +338,7 @@ public class DoubleFragment extends Fragment {
                                 onSave();
                                 //advertise
                                 if(advertise != null && advertise.isRunning()) {
-                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    log.d( "Advertising: " + getMatchState());
                                     advertise.update(getMatchState());
                                 }
                                 return true;
@@ -360,7 +365,7 @@ public class DoubleFragment extends Fragment {
             if (getActivity().isInMultiWindowMode()) {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
-                Log.d(TAG, "images disabled: isInMultiWindowMode = true");
+                log.d( "images disabled: isInMultiWindowMode = true");
             }
         }
 
@@ -447,7 +452,7 @@ public class DoubleFragment extends Fragment {
                         onSave();
                         //advertise
                         if(advertise != null && advertise.isRunning()) {
-                            Log.d(TAG, "Advertising: " + getMatchState());
+                            log.d( "Advertising: " + getMatchState());
                             advertise.update(getMatchState());
                         }
                     }
@@ -480,7 +485,7 @@ public class DoubleFragment extends Fragment {
                         onSave();
                         //advertise
                         if(advertise != null && advertise.isRunning()) {
-                            Log.d(TAG, "Advertising: " + getMatchState());
+                            log.d( "Advertising: " + getMatchState());
                             advertise.update(getMatchState());
                         }
                     }
@@ -552,7 +557,7 @@ public class DoubleFragment extends Fragment {
                 if(isPro) {
                     //Start Advertising using Nearby library
                     //First ask the permission in Android 6.0+
-                    Log.d(TAG,"Option selected: Advertise");
+                    log.d("Option selected: Advertise");
                     if(advertise == null || !advertise.isRunning()){
                         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             requestPermissions(
@@ -662,7 +667,7 @@ public class DoubleFragment extends Fragment {
         ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             isLowRamDevice = am.isLowRamDevice();
-            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+            log.d( "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
         }
 
         Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
@@ -746,7 +751,7 @@ public class DoubleFragment extends Fragment {
         IMG2.setImageResource(R.drawable.circle_placeholder);
         //advertise
         if(advertise != null && advertise.isRunning()) {
-            Log.d(TAG, "Advertising: " + getMatchState());
+            log.d( "Advertising: " + getMatchState());
             advertise.update(getMatchState());
         }
     }
@@ -1028,7 +1033,7 @@ public class DoubleFragment extends Fragment {
                 saveEditedViews();
                 //advertise
                 if(advertise != null && advertise.isRunning()) {
-                    Log.d(TAG, "Advertising: " + getMatchState());
+                    log.d( "Advertising: " + getMatchState());
                     advertise.update(getMatchState());
                 }
                 ((MainActivity)getActivity()).reviewApp();
@@ -1053,7 +1058,7 @@ public class DoubleFragment extends Fragment {
             onSave();
             //advertise
             if(advertise != null && advertise.isRunning()) {
-                Log.d(TAG, "Advertising: " + getMatchState());
+                log.d( "Advertising: " + getMatchState());
                 advertise.update(getMatchState());
             }
         }

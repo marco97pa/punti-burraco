@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private String TAG = this.getClass().getSimpleName();
+    FLog log;
 
     public static Context contextOfApplication;
     public static String SERVICE_ID;
@@ -138,6 +139,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        log = new FLog(TAG);
+        
         setAppTheme();
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
@@ -183,11 +186,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onComplete(@NonNull Task<Boolean> task) {
                         if (task.isSuccessful()) {
                             boolean updated = task.getResult();
-                            Log.d(TAG, "Fetch and activate succeeded");
-                            Log.d(TAG, "Config params updated: " + updated);
+                            log.d( "Fetch and activate succeeded");
+                            log.d( "Config params updated: " + updated);
 
                         } else {
-                            Log.d(TAG, "Fetch failed");
+                            log.d( "Fetch failed");
                         }
                         setNavFeedback(mFirebaseRemoteConfig.getBoolean("nav_menu_feedback"));
                     }
@@ -399,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
              * - 4: game interrupted in 4 players mode*/
             SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
             status = sharedPref.getInt("interrupted", 0);
-            Log.i("STATO:", Integer.toString(status));
+            log.i("GAME STATE:" + Integer.toString(status));
             //check if the score is 0 - 0: in that case do not notify
             boolean scoreNotZero = true;
             if (sharedPref.getInt("p1", PDefault) == 0 && sharedPref.getInt("p2", PDefault) == 0
@@ -687,16 +690,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 lang = getResources().getConfiguration().locale;
             }
             String localeId = lang.toString();
-            Log.i("LINGUA", localeId);
+            log.i("LANG " + localeId);
             //If lang is italian it will be redirected to guide-it.html., else to guide-en.html
             String URLtoLaunch;
             if(localeId.equals("it_IT")) {
                 URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-it.html";
-                Log.i("language", "IT");
+                log.i("language " + "IT");
             }
             else{
                 URLtoLaunch = "https://marco97pa.github.io/punti-burraco/guide-en.html";
-                Log.i("language", "EN");
+                log.i("language " + "EN");
             }
 
             //Add parameters that a javascript script on the webpage can detect
@@ -765,6 +768,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void reviewApp(){
+        log.i("Starting Review call to Play Store");
         ReviewManager manager = ReviewManagerFactory.create(this);
         com.google.android.play.core.tasks.Task<ReviewInfo> request = manager.requestReviewFlow();
         request.addOnCompleteListener(task -> {
@@ -782,7 +786,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     // There was some problem
                 }
             } catch (Exception ex) {
-                Log.w("Main - reviewApp" , ex);
+                log.w("reviewApp: " + ex);
             }
         });
     }
@@ -855,7 +859,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showIntroOnFirstLaunch(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
-        Log.d(TAG,"First app launch:" + first_app_launch);
+        log.d("First app launch:" + first_app_launch);
         if(first_app_launch){
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN, null);
             Intent myIntent = new Intent(this, MainIntroActivity.class);

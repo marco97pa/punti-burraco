@@ -43,14 +43,14 @@ public class DeveloperSettings extends SettingsFragment {
                         String firebaseConfig = "";
                         if (task.isSuccessful()) {
                             boolean updated = task.getResult();
-                            Log.d(TAG, "Fetch and activate succeeded");
-                            Log.d(TAG, "Config params updated: " + updated);
+                            log.d( "Fetch and activate succeeded");
+                            log.d( "Config params updated: " + updated);
                             //Generate Configuration String
                             firebaseConfig += "downloads: " + mFirebaseRemoteConfig.getLong("downloads") + "\n";
                             firebaseConfig += "nav_menu_feedback: " + mFirebaseRemoteConfig.getBoolean("nav_menu_feedback") + "\n";
 
                         } else {
-                            Log.d(TAG, "Fetch failed");
+                            log.d( "Fetch failed");
                             firebaseConfig = "Fetch failed";
                         }
 

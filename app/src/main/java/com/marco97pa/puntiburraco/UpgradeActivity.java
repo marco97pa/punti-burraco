@@ -381,6 +381,8 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
 
         Snackbar mySnackbar = Snackbar.make(appbar, error_msg, Snackbar.LENGTH_LONG);
         mySnackbar.show();
+
+        log.e("error_msg");
     }
 
     @Override

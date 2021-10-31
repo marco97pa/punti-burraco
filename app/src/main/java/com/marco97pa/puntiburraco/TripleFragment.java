@@ -36,6 +36,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.marco97pa.puntiburraco.utils.FLog;
 import com.yalantis.ucrop.UCrop;
 
 import androidx.core.app.ActivityCompat;
@@ -84,6 +85,8 @@ import static android.content.Context.ACTIVITY_SERVICE;
 public class TripleFragment extends Fragment {
 
     public static final String TAG = "3PlayersFragment";
+    FLog log;
+    
     int bp1,bp2,bp3, bi1, bi2,bi3, bs1, bs2,bs3,pn1,pn2,pn3,tot1,tot2,tot3,pm1,pm2,pm3, pb1, pb2, pb3;
     int tot=0;
     private TextView textNome1, textNome2, textNome3;
@@ -138,6 +141,8 @@ public class TripleFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_triple, container, false);
+        
+        log = new FLog(TAG);
 
         tot1=0;
         tot2=0;
@@ -441,7 +446,7 @@ public class TripleFragment extends Fragment {
                                 onSave();
                                 //advertise
                                 if(advertise != null && advertise.isRunning()) {
-                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    log.d( "Advertising: " + getMatchState());
                                     advertise.update(getMatchState());
                                 }
                                 return true;
@@ -511,7 +516,7 @@ public class TripleFragment extends Fragment {
                                 onSave();
                                 //advertise
                                 if(advertise != null && advertise.isRunning()) {
-                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    log.d( "Advertising: " + getMatchState());
                                     advertise.update(getMatchState());
                                 }
                                 return true;
@@ -581,7 +586,7 @@ public class TripleFragment extends Fragment {
                                 onSave();
                                 //advertise
                                 if(advertise != null && advertise.isRunning()) {
-                                    Log.d(TAG, "Advertising: " + getMatchState());
+                                    log.d( "Advertising: " + getMatchState());
                                     advertise.update(getMatchState());
                                 }
                                 return true;
@@ -609,7 +614,7 @@ public class TripleFragment extends Fragment {
                 IMG1.setVisibility(View.GONE);
                 IMG2.setVisibility(View.GONE);
                 IMG3.setVisibility(View.GONE);
-                Log.d(TAG, "images disabled: isInMultiWindowMode = true");
+                log.d( "images disabled: isInMultiWindowMode = true");
             }
         }
 
@@ -646,7 +651,7 @@ public class TripleFragment extends Fragment {
                         onSave();
                         //advertise
                         if(advertise != null && advertise.isRunning()) {
-                            Log.d(TAG, "Advertising: " + getMatchState());
+                            log.d( "Advertising: " + getMatchState());
                             advertise.update(getMatchState());
                         }
                     }
@@ -679,7 +684,7 @@ public class TripleFragment extends Fragment {
                         onSave();
                         //advertise
                         if(advertise != null && advertise.isRunning()) {
-                            Log.d(TAG, "Advertising: " + getMatchState());
+                            log.d( "Advertising: " + getMatchState());
                             advertise.update(getMatchState());
                         }
                     }
@@ -712,7 +717,7 @@ public class TripleFragment extends Fragment {
                         onSave();
                         //advertise
                         if(advertise != null && advertise.isRunning()) {
-                            Log.d(TAG, "Advertising: " + getMatchState());
+                            log.d( "Advertising: " + getMatchState());
                             advertise.update(getMatchState());
                         }
                     }
@@ -772,7 +777,7 @@ public class TripleFragment extends Fragment {
                 if(isPro) {
                     //Start Advertising using Nearby library
                     //First ask the permission in Android 6.0+
-                    Log.d(TAG,"Option selected: Advertise");
+                    log.d("Option selected: Advertise");
                     if(advertise == null || !advertise.isRunning()){
                         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             requestPermissions(
@@ -845,7 +850,7 @@ public class TripleFragment extends Fragment {
         ActivityManager am = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             isLowRamDevice = am.isLowRamDevice();
-            Log.d(TAG, "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
+            log.d( "isLowRamDevice? " + Boolean.toString(isLowRamDevice));
         }
 
         Boolean isImgActivated = sharedPref.getBoolean("img", !isLowRamDevice) ;
@@ -993,7 +998,7 @@ public class TripleFragment extends Fragment {
         IMG3.setImageResource(R.drawable.circle_placeholder);
         //advertise
         if(advertise != null && advertise.isRunning()) {
-            Log.d(TAG, "Advertising: " + getMatchState());
+            log.d( "Advertising: " + getMatchState());
             advertise.update(getMatchState());
         }
     }
@@ -1069,7 +1074,7 @@ public class TripleFragment extends Fragment {
         saveEditedViews();
         //advertise
         if(advertise != null && advertise.isRunning()) {
-            Log.d(TAG, "Advertising: " + getMatchState());
+            log.d( "Advertising: " + getMatchState());
             advertise.update(getMatchState());
         }
         //reset dpp
@@ -1428,7 +1433,7 @@ public class TripleFragment extends Fragment {
             //salvataggiSeVince
             //advertise
             if(advertise != null && advertise.isRunning()) {
-                Log.d(TAG, "Advertising: " + getMatchState());
+                log.d( "Advertising: " + getMatchState());
                 advertise.update(getMatchState());
             }
             ((MainActivity)getActivity()).reviewApp();
@@ -1457,7 +1462,7 @@ public class TripleFragment extends Fragment {
             onSave();
             //advertise
             if(advertise != null && advertise.isRunning()) {
-                Log.d(TAG, "Advertising: " + getMatchState());
+                log.d( "Advertising: " + getMatchState());
                 advertise.update(getMatchState());
             }
         }
