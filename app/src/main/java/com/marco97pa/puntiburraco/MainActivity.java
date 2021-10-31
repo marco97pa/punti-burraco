@@ -864,32 +864,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void requestConsent(Context context){
-        // Set tag for underage of consent. false means users are not underage.
-        ConsentRequestParameters params = new ConsentRequestParameters
-                .Builder()
-                .setTagForUnderAgeOfConsent(false)
-                .build();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
+        //Show only if it's not the first launch of the app to avoid flashing screen after the intro
+        if(!first_app_launch) {
+            // Set tag for underage of consent. false means users are not underage.
+            ConsentRequestParameters params = new ConsentRequestParameters
+                    .Builder()
+                    .setTagForUnderAgeOfConsent(false)
+                    .build();
 
-        consentInformation = UserMessagingPlatform.getConsentInformation(context);
-        consentInformation.requestConsentInfoUpdate(
-                this,
-                params,
-                new ConsentInformation.OnConsentInfoUpdateSuccessListener() {
-                    @Override
-                    public void onConsentInfoUpdateSuccess() {
-                        // The consent information state was updated.
-                        // You are now ready to check if a form is available.
-                        if (consentInformation.isConsentFormAvailable()) {
-                            loadForm();
+            consentInformation = UserMessagingPlatform.getConsentInformation(context);
+            consentInformation.requestConsentInfoUpdate(
+                    this,
+                    params,
+                    new ConsentInformation.OnConsentInfoUpdateSuccessListener() {
+                        @Override
+                        public void onConsentInfoUpdateSuccess() {
+                            // The consent information state was updated.
+                            // You are now ready to check if a form is available.
+                            if (consentInformation.isConsentFormAvailable()) {
+                                loadForm();
+                            }
                         }
-                    }
-                },
-                new ConsentInformation.OnConsentInfoUpdateFailureListener() {
-                    @Override
-                    public void onConsentInfoUpdateFailure(FormError formError) {
-                        // Handle the error.
-                    }
-                });
+                    },
+                    new ConsentInformation.OnConsentInfoUpdateFailureListener() {
+                        @Override
+                        public void onConsentInfoUpdateFailure(FormError formError) {
+                            // Handle the error.
+                        }
+                    });
+        }
     }
 
     public void loadForm(){
