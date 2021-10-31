@@ -988,6 +988,7 @@ public class DoubleFragment extends Fragment {
                         builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
+                                ((MainActivity)getActivity()).reviewApp();
                             }
                         });
                         AlertDialog dialog = builder.create();
@@ -1022,6 +1023,7 @@ public class DoubleFragment extends Fragment {
                         builder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
+                                ((MainActivity)getActivity()).reviewApp();
                             }
                         });
                         AlertDialog dialog = builder.create();
@@ -1036,7 +1038,6 @@ public class DoubleFragment extends Fragment {
                     log.d( "Advertising: " + getMatchState());
                     advertise.update(getMatchState());
                 }
-                ((MainActivity)getActivity()).reviewApp();
             }
         }
         catch (NullPointerException e){
