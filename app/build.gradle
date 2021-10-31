@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.marco97pa.puntiburraco"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
         versionCode 5050
         versionName "13.1.0"
