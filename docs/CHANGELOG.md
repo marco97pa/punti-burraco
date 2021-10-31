@@ -1,3 +1,9 @@
+### 13.2.0
+* Updated In App Billing to v4
+* Solved flashing screen on first app launch
+* Improved internal logs
+* Solved a lot of bugs
+
 ### 13.1.0
 * Added new consent window for ads to comply with GDPR
 * Added new prompt to review the app after a game
