@@ -62,10 +62,10 @@
             android:name=".MainActivity"
             android:appCategory="productivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Placeholder">
+            android:theme="@style/AppTheme.Placeholder"
+            android:exported="true"> <!-- To make this activity accessible to any app, like the Launcher -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -77,14 +77,14 @@
             android:name=".SettingActivity"
             android:label="@string/title_activity_setting"
             android:parentActivityName=".MainActivity"
-            tools:ignore="UnusedAttribute">
+            tools:ignore="UnusedAttribute"
+            android:exported="true"> <!-- To make this activity accessible to any app, like the Settings app -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marco97pa.puntiburraco.MainActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.NOTIFICATION_PREFERENCES" />
             </intent-filter>
         </activity>
