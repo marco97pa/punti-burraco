@@ -4,7 +4,7 @@ apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.3"
+    buildToolsVersion '31.0.0'
 
     defaultConfig {
         applicationId "com.marco97pa.puntiburraco"
@@ -60,8 +60,9 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.yalantis:ucrop:2.2.4'
     implementation 'com.heinrichreimersoftware:material-intro:2.0.0'
-    implementation 'com.anjlab.android.iab.v3:library:2.0.0'
-    testImplementation 'junit:junit:4.13'
+    implementation 'com.anjlab.android.iab.v3:library:2.0.3'
+    implementation 'com.android.billingclient:billing:4.1.0'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 
