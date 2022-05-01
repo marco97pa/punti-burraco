@@ -112,3 +112,4 @@ fabric.properties
 ### Android Patch ###
 gen-external-apklibs
 output.json
+.idea/misc.xml
