@@ -17,8 +17,12 @@
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
     </style>
 
-    <style name="AppTheme.Placeholder">
-        <item name="android:windowBackground">@drawable/splash</item>
+    <!-- Splash Screen theme -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/splash</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

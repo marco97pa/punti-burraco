@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
@@ -11,9 +12,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +51,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
     private String SERVICE_ID;
     private Context context;
     private final static int LOCATION_PERMISSION_NEARBY = 40;
+    private final static int BLUETOOTH_PERMISSION = 41;
     public String endPointName;
     public String endPointID;
 
@@ -106,13 +110,21 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        //On old Android start Discovery directly
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            startDiscovery();
+        }
+        //On Android 6 ask for Location permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             requestPermissions(
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_NEARBY);
         }
-        else {
-            startDiscovery();
+        //On Android 12 ask for Bluetooth permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requestPermissions(
+                    new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    BLUETOOTH_PERMISSION);
         }
     }
 
@@ -145,6 +157,8 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
 
     private void startDiscovery() {
         log.d( "Nearby starting...");
+        log.d( "Closing any still active connection...");
+        Nearby.getConnectionsClient(context).stopDiscovery();
         DiscoveryOptions discoveryOptions =
                 new DiscoveryOptions.Builder().setStrategy(Strategy.P2P_STAR).build();
         Nearby.getConnectionsClient(context)
@@ -162,7 +176,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // We're unable to start discovering.
-                                log.d( "We're unable to start discovering.");
+                                log.e( "We're unable to start discovering.");
                                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, R.style.AppTheme_Dialog);
                                 builder .setTitle(context.getString(R.string.nearby_error))
                                         .setMessage(context.getString(R.string.nearby_error_d))
@@ -170,6 +184,17 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                                         .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener(){
                                             public void onClick(DialogInterface dialog, int id) {
                                                 //nothing, dismiss
+                                                finish();
+                                            }
+                                        })
+                                        .setNegativeButton(context.getString(R.string.set_permissions), new DialogInterface.OnClickListener(){
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                //nothing, dismiss
+                                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                                intent.setData(uri);
+                                                startActivity(intent);
                                             }
                                         });
                                 AlertDialog alert = builder.create();
@@ -326,6 +351,23 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
 
                     // permission denied, boo!
                     Toast.makeText(this, getString(R.string.denied_perm_location), Toast.LENGTH_LONG).show();
+                    finish();
+
+                }
+                return;
+            }
+
+            case BLUETOOTH_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    startDiscovery();
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(this, getString(R.string.denied_perm_bluetooth), Toast.LENGTH_LONG).show();
                     finish();
 
                 }

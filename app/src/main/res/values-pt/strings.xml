@@ -167,4 +167,6 @@
     <string name="error_buy_already_own">Você já possui a versão PRO</string>
     <string name="only_for_pro">Este recurso está disponível apenas para usuários PRO</string>
     <string name="insert_name">Escreva o nome do jogador…</string>
+    <string name="denied_perm_bluetooth">Permissão negada</string>
+    <string name="set_permissions">Definir permissões</string>
 </resources>
