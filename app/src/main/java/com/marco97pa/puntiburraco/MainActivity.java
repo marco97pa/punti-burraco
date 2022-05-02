@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -147,6 +148,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         isDrawerFixed = getResources().getBoolean(R.bool.isTablet);
+
+        // Handle the splash screen transition.
+        SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 
         /* CREATING ACTIVITY
          * Creating activity and setting its contents, the toolbar, the fab and the first Fragment
