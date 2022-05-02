@@ -187,7 +187,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                                                 finish();
                                             }
                                         })
-                                        .setNegativeButton(context.getString(R.string.ok), new DialogInterface.OnClickListener(){
+                                        .setNegativeButton(context.getString(R.string.set_permissions), new DialogInterface.OnClickListener(){
                                             public void onClick(DialogInterface dialog, int id) {
                                                 //nothing, dismiss
                                                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
