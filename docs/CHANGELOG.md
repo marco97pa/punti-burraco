@@ -1,3 +1,10 @@
+### 13.3.0
+* The app start is even faster
+* New splash screen during loading times
+* Improved reliability of connection with nearby devices in Share Match
+* Made it easier to understand why the connection with another device can't start  
+* Improved support for Android 12
+
 ### 13.2.0
 * Updated In App Billing to v4
 * Solved flashing screen on first app launch
@@ -193,7 +200,7 @@
 * New snackbar alert
 * You can now revert your last action
 * Improved "Hands detail" function
-* New languages added: english e portuguese
+* New languages added: english and portuguese
 
 ### 6.5.0
 
