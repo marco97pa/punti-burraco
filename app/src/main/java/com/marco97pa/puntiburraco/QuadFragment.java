@@ -456,10 +456,20 @@ public class QuadFragment extends Fragment {
                     log.d( "Option selected: Advertise");
                     if (advertise == null || !advertise.isRunning()) {
                         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            requestPermissions(
-                                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                                    LOCATION_PERMISSION_NEARBY);
-                        } else {
+                            //On Android 12 ask for Bluetooth permission
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                requestPermissions(
+                                        new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                        LOCATION_PERMISSION_NEARBY);
+                            }
+                            //On Android M ask for Location permission
+                            else {
+                                requestPermissions(
+                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                        LOCATION_PERMISSION_NEARBY);
+                            }
+                        }
+                        else {
                             advertise = new NearbyAdvertise(getContext(), getMatchState());
                             advertise.start();
                         }

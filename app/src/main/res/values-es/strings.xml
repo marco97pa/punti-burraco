@@ -180,6 +180,8 @@
     <string name="error_buy_already_own">Ya tienes la versión PRO</string>
     <string name="only_for_pro">Esta función está disponible solo para usuarios PRO</string>
     <string name="insert_name">Escribe el nombre del jugador...</string>
+    <string name="denied_perm_bluetooth">Permiso denegado</string>
+    <string name="set_permissions">Establecer permisos</string>
 
 
 </resources>

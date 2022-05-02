@@ -139,7 +139,7 @@
     <string name="shared_match">Shared Match</string>
     <string name="shared_match_notif">For privacy concerns, a notification is shown when the match is shared with nearby players</string>
     <string name="nearby_error">Can\'t share the match</string>
-    <string name="nearby_error_d">There was a problem trying to make this device discoverable to others.\nCheck if you were already hosting a match and try again.\nMake sure you accept the Location permission for this app.\nIf the problem still occurs try to restart the app or the device itself</string>
+    <string name="nearby_error_d">There was a problem trying to make this device discoverable to others.\nCheck if you were already hosting a match and try again.\nMake sure you accept the Location and Bluetooth permission for this app.\nIf the problem still occurs try to restart the app or the device itself</string>
     <string name="connected_to">Connected to %1s</string>
     <string name="disconnected">Disconnected</string>
     <string name="denied_perm_location">Permission denied to find nearby devices using location services</string>
@@ -147,6 +147,7 @@
     <string name="stop">Stop hosting match</string>
     <string name="host_or_join">Anyone can join a match of another player but only a PRO user can host a match</string>
     <string name="how_to_upgrade">To host a match and other cool features, you can upgrade to the PRO version using the button below</string>
+    <string name="set_permissions">Set app permissions</string>
 
     <!-- In App Billing Strings -->
     <string name="upgrade">Upgrade</string>
@@ -193,6 +194,7 @@
     <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="link" translatable="false">https://pointsburaco.page.link/open</string>
     <string name="email" translatable="false">marco97pa@gmail.com</string>
+    <string name="denied_perm_bluetooth">Permission denied to find nearby devices using Bluetooth</string>
 
 </resources>
 

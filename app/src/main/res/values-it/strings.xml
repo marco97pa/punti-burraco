@@ -138,7 +138,7 @@
     <string name="shared_match">Partita condivisa</string>
     <string name="shared_match_notif">Per motivi di privacy, una notifica viene mostrata quando la partita è condivisa con i giocatori nelle vicinanze</string>
     <string name="nearby_error">Impossibile condividere questa partita</string>
-    <string name="nearby_error_d">C\'è stato un problema nel tentativo di rendere questo dispositivo visibile ad altri.\nControlla che non stavi già condividendo un\'altra partita e riprova.\nAccertati di aver consentito l\'uso della posizione per questa app.\nSe il problema persiste, riavvia l\'app o il dispositivo.</string>
+    <string name="nearby_error_d">C\'è stato un problema nel tentativo di rendere questo dispositivo visibile ad altri.\nControlla che non stavi già condividendo un\'altra partita e riprova.\nAccertati di aver consentito l\'uso della Posizione e del Bluetooth per questa app.\nSe il problema persiste, riavvia l\'app o il dispositivo.</string>
     <string name="connected_to">Connesso a %1s</string>
     <string name="disconnected">Disconnesso</string>
     <string name="denied_perm_location">Impossibile trovare dispositivi vicini: hai negato il permesso ai servizi di posizione</string>
@@ -180,6 +180,9 @@
         \nAl prezzo di un caffè mi darai il supporto necessario affinchè possa lavorare su nuove funzionalità e mantenere l\'app compatibile con una vasta gamma di dispositivi
     </string>
     <string name="insert_name">Inserisci il nome del giocatore…</string>
+    <string name="denied_perm_bluetooth">Hai negato il permesso di utilizzare il Bluetooth per trovare dispositivi nelle vicinanze</string>
+    <string name="set_permissions">Controlla permessi app</string>
+    <string name="set_permissions">C</string>
 
 
 </resources>
