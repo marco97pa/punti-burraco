@@ -1,3 +1,6 @@
+### 13.3.1
+* Solved a bug with suspended game notifications on Android 12
+
 ### 13.3.0
 * The app start is even faster
 * New splash screen during loading times

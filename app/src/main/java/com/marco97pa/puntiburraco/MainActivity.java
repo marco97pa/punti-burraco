@@ -455,7 +455,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Intent to open MainActivity (passing the actual player mode (fragment))
                 Intent launch_app = new Intent(this, MainActivity.class);
                 launch_app.putExtra("mode", status);
-                mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, launch_app, PendingIntent.FLAG_UPDATE_CURRENT));
+                PendingIntent pendingIntent;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    pendingIntent = PendingIntent.getActivity(this, 0, launch_app, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                }
+                else{
+                    pendingIntent = PendingIntent.getActivity(this, 0, launch_app, PendingIntent.FLAG_UPDATE_CURRENT);
+                }
+                mBuilder.setContentIntent(pendingIntent);
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(0, mBuilder.build());
             }
