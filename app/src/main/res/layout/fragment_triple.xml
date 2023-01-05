@@ -11,6 +11,13 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_3players_unit_id"/>
+
         <androidx.gridlayout.widget.GridLayout
 
             android:layout_width="match_parent"
@@ -398,13 +405,6 @@
                 grid:layout_row="3" />
 
         </androidx.gridlayout.widget.GridLayout>
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/admob_3players_unit_id"/>
 
     </LinearLayout>
 </ScrollView>

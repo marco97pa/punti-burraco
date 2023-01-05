@@ -1,3 +1,6 @@
+### 13.3.2
+* Ads are now less intrusive
+
 ### 13.3.1
 * Solved a bug with suspended game notifications on Android 12
 

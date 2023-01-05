@@ -14,6 +14,13 @@
         android:paddingRight="16dp"
         >
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_2players_unit_id"/>
+
         <androidx.gridlayout.widget.GridLayout
 
             android:id="@+id/grid"
@@ -260,13 +267,6 @@
                 ads:layout_row="0" />
 
         </androidx.gridlayout.widget.GridLayout>
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/admob_2players_unit_id"/>
 
 
     </LinearLayout>
