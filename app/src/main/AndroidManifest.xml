@@ -15,19 +15,23 @@
     <!-- In App Billing -->
     <uses-permission android:name="com.android.vending.BILLING" />
     <!-- Required for Nearby Connections -->
-    <!-- Request legacy Bluetooth permissions on older devices. -->
-    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
-    <!-- Only required for apps targeting Android 12 and higher -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <!-- WiFi Permissions -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- Location Permissions -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <!-- Bluetooth -->
+            <!-- Request legacy Bluetooth permissions on older devices. -->
+                <uses-permission android:maxSdkVersion="30" android:name="android.permission.BLUETOOTH"/>
+                <uses-permission android:maxSdkVersion="30" android:name="android.permission.BLUETOOTH_ADMIN"/>
+            <!-- New Bluetooth permissions for apps targeting Android 12 and higher -->
+                <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_ADVERTISE" />
+                <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_CONNECT" />
+                <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_SCAN" />
+        <!-- WiFi -->
+            <!-- Request legacy WiFi permissions on older devices. -->
+                <uses-permission  android:name="android.permission.ACCESS_WIFI_STATE" />
+                <uses-permission  android:name="android.permission.CHANGE_WIFI_STATE" />
+            <!-- New WiFi permissions for apps targeting Android 13+ -->
+                <uses-permission android:minSdkVersion="32" android:name="android.permission.NEARBY_WIFI_DEVICES" />
+        <!-- Location Permissions -->
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"

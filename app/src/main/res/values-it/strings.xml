@@ -182,6 +182,7 @@
     <string name="insert_name">Inserisci il nome del giocatore…</string>
     <string name="denied_perm_bluetooth">Hai negato il permesso di utilizzare il Bluetooth per trovare dispositivi nelle vicinanze</string>
     <string name="set_permissions">Controlla permessi app</string>
+    <string name="denied_perm_wifi">Permesso negato all\'uso del WiFi/Bluetooth per trovare dispositivi vicini</string>
 
 
 </resources>

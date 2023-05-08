@@ -780,17 +780,25 @@ public class TripleFragment extends Fragment {
                     log.d("Option selected: Advertise");
                     if(advertise == null || !advertise.isRunning()){
                         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            //On Android 12 ask for Bluetooth permission
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            //On Android 13 ask for Bluetooth & WiFi permissions
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 requestPermissions(
-                                        new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                        new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.NEARBY_WIFI_DEVICES },
                                         LOCATION_PERMISSION_NEARBY);
                             }
-                            //On Android M ask for Location permission
-                            else {
-                                requestPermissions(
-                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                                        LOCATION_PERMISSION_NEARBY);
+                            else{
+                                //On Android 12 ask for Bluetooth & Location permission
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                            LOCATION_PERMISSION_NEARBY);
+                                }
+                                //On Android M ask for Location permission
+                                else {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                            LOCATION_PERMISSION_NEARBY);
+                                }
                             }
                         }
                         else {

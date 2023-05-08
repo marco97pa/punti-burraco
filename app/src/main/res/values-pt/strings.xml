@@ -169,4 +169,5 @@
     <string name="insert_name">Escreva o nome do jogador…</string>
     <string name="denied_perm_bluetooth">Permissão negada</string>
     <string name="set_permissions">Definir permissões</string>
+    <string name="denied_perm_wifi">Permission denied to find nearby devices using WiFi/Bluetooth</string>
 </resources>

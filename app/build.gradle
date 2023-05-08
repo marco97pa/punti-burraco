@@ -49,7 +49,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation "androidx.preference:preference:1.2.0"
     implementation 'com.google.android.material:material:1.5.0'
-    implementation platform('com.google.firebase:firebase-bom:28.4.2')
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-perf'
@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:22.0.0'
     implementation 'com.google.android.ump:user-messaging-platform:2.0.0'
     implementation 'com.google.android.play:core:1.10.3'
-    implementation 'com.google.android.gms:play-services-nearby:18.1.0'
+    implementation 'com.google.android.gms:play-services-nearby:18.5.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.yalantis:ucrop:2.2.4'
     implementation 'com.heinrichreimersoftware:material-intro:2.0.0'

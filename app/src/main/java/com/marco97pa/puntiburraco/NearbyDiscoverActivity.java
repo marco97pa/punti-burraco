@@ -52,6 +52,7 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
     private Context context;
     private final static int LOCATION_PERMISSION_NEARBY = 40;
     private final static int BLUETOOTH_PERMISSION = 41;
+    private final static int WIFI_PERMISSION = 42;
     public String endPointName;
     public String endPointID;
 
@@ -121,10 +122,16 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
                     LOCATION_PERMISSION_NEARBY);
         }
         //On Android 12 ask for Bluetooth permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             requestPermissions(
                     new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
                     BLUETOOTH_PERMISSION);
+        }
+        //On Android 13 ask for WiFi permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(
+                    new String[]{Manifest.permission.NEARBY_WIFI_DEVICES, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    WIFI_PERMISSION);
         }
     }
 
@@ -368,6 +375,23 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
 
                     // permission denied, boo!
                     Toast.makeText(this, getString(R.string.denied_perm_bluetooth), Toast.LENGTH_LONG).show();
+                    finish();
+
+                }
+                return;
+            }
+
+            case WIFI_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+                    startDiscovery();
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(this, getString(R.string.denied_perm_wifi), Toast.LENGTH_LONG).show();
                     finish();
 
                 }
