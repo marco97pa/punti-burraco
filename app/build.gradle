@@ -5,13 +5,14 @@ apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 android {
     compileSdkVersion 31
     buildToolsVersion '31.0.0'
+    namespace 'com.marco97pa.puntiburraco'
 
     defaultConfig {
         applicationId "com.marco97pa.puntiburraco"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 5054
-        versionName "13.3.2"
+        versionCode 5055
+        versionName "13.3.3"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
