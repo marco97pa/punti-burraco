@@ -473,15 +473,8 @@ public class QuadFragment extends Fragment {
                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(textNome1.getWindowToken(), 0);
 
-                // First, request permission
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_SCREENSHOT);
-                }
-                else {
-                    openScreen();
-                }
+                // Then call the screenshot share activity
+                openScreen();
                 return true;
             case R.id.action_set:
                 showNoticeDialog();

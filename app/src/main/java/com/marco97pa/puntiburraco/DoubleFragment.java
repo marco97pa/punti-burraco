@@ -566,15 +566,8 @@ public class DoubleFragment extends Fragment {
                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(textNome1.getWindowToken(), 0);
 
-                //Than make the screenshot, asking the permission in Android 6.0+ (because it will be saved to memory)
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_SCREENSHOT);
-                }
-                else {
-                    openScreen();
-                }
+                // Then call the screenshot share activity
+                openScreen();
                 return true;
 
             case R.id.action_set:
