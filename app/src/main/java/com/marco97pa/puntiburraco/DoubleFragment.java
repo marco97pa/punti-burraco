@@ -3,6 +3,9 @@ package com.marco97pa.puntiburraco;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 
 import androidx.core.content.ContextCompat;
@@ -116,6 +119,8 @@ public class DoubleFragment extends Fragment {
     private static int REQUEST_CROP_PICTURE_2 = 22;
     private static int REQUEST_PICTURE_1 = 11;
     private static int REQUEST_CROP_PICTURE_1 = 21;
+    public int photo_picker_launched_for_player = 0;
+    public ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     //Constants response to permission request (Android 6.0+)
     private final static int STORAGE_PERMISSION_PICTURE_1 = 13;
     private final static int STORAGE_PERMISSION_PICTURE_2 = 23;
@@ -187,6 +192,25 @@ public class DoubleFragment extends Fragment {
             showAds();
         }
 
+        // Registers a photo picker activity launcher in single-select mode.
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        log.d("PhotoPicker - Selected URI: " + uri);
+                        // Call the method to invoke cropping
+                        if(photo_picker_launched_for_player == 1) {
+                            requestCropImage(uri, "img_m2_1.jpg", REQUEST_CROP_PICTURE_1);
+                        }
+                        if(photo_picker_launched_for_player == 2) {
+                            requestCropImage(uri, "img_m2_2.jpg", REQUEST_CROP_PICTURE_2);
+                        }
+                    } else {
+                        log.d("PhotoPicker - No media selected");
+                    }
+                });
+
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(), R.color.dialogBackground)));
         txtColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(), R.color.dialogText)));
@@ -241,9 +265,20 @@ public class DoubleFragment extends Fragment {
                 //Pick image from user Gallery
                 // First, request permission (Android 6.0+ only)
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_PICTURE_1);
+                    // If the PhotoPicker is available, call it
+                    if( ActivityResultContracts.PickVisualMedia.isPhotoPickerAvailable(getActivity()) ){
+                        photo_picker_launched_for_player = 1;
+                        // Launch the photo picker and let the user choose only images.
+                        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                .build());
+                    }
+                    // else call the default file picker of OS and ask for permission
+                    else {
+                        requestPermissions(
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                STORAGE_PERMISSION_PICTURE_1);
+                    }
                 }
                 else {
                     startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_1);
@@ -311,9 +346,20 @@ public class DoubleFragment extends Fragment {
                 //Pick image from user Gallery
                 // First, request permission
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_PICTURE_2);
+                    // If the PhotoPicker is available, call it
+                    if( ActivityResultContracts.PickVisualMedia.isPhotoPickerAvailable(getActivity()) ){
+                        photo_picker_launched_for_player = 2;
+                        // Launch the photo picker and let the user choose only images.
+                        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                .build());
+                    }
+                    // else call the default file picker of OS and ask for permission
+                    else {
+                        requestPermissions(
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                STORAGE_PERMISSION_PICTURE_2);
+                    }
                 }
                 else {
                     startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_2);
@@ -1393,6 +1439,28 @@ public class DoubleFragment extends Fragment {
         return data;
     }
 
+    /**
+     * requestCropImage
+     * Calls UCrop to crop an image and saves it in the app dir.
+     */
+    public void requestCropImage(Uri photo, String saveAs, int request){
+        //Later we will use this bitmap to create the File
+        Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+        //Save this bitmap to a temporary File
+        File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+        MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+        //Create the definitive file (saved inside App Dir)
+        File destination = new File(getActivity().getFilesDir(), saveAs);
+        //Start UCrop with the temp and definitive file that will be cropped
+        startActivityForResult(
+                UCrop.of(
+                                Uri.fromFile(temp),
+                                Uri.fromFile(destination))
+                        .withAspectRatio(1, 1)
+                        .withMaxResultSize(1080, 1080)
+                        .getIntent(getActivity()
+                        ), request);
+    }
 
     /**
      * ON ACTIVITY RESULT
@@ -1406,22 +1474,8 @@ public class DoubleFragment extends Fragment {
             // When the user is done picking a picture, let's get data from URI
             // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-            //Later we will use this bitmap to create the File
-            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
-            //Save this bitmap to a temporary File
-            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
-            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
-            //Create the definitive file (saved inside App Dir)
-            File destination = new File(getActivity().getFilesDir(), "img_m2_1.jpg");
-            //Start UCrop with the temp and definitive file that will be cropped
-            startActivityForResult(
-                    UCrop.of(
-                            Uri.fromFile(temp),
-                            Uri.fromFile(destination))
-                    .withAspectRatio(1, 1)
-                    .withMaxResultSize(1080, 1080)
-                    .getIntent(getActivity()
-                    ), REQUEST_CROP_PICTURE_1);
+            // Call the method to invoke cropping
+            requestCropImage(photo, "img_m2_1.jpg", REQUEST_CROP_PICTURE_1);
         }
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_1) {
@@ -1439,22 +1493,8 @@ public class DoubleFragment extends Fragment {
             // When the user is done picking a picture, let's get data from URI
             // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-            //Later we will use this bitmap to create the File
-            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
-            //Save this bitmap to a temporary File
-            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
-            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
-            //Create the definitive file (saved inside App Dir)
-            File destination = new File(getActivity().getFilesDir(), "img_m2_2.jpg");
-            //Start UCrop with the temp and definitive file that will be cropped
-            startActivityForResult(
-                    UCrop.of(
-                            Uri.fromFile(temp),
-                            Uri.fromFile(destination))
-                            .withAspectRatio(1, 1)
-                            .withMaxResultSize(1080, 1080)
-                            .getIntent(getActivity()
-                            ), REQUEST_CROP_PICTURE_2);
+            // Call the method to invoke cropping
+            requestCropImage(photo, "img_m2_2.jpg", REQUEST_CROP_PICTURE_2);
         }
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_2) {
