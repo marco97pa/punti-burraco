@@ -1,3 +1,11 @@
+### 13.4.0
+* Support for Android 13
+* New Photo Picker to select profile pics of players
+* The app now asks for Notification permission at the first launch
+* Reduced requests for accessing user file storage and completely removed on Android 13+
+* Improved italian translation
+* Solved a lot of bugs
+
 ### 13.3.2
 * Ads are now less intrusive
 
