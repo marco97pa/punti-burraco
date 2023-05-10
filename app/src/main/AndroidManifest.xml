@@ -5,8 +5,10 @@
     <uses-sdk tools:overrideLibrary="android.support.customtabs" />
     <!-- Support ChromeBook -->
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-    <!-- Save screenshot and set profile images -->
+    <!-- Set profile images -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
