@@ -12,6 +12,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.marco97pa.puntiburraco.utils.FLog;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
@@ -107,6 +108,11 @@ public class DeveloperSettings extends SettingsFragment {
                 return true;
             }
         });
+
+        Preference photo_picker = findPreference("photo_picker");
+        Boolean isPhotoPickerAvailable = ActivityResultContracts.PickVisualMedia.isPhotoPickerAvailable();
+        photo_picker.setSummary(isPhotoPickerAvailable.toString());
+
     }
 
     @Override

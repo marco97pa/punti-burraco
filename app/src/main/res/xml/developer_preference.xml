@@ -24,6 +24,12 @@
     </androidx.preference.Preference>
 
     <androidx.preference.Preference
+        android:title="Is the PhotoPicker module available?"
+        android:summary="Loading..."
+        android:key="photo_picker">
+    </androidx.preference.Preference>
+
+    <androidx.preference.Preference
         android:title="Firebase Remote Config"
         android:summary="Fetching..."
         android:key="remote_config">
