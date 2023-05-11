@@ -111,7 +111,6 @@ public class NearbyAdvertise {
                                         .setSmallIcon(R.drawable.ic_mirroring_black_24dp)
                                         .setContentTitle(context.getString(R.string.shared_match))
                                         .setContentText(context.getString(R.string.discoverable))
-                                        .setAutoCancel(true)
                                         .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                                         .setOngoing(true)
                                         .setChannelId(CHANNEL_ID);

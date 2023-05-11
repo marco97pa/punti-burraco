@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.marco97pa.puntiburraco">
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Chrome Custom Tabs -->
     <uses-sdk tools:overrideLibrary="android.support.customtabs" />
     <!-- Support ChromeBook -->
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-    <!-- Save screenshot and set profile images -->
+    <!-- Set profile images -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,19 +17,23 @@
     <!-- In App Billing -->
     <uses-permission android:name="com.android.vending.BILLING" />
     <!-- Required for Nearby Connections -->
-    <!-- Request legacy Bluetooth permissions on older devices. -->
-    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
-    <!-- Only required for apps targeting Android 12 and higher -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <!-- WiFi Permissions -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- Location Permissions -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <!-- Bluetooth -->
+            <!-- Request legacy Bluetooth permissions on older devices. -->
+                <uses-permission android:maxSdkVersion="30" android:name="android.permission.BLUETOOTH"/>
+                <uses-permission android:maxSdkVersion="30" android:name="android.permission.BLUETOOTH_ADMIN"/>
+            <!-- New Bluetooth permissions for apps targeting Android 12 and higher -->
+                <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_ADVERTISE" />
+                <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_CONNECT" />
+                <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_SCAN" />
+        <!-- WiFi -->
+            <!-- Request legacy WiFi permissions on older devices. -->
+                <uses-permission  android:name="android.permission.ACCESS_WIFI_STATE" />
+                <uses-permission  android:name="android.permission.CHANGE_WIFI_STATE" />
+            <!-- New WiFi permissions for apps targeting Android 13+ -->
+                <uses-permission android:minSdkVersion="32" android:name="android.permission.NEARBY_WIFI_DEVICES" />
+        <!-- Location Permissions -->
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -41,7 +46,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.marco97pa.puntiburraco.provider"
+            android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -132,6 +137,15 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!-- Trigger Google Play services to install the backported photo picker module. -->
+        <service android:name="com.google.android.gms.metadata.ModuleDependencies"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+            </intent-filter>
+            <meta-data android:name="photopicker_activity:0:required" android:value="" />
+        </service>
     </application>
 
 </manifest>

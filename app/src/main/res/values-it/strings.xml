@@ -13,7 +13,7 @@
     <!-- Interface -->
     <string name="SuggBP">Burrachi puri</string>
     <string name="SuggBI">Burrachi sporchi</string>
-    <string name="SuggBS">Burrachi semi sporchi</string>
+    <string name="SuggBS">Burrachi semipuliti</string>
     <string name="SuggMiniBP">B. puri</string>
     <string name="SuggMiniBI">B.sporchi</string>
     <string name="SuggMiniBS">B. semi</string>
@@ -131,7 +131,7 @@
     <string name="intro_personalize">Personalizza</string>
     <string name="intro_share">Puoi condividere facilmente i risultati delle tue partite con i tuoi amici su Facebook, Instagram, Whatsapp o altri social network</string>
     <string name="intro_set_input_method">L\'app calcola i risultati automaticamente: ti basta inserire il numero di burrachi, i punti sul tavolo e gli eventuali punti in mano. Nella prossima sezione puoi scegliere il tuo metodo d\'inserimento preferito.\n\nSe è la prima volta che usi l\'app, ti consiglio di usare l\'opzione predefinita. Potrai cambiarla successivamente nelle Impostazioni.</string>
-    <string name="discoverable">Questi dispositivo è visibile ai dispositivi vicini</string>
+    <string name="discoverable">Questo dispositivo è visibile ai dispositivi vicini</string>
     <string name="searching">Cercando altri giocatori...</string>
     <string name="open_nearby_hint">Avvia %1s su un altro dispositivo e scegli la voce %2s dal menu laterale per giocare insieme</string>
     <string name="open_nearby_hint2">Inizia una partita su un altro dispositivo e scegli \"Invita a questa partita\" del menu a tre punti per iniziare a giocare insieme</string>
@@ -182,6 +182,7 @@
     <string name="insert_name">Inserisci il nome del giocatore…</string>
     <string name="denied_perm_bluetooth">Hai negato il permesso di utilizzare il Bluetooth per trovare dispositivi nelle vicinanze</string>
     <string name="set_permissions">Controlla permessi app</string>
+    <string name="denied_perm_wifi">Permesso negato all\'uso del WiFi/Bluetooth per trovare dispositivi vicini</string>
 
 
 </resources>

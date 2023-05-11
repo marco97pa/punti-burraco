@@ -175,7 +175,7 @@
                 />
 
             <TextView
-                android:id="@+id/bottom_sheet_share_facebook.text"
+                android:id="@+id/bottom_sheet_share_facebook_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -200,7 +200,7 @@
                 />
 
             <TextView
-                android:id="@+id/bottom_sheet_share_instagram.text"
+                android:id="@+id/bottom_sheet_share_instagram_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -195,6 +195,7 @@
     <string name="insert_name">Insert the name of the player…</string>
     <string name="denied_perm_bluetooth">Permission denied to find nearby devices using Bluetooth</string>
     <string name="set_permissions">Set app permissions</string>
+    <string name="denied_perm_wifi">Permission denied to find nearby devices using WiFi/Bluetooth</string>
 
 </resources>
 

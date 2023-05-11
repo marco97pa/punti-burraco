@@ -20,6 +20,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -227,7 +228,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
     }
 
     public void shareOnOtherApps(){
-        Uri image = takeScreenshot();
+        Uri image = takeScreenshot(this);
 
         //add event to Firebase
         Bundle bundle = new Bundle();
@@ -236,6 +237,9 @@ private FirebaseAnalytics mFirebaseAnalytics;
 
         //Share
         Intent share = new Intent(Intent.ACTION_SEND);
+        // set flag to give temporary permission to external app to use your FileProvider
+        share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        // set the file type
         share.setType("image/jpeg");
         share.putExtra(Intent.EXTRA_STREAM, image);
         startActivity(Intent.createChooser(share, getString(R.string.action_share)));
@@ -244,7 +248,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
     public void shareOnFacebook(){
         try{
             // Define image asset URI and attribution link URL
-            Uri backgroundAssetUri = takeScreenshot();
+            Uri backgroundAssetUri = takeScreenshot(this);
             String attributionLinkUrl = getString(R.string.link);
 
             // Instantiate implicit intent with ADD_TO_STORY action,
@@ -281,7 +285,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
     public void shareOnInstagram(){
         try{
             // Define image asset URI and attribution link URL
-            Uri backgroundAssetUri = takeScreenshot();
+            Uri backgroundAssetUri = takeScreenshot(this);
             String attributionLinkUrl = getString(R.string.link);
 
             // Instantiate implicit intent with ADD_TO_STORY action,
@@ -319,7 +323,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
     public void shareOnWhatsapp(){
         try{
             //Define image asset URI and text
-            Uri backgroundAssetUri = takeScreenshot();
+            Uri backgroundAssetUri = takeScreenshot(this);
             String text = String.format(getString(R.string.share_message), getString(R.string.app_name), getString(R.string.link));
 
             //Define intent
@@ -359,7 +363,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
      * This method hides the BottomSheetDialog then
      * A screenshot of the app will be taken, saved in memory
      */
-    public Uri takeScreenshot() throws NullPointerException{
+    public Uri takeScreenshot(Context context) throws NullPointerException{
         //First hide the ControllerView
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet_share));;
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -373,7 +377,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
         v.setDrawingCacheEnabled(false);
 
         //and save as JPG
-        Uri jpg = saveImage(bmp);
+        Uri jpg = saveImage(bmp, context);
         if(jpg == null){
             throw new NullPointerException("Image screenshot not saved");
         }
@@ -381,75 +385,21 @@ private FirebaseAnalytics mFirebaseAnalytics;
         return jpg;
     }
 
-    private Uri saveImage(Bitmap bitmap){
-        String name = "Score_"+ System.currentTimeMillis() + ".jpg";
+    private Uri saveImage(Bitmap bitmap, Context context){
+
         Uri uri = null;
+        String filename = "Score_"+ System.currentTimeMillis() + ".jpg";
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            String relativeLocation = Environment.DIRECTORY_PICTURES + File.separator + getString(R.string.app_name);
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, name);
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            // without this part causes "Failed to create new MediaStore record" exception to be invoked (uri is null below)
-            values.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, relativeLocation);
-
-            final ContentResolver resolver = getContentResolver();
-            OutputStream stream = null;
-            uri = null;
-            try {
-                final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                uri = resolver.insert(contentUri, values);
-
-                if (uri == null) {
-                    throw new IOException("Failed to create new MediaStore record.");
-                }
-
-                stream = resolver.openOutputStream(uri);
-
-                if (stream == null) {
-                    throw new IOException("Failed to get output stream.");
-                }
-
-                if (bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream) == false) {
-                    throw new IOException("Failed to save bitmap.");
-                }
-            } catch (IOException e) {
-                if (uri != null) {
-                    // Don't leave an orphan entry in the MediaStore
-                    resolver.delete(uri, null, null);
-                }
-            } finally {
-                if (stream != null) {
-                    try {
-                        stream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        }
-
-        else {
-            File imageFileToShare;
-            try {
-                // Save as jpg
-                FileOutputStream fos = new FileOutputStream(imageFileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), name));
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 95, fos);
-                fos.flush();
-                fos.close();
-
-                //Get URI
-                uri = FileProvider.getUriForFile(getApplicationContext(),
-                        "com.marco97pa.puntiburraco.provider",
-                        imageFileToShare);
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        try{
+            File file = new File (context.getFilesDir(), filename);
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            // generate URI, I defined authority as the application ID in the Manifest, the last param is file I want to open
+            uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, file);
+        }catch(Exception e){
+            Log.e("saveScreenshot" , e.toString());
         }
 
         return uri;

@@ -143,6 +143,8 @@
     <string name="connected_to">Connected to %1s</string>
     <string name="disconnected">Disconnected</string>
     <string name="denied_perm_location">Permission denied to find nearby devices using location services</string>
+    <string name="denied_perm_bluetooth">Permission denied to find nearby devices using Bluetooth</string>
+    <string name="denied_perm_wifi">Permission denied to find nearby devices using WiFi/Bluetooth</string>
     <string name="join">Host this match</string>
     <string name="stop">Stop hosting match</string>
     <string name="host_or_join">Anyone can join a match of another player but only a PRO user can host a match</string>
@@ -194,7 +196,7 @@
     <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="link" translatable="false">https://pointsburaco.page.link/open</string>
     <string name="email" translatable="false">marco97pa@gmail.com</string>
-    <string name="denied_perm_bluetooth">Permission denied to find nearby devices using Bluetooth</string>
+
 
 </resources>
 

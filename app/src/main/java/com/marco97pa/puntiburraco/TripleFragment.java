@@ -1,6 +1,10 @@
 package com.marco97pa.puntiburraco;
 
 import android.Manifest;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
@@ -115,6 +119,9 @@ public class TripleFragment extends Fragment {
     private static int REQUEST_PICTURE_1 = 11;
     private static int REQUEST_CROP_PICTURE_1 = 21;
 
+    public int photo_picker_launched_for_player = 0;
+    public ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+
     //Constants response to permission request (Android 6.0+)
     private final static int STORAGE_PERMISSION_PICTURE_1 = 13;
     private final static int STORAGE_PERMISSION_PICTURE_2 = 23;
@@ -198,6 +205,28 @@ public class TripleFragment extends Fragment {
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+
+        // Registers a photo picker activity launcher in single-select mode.
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        log.d("PhotoPicker - Selected URI: " + uri);
+                        // Call the method to invoke cropping
+                        if(photo_picker_launched_for_player == 1) {
+                            requestCropImage(uri, "img_m3_1.jpg", REQUEST_CROP_PICTURE_1);
+                        }
+                        if(photo_picker_launched_for_player == 2) {
+                            requestCropImage(uri, "img_m3_2.jpg", REQUEST_CROP_PICTURE_2);
+                        }
+                        if(photo_picker_launched_for_player == 3) {
+                            requestCropImage(uri, "img_m3_3.jpg", REQUEST_CROP_PICTURE_3);
+                        }
+                    } else {
+                        log.d("PhotoPicker - No media selected");
+                    }
+                });
 
         //get Actual Theme Colors
         bgColor = String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(getActivity(),R.color.dialogBackground)));
@@ -419,9 +448,20 @@ public class TripleFragment extends Fragment {
                 //Pick image from user Gallery
                 // First, request permission (Android 6.0+ only)
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_PICTURE_1);
+                    // If the PhotoPicker is available, call it
+                    if( ActivityResultContracts.PickVisualMedia.isPhotoPickerAvailable(getActivity()) ){
+                        photo_picker_launched_for_player = 1;
+                        // Launch the photo picker and let the user choose only images.
+                        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                .build());
+                    }
+                    // else call the default file picker of OS and ask for permission
+                    else {
+                        requestPermissions(
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                STORAGE_PERMISSION_PICTURE_1);
+                    }
                 }
                 else {
                     startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_1);
@@ -489,9 +529,20 @@ public class TripleFragment extends Fragment {
                 //Pick image from user Gallery
                 // First, request permission
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_PICTURE_2);
+                    // If the PhotoPicker is available, call it
+                    if( ActivityResultContracts.PickVisualMedia.isPhotoPickerAvailable(getActivity()) ){
+                        photo_picker_launched_for_player = 2;
+                        // Launch the photo picker and let the user choose only images.
+                        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                .build());
+                    }
+                    // else call the default file picker of OS and ask for permission
+                    else {
+                        requestPermissions(
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                STORAGE_PERMISSION_PICTURE_2);
+                    }
                 }
                 else {
                     startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_2);
@@ -559,9 +610,20 @@ public class TripleFragment extends Fragment {
                 //Pick image from user Gallery
                 // First, request permission
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_PICTURE_3);
+                    // If the PhotoPicker is available, call it
+                    if( ActivityResultContracts.PickVisualMedia.isPhotoPickerAvailable(getActivity()) ){
+                        photo_picker_launched_for_player = 3;
+                        // Launch the photo picker and let the user choose only images.
+                        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                .build());
+                    }
+                    // else call the default file picker of OS and ask for permission
+                    else {
+                        requestPermissions(
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                STORAGE_PERMISSION_PICTURE_3);
+                    }
                 }
                 else {
                     startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity()), REQUEST_PICTURE_3);
@@ -748,15 +810,8 @@ public class TripleFragment extends Fragment {
                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(textNome1.getWindowToken(), 0);
 
-                // First, request permission
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_SCREENSHOT);
-                }
-                else {
-                    openScreen();
-                }
+                // Then call the screenshot share activity
+                openScreen();
                 return true;
 
             case R.id.action_set:
@@ -780,17 +835,25 @@ public class TripleFragment extends Fragment {
                     log.d("Option selected: Advertise");
                     if(advertise == null || !advertise.isRunning()){
                         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            //On Android 12 ask for Bluetooth permission
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            //On Android 13 ask for Bluetooth & WiFi permissions
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 requestPermissions(
-                                        new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                        new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.NEARBY_WIFI_DEVICES },
                                         LOCATION_PERMISSION_NEARBY);
                             }
-                            //On Android M ask for Location permission
-                            else {
-                                requestPermissions(
-                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                                        LOCATION_PERMISSION_NEARBY);
+                            else{
+                                //On Android 12 ask for Bluetooth & Location permission
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                            LOCATION_PERMISSION_NEARBY);
+                                }
+                                //On Android M ask for Location permission
+                                else {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                            LOCATION_PERMISSION_NEARBY);
+                                }
                             }
                         }
                         else {
@@ -1788,6 +1851,29 @@ public class TripleFragment extends Fragment {
     }
 
     /**
+     * requestCropImage
+     * Calls UCrop to crop an image and saves it in the app dir.
+     */
+    public void requestCropImage(Uri photo, String saveAs, int request){
+        //Later we will use this bitmap to create the File
+        Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
+        //Save this bitmap to a temporary File
+        File temp = new File(getActivity().getFilesDir(), "temp.jpg");
+        MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
+        //Create the definitive file (saved inside App Dir)
+        File destination = new File(getActivity().getFilesDir(), saveAs);
+        //Start UCrop with the temp and definitive file that will be cropped
+        startActivityForResult(
+                UCrop.of(
+                                Uri.fromFile(temp),
+                                Uri.fromFile(destination))
+                        .withAspectRatio(1, 1)
+                        .withMaxResultSize(1080, 1080)
+                        .getIntent(getActivity()
+                        ), request);
+    }
+
+    /**
      * ON ACTIVITY RESULT
      * Sets images choosen by user and manages its crop
      */
@@ -1799,22 +1885,8 @@ public class TripleFragment extends Fragment {
             // When the user is done picking a picture, let's get data from URI
             // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-            //Later we will use this bitmap to create the File
-            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
-            //Save this bitmap to a temporary File
-            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
-            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
-            //Create the definitive file (saved inside App Dir)
-            File destination = new File(getActivity().getFilesDir(), "img_m3_1.jpg");
-            //Start UCrop with the temp and definitive file that will be cropped
-            startActivityForResult(
-                    UCrop.of(
-                            Uri.fromFile(temp),
-                            Uri.fromFile(destination))
-                            .withAspectRatio(1, 1)
-                            .withMaxResultSize(1080, 1080)
-                            .getIntent(getActivity()
-                            ), REQUEST_CROP_PICTURE_1);
+            // Call the method to invoke cropping
+            requestCropImage(photo, "img_m3_1.jpg", REQUEST_CROP_PICTURE_1);
         }
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_1) {
@@ -1832,22 +1904,8 @@ public class TripleFragment extends Fragment {
             // When the user is done picking a picture, let's get data from URI
             // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-            //Later we will use this bitmap to create the File
-            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
-            //Save this bitmap to a temporary File
-            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
-            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
-            //Create the definitive file (saved inside App Dir)
-            File destination = new File(getActivity().getFilesDir(), "img_m3_2.jpg");
-            //Start UCrop with the temp and definitive file that will be cropped
-            startActivityForResult(
-                    UCrop.of(
-                            Uri.fromFile(temp),
-                            Uri.fromFile(destination))
-                            .withAspectRatio(1, 1)
-                            .withMaxResultSize(1080, 1080)
-                            .getIntent(getActivity()
-                            ), REQUEST_CROP_PICTURE_2);
+            // Call the method to invoke cropping
+            requestCropImage(photo, "img_m3_2.jpg", REQUEST_CROP_PICTURE_2);
         }
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_2) {
@@ -1864,22 +1922,8 @@ public class TripleFragment extends Fragment {
             // When the user is done picking a picture, let's get data from URI
             // We cannot access this Uri directly in Android 10
             Uri photo = data.getData();
-            //Later we will use this bitmap to create the File
-            Bitmap bitmap = MediaStoreUtils.getBitmap(getActivity(), photo);
-            //Save this bitmap to a temporary File
-            File temp = new File(getActivity().getFilesDir(), "temp.jpg");
-            MediaStoreUtils.convertBitmaptoFile(temp, bitmap);
-            //Create the definitive file (saved inside App Dir)
-            File destination = new File(getActivity().getFilesDir(), "img_m3_3.jpg");
-            //Start UCrop with the temp and definitive file that will be cropped
-            startActivityForResult(
-                    UCrop.of(
-                            Uri.fromFile(temp),
-                            Uri.fromFile(destination))
-                            .withAspectRatio(1, 1)
-                            .withMaxResultSize(1080, 1080)
-                            .getIntent(getActivity()
-                            ), REQUEST_CROP_PICTURE_3);
+            // Call the method to invoke cropping
+            requestCropImage(photo, "img_m3_3.jpg", REQUEST_CROP_PICTURE_3);
         }
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_CROP_PICTURE_3) {
