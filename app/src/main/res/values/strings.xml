@@ -194,7 +194,7 @@
     <string name="change_background_hint">Swipe to change background</string>
     <string name="app_not_installed">%1$s not installed: can\'t share result</string>
     <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="link" translatable="false">https://pointsburaco.page.link/open</string>
+    <string name="link" translatable="false">https://bit.ly/points-buraco</string>
     <string name="email" translatable="false">marco97pa@gmail.com</string>
 
 
