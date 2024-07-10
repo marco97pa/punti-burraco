@@ -789,13 +789,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void reviewApp(){
         log.i("Starting Review call to Play Store");
         ReviewManager manager = ReviewManagerFactory.create(this);
-        com.google.android.play.core.tasks.Task<ReviewInfo> request = manager.requestReviewFlow();
+        com.google.android.gms.tasks.Task<ReviewInfo> request = manager.requestReviewFlow();
         request.addOnCompleteListener(task -> {
             try {
                 if (task.isSuccessful()) {
                     // We can get the ReviewInfo object
                     ReviewInfo reviewInfo = task.getResult();
-                    com.google.android.play.core.tasks.Task<Void> flow = manager.launchReviewFlow(MainActivity.this, reviewInfo);
+                    com.google.android.gms.tasks.Task<Void> flow = manager.launchReviewFlow(MainActivity.this, reviewInfo);
                     flow.addOnCompleteListener(task2 -> {
                         // The flow has finished. The API does not indicate whether the user
                         // reviewed or not, or even whether the review dialog was shown. Thus, no
