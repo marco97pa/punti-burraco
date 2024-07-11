@@ -64,8 +64,8 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.yalantis:ucrop:2.2.8'
     implementation 'com.heinrichreimersoftware:material-intro:2.0.0'
-    implementation 'com.anjlab.android.iab.v3:library:2.1.0'
-    implementation 'com.android.billingclient:billing:6.1.0' //The library anjlab.android.iab is NOT ready for 7.0.0 as of 2024.07
+    implementation 'com.anjlab.android.iab.v3:library:2.2.0'
+    implementation 'com.android.billingclient:billing:7.0.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
     testImplementation 'junit:junit:4.13.2'
     constraints {
