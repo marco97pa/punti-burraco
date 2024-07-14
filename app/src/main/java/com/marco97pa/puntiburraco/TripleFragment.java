@@ -859,10 +859,12 @@ public class TripleFragment extends Fragment {
                         else {
                             advertise = new NearbyAdvertise(getContext(), getMatchState());
                             advertise.start();
+                            ((MainActivity)getActivity()).startBrightnessService();
                         }
                     }
                     else{
                         advertise.stop();
+                        ((MainActivity)getActivity()).stopBrightnessService();
                         item.setTitle(getString(R.string.join));
                     }
                 }
@@ -1667,6 +1669,7 @@ public class TripleFragment extends Fragment {
                     // permission was granted, yay!
                     advertise = new NearbyAdvertise(getContext(), getMatchState());
                     advertise.start();
+                    ((MainActivity)getActivity()).startBrightnessService();
 
                 } else {
 

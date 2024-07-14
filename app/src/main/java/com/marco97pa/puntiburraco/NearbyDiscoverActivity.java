@@ -10,15 +10,19 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +45,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.marco97pa.puntiburraco.utils.FLog;
+import com.marco97pa.puntiburraco.utils.UserActivityReceiver;
 
 import java.nio.charset.Charset;
 
@@ -61,6 +66,11 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
     private LinearLayout player3, game, search;
     private Button button;
 
+    // Managing custom dim screen
+    private Handler handler;
+    private Runnable dimRunnable;
+    private UserActivityReceiver userActivityReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +82,23 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        // To keep the screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        // Launching the custom dim screen service
+        handler = new Handler();
+        dimRunnable = new Runnable() {
+            @Override
+            public void run() {
+                dimScreen();
+            }
+        };
+        userActivityReceiver = new UserActivityReceiver(this, dimRunnable, handler);
+        registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_USER_PRESENT));
+        registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+        registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+        handler.postDelayed(dimRunnable, 60000); // Initial delay
 
         context = this;
         SERVICE_ID = context.getPackageName();
@@ -340,6 +367,9 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
         if(endPointID != null) {
             Nearby.getConnectionsClient(context).disconnectFromEndpoint(endPointID);
         }
+        // Unregister dim screen service
+        unregisterReceiver(userActivityReceiver);
+        handler.removeCallbacks(dimRunnable);
     }
 
     //ASK PERMISSION Android 6.0+ (Marshmallow)
@@ -402,5 +432,24 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
 
     public String getUserNickname(){
         return  Build.MANUFACTURER + " " + Build.MODEL;
+    }
+
+    /* dimScreen
+    *  Method that dims the screen Brightness to minimum
+    */
+    private void dimScreen() {
+        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+        layoutParams.screenBrightness = 0.01f; // Minimum brightness
+        getWindow().setAttributes(layoutParams);
+    }
+
+    /* We override touchEvents so we can detect if the user touches the screen to reset screen brightness
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            userActivityReceiver.onReceive(this, null); // Simulate user activity
+        }
+        return super.onTouchEvent(event);
     }
 }
