@@ -1,6 +1,7 @@
 ### 13.5.0
 * Android 14 Support
 * During a shared match the app will keep the screen on to make the connection more reliable. To save battery the screen will automatically dim its brightness after 1 minute of inactivity
+* Notification permission is now explained during the introduction on first app launch
 
 ### 13.4.0
 * Support for Android 13
