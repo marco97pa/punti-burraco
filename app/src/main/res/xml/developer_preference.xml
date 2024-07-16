@@ -30,6 +30,12 @@
     </androidx.preference.Preference>
 
     <androidx.preference.Preference
+        android:title="@string/setting_version_code"
+        android:summary="@string/setting_version_d"
+        android:key="version_code">
+    </androidx.preference.Preference>
+
+    <androidx.preference.Preference
         android:title="Firebase Remote Config"
         android:summary="Fetching..."
         android:key="remote_config">

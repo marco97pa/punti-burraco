@@ -196,6 +196,7 @@
     <string name="test_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="link" translatable="false">https://bit.ly/points-buraco</string>
     <string name="email" translatable="false">marco97pa@gmail.com</string>
+    <string name="setting_version_code" translatable="false">Version code</string>
 
 
 </resources>
