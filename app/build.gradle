@@ -10,7 +10,7 @@ android {
         applicationId "com.marco97pa.puntiburraco"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 5058
+        versionCode 5060
         versionName "13.5.0"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
