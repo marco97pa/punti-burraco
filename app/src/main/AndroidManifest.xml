@@ -44,6 +44,26 @@
         android:theme="@style/Theme.App.Starting"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <!-- This fix solves an issue with the following Google libraries:
+             - com.google.android.gms:play-services-measurement-api (from firebase-bom)
+             - com.google.android.gms:play-services-ads
+             During the merge of the build process, both libraries conflict with each other
+             To workaround this issue we must explicit the resource to replace to avoid
+             the conflict.
+
+             More info here: https://stackoverflow.com/a/78086604/10502580
+
+             As of 2024.07 it has NOT been fixed by Google.
+             If they fix this issue this workaround could be erased.
+             It can also cause trouble if one of the libraries above gets the fix.
+         -->
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
+
+        <!-- End of fix -->
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"

@@ -17,6 +17,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -49,6 +50,7 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
@@ -88,6 +90,7 @@ import com.google.android.ump.ConsentRequestParameters;
 import com.google.android.ump.FormError;
 import com.google.android.ump.UserMessagingPlatform;
 import com.marco97pa.puntiburraco.utils.FLog;
+import com.marco97pa.puntiburraco.utils.UserActivityReceiver;
 
 
 /**
@@ -135,6 +138,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         void onLongClick(View view, int position);
     }
+
+    // Managing custom dim screen
+    private Handler handler;
+    private Runnable dimRunnable;
+    private UserActivityReceiver userActivityReceiver;
 
     //CREATING ACTIVITY AND FAB BUTTON
     @Override
@@ -265,8 +273,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         //Ask for Notification permission on Android 13+
-        // We actually ignore the response since if the user denies, notification won't be posted
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        // Only after first app launch
+        boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
+        if (!first_app_launch && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissions(
                     new String[]{Manifest.permission.POST_NOTIFICATIONS},
                     999);
@@ -318,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean isWakeOn = sharedPreferences.getBoolean("wake", false);
         if (isWakeOn) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            startBrightnessService();
         }
 
         //EMOJI: Imposta carattere e avvia il download in background
@@ -369,6 +378,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopBrightnessService();
     }
 
     @Override
@@ -789,13 +799,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void reviewApp(){
         log.i("Starting Review call to Play Store");
         ReviewManager manager = ReviewManagerFactory.create(this);
-        com.google.android.play.core.tasks.Task<ReviewInfo> request = manager.requestReviewFlow();
+        com.google.android.gms.tasks.Task<ReviewInfo> request = manager.requestReviewFlow();
         request.addOnCompleteListener(task -> {
             try {
                 if (task.isSuccessful()) {
                     // We can get the ReviewInfo object
                     ReviewInfo reviewInfo = task.getResult();
-                    com.google.android.play.core.tasks.Task<Void> flow = manager.launchReviewFlow(MainActivity.this, reviewInfo);
+                    com.google.android.gms.tasks.Task<Void> flow = manager.launchReviewFlow(MainActivity.this, reviewInfo);
                     flow.addOnCompleteListener(task2 -> {
                         // The flow has finished. The API does not indicate whether the user
                         // reviewed or not, or even whether the review dialog was shown. Thus, no
@@ -998,6 +1008,75 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         return false;
+    }
+
+    /* dimScreen
+     *  Method that dims the screen Brightness to minimum
+     */
+    private void dimScreen() {
+        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+        layoutParams.screenBrightness = 0.01f; // Minimum brightness
+        getWindow().setAttributes(layoutParams);
+    }
+
+    /* We override touchEvents so we can detect if the user touches the screen to reset screen brightness
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            userActivityReceiver.onReceive(this, null); // Simulate user activity
+        }
+        return super.onTouchEvent(event);
+    }
+
+    /* We override touchEvents of the whole activity
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        if(userActivityReceiver != null){
+            userActivityReceiver.onReceive(this, null); // Simulate user activity
+        }
+        super.dispatchTouchEvent(ev);
+        return false; //consume standard touch events
+    }
+
+    public void stopBrightnessService(){
+        try {
+            // To allow the screen to turn off
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            // Unregister dim screen service
+            unregisterReceiver(userActivityReceiver);
+            handler.removeCallbacks(dimRunnable);
+            log.i("BrightnessService: Stopped");
+        }catch(Exception e) {
+            // already unregistered or null
+            log.i("BrightnessService: Not stopped, already unregistered");
+        }
+        userActivityReceiver = null;
+    }
+
+    public void startBrightnessService(){
+        if(userActivityReceiver == null) {
+            // To keep the screen on
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            // Launching the custom dim screen service
+            handler = new Handler();
+            dimRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    dimScreen();
+                }
+            };
+            userActivityReceiver = new UserActivityReceiver(this, dimRunnable, handler);
+            registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_USER_PRESENT));
+            registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+            registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+            handler.postDelayed(dimRunnable, 60000); // Initial delay
+            log.i("BrightnessService: Started");
+        }
+        else {
+            log.i("BrightnessService: Not started, already running");
+        }
     }
 
 }

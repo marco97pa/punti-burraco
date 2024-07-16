@@ -624,10 +624,12 @@ public class DoubleFragment extends Fragment {
                         else {
                             advertise = new NearbyAdvertise(getContext(), getMatchState());
                             advertise.start();
+                            ((MainActivity)getActivity()).startBrightnessService();
                         }
                     }
                     else{
                         advertise.stop();
+                        ((MainActivity)getActivity()).stopBrightnessService();
                         item.setTitle(getString(R.string.join));
                     }
                 }
@@ -1227,6 +1229,7 @@ public class DoubleFragment extends Fragment {
                     // permission was granted, yay!
                     advertise = new NearbyAdvertise(getContext(), getMatchState());
                     advertise.start();
+                    ((MainActivity)getActivity()).startBrightnessService();
 
                 } else {
 

@@ -60,6 +60,11 @@ public class DeveloperSettings extends SettingsFragment {
                     }
                 });
 
+
+        //Sets version code programatically
+        Preference version_code = findPreference("version_code");
+        version_code.setSummary(Integer.toString(BuildConfig.VERSION_CODE));
+
         //Sets intent to redirect user to App Settings in Android
         Preference advanced_p = findPreference("advanced");
         advanced_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
