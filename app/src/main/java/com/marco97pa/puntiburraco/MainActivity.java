@@ -273,8 +273,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         //Ask for Notification permission on Android 13+
-        // We actually ignore the response since if the user denies, notification won't be posted
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        // Only after first app launch
+        boolean first_app_launch = sharedPreferences.getBoolean("is_first_app_launch", true);
+        if (!first_app_launch && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissions(
                     new String[]{Manifest.permission.POST_NOTIFICATIONS},
                     999);
@@ -326,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean isWakeOn = sharedPreferences.getBoolean("wake", false);
         if (isWakeOn) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            startBrightnessService();
         }
 
         //EMOJI: Imposta carattere e avvia il download in background
@@ -1040,34 +1041,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void stopBrightnessService(){
-        // To allow the screen to turn off
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        // Unregister dim screen service
-        unregisterReceiver(userActivityReceiver);
-        handler.removeCallbacks(dimRunnable);
+        try {
+            // To allow the screen to turn off
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            // Unregister dim screen service
+            unregisterReceiver(userActivityReceiver);
+            handler.removeCallbacks(dimRunnable);
+            log.i("BrightnessService: Stopped");
+        }catch(Exception e) {
+            // already unregistered or null
+            log.i("BrightnessService: Not stopped, already unregistered");
+        }
         userActivityReceiver = null;
     }
 
     public void startBrightnessService(){
-        // To keep the screen on
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        // Launching the custom dim screen service
-        handler = new Handler();
-        dimRunnable = new Runnable() {
-            @Override
-            public void run() {
-                dimScreen();
-            }
-        };
-        userActivityReceiver = new UserActivityReceiver(this, dimRunnable, handler);
-        registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_USER_PRESENT));
-        registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
-        registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
-        handler.postDelayed(dimRunnable, 60000); // Initial delay
-    }
-
-    public void resetBrightness(){
-        userActivityReceiver.onReceive(this, null); // Simulate user activity
+        if(userActivityReceiver == null) {
+            // To keep the screen on
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            // Launching the custom dim screen service
+            handler = new Handler();
+            dimRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    dimScreen();
+                }
+            };
+            userActivityReceiver = new UserActivityReceiver(this, dimRunnable, handler);
+            registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_USER_PRESENT));
+            registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+            registerReceiver(userActivityReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+            handler.postDelayed(dimRunnable, 60000); // Initial delay
+            log.i("BrightnessService: Started");
+        }
+        else {
+            log.i("BrightnessService: Not started, already running");
+        }
     }
 
 }
