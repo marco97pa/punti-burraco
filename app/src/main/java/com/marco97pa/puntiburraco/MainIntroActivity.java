@@ -1,5 +1,6 @@
 package com.marco97pa.puntiburraco;
 
+import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -38,6 +39,19 @@ public class MainIntroActivity extends IntroActivity {
                 .backgroundDark(R.color.colorSecondary)
                 .scrollable(true)
                 .build());
+        //Ask for Notification permission on Android 13+
+        // We actually ignore the response since if the user denies, notification won't be posted
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            addSlide(new SimpleSlide.Builder()
+                    .title(R.string.setting_notification)
+                    .description(R.string.channel_description)
+                    .image(R.drawable.baseline_notifications_active_24)
+                    .background(R.color.design_default_color_secondary)
+                    .backgroundDark(R.color.design_default_color_secondary_variant)
+                    .scrollable(false)
+                    .permission(Manifest.permission.POST_NOTIFICATIONS)
+                    .build());
+        }
         //Third slide: How points are counted
         addSlide(new SimpleSlide.Builder()
                 .title(R.string.intro_personalize)
