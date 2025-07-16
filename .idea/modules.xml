@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PuntiBurraco.iml" filepath="$PROJECT_DIR$/.idea/modules/PuntiBurraco.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PuntiBurraco.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PuntiBurraco.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PuntiBurraco.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PuntiBurraco.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PuntiBurraco.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PuntiBurraco.app.main.iml" />

@@ -3,15 +3,15 @@ apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 
 android {
-    compileSdk 34
+    compileSdk 36
     namespace 'com.marco97pa.puntiburraco'
 
     defaultConfig {
         applicationId "com.marco97pa.puntiburraco"
-        minSdkVersion 21
-        targetSdkVersion 34
-        versionCode 5060
-        versionName "13.5.0"
+        minSdkVersion 23
+        targetSdkVersion 36
+        versionCode 5064
+        versionName "13.6.0"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
@@ -39,30 +39,31 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.core:core:1.16.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.gridlayout:gridlayout:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.gridlayout:gridlayout:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.activity:activity:1.9.0'
+    implementation 'androidx.activity:activity:1.10.1'
     implementation 'androidx.browser:browser:1.8.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.emoji:emoji:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation "androidx.preference:preference:1.2.1"
     implementation 'com.google.android.material:material:1.12.0'
-    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation platform('com.google.firebase:firebase-bom:33.16.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-perf'
     implementation 'com.google.firebase:firebase-config'
-    implementation 'com.google.android.gms:play-services-ads:23.2.0'
-    implementation 'com.google.android.ump:user-messaging-platform:2.2.0'
-    implementation 'com.google.android.play:review:2.0.1'
+    implementation 'com.google.android.gms:play-services-ads:24.4.0'
+    implementation 'com.google.android.ump:user-messaging-platform:3.2.0'
+    implementation 'com.google.android.play:review:2.0.2'
     implementation 'com.google.android.gms:play-services-nearby:19.3.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'com.github.yalantis:ucrop:2.2.9'
+    implementation 'com.github.yalantis:ucrop:2.2.10'
     implementation 'com.heinrichreimersoftware:material-intro:2.0.0'
     implementation 'com.anjlab.android.iab.v3:library:2.2.0'
     implementation 'com.android.billingclient:billing:7.0.0'

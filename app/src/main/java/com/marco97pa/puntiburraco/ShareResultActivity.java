@@ -2,6 +2,11 @@ package com.marco97pa.puntiburraco;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
@@ -13,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +32,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -57,6 +64,20 @@ private FirebaseAnalytics mFirebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 1. Opt into true edge-to-edge
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        // 2. Make status & nav bars transparent
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+
+        // 3. Toggle icon color: true=dark icons, false=light icons
+        WindowInsetsControllerCompat controller =
+                new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
+        controller.setAppearanceLightStatusBars(true);
+        controller.setAppearanceLightNavigationBars(false);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //lock rotation to portrait
         setContentView(R.layout.activity_share_result);
 
@@ -70,6 +91,34 @@ private FirebaseAnalytics mFirebaseAnalytics;
 
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet_share));
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        root = (LinearLayout) findViewById(R.id.rootLayout);
+        fab = (ExtendedFloatingActionButton) findViewById(R.id.fab);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, windowInsets) -> {
+            Insets systemBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Apply padding to the root view to account for system bars
+            v.setPadding(systemBarInsets.left, systemBarInsets.top, systemBarInsets.right, systemBarInsets.bottom);
+
+            ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams) fab.getLayoutParams();
+            // Assuming 16dp base margin, convert to pixels
+            int fabBaseMarginPx = (int) (16 * getResources().getDisplayMetrics().density);
+            fabParams.bottomMargin = systemBarInsets.bottom + fabBaseMarginPx;
+            fab.setLayoutParams(fabParams);
+
+            // Apply bottom padding to the BottomSheet's content area
+            // This ensures that when the BottomSheet is expanded, its content is above the navigation bar.
+            if (bottomSheet != null) { // or bottomSheetContentContainer
+                bottomSheet.setPadding(
+                        bottomSheet.getPaddingLeft(),
+                        bottomSheet.getPaddingTop(),
+                        bottomSheet.getPaddingRight(),
+                        systemBarInsets.bottom // Add the navigation bar height as bottom padding
+                );
+            }
+
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         name1 = (TextView) findViewById(R.id.name1);
         name2 = (TextView) findViewById(R.id.name2);
@@ -100,7 +149,7 @@ private FirebaseAnalytics mFirebaseAnalytics;
         }
 
         //Set background based on user selection
-        root = (LinearLayout) findViewById(R.id.rootLayout);
+
         selection = 1;
         changeBackground();
         /* Handling swipes on rootView
@@ -138,7 +187,6 @@ private FirebaseAnalytics mFirebaseAnalytics;
 
         //BUTTONS
         //fab
-        fab = (ExtendedFloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -499,5 +547,23 @@ private FirebaseAnalytics mFirebaseAnalytics;
 
         public void onTouchDown(){
         }
+    }
+
+    /**
+     * Helper to listen for insets on any view and invoke a callback
+     */
+    private void applyWindowInsets(View view, InsetCallback callback) {
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
+            callback.onApply(windowInsets);
+            return windowInsets;
+        });
+    }
+
+
+    /**
+     * Functional interface for inset callbacks
+     */
+    private interface InsetCallback {
+        void onApply(WindowInsetsCompat insets);
     }
 }
