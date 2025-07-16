@@ -197,6 +197,8 @@
     <string name="link" translatable="false">https://bit.ly/points-buraco</string>
     <string name="email" translatable="false">marco97pa@gmail.com</string>
     <string name="setting_version_code" translatable="false">Version code</string>
+    <string name="setting_version_os">Operating System Version</string>
+    <string name="setting_version_sdk">App Target Version</string>
 
 
 </resources>

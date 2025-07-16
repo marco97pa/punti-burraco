@@ -65,6 +65,18 @@ public class DeveloperSettings extends SettingsFragment {
         Preference version_code = findPreference("version_code");
         version_code.setSummary(Integer.toString(BuildConfig.VERSION_CODE));
 
+        //Sets sdk version programatically
+        Preference version_sdk = findPreference("version_sdk");
+        int sdk_app = this.getActivity().getApplicationInfo().targetSdkVersion;
+        version_sdk.setSummary(
+                Integer.toString(sdk_app) + " (" + getAndroidVersionName(sdk_app) + ")"
+        );
+        Preference version_os = findPreference("version_os");
+        int sdk_os = android.os.Build.VERSION.SDK_INT;
+        version_os.setSummary(
+                Integer.toString(sdk_os) + " (" + getAndroidVersionName(sdk_os) + ")"
+        );
+
         //Sets intent to redirect user to App Settings in Android
         Preference advanced_p = findPreference("advanced");
         advanced_p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -126,4 +138,41 @@ public class DeveloperSettings extends SettingsFragment {
         //Setting activity title
         ((SettingActivity) getActivity()).setTitle(getString(R.string.setting_developer));
     }
+
+    public String getAndroidVersionName(int apiLevel) {
+        if(apiLevel >= 33){
+            return "Android " + (apiLevel - 20);
+        }
+        else {
+            switch (apiLevel) {
+                case 32:
+                    return "Android 12L";
+                case 31:
+                    return "Android 12";
+                case 30:
+                    return "Android 11";
+                case 29:
+                    return "Android 10";
+                case 28:
+                    return "Android 9";
+                case 27:
+                    return "Android 8.1";
+                case 26:
+                    return "Android 8.0";
+                case 25:
+                    return "Android 7.1";
+                case 24:
+                    return "Android 7.0";
+                case 23:
+                    return "Android 6.0";
+                case 22:
+                    return "Android 5.1";
+                case 21:
+                    return "Android 5.0";
+                default:
+                    return "Unknown or unsupported API level";
+            }
+        }
+    }
+
 }

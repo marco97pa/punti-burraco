@@ -36,6 +36,18 @@
     </androidx.preference.Preference>
 
     <androidx.preference.Preference
+        android:title="@string/setting_version_os"
+        android:summary="@string/setting_version_d"
+        android:key="version_os">
+    </androidx.preference.Preference>
+
+    <androidx.preference.Preference
+        android:title="@string/setting_version_sdk"
+        android:summary="@string/setting_version_d"
+        android:key="version_sdk">
+    </androidx.preference.Preference>
+
+    <androidx.preference.Preference
         android:title="Firebase Remote Config"
         android:summary="Fetching..."
         android:key="remote_config">
