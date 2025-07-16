@@ -5,6 +5,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import android.content.res.Configuration;
 
 import android.Manifest;
 import android.content.Context;
@@ -83,7 +89,32 @@ public class NearbyDiscoverActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        // To keep the screen on
+        View root = findViewById(R.id.myCoordinatorLayout);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, windowInsets) -> {
+            Insets systemBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Apply padding to the root view to account for system bars
+            v.setPadding(systemBarInsets.left, systemBarInsets.top, systemBarInsets.right, systemBarInsets.bottom);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
+
+        // Control Status Bar Icon Colors based on Theme
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), root);
+
+        // Check if the current theme is a dark theme
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        boolean isNightMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+
+        if (isNightMode) {
+            // Dark theme: Use light status bar icons
+            windowInsetsController.setAppearanceLightStatusBars(false);
+        } else {
+            // Light theme: Use dark status bar icons
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
+
+            // To keep the screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Launching the custom dim screen service

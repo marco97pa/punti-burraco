@@ -150,13 +150,13 @@
         </activity>
         <activity
             android:name=".MainIntroActivity"
-            android:theme="@style/Theme.Intro" />
+            android:theme="@style/Theme.App.LibrariesWithoutInsetsSupport" />
         <activity android:name=".ShareResultActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.App.LibrariesWithoutInsetsSupport" />
         <!-- Trigger Google Play services to install the backported photo picker module. -->
         <service android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"

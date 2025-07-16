@@ -2,6 +2,7 @@ package com.marco97pa.puntiburraco;
 
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -19,6 +20,11 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import java.util.Random;
 
@@ -46,6 +52,47 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // 1. Opt into true edge-to-edge
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        // 2. Make status & nav bars transparent
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+
+        // 3. Toggle icon color: true=dark icons, false=light icons
+        WindowInsetsControllerCompat controller =
+                new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
+
+        // Check if the current theme is a dark theme
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        boolean isNightMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+
+        if (isNightMode) {
+            // Dark theme: Use light status bar icons
+            controller.setAppearanceLightStatusBars(false);
+        } else {
+            // Light theme: Use dark status bar icons
+            controller.setAppearanceLightStatusBars(true);
+        }
+
+        // Get the root content view where the fragment will be placed
+        // android.R.id.content is a FrameLayout that is the root of the content area.
+        View contentRoot = findViewById(android.R.id.content);
+        if (contentRoot != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(contentRoot, (v, windowInsets) -> {
+                Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+                // Apply padding to account for status bar (top) and navigation bar (bottom)
+                // The fragment's view will then be laid out within these paddings.
+                v.setPadding(0, 0, 0, systemBars.bottom);
+
+                // If your custom toolbar is inside android.R.id.content (which it isn't based on your setup),
+                // you'd adjust its top margin here. But your toolbar setup is separate.
+
+                return WindowInsetsCompat.CONSUMED; // Consume the insets
+            });
+        }
+
         // Display the fragment as the main content.
         getSupportFragmentManager()
                 .beginTransaction()
@@ -54,6 +101,7 @@ public class SettingActivity extends AppCompatActivity {
 
         //setCustomToolbar
         setupToolbar();
+
     }
 
     private void setupToolbar() {
@@ -65,6 +113,14 @@ public class SettingActivity extends AppCompatActivity {
 
             Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
+
+            // 5. Apply insets manually
+            applyWindowInsets(toolbar, windowInsets -> {
+                Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars());
+                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                lp.topMargin = bars.top;
+                toolbar.setLayoutParams(lp);
+            });
         }
 
         ActionBar actionBar = getSupportActionBar();
@@ -72,6 +128,8 @@ public class SettingActivity extends AppCompatActivity {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+
     }
 
     public void setTitle(String title){
@@ -100,6 +158,24 @@ public class SettingActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(colorDark);
         }
 
+    }
+
+    /**
+     * Helper to listen for insets on any view and invoke a callback
+     */
+    private void applyWindowInsets(View view, SettingActivity.InsetCallback callback) {
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
+            callback.onApply(windowInsets);
+            return windowInsets;
+        });
+    }
+
+
+    /**
+     * Functional interface for inset callbacks
+     */
+    private interface InsetCallback {
+        void onApply(WindowInsetsCompat insets);
     }
 
 }

@@ -1,3 +1,7 @@
+### 13.6.0
+* Android 15 and 16 Support
+* Improvements on handling different displays and layouts, working on universal screen support
+
 ### 13.5.0
 * Android 14 Support
 * During a shared match the app will keep the screen on to make the connection more reliable. To save battery the screen will automatically dim its brightness after 1 minute of inactivity
