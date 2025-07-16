@@ -1,6 +1,6 @@
 ### 13.6.0
 * Android 15 and 16 Support
-* Improvements on handling different displays and layouts, working on universal screen support
+* Improvements on handling different displays and layouts, initial work on universal screen support
 
 ### 13.5.0
 * Android 14 Support
