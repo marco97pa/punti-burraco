@@ -1,3 +1,6 @@
+### 13.6.1
+* Upgraded Android In-App Billing libraries and more internal libraries
+
 ### 13.6.0
 * Android 15 and 16 Support
 * Improvements on handling different displays and layouts, initial work on universal screen support

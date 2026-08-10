@@ -101,6 +101,7 @@
     <!-- Various String -->
     <string name="dialog_share">Compartir</string>
     <string name="dialog_delete">Borrar</string>
+    <string name="buy">Comprar</string>
     <string name="no_data_available">Aún no has jugado ningún juego ...</string>
     <string name="audio_up">Volumen multimedia subido al máximo</string>
     <string name="change_background_hint">Voluta para cambiar el fondo</string>
@@ -183,6 +184,8 @@
     <string name="denied_perm_bluetooth">Permiso denegado</string>
     <string name="set_permissions">Establecer permisos</string>
     <string name="denied_perm_wifi">Permission denied to find nearby devices using WiFi/Bluetooth</string>
+    <string name="setting_version_os">Operating System Version</string>
+    <string name="setting_version_sdk">App Target Version</string>
 
 
 </resources>

@@ -100,6 +100,7 @@
     <!-- Various String -->
     <string name="dialog_share">Condividi</string>
     <string name="dialog_delete">Elimina</string>
+    <string name="buy">Ottieni</string>
     <string name="no_data_available">Non hai ancora giocato nessuna partita...</string>
     <string name="audio_up">Volume multimediale alzato al massimo</string>
     <string name="change_background_hint">Scorri per cambiare lo sfondo</string>
@@ -183,6 +184,8 @@
     <string name="denied_perm_bluetooth">Hai negato il permesso di utilizzare il Bluetooth per trovare dispositivi nelle vicinanze</string>
     <string name="set_permissions">Controlla permessi app</string>
     <string name="denied_perm_wifi">Permesso negato all\'uso del WiFi/Bluetooth per trovare dispositivi vicini</string>
+    <string name="setting_version_os">Operating System Version</string>
+    <string name="setting_version_sdk">App Target Version</string>
 
 
 </resources>

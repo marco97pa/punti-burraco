@@ -183,6 +183,7 @@
     <string name="error_buy_generic">There was a generic error during the purchase</string>
     <string name="error_buy_already_own">You already own the PRO version</string>
     <string name="only_for_pro">This feature is available only for PRO users</string>
+    <string name="buy">Buy</string>
 
     <!-- Various String -->
     <string name="no_data_available">Nothing here</string>

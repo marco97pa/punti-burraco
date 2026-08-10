@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.ProductDetails;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseInfo;
 import com.anjlab.android.iab.v3.SkuDetails;
@@ -23,6 +24,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.snackbar.Snackbar;
 import com.marco97pa.puntiburraco.utils.FLog;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,7 +94,7 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         fab = (ExtendedFloatingActionButton) findViewById(R.id.fab);
@@ -173,12 +176,7 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //close app
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            finishAndRemoveTask();
-                        }
-                        else{
-                            finishAffinity();
-                        }
+                        finishAndRemoveTask();
                         System.exit(0);
                     }
                 };
@@ -284,20 +282,28 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
         /*
          * Called when BillingProcessor is initialized and it's ready to purchase
          */
-        bp.getPurchaseListingDetailsAsync(getString(R.string.in_app_pro_version), new BillingProcessor.ISkuDetailsResponseListener() {
+        bp.getPurchaseProductDetailsAsync(getString(R.string.in_app_pro_version), new BillingProcessor.IProductDetailsResponseListener() {
             @Override
-            public void onSkuDetailsResponse(@Nullable List<SkuDetails> products) {
-                SkuDetails sku = products.get(0);
-                collapsingToolbar.setTitle(purgeTitle(sku.title));
+            public void onProductDetailsResponse(@NonNull List<ProductDetails> products) {
+                if (products.isEmpty()) {
+                    onProductDetailsError("No products found");
+                    return;
+                }
+                
+                ProductDetails pd = products.get(0);
+                collapsingToolbar.setTitle(purgeTitle(pd.getTitle()));
                 details_layout.setVisibility(View.VISIBLE);
-                description.setText(sku.description);
-                fab.setText(sku.priceText);
+                description.setText(pd.getDescription());
+                
+                ProductDetails.OneTimePurchaseOfferDetails offerDetails = pd.getOneTimePurchaseOfferDetails();
+                String price = (offerDetails != null) ? offerDetails.getFormattedPrice() : getString(R.string.buy);
+
+                fab.setText(price);
                 fab.setEnabled(true);
             }
 
-            @Override
-            public void onSkuDetailsError(String error) {
-                Snackbar mySnackbar = Snackbar.make(appbar, getString(R.string.error_buy_product), Snackbar.LENGTH_LONG);
+            @Override public void onProductDetailsError(@NonNull String error) {
+                Snackbar mySnackbar = Snackbar.make(appbar, getString(R.string.error_buy_product) + " : " + error, Snackbar.LENGTH_LONG);
                 mySnackbar.show();
             }
         });
@@ -410,22 +416,13 @@ public class UpgradeActivity extends AppCompatActivity implements BillingProcess
 
         ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                final Network network = connectivityManager.getActiveNetwork();
-                if (network != null) {
-                    final NetworkCapabilities nc = connectivityManager.getNetworkCapabilities(network);
+            final Network network = connectivityManager.getActiveNetwork();
+            if (network != null) {
+                final NetworkCapabilities nc = connectivityManager.getNetworkCapabilities(network);
 
-                    return (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                            nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                            nc.hasTransport((NetworkCapabilities.TRANSPORT_ETHERNET)));
-                }
-            } else {
-                NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
-                for (NetworkInfo tempNetworkInfo : networkInfos) {
-                    if (tempNetworkInfo.isConnected()) {
-                        return true;
-                    }
-                }
+                return (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                        nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                        nc.hasTransport((NetworkCapabilities.TRANSPORT_ETHERNET)));
             }
         }
         return false;

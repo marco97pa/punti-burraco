@@ -181,6 +181,7 @@
     <string name="only_for_pro">This feature is available only for PRO users</string>
 
     <!-- Various String -->
+    <string name="buy">Buy</string>
     <string name="no_data_available">Nothing here</string>
     <string name="audio_up">Turned up the volume</string>
     <string name="facebook" translatable="false">Facebook</string>
@@ -196,6 +197,8 @@
     <string name="denied_perm_bluetooth">Permission denied to find nearby devices using Bluetooth</string>
     <string name="set_permissions">Set app permissions</string>
     <string name="denied_perm_wifi">Permission denied to find nearby devices using WiFi/Bluetooth</string>
+    <string name="setting_version_os">Operating System Version</string>
+    <string name="setting_version_sdk">App Target Version</string>
 
 </resources>
 
